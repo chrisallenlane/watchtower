@@ -1,4 +1,13 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+#######################################################################
+# webapp-vulnscan - a webapp-vulnscanner, obviously
+#
+# Chris Lane
+# chris@chris-allen-lane.com
+# http://chris-allen-lane.com
+# http://twitter.com/chrisallenlane
+########################################################################
+
 require 'rubygems'
 require 'trollop'
 require 'fileutils'
@@ -12,15 +21,17 @@ require 'models/vulnscanner'
 ######################################################################
 opts = Trollop::options do    
     opt :scan_dir, 'The directory to scan',
-        :short => 's',
-        :type => :string
+        :type 		=> :string,
+        :required	=> :true,
+        :short 		=> 's'
         
     opt :colorize, 'Colorizes output',
-        :short => 'c'
+        :short 		=> 'c'
         
     opt :config_file, 'Path to the config file',
-        :short => 'o',
-        :type => :string
+        :type 		=> :string,
+        :required 	=> :true,
+        :short 		=> 'o'
 end
 
 # If --colorize was specified, include the colorize gem. Otherwise,
@@ -41,18 +52,14 @@ end
 ######################################################################
 # Config and Payloads
 ######################################################################
-# If a configuration file was specified, load it. Otherwise, load some
-# sensible defaults.
-if opts[:config_file_given]
-	if File.exists? opts[:config_file]
-		require opts[:config_file]
-	end
-else
+# Load the configuration file
+unless File.exists? opts[:config_file]
 	puts 'The specified config file does not exist.'
 	exit
 end
+require opts[:config_file]
 
-# verify that the directory to scan actually exists
+# Verify that the directory to scan actually exists
 unless File.exists? opts[:scan_dir]
 	puts 'The specified directory to scan does not exist.'
 	exit
@@ -62,10 +69,10 @@ end
 ######################################################################
 # Start the scan
 ######################################################################
-vulnscanner = VulnScanner.new({:payloads => $payloads,:scan_dir	=> opts[:scan_dir]})
+vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
 
-# display the output
+# Display the output
 vulnscanner.points_of_interest.each do |point|
 	puts point.get(true) + "\n\n"
 end
