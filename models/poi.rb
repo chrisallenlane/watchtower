@@ -22,8 +22,7 @@ class PoI
 		text = ''
 		if use_color
 			text += @file.colorize(@@color_file) + ':' + @line_number.colorize(@@color_line_number) + "\n"
-			# highlight the match in the snippet
-			text += @snippet.sub(@match, @match.colorize(:background => @@color_match))
+			text += @snippet.sub(@match, @match.colorize(:background => @@color_match)) # highlight the match in the snippet
 		else
 			text += @file + ':' + @line_number
 			text += @snippet

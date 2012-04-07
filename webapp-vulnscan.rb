@@ -2,8 +2,9 @@
 require 'rubygems'
 require 'trollop'
 require 'fileutils'
-require 'models/poi'
 require 'shellwords'
+require 'models/poi'
+require 'models/vulnscanner'
 
 
 ######################################################################
@@ -61,54 +62,10 @@ end
 ######################################################################
 # Start the scan
 ######################################################################
-# create an array of points of interest
-points_of_interest = []
-
-# @todo: separate the data from the presentation
-$payloads.each do | filetype, payload_groups |
-	
-	# cast the filetype symbol into a string
-	ftype = filetype.to_s	
-	# iterate over the payload groups
-	payload_groups.each do |payload_group, payloads|
-		
-		# iterate over each payload
-		payloads.each do |payload|
-			# suppress ack's own color usage unless --colorize was specified
-			
-			result = `cd #{opts[:scan_dir]}; ack-grep '#{payload.shellescape}' --sort --#{ftype}`
-			
-			# display the matches
-			unless result.strip.empty?
-
-				# iterate over the ack results
-				result.each_line do | line | 
-					# parse the result string into components
-					first_colon_pos  = line.index(':')
-					second_colon_pos = line.index(':', first_colon_pos + 1)
-					
-					# parse out the important information
-					file_name        = line.slice(0..(first_colon_pos - 1)) 
-					line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
-					snippet          = line.slice((second_colon_pos +1), line.length).strip
-
-					# buffer a new point of interest
-					data = {
-						:filetype    => ftype,
-						:file        => file_name,
-						:line_number => line_num,
-						:match       => payload,
-						:snippet     => snippet,
-					}
-					points_of_interest.push(PoI.new(data))
-
-				end
-			end
-		end	
-	end
-end
+vulnscanner = VulnScanner.new({:payloads => $payloads,:scan_dir	=> opts[:scan_dir]})
+vulnscanner.scan
 
 # display the output
-points_of_interest.each do |point|
+vulnscanner.points_of_interest.each do |point|
 	puts point.get(true) + "\n\n"
 end

@@ -1,7 +1,3 @@
-# This is going to be SUPER convenient:
-# ack-grep --help=types
-
-
 ######################################################################
 # Configs
 ######################################################################
@@ -16,5 +12,8 @@
 $payloads = {}
 
 require './payloads/php.rb'
-
+#require './payloads/html.rb'
+#require './payloads/js.rb'
+#require './payloads/asp.rb'
+#require './payloads/sql.rb'
 #payloads += custom_strings
