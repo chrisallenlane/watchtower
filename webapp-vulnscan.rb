@@ -8,7 +8,7 @@ require 'fileutils'
 # Menu options and program flow
 ######################################################################
 opts = Trollop::options do    
-    opt :scan_dir, 'The directory to scan.',
+    opt :scan_dir, 'The directory to scan',
         :short => 's', :type => String
         
     opt :colorize, 'Colorizes output',
@@ -36,8 +36,8 @@ end
 ######################################################################
 # Config and Payloads
 ######################################################################
-# If a configuration file was specified, load it. Otherwise, load the 
-# defaults.
+# If a configuration file was specified, load it. Otherwise, load some
+# sensible defaults.
 if opts[:config_file_given]
 	if File.exists? opts[:config_file]
 		require opts[:config_file]
@@ -71,33 +71,40 @@ end
 ######################################################################
 puts 'Scanning...'
 # search the target directories for the payloads
-payloads.each do | payload |
-    # suppress ack's own color usage unless --colorize was specified
-    if opts[:colorize_given]
-		result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' --color`
-    else
-		result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' --nocolor`
-    end
-    
-    # display the matches
-	unless result.strip.empty?
-		puts " -- Searching for: #{payload}".colorize( :cyan )
+payloads.each do | filetype, payload_groups |
+	
+	# iterate over the payload groups
+	payload_groups.each do |payload_group, payload|
+		# cast the filetype symbol into a string
+		filetype.to_s!
+		puts " ===== Filetype: #{filetype} ====="
+	
+		# suppress ack's own color usage unless --colorize was specified
+		color = (opts[:colorize_given]) ? '--color' : '--nocolor'
+		result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' #{color} --sort --#{filetype}`
+		
+		# display the matches
+		unless result.strip.empty?
+			puts " -- Searching for: #{payload}".colorize( :cyan )
 
-		# iterate over the ack results
-        result.each_line do | line | 
-            # parse the result string into components
-            first_colon_pos  = line.index(':')
-            second_colon_pos = line.index(':', first_colon_pos + 1)
-            
-            # parse out the important information
-            file_name        = line.slice(0..(first_colon_pos - 1)) 
-            line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
-            snippet          = line.slice((second_colon_pos +1), line.length).strip
+			# iterate over the ack results
+			result.each_line do | line | 
+				# parse the result string into components
+				first_colon_pos  = line.index(':')
+				second_colon_pos = line.index(':', first_colon_pos + 1)
+				
+				# parse out the important information
+				file_name        = line.slice(0..(first_colon_pos - 1)) 
+				line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
+				snippet          = line.slice((second_colon_pos +1), line.length).strip
 
-            # output the scandata
-			puts file_name.colorize( :cyan ) + " (" + line_num.colorize( :yellow ) + ")"
-			puts snippet + "\n\n" 
-        end
-        puts "\n\n"
+				# output the scandata
+				puts file_name.colorize( :cyan ) + " (" + line_num.colorize( :yellow ) + ")"
+				puts snippet + "\n\n" 
+			end
+			puts "\n\n"
+		end
 	end
+	
+	puts "\n\n\n\n"
 end
