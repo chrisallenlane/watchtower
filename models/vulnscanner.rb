@@ -1,0 +1,3 @@
+class VulnScanner
+	@@vulns = []
+end

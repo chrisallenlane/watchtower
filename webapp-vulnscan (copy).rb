@@ -2,8 +2,6 @@
 require 'rubygems'
 require 'trollop'
 require 'fileutils'
-require 'models/poi'
-require 'shellwords'
 
 
 ######################################################################
@@ -11,8 +9,7 @@ require 'shellwords'
 ######################################################################
 opts = Trollop::options do    
     opt :scan_dir, 'The directory to scan',
-        :short => 's',
-        :type => :string
+        :short => 's', :type => String
         
     opt :colorize, 'Colorizes output',
         :short => 'c'
@@ -61,25 +58,28 @@ end
 ######################################################################
 # Start the scan
 ######################################################################
-# create an array of points of interest
-points_of_interest = []
+puts 'Scanning...'
+# search the target directories for the payloads
 
 # @todo: separate the data from the presentation
 $payloads.each do | filetype, payload_groups |
 	
 	# cast the filetype symbol into a string
-	ftype = filetype.to_s	
+	ftype = filetype.to_s
+	puts " ===== Filetype: #{ftype} =====".colorize(:red)
+	
 	# iterate over the payload groups
 	payload_groups.each do |payload_group, payloads|
 		
 		# iterate over each payload
 		payloads.each do |payload|
 			# suppress ack's own color usage unless --colorize was specified
-			
-			result = `cd #{opts[:scan_dir]}; ack-grep '#{payload.shellescape}' --sort --#{ftype}`
+			color  = (opts[:colorize_given]) ? '--color' : '--nocolor'
+			result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' #{color} --sort --#{ftype}`
 			
 			# display the matches
 			unless result.strip.empty?
+				puts " -- Searching for: #{payload}".colorize( :cyan )
 
 				# iterate over the ack results
 				result.each_line do | line | 
@@ -92,23 +92,14 @@ $payloads.each do | filetype, payload_groups |
 					line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
 					snippet          = line.slice((second_colon_pos +1), line.length).strip
 
-					# buffer a new point of interest
-					data = {
-						:filetype    => ftype,
-						:file        => file_name,
-						:line_number => line_num,
-						:match       => payload,
-						:snippet     => snippet,
-					}
-					points_of_interest.push(PoI.new(data))
-
+					# output the scandata
+					puts file_name.colorize( :cyan ) + " (" + line_num.colorize( :yellow ) + ")"
+					puts snippet + "\n\n" 
 				end
+				puts "\n\n"
 			end
 		end	
 	end
-end
-
-# display the output
-points_of_interest.each do |point|
-	puts point.get(true) + "\n\n"
+	
+	puts "\n\n"
 end
