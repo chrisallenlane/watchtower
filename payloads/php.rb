@@ -1,5 +1,5 @@
 # Enumerate the various PHP hazards to search for
-payloads[:php] = [
+$payloads[:php] = {
 	# dangerous PHP functions
 	:dangerous_functions => %w[
 		assert\(
@@ -45,4 +45,4 @@ payloads[:php] = [
 		\$GLOBALS
 		\$_FILES
 	]
-]
+}

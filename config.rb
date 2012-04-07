@@ -13,7 +13,7 @@
 # Payloads
 ######################################################################
 # assemble the array of payloads
-payloads = []
+$payloads = {}
 
 require './payloads/php.rb'
 

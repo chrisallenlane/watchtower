@@ -15,7 +15,8 @@ opts = Trollop::options do
         :short => 'c'
         
     opt :config_file, 'Path to the config file',
-        :short => 'o'
+        :short => 'o',
+        :type => :string
 end
 
 # If --colorize was specified, include the colorize gem. Otherwise,
@@ -43,20 +44,8 @@ if opts[:config_file_given]
 		require opts[:config_file]
 	end
 else
-	payloads = %w[
-		assert\(		base64_decode\(		base64_encode\(		create_function\(
-		curl_exec\(		curl_init\(			eval\(				exec\(
-		fclose\(		file\(				file_get_contents\(	file_put_contents\(
-		fopen\(			fread\(				fsockopen\(			include\(
-		include_once\(	mail\(				ob_get_contents\(	passthru\(
-		pfsockopen\(	popen\(				proc_open\(			readfile\(
-		require\(		require_once\(		shell_exec\(		system\(
-		unserialize\(	`
-		
-		\$_GET		\$_POST		\$_SESSION
-		\$_SERVER	\$_COOKIE	\$_REQUEST
-		\$GLOBALS	\$_FILES
-	]
+	puts 'The specified config file does not exist.'
+	exit
 end
 
 # verify that the directory to scan actually exists
@@ -71,40 +60,44 @@ end
 ######################################################################
 puts 'Scanning...'
 # search the target directories for the payloads
-payloads.each do | filetype, payload_groups |
+$payloads.each do | filetype, payload_groups |
+	
+	# cast the filetype symbol into a string
+	ftype = filetype.to_s
+	puts " ===== Filetype: #{ftype} =====".colorize(:red)
 	
 	# iterate over the payload groups
-	payload_groups.each do |payload_group, payload|
-		# cast the filetype symbol into a string
-		filetype.to_s!
-		puts " ===== Filetype: #{filetype} ====="
-	
-		# suppress ack's own color usage unless --colorize was specified
-		color = (opts[:colorize_given]) ? '--color' : '--nocolor'
-		result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' #{color} --sort --#{filetype}`
+	payload_groups.each do |payload_group, payloads|
 		
-		# display the matches
-		unless result.strip.empty?
-			puts " -- Searching for: #{payload}".colorize( :cyan )
+		# iterate over each payload
+		payloads.each do |payload|
+			# suppress ack's own color usage unless --colorize was specified
+			color  = (opts[:colorize_given]) ? '--color' : '--nocolor'
+			result = `cd #{opts[:scan_dir]}; ack-grep '#{payload}' #{color} --sort --#{ftype}`
+			
+			# display the matches
+			unless result.strip.empty?
+				puts " -- Searching for: #{payload}".colorize( :cyan )
 
-			# iterate over the ack results
-			result.each_line do | line | 
-				# parse the result string into components
-				first_colon_pos  = line.index(':')
-				second_colon_pos = line.index(':', first_colon_pos + 1)
-				
-				# parse out the important information
-				file_name        = line.slice(0..(first_colon_pos - 1)) 
-				line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
-				snippet          = line.slice((second_colon_pos +1), line.length).strip
+				# iterate over the ack results
+				result.each_line do | line | 
+					# parse the result string into components
+					first_colon_pos  = line.index(':')
+					second_colon_pos = line.index(':', first_colon_pos + 1)
+					
+					# parse out the important information
+					file_name        = line.slice(0..(first_colon_pos - 1)) 
+					line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
+					snippet          = line.slice((second_colon_pos +1), line.length).strip
 
-				# output the scandata
-				puts file_name.colorize( :cyan ) + " (" + line_num.colorize( :yellow ) + ")"
-				puts snippet + "\n\n" 
+					# output the scandata
+					puts file_name.colorize( :cyan ) + " (" + line_num.colorize( :yellow ) + ")"
+					puts snippet + "\n\n" 
+				end
+				puts "\n\n"
 			end
-			puts "\n\n"
-		end
+		end	
 	end
 	
-	puts "\n\n\n\n"
+	puts "\n\n"
 end
