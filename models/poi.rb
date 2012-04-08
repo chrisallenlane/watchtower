@@ -17,18 +17,24 @@ class PoI
 	end
 	
 	# outputs the point of interest to the command line
-	def get use_color = false
-		#buffer and return text describing self
+	def to_s
 		text = ''
-		if use_color
-			text += @file.colorize(@@color_file) + ':' + @line_number.colorize(@@color_line_number) + "\n"
-			text += @snippet.sub(@match, @match.colorize(:background => @@color_match)) # highlight the match in the snippet
-		else
-			text += @file + ':' + @line_number
-			text += @snippet
-		end
-		
-		return text
+		text += @file + ':' + @line_number + "\n"
+		text += @snippet
+		text
+	end
+	
+	# colorizes output
+	def colorize
+		text = ''
+		text += @file.colorize(@@color_file) + ':' + @line_number.colorize(@@color_line_number) + "\n"
+		text += @snippet.sub(@match, @match.colorize(:background => @@color_match))
+		text
+	end
+	
+	# implement the concatenation operator
+	def + arg
+		self.to_s + arg
 	end
 	
 end

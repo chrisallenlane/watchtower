@@ -74,5 +74,5 @@ vulnscanner.scan
 
 # Display the output
 vulnscanner.points_of_interest.each do |point|
-	puts point.get(true) + "\n\n"
+	puts point.colorize + "\n\n"
 end
