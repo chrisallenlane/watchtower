@@ -42,7 +42,7 @@ $payloads[:php] = {
 		$_SERVER
 		$_COOKIE
 		$_REQUEST
-		$GLOBALS
 		$_FILES
+		$GLOBALS
 	]
 }
