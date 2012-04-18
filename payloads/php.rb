@@ -1,4 +1,4 @@
-# Enumerate the various PHP hazards to search for
+# A hash of interesting PHP data
 $payloads[:php] = {
 	# dangerous PHP functions
 	:dangerous_functions => %w[
