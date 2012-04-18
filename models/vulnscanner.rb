@@ -1,6 +1,8 @@
 class VulnScanner
+
 	attr_accessor :payloads, :points_of_interest, :scan_dir
 	
+	# initializer
 	def initialize data
 		@payloads	= data[:payloads]
 		@scan_dir 	= data[:scan_dir]
@@ -9,7 +11,7 @@ class VulnScanner
 	
 	# performs a scan of the specified codebase
 	def scan
-		@payloads.each do | filetype, payload_groups |		
+		@payloads.each do |filetype, payload_groups|
 			# cast the filetype symbol into a string
 			ftype = filetype.to_s	
 			# iterate over the payload groups
