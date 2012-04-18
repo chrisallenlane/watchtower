@@ -26,7 +26,7 @@ class VulnScanner
 					unless result.strip.empty?
 
 						# iterate over the ack results
-						result.each_line do | line | 
+						result.each_line do |line| 
 							# parse the result string into components
 							first_colon_pos  = line.index(':')
 							second_colon_pos = line.index(':', first_colon_pos + 1)

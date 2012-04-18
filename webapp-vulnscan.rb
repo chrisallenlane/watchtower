@@ -34,20 +34,9 @@ opts = Trollop::options do
         :short 		=> 'o'
 end
 
-# If --colorize was specified, include the colorize gem. Otherwise,
-# monkey-patch String.colorize so that it does nothing. This will save
-# us from having to do some tedious if/else switching further down in
-# the program
-if opts[:colorize_given]
-	require 'colorize'
-else
-	class String
-		def colorize params
-			return self
-		end
-	end
-end
-
+# only include the colorize gem if it is required
+require 'colorize' if opts[:colorize_given]
+	
 
 #######################################################################
 # Config and Payloads
@@ -72,7 +61,10 @@ end
 vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
 
-# Display the output
-vulnscanner.points_of_interest.each do |point|
-	puts point.colorize + "\n\n"
+# Display the output. Leave the conditional `if` outside the loop
+#for performance
+if opts[:colorize_given] 
+	vulnscanner.points_of_interest.each do |point| puts point.colorize + "\n\n"	end
+else
+	vulnscanner.points_of_interest.each do |point| puts point + "\n\n"end
 end
