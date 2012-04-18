@@ -21,7 +21,6 @@ class PoI
 		text = ''
 		text += @file + ':' + @line_number + "\n"
 		text += @snippet
-		text
 	end
 	
 	# colorizes output
@@ -29,7 +28,6 @@ class PoI
 		text = ''
 		text += @file.colorize(@@color_file) + ':' + @line_number.colorize(@@color_line_number) + "\n"
 		text += @snippet.sub(@match, @match.colorize(:background => @@color_match))
-		text
 	end
 	
 	# implement the concatenation operator

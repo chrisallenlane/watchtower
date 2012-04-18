@@ -64,7 +64,7 @@ vulnscanner.scan
 # Display the output. Leave the conditional `if` outside the loop
 #for performance
 if opts[:colorize_given] 
-	vulnscanner.points_of_interest.each do |point| puts point.colorize + "\n\n"	end
+	vulnscanner.points_of_interest.each {|point| puts point.colorize + "\n\n"} 
 else
-	vulnscanner.points_of_interest.each do |point| puts point + "\n\n"end
+	vulnscanner.points_of_interest.each {|point| puts point + "\n\n"}
 end
