@@ -21,6 +21,11 @@ body{
 	BORDER: 1PX SOLID GREEN;
 }
 
+div.point_of_interest{
+	border: 1px solid red;
+	margin: 10px;
+}
+
 html{
 	background-color: silver;
 }

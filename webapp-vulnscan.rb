@@ -8,7 +8,7 @@
 # http://twitter.com/chrisallenlane
 #######################################################################
 
-require 'rubygems'
+require 'rubygems'		# is this bad?
 require 'trollop'
 require 'fileutils'
 require 'shellwords'
@@ -38,11 +38,6 @@ opts = Trollop::options do
 			:default	=> './config.rb',
 			:short 		=> 'f'
 end
-
-# support exporting to html, xml, yaml, csv, text, json
-
-# only include the colorize gem if it is required
-require 'colorize' if opts[:colorize_given]
 	
 
 #######################################################################
@@ -65,6 +60,8 @@ end
 #######################################################################
 # Scan
 #######################################################################
+# sort the payload hashes here?
+
 vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
 
@@ -80,22 +77,31 @@ vulnscanner.scan
 # but I'm happy to spend a bit of Moore's dividend here to keep the code
 # cleaner. (We would need to do some irritating branching later
 # on otherwise.)
-vulnscanner.points_of_interest.each {|point| point.colorize} if opts[:colorize_given]
+if opts[:colorize_given]
+	require 'colorize' 
+	vulnscanner.points_of_interest.each {|point| point.colorize}
+end
 
+# output in the requested format
 case opts[:output_format]
 	when 'csv'
 		vulnscanner.points_of_interest.each {|point| puts point.csv}
+		
 	when 'html'
 		# load a view here
+	
 	when 'json'
 		vulnscanner.points_of_interest.each {|point| puts point.json}
+	
 	when 'xml'
 		puts '<points_of_interest>'
 		vulnscanner.points_of_interest.each {|point| puts point.xml}
 		puts '</points_of_interest>'
+	
 	when 'yaml'
 		puts 'points_of_interest:'
 		vulnscanner.points_of_interest.each {|point| puts point.yaml}
+	
 	else
 		vulnscanner.points_of_interest.each {|point| puts point + "\n\n"}
 end

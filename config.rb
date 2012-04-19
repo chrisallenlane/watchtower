@@ -3,8 +3,8 @@
 #######################################################################
 # These are not currently in use, but may come into play if I build a 
 # graphical front-end eventually
-@@browser = 'google-chrome'
-@@editor  = 'geany'
+#@@browser = 'google-chrome'
+#@@editor  = 'geany'
 
 
 #######################################################################
