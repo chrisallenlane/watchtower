@@ -33,3 +33,8 @@ div.point_of_interest{
 html{
 	background-color: silver;
 }
+
+p#footer{
+	clear: both;
+	text-align: center;
+}

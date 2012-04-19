@@ -1,19 +1,22 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head>
 	<title>WebApp-Vulnscan :: Report</title>
 	<link rel='stylesheet' type='text/css' href='./main.css'>
+	<link rel='stylesheet' type='text/css' href='./jquery-ui-1.8.19.custom.css'>
 	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 	<script type='text/javascript'>
 		function toggle_payload(filetype, payload){
 			//modify the nav item
 			$('div#column_nav li.' + payload + ' a').toggleClass('payload_hidden');
 			//hide the payload
-			$('div#column_content div.filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
+			$('div#column_content div#filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
 		}
 		
 		jQuery(document).ready(function(){
 			$('div#column_nav').accordion();
+			$('div#column_content').tabs();
 		});
 	</script>
 </head>
@@ -23,10 +26,11 @@
 		<h2>Source Code Audit (Generated DD/MM/YYYY)</h2>
 	</div>
 
+	<!-- payload browser -->
 	<div id='column_nav'>
 		<h3>PHP</h3>
 		<ul class='php'>
-			<li class='require_once'><code><a href='javascript:toggle_payload("php", "require_once")'>require_once</a></code></li>
+			<li class='require_once'><code><a href='javascript:toggle_payload("php","require_once")'>require_once</a></code></li>
 			<li><code>require</code></li>
 			<li><code>include_once</code></li>
 			<li><code>include</code></li>
@@ -38,32 +42,18 @@
 			<li><code>eval</code></li>
 			<li><code>etc</code></li>
 		</ul>
-
-		<!--
-		<ul>
-			<li class='php'>PHP
-				<ul>
-					<li class='require_once'><code><a href='javascript:toggle_payload("php", "require_once")'>require_once</a></code></li>
-					<li><code>require</code></li>
-					<li><code>include_once</code></li>
-					<li><code>include</code></li>
-				</ul>
-			</li>
-			<li class='js'>JS
-				<ul>
-					<li><code>eval</code></li>
-					<li><code>eval</code></li>
-					<li><code>etc</code></li>
-				</ul>
-			</li>
-		</ul>
-		-->
 	</div>
-
+	
 	<div id='column_content'>
-		<div class='filetype_php'>
-			<h2>PHP</h2>
+		<!-- tab navigation -->
+		<ul>
+			<li><a href='#filetype_php'>PHP</a></li>
+			<li><a href='#filetype_js'>JS</a></li>
+		</ul>
 			
+		<!-- filetypes -->
+		<div id='filetype_php'>
+			<h2>PHP</h2>
 			<div class='payload_require_once'>
 				<h3><code>require_once</code></h3>
 				<div class='point_of_interest'>
@@ -71,6 +61,7 @@
 					<span class='line_number'>45</span>
 					<p class='snippet'><code>The snippet goes here</code></p>
 				</div>
+				
 				<div class='point_of_interest'>
 					<span class='filename'>Filename</span>
 					<span class='line_number'>45</span>
@@ -85,11 +76,52 @@
 					<span class='line_number'>45</span>
 					<p class='snippet'><code>The snippet goes here</code></p>
 				</div>
+				
 				<div class='point_of_interest'>
 					<span class='filename'>Filename</span>
 					<span class='line_number'>45</span>
 					<p class='snippet'><code>The snippet goes here</code></p>
 				</div>
+				
+				<div class='point_of_interest'>
+					<span class='filename'>Filename</span>
+					<span class='line_number'>45</span>
+					<p class='snippet'><code>The snippet goes here</code></p>
+				</div>
+			</div>
+		</div>
+	
+		<div id='filetype_js'>
+			<h2>JS</h2>
+			<div class='payload_require_once'>
+				<h3><code>require_once</code></h3>
+				<div class='point_of_interest'>
+					<span class='filename'>Filename</span>
+					<span class='line_number'>45</span>
+					<p class='snippet'><code>The snippet goes here</code></p>
+				</div>
+				
+				<div class='point_of_interest'>
+					<span class='filename'>Filename</span>
+					<span class='line_number'>45</span>
+					<p class='snippet'><code>The snippet goes here</code></p>
+				</div>
+			</div>
+			
+			<div class='payload_require'>
+				<h3><code>require</code></h3>
+				<div class='point_of_interest'>
+					<span class='filename'>Filename</span>
+					<span class='line_number'>45</span>
+					<p class='snippet'><code>The snippet goes here</code></p>
+				</div>
+				
+				<div class='point_of_interest'>
+					<span class='filename'>Filename</span>
+					<span class='line_number'>45</span>
+					<p class='snippet'><code>The snippet goes here</code></p>
+				</div>
+				
 				<div class='point_of_interest'>
 					<span class='filename'>Filename</span>
 					<span class='line_number'>45</span>
@@ -98,7 +130,9 @@
 			</div>
 		</div>
 	</div>
+	</div>
 
+	<p id='footer'>This is the footer</p>
 
 </body>
 </html>
