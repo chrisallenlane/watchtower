@@ -5,19 +5,19 @@ body{
 	width: 1000px;
 }
 
-#column_nav{
+.column_nav{
 	float: left;
-	width: 210px;
+	width: 150px;
 	margin: 10px 5px 10px 10px;
 	padding: 10px;
 	BORDER: 1PX SOLID BLUE;
 }
 
-#column_nav li a.payload_hidden{
+.column_nav li a.payload_hidden{
 	color: silver;
 }
 
-#column_content{
+.column_content{
 	float: right;
 	width: 710px;
 	margin: 10px 10px 10px 5px;
