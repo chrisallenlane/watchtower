@@ -14,6 +14,7 @@ class PoI
 		@line_number = data[:line_number]
 		@match       = data[:match]
 		@snippet     = data[:snippet]
+		@group       = data[:group]
 	end
 	
 	# colorizes command-line output

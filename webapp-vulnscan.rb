@@ -37,6 +37,8 @@ opts = Trollop::options do
 			:type 		=> :string,
 			:default	=> './config.rb',
 			:short 		=> 'f'
+			
+	# report name?
 end
 	
 
@@ -88,7 +90,10 @@ case opts[:output_format]
 		vulnscanner.points_of_interest.each {|point| puts point.csv}
 		
 	when 'html'
-		# load a view here
+		require 'erb'
+		require 'base64'
+		erb = ERB.new(File.read('./views/report.html.erb'), 0, '<>')
+		puts erb.result(binding)
 	
 	when 'xml'
 		puts '<points_of_interest>'
