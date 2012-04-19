@@ -11,9 +11,9 @@ class VulnScanner
 	
 	# performs a scan of the specified codebase
 	def scan
-		@payloads.each do |filetype, payload_groups|
-			# cast the filetype symbol into a string
-			ftype = filetype.to_s	
+		@payloads.each do |file_type, payload_groups|
+			# cast the file_type symbol into a string
+			ftype = file_type.to_s	
 			# iterate over the payload groups
 			payload_groups.each do |payload_group, payloads|
 				
@@ -38,7 +38,7 @@ class VulnScanner
 
 							# buffer a new point of interest
 							data = {
-								:filetype    => ftype,
+								:file_type   => ftype,
 								:file        => file_name,
 								:line_number => line_num,
 								:match       => payload,

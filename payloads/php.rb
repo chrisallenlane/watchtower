@@ -33,7 +33,6 @@ $payloads[:php] = {
 		unserialize(
 		`
 	],
-
 	# dangerous user data
 	:user_data => %w[
 		$_GET
