@@ -43,6 +43,7 @@ class VulnScanner
 								:line_number => line_num,
 								:match       => payload,
 								:snippet     => snippet,
+								:group		 => payload_group,
 							}
 							@points_of_interest.push(PoI.new(data))
 						end
@@ -50,6 +51,11 @@ class VulnScanner
 				end	
 			end
 		end		
+	end
+	
+	# sorts the points of interest
+	def sort_pois
+	
 	end
 	
 end

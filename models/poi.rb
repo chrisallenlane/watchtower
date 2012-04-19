@@ -5,7 +5,7 @@ class PoI
 	@@color_line_number = :yellow
 	@@color_match       = :red
 
-	attr_accessor :file_type, :file, :line_number, :match, :snippet
+	attr_accessor :file_type, :file, :line_number, :match, :snippet, :group
 	
 	# define the initializer. accept a hash of data
 	def initialize data
@@ -27,6 +27,7 @@ class PoI
 	def to_s
 		text = @file + ':' + @line_number + "\n"
 		text += @snippet
+		text += @group
 	end
 	
 	# implement the concatenation operator
@@ -53,6 +54,7 @@ class PoI
 			"\t\t<line_number><![CDATA[#{@line_number}]]></line_number>\n" + 
 			"\t\t<match><![CDATA[#{@match}]]></match>\n" + 
 			"\t\t<snippet><![CDATA[#{@snippet}]]></snippet>\n" + 
+			"\t\t<group><![CDATA[#{@group}]]></group>\n" + 
 		"\t</poi>\n"
 	end
 end
