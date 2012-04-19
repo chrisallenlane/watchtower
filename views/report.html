@@ -2,7 +2,20 @@
 <head>
 	<title>WebApp-Vulnscan :: Report</title>
 	<link rel='stylesheet' type='text/css' href='./main.css'>
-	<script type='text/javascript'></script>
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	<script type='text/javascript'>
+		function toggle_payload(filetype, payload){
+			//modify the nav item
+			$('div#column_nav li.' + payload + ' a').toggleClass('payload_hidden');
+			//hide the payload
+			$('div#column_content div.filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
+		}
+		
+		jQuery(document).ready(function(){
+			$('div#column_nav').accordion();
+		});
+	</script>
 </head>
 <body>
 	<div id='masthead'>
@@ -11,11 +24,26 @@
 	</div>
 
 	<div id='column_nav'>
-		Payloads
+		<h3>PHP</h3>
+		<ul class='php'>
+			<li class='require_once'><code><a href='javascript:toggle_payload("php", "require_once")'>require_once</a></code></li>
+			<li><code>require</code></li>
+			<li><code>include_once</code></li>
+			<li><code>include</code></li>
+		</ul>
+
+		<h3>JS</h3>
+		<ul class='js'>
+			<li><code>eval</code></li>
+			<li><code>eval</code></li>
+			<li><code>etc</code></li>
+		</ul>
+
+		<!--
 		<ul>
 			<li class='php'>PHP
 				<ul>
-					<li><code>require_once</code></li>
+					<li class='require_once'><code><a href='javascript:toggle_payload("php", "require_once")'>require_once</a></code></li>
 					<li><code>require</code></li>
 					<li><code>include_once</code></li>
 					<li><code>include</code></li>
@@ -29,6 +57,7 @@
 				</ul>
 			</li>
 		</ul>
+		-->
 	</div>
 
 	<div id='column_content'>

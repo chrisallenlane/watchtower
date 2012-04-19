@@ -26,7 +26,7 @@ opts = Trollop::options do
 			:short 		=> 's'
 
 	opt :output_format, 'Specify the output format. Valid options are "csv", ' + 
-			'"html", "json", "txt", "xml", "yaml"',
+			'"html", "txt", "xml"',
 			:default	=> 'txt',
 			:short 		=> 'o'
 
@@ -77,7 +77,7 @@ vulnscanner.scan
 # but I'm happy to spend a bit of Moore's dividend here to keep the code
 # cleaner. (We would need to do some irritating branching later
 # on otherwise.)
-if opts[:colorize_given]
+if opts[:colorize_given] and opts[:output_format].eql? 'txt'
 	require 'colorize' 
 	vulnscanner.points_of_interest.each {|point| point.colorize}
 end
@@ -90,17 +90,10 @@ case opts[:output_format]
 	when 'html'
 		# load a view here
 	
-	when 'json'
-		vulnscanner.points_of_interest.each {|point| puts point.json}
-	
 	when 'xml'
 		puts '<points_of_interest>'
 		vulnscanner.points_of_interest.each {|point| puts point.xml}
 		puts '</points_of_interest>'
-	
-	when 'yaml'
-		puts 'points_of_interest:'
-		vulnscanner.points_of_interest.each {|point| puts point.yaml}
 	
 	else
 		vulnscanner.points_of_interest.each {|point| puts point + "\n\n"}

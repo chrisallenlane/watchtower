@@ -34,6 +34,11 @@ class PoI
 		self.to_s + arg
 	end
 	
+	# outputs as CSV
+	def csv
+	
+	end
+	
 	# outputs as HTML
 	def html
 		html = ''
@@ -50,14 +55,4 @@ class PoI
 			"\t\t<snippet><![CDATA[#{@snippet}]]></snippet>\n" + 
 		"\t</poi>\n"
 	end
-	
-	# outputs as YAML
-	def yaml
-			"  - file: #{@file}\n" +
-			"  file_type: #{@file_type}\n" +
-			"  line_number: #{@line_number}\n" +
-			"  match: #{@match}\n" +
-			"  snippet: #{@snippet}\n\n"
-	end
-	
 end
