@@ -1,6 +1,6 @@
 class VulnScanner
 
-	attr_accessor :payloads, :points_of_interest, :scan_dir
+	attr_accessor :payloads, :points_of_interest, :scan_dir, :project_name
 	
 	# initializer
 	def initialize data

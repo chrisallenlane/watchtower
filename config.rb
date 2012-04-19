@@ -13,6 +13,8 @@
 # assemble the array of payloads
 $payloads = {}
 
+# need to gracefully handle 'synonymous' filetype extensions here
+# (.php, .php4, .php5, .phtml, etc)
 require './payloads/php.rb'
 require './payloads/html.rb'
 #require './payloads/js.rb'

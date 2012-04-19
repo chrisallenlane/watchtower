@@ -1,11 +1,16 @@
 # A hash of interesting HTML elements
 $payloads[:html] = {
-	# dangerous PHP functions
+	# noteworthy HTML tags
 	:inputs => %w[
+		<applet
+		<embed
 		<form
 		<input
-		<textarea
+		<object
 		<select
 		<script
+		<style
+		<textarea
+		<xml
 	]
 }

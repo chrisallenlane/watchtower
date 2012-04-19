@@ -23,7 +23,7 @@ class PoI
 		text += @snippet
 	end
 	
-	# colorizes output
+	# colorizes command-line output
 	def colorize
 		text = ''
 		text += @file.colorize(@@color_file) + ':' + @line_number.colorize(@@color_line_number) + "\n"
@@ -33,6 +33,12 @@ class PoI
 	# implement the concatenation operator
 	def + arg
 		self.to_s + arg
+	end
+	
+	# outputs as HTML
+	def html
+		html = ''
+		# @todo: implement this here
 	end
 	
 end
