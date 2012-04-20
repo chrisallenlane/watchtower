@@ -1,18 +1,23 @@
 #######################################################################
 # Configs
 #######################################################################
-# @todo: files to exclude
 $configs = {
-	
-	# files to exclude from the search
-	:exclude => [
-		'.git',
-		'.svn',
-	],
 	
 	# If true, javascript will be embedded directly into the report. If
 	# false, it will be linked to a hosted file.
 	:embed_javascript => false,
+	
+	# @todo: files to exclude from the search
+	:exclude_dirs => [
+
+	],
+	
+	# @todo: implement this
+	:payload_dir => '',
+	
+	# for use with HTML reporting
+	# @todo: implement this
+	:html_stylesheet => '',
 }
 
 
@@ -22,10 +27,9 @@ $configs = {
 # assemble the array of payloads
 $payloads = {}
 
-# need to gracefully handle 'synonymous' filetype extensions here
-# (.php, .php4, .php5, .phtml, etc)
-require './payloads/php.rb'
+# might want to wrap this in some load function
 require './payloads/html.rb'
-require './payloads/js.rb'
+require './payloads/php.rb'
+#require './payloads/js.rb'
 #require './payloads/sql.rb'
 #payloads += custom_strings

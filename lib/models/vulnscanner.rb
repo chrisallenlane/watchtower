@@ -18,8 +18,9 @@ class VulnScanner
 			payload_groups.each do |payload_group, payloads|
 			
 				# iterate over each payload
-				payloads.each do |payload|				
+				payloads.each do |payload|
 					# do an ack-grep scan
+					# @todo: --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
 					result = `cd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype}`
 					
 					# display the matches
@@ -44,6 +45,9 @@ class VulnScanner
 								:snippet     => snippet,
 								:group		 => payload_group,
 							}
+							
+							#puts data.to_yaml
+							
 							@points_of_interest.push(PoI.new(data))
 						end
 					end

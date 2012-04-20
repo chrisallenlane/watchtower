@@ -43,19 +43,44 @@
 		</ul>
 		
 		<%
-		last_file_type = ''
-		last_payload   = ''
-		first_pass     = true
-		for point in vulnscanner.points_of_interest
+		# implement special behavior on the first pass through
+		first_pass = true
+		
+		# iterate over the points of interest
+		vulnscanner.points_of_interest.each_with_index do |point, index|
+			next_point = vulnscanner.points_of_interest[index + 1]
+			last_point = vulnscanner.points_of_interest[index - 1]
+		
+			# if we're on the last point, nil guard
+			if next_point.nil?
+				next_point = point.clone
+				next_point.file_type = ''
+				next_point.match     = ''
+			end
+		
+			# if we're on the first point, guard wrap-around
+			if index == 0
+				last_point = point.clone
+				last_point.file_type = ''
+				last_point.match     = ''
+			end
+			
+			#puts "<br>" + h(point.to_yaml)
+			#puts "<br>" + h(next_point.to_yaml)
+			#puts "<br>" + h(last_point.to_yaml)
+			#puts "<br><br>"
+			
 		%>
-		<% unless point.file_type.eql? last_file_type %>
+		<% if first_pass or (point.file_type != next_point.file_type) %>
 		<!-- @filetype -->
 		<div id='filetype_<%= point.file_type %>'>
 			<div class='column_nav'>
 				<ul>
 					<% $payloads[point.file_type.to_sym].each do |payload_group, payloads| %>
-					<% for payload in payloads %>
-					<li class='<%=  Digest::MD5.hexdigest(payload) %>'><code><a href='javascript:toggle_payload("<%= point.file_type %>","<%= Digest::MD5.hexdigest(payload) %>")'><%= h payload %></a></code></li>
+					<% for payload in payloads
+						@payload_hash = Digest::MD5.hexdigest(payload)
+					%>
+					<li class='<%= @payload_hash %>'><code><a href='javascript:toggle_payload("<%= point.file_type %>","<%= @payload_hash %>")'><%= h payload %></a></code></li>
 					<% end %>
 					<% end %>
 				</ul>
@@ -65,8 +90,8 @@
 				<h2><%= h point.file_type %></h2>
 		<% end %>
 		
-				<% unless point.match.eql? last_payload %>
-				<div class='payload_require_once'>			
+				<% if first_pass or (point.match != next_point.match) %>
+				<div class='payload_<%= @payload_hash %>'>
 					<!-- payload -->
 					<h3><code><%= h point.match %></code></h3>
 				<% end %>
@@ -74,23 +99,23 @@
 					<!-- point of interest -->
 					<div class='point_of_interest'>
 						<span class='file_name'><%= h point.file %></span>
+						<span class='file_type'><%= h point.file_type %></span>
 						<span class='line_number'><%= h point.line_number %></span>
+						<span class='match'><%= h point.match %></span>
 						<p class='snippet'><code><%= h point.snippet %></code></p>
 					</div> <!-- poi -->
 				
-				<% unless point.match.eql? last_payload %>	
-				</div> <!-- payload -->
+				<% unless point.match.eql? next_point.match %>
+				</div> <!-- @close_payload -->
 				<% end %>
 				
-			<% unless point.file_type.eql? last_file_type or first_pass == true %>
+			<% unless point.file_type.eql? next_point.file_type %>
 			</div> <!-- column_content -->
-		</div> <!-- filetype -->
-		<% end %>
+		</div> <!-- @close_filetype -->
 		
 		<%
-		last_file_type = point.file_type		
-		last_payload   = point.match
-		first_pass     = false
+				first_pass = false
+			end 
 		end
 		%>
 		

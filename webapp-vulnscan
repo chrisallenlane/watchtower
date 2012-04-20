@@ -11,6 +11,7 @@
 require 'rubygems'		# is this bad?
 require 'trollop'
 require 'fileutils'
+#require 'enumerator'
 require 'shellwords'
 require 'lib/models/poi'
 require 'lib/models/vulnscanner'
@@ -64,6 +65,19 @@ end
 #######################################################################
 vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
+
+=begin
+fuckyou = %w[a b c]
+fuckyou.each_with_index do |point, index|
+	puts "#{index}: #{point}"
+end
+exit
+
+vulnscanner.points_of_interest.each_with_index do |index, point|
+	puts "#{index}: #{point.match}"
+end
+exit
+=end
 
 #puts $payloads.to_yaml
 #exit
