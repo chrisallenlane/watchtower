@@ -16,15 +16,14 @@ class VulnScanner
 			ftype = file_type.to_s	
 			# iterate over the payload groups
 			payload_groups.each do |payload_group, payloads|
-				
+			
 				# iterate over each payload
-				payloads.each do |payload|
+				payloads.each do |payload|				
 					# do an ack-grep scan
 					result = `cd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype}`
 					
 					# display the matches
 					unless result.strip.empty?
-
 						# iterate over the ack results
 						result.each_line do |line| 
 							# parse the result string into components
@@ -51,11 +50,5 @@ class VulnScanner
 				end	
 			end
 		end		
-	end
-	
-	# sorts the points of interest
-	def sort_pois
-	
-	end
-	
+	end	
 end

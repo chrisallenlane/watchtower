@@ -2,8 +2,10 @@
 <html>
 <head>
 	<title>WebApp-Vulnscan :: Report</title>
-	<link rel='stylesheet' type='text/css' href='./main.css'>
-	<link rel='stylesheet' type='text/css' href='./jquery-ui-1.8.19.custom.css'>
+	<style type='text/css'>
+		<%= dochead[:stylesheet_1] %>
+		<%= dochead[:stylesheet_2] %>		
+	</style>
 	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 	<script type='text/javascript'>
@@ -23,7 +25,7 @@
 <body>
 	<div id='masthead'>
 		<h1>chris-allen-lane.com</h1>
-		<h2>Source Code Audit (Generated DD/MM/YYYY)</h2>
+		<h2>Source Code Audit (Generated <%= Date.today.strftime("%Y-%m-%d") %>)</h2>
 	</div>
 
 	<div id='main'>
@@ -33,39 +35,58 @@
 			<%= "<li><a href='#filetype_#{key}'>#{key}</a></li>" %>
 			<% end %>
 		</ul>
-			
-		<!-- filetype -->
-		<div id='filetype_php'>
+		
+		<%
+		last_file_type = ''
+		last_payload   = ''
+		first_pass     = true
+		for point in vulnscanner.points_of_interest
+		%>
+		<% unless point.file_type.eql? last_file_type %>
+		<!-- @filetype -->
+		<div id='filetype_<%= point.file_type %>'>
 			<div class='column_nav'>
 				<ul>
-					<li class='require_once'><code><a href='javascript:toggle_payload("php","require_once")'>require_once</a></code></li>
-					<li><code>require</code></li>
-					<li><code>include_once</code></li>
-					<li><code>include</code></li>
+					<% $payloads[point.file_type.to_sym].each do |payload_group, payloads| %>
+					<% for payload in payloads %>
+					<li class='<%=  Digest::MD5.hexdigest(payload) %>'><code><a href='javascript:toggle_payload("<%= point.file_type %>","<%= Digest::MD5.hexdigest(payload) %>")'><%= h payload %></a></code></li>
+					<% end %>
+					<% end %>
 				</ul>
 			</div>
 			
 			<div class='column_content'>
-				<h2>PHP</h2>
-				<div class='payload_require_once'>
-					
+				<h2><%= h point.file_type %></h2>
+		<% end %>
+		
+				<% unless point.match.eql? last_payload %>
+				<div class='payload_require_once'>			
 					<!-- payload -->
-					<h3><code>require_once</code></h3>
+					<h3><code><%= h point.match %></code></h3>
+				<% end %>
 
 					<!-- point of interest -->
 					<div class='point_of_interest'>
-						<span class='filename'>Filename</span>
-						<span class='line_number'>45</span>
-						<p class='snippet'><code>The snippet goes here</code></p>
+						<span class='file_name'><%= h point.file %></span>
+						<span class='line_number'><%= h point.line_number %></span>
+						<p class='snippet'><code><%= h point.snippet %></code></p>
 					</div> <!-- poi -->
-					
-				</div> <!-- payload -->
 				
+				<% unless point.match.eql? last_payload %>	
+				</div> <!-- payload -->
+				<% end %>
+				
+			<% unless point.file_type.eql? last_file_type or first_pass == true %>
 			</div> <!-- column_content -->
 		</div> <!-- filetype -->
+		<% end %>
 		
-		
-		
+		<%
+		last_file_type = point.file_type		
+		last_payload   = point.match
+		first_pass     = false
+		end
+		%>
 		
 	</div> <!-- main -->
 

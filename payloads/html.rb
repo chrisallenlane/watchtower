@@ -2,6 +2,8 @@
 $payloads[:html] = {
 	# noteworthy HTML tags
 	:inputs => %w[
+		coupon
+		<p>
 		<applet
 		<embed
 		<form

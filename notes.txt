@@ -4,3 +4,5 @@ source code auditing tool
 
 
 Calcify
+
+need to be able to exclude files via the config file

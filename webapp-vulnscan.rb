@@ -91,8 +91,18 @@ case opts[:output_format]
 		
 	when 'html'
 		require 'erb'
-		require 'base64'
-		erb = ERB.new(File.read('./views/report.html.erb'), 0, '<>')
+		include ERB::Util
+		require 'digest'
+		
+		# pass page variables into the erb
+		dochead = {
+			:stylesheet_1 => File.read('./views/jquery-ui-1.8.19.custom.css'),
+			:stylesheet_2 => File.read('./views/main.css'),
+			#:jquery       = File.read('./views/report.html.erb'),
+			#:jquery_ui    = File.read('./views/report.html.erb'),
+		}
+
+		erb = ERB.new(File.read('./views/report.html.erb'), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	
 	when 'xml'

@@ -41,12 +41,6 @@ class PoI
 	
 	end
 	
-	# outputs as HTML
-	def html
-		html = ''
-		# @todo: implement this here
-	end
-	
 	# outputs as XML
 	def xml
 		"\t<poi>\n" +

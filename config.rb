@@ -6,6 +6,9 @@
 #@@browser = 'google-chrome'
 #@@editor  = 'geany'
 
+# @todo: files to exclude
+$exclude = {}
+
 
 #######################################################################
 # Payloads
@@ -17,7 +20,6 @@ $payloads = {}
 # (.php, .php4, .php5, .phtml, etc)
 require './payloads/php.rb'
 require './payloads/html.rb'
-#require './payloads/js.rb'
-#require './payloads/asp.rb'
+require './payloads/js.rb'
 #require './payloads/sql.rb'
 #payloads += custom_strings
