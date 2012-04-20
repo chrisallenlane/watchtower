@@ -4,10 +4,16 @@
 	<title>WebApp-Vulnscan :: Report</title>
 	<style type='text/css'>
 		<%= dochead[:stylesheet_1] %>
-		<%= dochead[:stylesheet_2] %>		
+		<%= dochead[:stylesheet_2] %>
 	</style>
-	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
+	<% if $configs[:embed_javascript].eql? true %>
+		<%= dochead[:jquery] %>
+		<%= dochead[:jquery_ui] %>
+	<% else %>
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
+	<% end %>
+	
 	<script type='text/javascript'>
 		function toggle_payload(filetype, payload){
 			//modify the nav item

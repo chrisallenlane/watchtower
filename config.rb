@@ -1,13 +1,19 @@
 #######################################################################
 # Configs
 #######################################################################
-# These are not currently in use, but may come into play if I build a 
-# graphical front-end eventually
-#@@browser = 'google-chrome'
-#@@editor  = 'geany'
-
 # @todo: files to exclude
-$exclude = {}
+$configs = {
+	
+	# files to exclude from the search
+	:exclude => [
+		'.git',
+		'.svn',
+	],
+	
+	# If true, javascript will be embedded directly into the report. If
+	# false, it will be linked to a hosted file.
+	:embed_javascript => false,
+}
 
 
 #######################################################################

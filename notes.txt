@@ -6,3 +6,7 @@ source code auditing tool
 Calcify
 
 need to be able to exclude files via the config file
+Make the pois draggable
+Make it possible to "shrink" (or something) a poi 
+refactor into a lib directory
+document with rdoc in /docs/

@@ -12,8 +12,8 @@ require 'rubygems'		# is this bad?
 require 'trollop'
 require 'fileutils'
 require 'shellwords'
-require 'models/poi'
-require 'models/vulnscanner'
+require 'lib/models/poi'
+require 'lib/models/vulnscanner'
 
 
 #######################################################################
@@ -96,13 +96,13 @@ case opts[:output_format]
 		
 		# pass page variables into the erb
 		dochead = {
-			:stylesheet_1 => File.read('./views/jquery-ui-1.8.19.custom.css'),
-			:stylesheet_2 => File.read('./views/main.css'),
-			#:jquery       = File.read('./views/report.html.erb'),
-			#:jquery_ui    = File.read('./views/report.html.erb'),
+			:stylesheet_1 => File.read('./lib/static/jquery-ui-1.8.19.custom.css'),
+			:stylesheet_2 => File.read('./lib/static/main.css'),
+			:jquery       => File.read('./lib/static/jquery-1.7.2.min.js'),
+			:jquery_ui    => File.read('./lib/static/jquery-ui-1.8.19.custom.min.js'),
 		}
 
-		erb = ERB.new(File.read('./views/report.html.erb'), 0, '<>', 'buffer')
+		erb = ERB.new(File.read('./lib/report.html.erb'), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	
 	when 'xml'
