@@ -19,11 +19,11 @@
 	<script type='text/javascript'>
 		
 		function togglePayloadGroup(group){
-			alert(group);
+			$('ul.payload_group_' + group).fadeToggle();
 			$('div.payload_group_' + group).fadeToggle();
 		}
 		
-		function toggle_payload(filetype, payload){
+		function togglePayload(filetype, payload){
 			//modify the nav item
 			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
 			//hide the payload
@@ -56,30 +56,21 @@
 			<%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
 			<% end %>
 		</ul>
-		
 
 
-
-
-
-
-
-
-
-		
 		<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, payload_groups|%>
 		<!-- @filetype -->
 		<div id='filetype_<%= sym_file_type.to_s %>'>
 			<div class='column_nav'>
 				<% payload_groups.each do |payload_group, payloads| %>
 				<h3><a onclick='javascript:togglePayloadGroup("<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %></a></h3>
-				<ul>
+				<ul class='payload_group_<%= payload_group.to_s %>'>
 					<%
 					payloads.each do |payload, points|
 						# we only need to calculate this hash once
 						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 					%>
-					<li class='<%= @payload_hash %>'><code><a href='javascript:toggle_payload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'><%= h payload.to_s %></a></code></li>
+					<li class='<%= @payload_hash %>'><code><a href='javascript:togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'><%= h payload.to_s %></a></code></li>
 					<% end %>
 				</ul>
 				<% end %>
@@ -87,8 +78,7 @@
 			
 			<div class='column_content'>
 				<h2><%= sym_file_type.to_s %></h2>
-				<%
-				payload_groups.each do |payload_group, payloads|
+				<% payload_groups.each do |payload_group, payloads|
 					payloads.each do |payload, points|
 						# we only need to calculate this hash once
 						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
@@ -115,27 +105,8 @@
 			</div> <!-- column_content -->
 		</div> <!-- @close_filetype -->
 		<% end %>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
 	</div> <!-- main -->
 	<p id='footer'>This is the footer</p>
 </body>
