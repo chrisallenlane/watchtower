@@ -96,7 +96,7 @@ case opts[:output_format]
 		include ERB::Util
 		
 		# sort the points of interest for HTML output
-		pois_sorted = vulnscanner.sort
+		vulnscanner.sort
 		
 		# parse and display the HTML output
 		erb = ERB.new(File.read('./lib/report.html.erb'), 0, '<>', 'buffer')

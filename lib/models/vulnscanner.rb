@@ -1,12 +1,13 @@
 class VulnScanner
 
-	attr_accessor :payloads, :points_of_interest, :scan_dir, :project_name
+	attr_accessor :payloads, :points_of_interest, :points_of_interest_sorted, :scan_dir
 	
 	# initializer
 	def initialize data
 		@payloads	= data[:payloads]
 		@scan_dir 	= data[:scan_dir]
-		@points_of_interest = []
+		@points_of_interest        = []
+		@points_of_interest_sorted = {}
 	end
 	
 	# performs a scan of the specified codebase
@@ -58,18 +59,14 @@ class VulnScanner
 	
 	# sort the points of interest into a structured hash
 	def sort
-		sorted_pois = {}
 		@points_of_interest.each_with_index do |point, index|
-			sorted_pois[point.file_type.to_sym] ||= {}
-			sorted_pois[point.file_type.to_sym][point.group.to_sym] ||= {}
-			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym] ||= {}
-			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:pois] ||= []
-			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:pois].push point
-			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:count] ||= 0
-			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:count] += 1
+			@points_of_interest_sorted[point.file_type.to_sym] ||= {}
+			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym] ||= {}
+			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym] ||= []
+			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym].push point
 		end
 		
-		sorted_pois
+		@points_of_interest_sorted
 	end
 	
 end
