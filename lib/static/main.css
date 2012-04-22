@@ -1,6 +1,8 @@
 body{
 	background-color: #EEE;
 	border: 1px solid gray;
+	font-family: sans-serif;
+	font-size: small;
 	margin: 10px auto;
 	width: 1000px;
 }

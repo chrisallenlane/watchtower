@@ -8,11 +8,11 @@
 # http://twitter.com/chrisallenlane
 #######################################################################
 
-require 'rubygems'		# is this bad?
-require 'trollop'
+require 'rubygems'
+require 'digest'
 require 'fileutils'
-#require 'enumerator'
 require 'shellwords'
+require 'trollop'
 require 'lib/models/poi'
 require 'lib/models/vulnscanner'
 
@@ -66,19 +66,6 @@ end
 vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
 
-=begin
-fuckyou = %w[a b c]
-fuckyou.each_with_index do |point, index|
-	puts "#{index}: #{point}"
-end
-exit
-
-vulnscanner.points_of_interest.each_with_index do |index, point|
-	puts "#{index}: #{point.match}"
-end
-exit
-=end
-
 #puts $payloads.to_yaml
 #exit
 
@@ -91,6 +78,8 @@ exit
 # but I'm happy to spend a bit of Moore's dividend here to keep the code
 # cleaner. (We would need to do some irritating branching later
 # on otherwise.)
+# @todo: now that I'm only colorizing plain text, I can probably
+# just move this down into the 'else' case
 if opts[:colorize_given] and opts[:output_format].eql? 'txt'
 	require 'colorize' 
 	vulnscanner.points_of_interest.each {|point| point.colorize}
@@ -102,18 +91,14 @@ case opts[:output_format]
 		vulnscanner.points_of_interest.each {|point| puts point.csv}
 		
 	when 'html'
+		# require erb for templating
 		require 'erb'
 		include ERB::Util
-		require 'digest'
 		
-		# pass page variables into the erb
-		dochead = {
-			:stylesheet_1 => File.read('./lib/static/jquery-ui-1.8.19.custom.css'),
-			:stylesheet_2 => File.read('./lib/static/main.css'),
-			:jquery       => File.read('./lib/static/jquery-1.7.2.min.js'),
-			:jquery_ui    => File.read('./lib/static/jquery-ui-1.8.19.custom.min.js'),
-		}
-
+		# sort the points of interest for HTML output
+		pois_sorted = vulnscanner.sort
+		
+		# parse and display the HTML output
 		erb = ERB.new(File.read('./lib/report.html.erb'), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	

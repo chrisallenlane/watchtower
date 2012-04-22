@@ -5,7 +5,7 @@ class PoI
 	@@color_line_number = :yellow
 	@@color_match       = :red
 
-	attr_accessor :file_type, :file, :line_number, :match, :snippet, :group
+	attr_accessor :file_type, :file, :line_number, :match, :match_md5, :snippet, :group
 	
 	# define the initializer. accept a hash of data
 	def initialize data
@@ -13,6 +13,7 @@ class PoI
 		@file        = data[:file]
 		@line_number = data[:line_number]
 		@match       = data[:match]
+		@match_md5   = Digest::MD5.hexdigest(data[:match])
 		@snippet     = data[:snippet]
 		@group       = data[:group]
 	end

@@ -10,3 +10,29 @@ Make the pois draggable
 Make it possible to "shrink" (or something) a poi 
 refactor into a lib directory
 document with rdoc in /docs/
+
+
+Something in Japanese
+to seek
+to search
+to find
+miru
+blue ____
+aegis
+Slippy
+unlock
+chizu
+samus
+
+
+TODO:
+name
+--webapp --url
+draggable POIS
+stylesheets
+CSV
+Hide Payloads with no occurrences
+README
+LICENSE
+Promote (Reddit, etc)
+Payload Groups

@@ -2,13 +2,15 @@
 <html>
 <head>
 	<title>WebApp-Vulnscan :: Report</title>
-	<style type='text/css'>
-		<%= dochead[:stylesheet_1] %>
-		<%= dochead[:stylesheet_2] %>
+	<style type='text/css'>		
+		<%# = ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.css')).result(binding) %>
+		<%# = ERB.new(File.read('./lib/static/main.css')).result(binding) %>
 	</style>
+	<link rel='stylesheet' type='text/css' href='./jquery-ui-1.8.19.custom.css'>
+	<link rel='stylesheet' type='text/css' href='./main.css'>
 	<% if $configs[:embed_javascript].eql? true %>
-		<%= dochead[:jquery] %>
-		<%= dochead[:jquery_ui] %>
+		<%= ERB.new(File.read('./lib/static/jquery-1.7.2.min.js')).result(binding) %>
+		<%= ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.min.js')).result(binding) %> %>
 	<% else %>
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
@@ -20,6 +22,13 @@
 			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
 			//hide the payload
 			$('div#filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
+		}
+		
+		// hide's each poi's content
+		function poiHideContent(obj){
+			next_text = ($(obj).text() == 'Hide') ? 'Show' : 'Hide';
+			$(obj).text(next_text);
+			$(obj).siblings('div.poi_content').fadeToggle();
 		}
 		
 		// initialize the tabbed display
@@ -37,87 +46,55 @@
 	<div id='main'>
 		<!-- tab navigation -->
 		<ul>
-			<%  $payloads.each do |key, deep_hash|  %>
-			<%= "<li><a href='#filetype_#{key}'>#{key}</a></li>" %>
+			<% pois_sorted.each do |sym_file_type, hash_matches_by_payload| %>
+			<%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
 			<% end %>
 		</ul>
 		
-		<%
-		# implement special behavior on the first pass through
-		first_pass = true
-		
-		# iterate over the points of interest
-		vulnscanner.points_of_interest.each_with_index do |point, index|
-			next_point = vulnscanner.points_of_interest[index + 1]
-			last_point = vulnscanner.points_of_interest[index - 1]
-		
-			# if we're on the last point, nil guard
-			if next_point.nil?
-				next_point = point.clone
-				next_point.file_type = ''
-				next_point.match     = ''
-			end
-		
-			# if we're on the first point, guard wrap-around
-			if index == 0
-				last_point = point.clone
-				last_point.file_type = ''
-				last_point.match     = ''
-			end
-			
-			#puts "<br>" + h(point.to_yaml)
-			#puts "<br>" + h(next_point.to_yaml)
-			#puts "<br>" + h(last_point.to_yaml)
-			#puts "<br><br>"
-			
-		%>
-		<% if first_pass or (point.file_type != next_point.file_type) %>
+		<% pois_sorted.each do |sym_file_type, hash_matches_by_payload| %>
 		<!-- @filetype -->
-		<div id='filetype_<%= point.file_type %>'>
+		<div id='filetype_<%= sym_file_type.to_s %>'>
 			<div class='column_nav'>
+				<% $payloads[sym_file_type].each do |payload_group, payloads| %>
+				<h3><%= payload_group.to_s.gsub('_', ' ') %></h3>
 				<ul>
-					<% $payloads[point.file_type.to_sym].each do |payload_group, payloads| %>
 					<% for payload in payloads
 						@payload_hash = Digest::MD5.hexdigest(payload)
 					%>
-					<li class='<%= @payload_hash %>'><code><a href='javascript:toggle_payload("<%= point.file_type %>","<%= @payload_hash %>")'><%= h payload %></a></code></li>
-					<% end %>
+					<li class='<%= @payload_hash %>'><code><a href='javascript:toggle_payload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'><%= h payload %></a></code></li>
 					<% end %>
 				</ul>
+				<% end %>
 			</div>
 			
 			<div class='column_content'>
-				<h2><%= h point.file_type %></h2>
-		<% end %>
+				<h2><%= h sym_file_type.to_s %></h2>
 		
-				<% if first_pass or (point.match != next_point.match) %>
-				<div class='payload_<%= @payload_hash %>'>
+				<% hash_matches_by_payload.each do |sym_payload, point_data| %>
+				<div class='payload_<%= Digest::MD5.hexdigest(sym_payload.to_s) %>'>
 					<!-- payload -->
-					<h3><code><%= h point.match %></code></h3>
-				<% end %>
-
+					<h3><code><%= h sym_payload.to_s %></code></h3>
+		
+					<% point_data[:pois].each do |point| %>
 					<!-- point of interest -->
 					<div class='point_of_interest'>
 						<span class='file_name'><%= h point.file %></span>
-						<span class='file_type'><%= h point.file_type %></span>
-						<span class='line_number'><%= h point.line_number %></span>
-						<span class='match'><%= h point.match %></span>
-						<p class='snippet'><code><%= h point.snippet %></code></p>
+						<a class='poi_hide_content' onclick='javascript:poiHideContent(this)'>Hide</a>
+						<div class='poi_content'>
+							<span class='file_type'><%= h point.file_type %></span>
+							<span class='line_number'><%= h point.line_number %></span>
+							<span class='match'><%= h point.match %></span>
+							<p class='snippet'><code><%= h point.snippet %></code></p>
+						</div>
 					</div> <!-- poi -->
-				
-				<% unless point.match.eql? next_point.match %>
+					<% end %>
+		
 				</div> <!-- @close_payload -->
 				<% end %>
 				
-			<% unless point.file_type.eql? next_point.file_type %>
 			</div> <!-- column_content -->
 		</div> <!-- @close_filetype -->
-		
-		<%
-				first_pass = false
-			end 
-		end
-		%>
+		<% end %>
 		
 	</div> <!-- main -->
 
