@@ -17,6 +17,12 @@
 	<% end %>
 	
 	<script type='text/javascript'>
+		
+		function togglePayloadGroup(group){
+			alert(group);
+			$('div.payload_group_' + group).fadeToggle();
+		}
+		
 		function toggle_payload(filetype, payload){
 			//modify the nav item
 			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
@@ -66,7 +72,7 @@
 		<div id='filetype_<%= sym_file_type.to_s %>'>
 			<div class='column_nav'>
 				<% payload_groups.each do |payload_group, payloads| %>
-				<h3><%= payload_group.to_s.gsub('_', ' ') %></h3>
+				<h3><a onclick='javascript:togglePayloadGroup("<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %></a></h3>
 				<ul>
 					<%
 					payloads.each do |payload, points|
@@ -77,8 +83,6 @@
 					<% end %>
 				</ul>
 				<% end %>
-				
-				
 			</div>
 			
 			<div class='column_content'>
@@ -89,7 +93,7 @@
 						# we only need to calculate this hash once
 						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 				%>
-				<div class='payload'>
+				<div class='payload_<%= Digest::MD5.hexdigest(payload.to_s) %> payload_group_<%= payload_group.to_s %>'>
 					<h3><code><%= h payload.to_s %></code></h3>
 					<% points.each do |point|%>
 					<div class='point_of_interest'>

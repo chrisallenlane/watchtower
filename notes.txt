@@ -31,7 +31,6 @@ name
 draggable POIS
 stylesheets
 CSV
-Hide Payloads with no occurrences
 README
 LICENSE
 Promote (Reddit, etc)
