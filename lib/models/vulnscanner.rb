@@ -61,11 +61,12 @@ class VulnScanner
 		sorted_pois = {}
 		@points_of_interest.each_with_index do |point, index|
 			sorted_pois[point.file_type.to_sym] ||= {}
-			sorted_pois[point.file_type.to_sym][point.match.to_sym] ||= {}
-			sorted_pois[point.file_type.to_sym][point.match.to_sym][:pois] ||= []
-			sorted_pois[point.file_type.to_sym][point.match.to_sym][:pois].push point
-			sorted_pois[point.file_type.to_sym][point.match.to_sym][:count] ||= 0
-			sorted_pois[point.file_type.to_sym][point.match.to_sym][:count] += 1
+			sorted_pois[point.file_type.to_sym][point.group.to_sym] ||= {}
+			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym] ||= {}
+			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:pois] ||= []
+			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:pois].push point
+			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:count] ||= 0
+			sorted_pois[point.file_type.to_sym][point.group.to_sym][point.match.to_sym][:count] += 1
 		end
 		
 		sorted_pois
