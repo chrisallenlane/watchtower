@@ -9,7 +9,7 @@ body{
 
 .column_nav{
 	float: left;
-	width: 150px;
+	width: 190px;
 	margin: 10px 5px 10px 10px;
 	padding: 10px;
 	BORDER: 1PX SOLID BLUE;
@@ -21,7 +21,7 @@ body{
 
 .column_content{
 	float: right;
-	width: 710px;
+	width: 750px;
 	margin: 10px 10px 10px 5px;
 	padding: 10px;
 	BORDER: 1PX SOLID GREEN;

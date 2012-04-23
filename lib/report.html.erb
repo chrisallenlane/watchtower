@@ -17,27 +17,28 @@
 	<% end %>
 	
 	<script type='text/javascript'>
-		
-		function togglePayloadGroup(group){
+		// shows/hides payload groups
+		function togglePayloadGroup(obj, group){
+			sym     = $(obj).children('span.expand_collapse').text();
+			new_sym = (sym == '-') ? '+' : '-' ;
+			$(obj).children('span.expand_collapse').text(new_sym);
 			$('ul.payload_group_' + group).fadeToggle();
 			$('div.payload_group_' + group).fadeToggle();
 		}
-		
+		// shows/hides an individual payload
 		function togglePayload(filetype, payload){
 			//modify the nav item
 			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
 			//hide the payload
 			$('div#filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
 		}
-		
-		// hide's each poi's content
+		// hides each poi's content
 		function poiHideContent(obj){
 			next_text = ($(obj).text() == 'Hide') ? 'Show' : 'Hide';
 			$(obj).text(next_text);
 			$(obj).siblings('div.poi_content').fadeToggle();
 		}
-		
-		// initialize the tabbed display
+		// initializes the tabbed display
 		jQuery(document).ready(function(){
 			$('div#main').tabs();
 		});
@@ -63,7 +64,7 @@
 		<div id='filetype_<%= sym_file_type.to_s %>'>
 			<div class='column_nav'>
 				<% payload_groups.each do |payload_group, payloads| %>
-				<h3><a onclick='javascript:togglePayloadGroup("<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %></a></h3>
+				<h3><a onclick='javascript:togglePayloadGroup(this, "<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
 				<ul class='payload_group_<%= payload_group.to_s %>'>
 					<%
 					payloads.each do |payload, points|
@@ -87,13 +88,10 @@
 					<h3><code><%= h payload.to_s %></code></h3>
 					<% points.each do |point|%>
 					<div class='point_of_interest'>
-						<span class='file_name'><%= h point.file %></span>
+						<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
 						<a class='poi_hide_content' onclick='javascript:poiHideContent(this)'>Hide</a>
 						<div class='poi_content'>
-							<span class='file_type'><%= h point.file_type %></span>
-							<span class='line_number'><%= h point.line_number %></span>
-							<span class='match'><%= h point.match %></span>
-							<p class='snippet'><code><%= h point.snippet %></code></p>
+							<p class='snippet'><code><pre><%= h point.snippet %></pre></code></p>
 						</div>
 					</div>
 					<% end %>
@@ -105,7 +103,6 @@
 			</div> <!-- column_content -->
 		</div> <!-- @close_filetype -->
 		<% end %>
-
 
 	</div> <!-- main -->
 	<p id='footer'>This is the footer</p>

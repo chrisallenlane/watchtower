@@ -34,4 +34,3 @@ CSV
 README
 LICENSE
 Promote (Reddit, etc)
-Payload Groups
