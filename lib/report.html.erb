@@ -14,8 +14,8 @@
 	<%= ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.min.js')).result(binding) %>
 	</script>
 	<% else %>
-		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 	<% end %>
 	
 	<script type='text/javascript'>
@@ -29,11 +29,26 @@
 		}
 		// shows/hides an individual payload
 		function togglePayload(filetype, payload){
+			obj      = $('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').last();
+			new_text = ($(obj).text() == 'Show') ? 'Hide' : 'Show' ;
+			$(obj).text(new_text);
+			
 			//modify the nav item
 			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
 			//hide the payload
 			$('div#filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
 		}
+		/*
+		// shows/hides an individual payload
+		function togglePayload(obj, filetype, payload){
+			new_text = ($(obj).text() == 'Show') ? 'Hide' : 'Show' ;
+			$(obj).text(new_text);
+			//modify the nav item
+			$('div#filetype_' + filetype + ' div.column_nav ul li.' + payload + ' a').toggleClass('payload_hidden');
+			//hide the payload
+			$('div#filetype_' + filetype + ' div.payload_' + payload).fadeToggle();
+		}
+		*/
 		// hides each poi's content
 		function poiHideContent(obj){
 			next_text = ($(obj).text() == 'Hide') ? 'Show' : 'Hide';
@@ -54,6 +69,11 @@
 		<h1><%= opts[:scan_dir] %></h1>
 		<% end %>
 		<h2>Source Code Audit (Generated <%= Date.today.strftime("%Y-%m-%d") %>)</h2>
+		
+		<noscript>
+			<p class='warning'>WARNING: You have JavaScript disabled. You
+			will not have access to this report's advanced functionality.</p>
+		</noscript>
 	</div>
 
 	<div id='main'>
@@ -77,7 +97,10 @@
 						# we only need to calculate this hash once
 						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 					%>
-					<li class='<%= @payload_hash %>'><code><a href='javascript:togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'><%= h payload.to_s %></a></code></li>
+					<li class='<%= @payload_hash %>'>
+						<code><a href='#<%= @payload_hash %>'><%= h payload.to_s %></a></code>
+						<a class='show_hide' onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
+					</li>
 					<% end %>
 				</ul>
 				<% end %>
@@ -90,8 +113,15 @@
 						# we only need to calculate this hash once
 						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 				%>
-				<div class='payload_<%= Digest::MD5.hexdigest(payload.to_s) %> payload_group_<%= payload_group.to_s %>'>
-					<h3><code><%= h payload.to_s %></code></h3>
+				<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %>'>
+					<a name='<%= @payload_hash %>'></a>
+					<h3>
+						<code><%= h payload.to_s %></code>
+						<span class='top_hide'>
+							<a href='#'>Top</a> |
+							<a onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
+						</span>
+					</h3>
 					<% points.each do |point|%>
 					<div class='point_of_interest'>
 						<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
