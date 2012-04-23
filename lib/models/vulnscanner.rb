@@ -57,7 +57,7 @@ class VulnScanner
 		end		
 	end
 	
-	# sort the points of interest into a structured hash
+	# structure the points of interest into a hash
 	def sort
 		@points_of_interest.each_with_index do |point, index|
 			@points_of_interest_sorted[point.file_type.to_sym] ||= {}
@@ -65,8 +65,5 @@ class VulnScanner
 			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym] ||= []
 			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym].push point
 		end
-		
-		@points_of_interest_sorted
 	end
-	
 end
