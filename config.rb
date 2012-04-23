@@ -5,7 +5,7 @@ $configs = {
 	
 	# If true, javascript will be embedded directly into the report. If
 	# false, it will be linked to a hosted file.
-	:embed_javascript => false,
+	:embed_javascript => true,
 	
 	# @todo: files to exclude from the search
 	:exclude_dirs => [
@@ -30,6 +30,5 @@ $payloads = {}
 # might want to wrap this in some load function
 require './payloads/html.rb'
 require './payloads/php.rb'
-#require './payloads/js.rb'
-#require './payloads/sql.rb'
-#payloads += custom_strings
+require './payloads/js.rb'
+require './payloads/sql.rb'

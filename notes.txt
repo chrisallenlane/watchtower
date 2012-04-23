@@ -34,3 +34,6 @@ CSV
 README
 LICENSE
 Promote (Reddit, etc)
+Restructure the payload files to make it easier to turn groups on and off
+Make the JS links more convenient (have on-page anchor links as well as show/hide)
+Make a SQL scanner for peering into database dumps

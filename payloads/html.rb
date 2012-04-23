@@ -2,15 +2,23 @@
 $payloads[:html] = {
 	# noteworthy HTML tags
 	:inputs => %w[
-		<applet
-		<embed
 		<form
 		<input
-		<object
 		<select
 		<script
-		<style
 		<textarea
+	],
+	
+	:dangerous => %w[
+		<applet
+		<embed
+		<iframe
+		<object
+		<style
 		<xml
-	]
+	],
+	
+	:comments => %w[
+		<!--
+	],
 }

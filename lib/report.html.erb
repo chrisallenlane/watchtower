@@ -1,16 +1,18 @@
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head>
-	<title>WebApp-Vulnscan :: Report</title>
+	<title>WebApp-Vulnscan<%= (opts[:project_name_given]) ? (':: ' + opts[:project_name]) : '' %></title>
 	<style type='text/css'>		
-		<%# = ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.css')).result(binding) %>
-		<%# = ERB.new(File.read('./lib/static/main.css')).result(binding) %>
+	<%# = ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.css')).result(binding) %>
+	<%# = ERB.new(File.read('./lib/static/main.css')).result(binding) %>
 	</style>
 	<link rel='stylesheet' type='text/css' href='./jquery-ui-1.8.19.custom.css'>
 	<link rel='stylesheet' type='text/css' href='./main.css'>
 	<% if $configs[:embed_javascript].eql? true %>
-		<%= ERB.new(File.read('./lib/static/jquery-1.7.2.min.js')).result(binding) %>
-		<%= ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.min.js')).result(binding) %> %>
+	<script type='text/javascript'>
+	<%= ERB.new(File.read('./lib/static/jquery-1.7.2.min.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.min.js')).result(binding) %>
+	</script>
 	<% else %>
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 		<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
@@ -46,7 +48,11 @@
 </head>
 <body>
 	<div id='masthead'>
-		<h1>chris-allen-lane.com</h1>
+		<% if opts[:project_name_given] %>
+		<h1><%= opts[:project_name] %></h1>
+		<% else %>
+		<h1><%= opts[:scan_dir] %></h1>
+		<% end %>
 		<h2>Source Code Audit (Generated <%= Date.today.strftime("%Y-%m-%d") %>)</h2>
 	</div>
 

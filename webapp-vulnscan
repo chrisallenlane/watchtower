@@ -21,25 +21,27 @@ require 'lib/models/vulnscanner'
 # Menu options and program flow
 #######################################################################
 opts = Trollop::options do    
-	opt :scan_dir, 'The directory to scan',
+	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
 			:required	=> :true,
 			:short 		=> 's'
 
-	opt :output_format, 'Specify the output format. Valid options are "csv", ' + 
-			'"html", "txt", and "xml"',
-			:default	=> 'txt',
-			:short 		=> 'o'
-
-	opt :colorize, 'Colorizes command-line output',
+	opt :colorize,		'Colorizes command-line output',
 			:short 		=> 'c'
 
-	opt :config_file, 'Path to the config file.',
+	opt :config_file,	'Path to the config file.',
 			:type 		=> :string,
 			:default	=> './config.rb',
 			:short 		=> 'f'
+
+	opt :output_format,	'Specify the output format. Valid options are "csv", ' + 
+			'"html", "txt", and "xml"',
+			:default	=> 'txt',
+			:short 		=> 'o'
 			
-	# report name?
+	opt :project_name, 'The name of the project (useful when outputting an HTML report)',
+			:type 		=> :string,
+			:short 		=> 'p'
 end
 	
 
@@ -65,9 +67,6 @@ end
 #######################################################################
 vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
-
-#puts $payloads.to_yaml
-#exit
 
 
 #######################################################################
