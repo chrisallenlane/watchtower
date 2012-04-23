@@ -20,9 +20,16 @@ class VulnScanner
 			
 				# iterate over each payload
 				payloads.each do |payload|
+					# assemble a list of directories to ignore
+					ignore = ''
+					unless $configs[:exclude_dirs].empty?
+						$configs[:exclude_dirs].each do |dir|
+							ignore += " --ignore-dir='#{dir}'"
+						end
+					end
+
 					# do an ack-grep scan
-					# @todo: --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
-					result = `cd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype}`
+					result = `cd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype} #{ignore}`
 					
 					# display the matches
 					unless result.strip.empty?

@@ -19,23 +19,18 @@ samus
 deep eyes
 hindsight
 
+
 ------------------
 TODO
 ------------------
-need to be able to exclude files via the config file
+Sort hashes for consistency
+need to be able to exclude directories via the config file
+--webapp --url
 Make the pois draggable
 document with rdoc in /docs/
---webapp --url
-draggable POIS
-stylesheets
-CSV
+style
+implement CSV format reporting
 README
 LICENSE
-Promote (Reddit, etc)
-Client/Auditor block
-Github link
-JS: search for cookie functions
-C/C++: create payload files for these
-Actually update the project stylesheets (from Desktop - probably should just hard-path to the project stylesheets. Makes more sense.)
-Sort hashes for consistancy
-PHP: Scan for $$
+Client/Auditor block (or header block)
+

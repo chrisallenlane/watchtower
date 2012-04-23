@@ -98,6 +98,7 @@
 					%>
 					<li class='<%= @payload_hash %>'>
 						<code><a href='#<%= @payload_hash %>'><%= h payload.to_s %></a></code>
+						<span class='payload_count'>(<%= points.count %>)</span>
 						<a class='show_hide' onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
 					</li>
 					<% end %>
@@ -116,6 +117,7 @@
 					<a name='<%= @payload_hash %>'></a>
 					<h3>
 						<code><%= h payload.to_s %></code>
+						<span class='payload_count'>(<%= points.count %>)</span>
 						<span class='top_hide'>
 							<a href='#'>Top</a> |
 							<a onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
@@ -140,6 +142,9 @@
 		<% end %>
 
 	</div> <!-- main -->
-	<p id='footer'>This is the footer</p>
+	
+	<% unless $configs[:footer_text].empty? %>
+	<p id='footer'><%= $configs[:footer_text] %></p>
+	<% end %>
 </body>
 </html>

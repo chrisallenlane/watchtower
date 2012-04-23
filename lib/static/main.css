@@ -90,3 +90,8 @@ p.warning{
 	line-height: 2em;
 	text-align: center;
 }
+
+span.payload_count{
+	color: gray;
+	font-size: x-small;
+}
