@@ -1,5 +1,5 @@
 ------------------
-Project Name Ideas
+ Project Name Ideas
 ------------------
 overseer / oversight
 vulnerability scanner
@@ -21,16 +21,15 @@ hindsight
 
 
 ------------------
-TODO
+ TODO
 ------------------
 Sort hashes for consistency
-need to be able to exclude directories via the config file
+implement CSV format reporting
 --webapp --url
 Make the pois draggable
-document with rdoc in /docs/
-style
-implement CSV format reporting
-README
-LICENSE
 Client/Auditor block (or header block)
 
+style
+document with rdoc in /docs/
+README
+LICENSE

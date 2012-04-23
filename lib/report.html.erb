@@ -2,12 +2,21 @@
 <html>
 <head>
 	<title>WebApp-Vulnscan<%= (opts[:project_name_given]) ? (':: ' + opts[:project_name]) : '' %></title>
-	<style type='text/css'>		
-	<%# = ERB.new(File.read('./lib/static/jquery-ui-1.8.19.custom.css')).result(binding) %>
-	<%# = ERB.new(File.read('./lib/static/main.css')).result(binding) %>
+	<style type='text/css'>
+	<%
+	unless $configs[:stylesheets].empty?
+		$configs[:stylesheets].each do |stylesheet|
+	%>
+	<%# = ERB.new(File.read(stylesheet)).result(binding) %>
+	<%
+		end
+	end
+	%>
 	</style>
+	
 	<link rel='stylesheet' type='text/css' href='///home/chris/Source/terminal/cal-webapp-vulnscan/lib/static/jquery-ui-1.8.19.custom.css'>
 	<link rel='stylesheet' type='text/css' href='///home/chris/Source/terminal/cal-webapp-vulnscan/lib/static/main.css'>
+	
 	<% if $configs[:embed_javascript].eql? true %>
 	<script type='text/javascript'>
 	<%= ERB.new(File.read('./lib/static/jquery-1.7.2.min.js')).result(binding) %>

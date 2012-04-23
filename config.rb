@@ -20,7 +20,10 @@ $configs = {
 	
 	# for use with HTML reporting
 	# @todo: implement this
-	:stylesheets 		=> [],
+	:stylesheets 		=> [
+		'./lib/static/jquery-ui-1.8.19.custom.css',
+		'./lib/static/main.css',
+	],
 	
 	# payloads paths are relative to project root
 	:payloads 			=> [
