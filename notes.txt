@@ -1,17 +1,10 @@
-webapp
+------------------
+Project Name Ideas
+------------------
+overseer / oversight
 vulnerability scanner
 source code auditing tool
-
-
 Calcify
-
-need to be able to exclude files via the config file
-Make the pois draggable
-Make it possible to "shrink" (or something) a poi 
-refactor into a lib directory
-document with rdoc in /docs/
-
-
 Something in Japanese
 to seek
 to search
@@ -23,10 +16,15 @@ Slippy
 unlock
 chizu
 samus
+deep eyes
+hindsight
 
-
-TODO:
-name
+------------------
+TODO
+------------------
+need to be able to exclude files via the config file
+Make the pois draggable
+document with rdoc in /docs/
 --webapp --url
 draggable POIS
 stylesheets
@@ -36,4 +34,11 @@ LICENSE
 Promote (Reddit, etc)
 Restructure the payload files to make it easier to turn groups on and off
 Make the JS links more convenient (have on-page anchor links as well as show/hide)
-Make a SQL scanner for peering into database dumps
+Client/Auditor block
+Github link
+JavaScript disabled warning
+JS: search for cookie functions
+C/C++: create payload files for these
+Actual update the project stylesheets (from Desktop - probably should just hard-path to the project stylesheets. Makes more sense.)
+Sort hashes for consistancy
+PHP: Scan for $$
