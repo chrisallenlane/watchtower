@@ -1,3 +1,7 @@
+a.poi_hide_content{
+	float: right;
+}
+
 body{
 	background-color: #EEE;
 	border: 1px solid gray;
@@ -9,27 +13,65 @@ body{
 
 .column_nav{
 	float: left;
-	width: 190px;
+	width: 180px;
 	margin: 10px 5px 10px 10px;
 	padding: 10px;
 	BORDER: 1PX SOLID BLUE;
 }
 
-.column_nav li a.payload_hidden{
+.column_nav ul{
+	list-style-type: none;
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+
+.column_nav ul li a.payload_hidden{
 	color: silver;
+}
+
+.column_nav ul li a.show_hide{
+	float: right;
+	font-size: x-small;
+}
+
+.column_nav h3{
+	font-size: small;
+	margin: 0;
+	text-transform: capitalize;
 }
 
 .column_content{
 	float: right;
-	width: 750px;
+	width: 740px;
 	margin: 10px 10px 10px 5px;
 	padding: 10px;
 	BORDER: 1PX SOLID GREEN;
 }
 
+.column_content h2{
+	margin: 0 0 10px 0;
+	text-transform: uppercase;
+}
+
+.column_content h3 span.top_hide{
+	float: right;
+	font-size: x-small;
+}
+
+div.audit_block{
+	float: right;
+	width: 200px;
+	BORDER: 1PX SOLID BLUE;
+	height: 200px;
+}
+
 div.point_of_interest{
 	border: 1px solid red;
 	margin: 10px;
+}
+
+div.point_of_interest div.poi_content{
+	overflow: auto;
 }
 
 html{
@@ -38,5 +80,13 @@ html{
 
 p#footer{
 	clear: both;
+	text-align: center;
+}
+
+p.warning{
+	background-color: #A52A2A;
+	color: white;
+	font-weight: bold;
+	line-height: 2em;
 	text-align: center;
 }

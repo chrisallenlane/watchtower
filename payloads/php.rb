@@ -45,6 +45,7 @@ php_payloads = {
 		gzuncompress(
 		zlib_encode(
 		zlib_decode(
+		$$
 	],
 	
 	# dangerous user data

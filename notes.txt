@@ -32,13 +32,10 @@ CSV
 README
 LICENSE
 Promote (Reddit, etc)
-Restructure the payload files to make it easier to turn groups on and off
-Make the JS links more convenient (have on-page anchor links as well as show/hide)
 Client/Auditor block
 Github link
-JavaScript disabled warning
 JS: search for cookie functions
 C/C++: create payload files for these
-Actual update the project stylesheets (from Desktop - probably should just hard-path to the project stylesheets. Makes more sense.)
+Actually update the project stylesheets (from Desktop - probably should just hard-path to the project stylesheets. Makes more sense.)
 Sort hashes for consistancy
 PHP: Scan for $$
