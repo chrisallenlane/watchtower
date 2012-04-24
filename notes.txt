@@ -26,7 +26,6 @@ hindsight
 Sort hashes for consistency
 implement CSV format reporting
 --webapp --url
-Make the pois draggable
 Client/Auditor block (or header block)
 
 style

@@ -16,7 +16,6 @@ body{
 	width: 180px;
 	margin: 10px 5px 10px 10px;
 	padding: 10px;
-	BORDER: 1PX SOLID BLUE;
 }
 
 .column_nav ul{
@@ -45,7 +44,6 @@ body{
 	width: 740px;
 	margin: 10px 10px 10px 5px;
 	padding: 10px;
-	BORDER: 1PX SOLID GREEN;
 }
 
 .column_content h2{
@@ -58,15 +56,7 @@ body{
 	font-size: x-small;
 }
 
-div.audit_block{
-	float: right;
-	width: 200px;
-	BORDER: 1PX SOLID BLUE;
-	height: 200px;
-}
-
 div.point_of_interest{
-	border: 1px solid red;
 	margin: 10px;
 }
 
@@ -76,6 +66,32 @@ div.point_of_interest div.poi_content{
 
 html{
 	background-color: silver;
+}
+
+#main{
+	clear: both;
+}
+
+#masthead #masthead_left{
+	float: left;
+	padding: 10px;
+}
+
+#masthead #masthead_left h1{
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+#masthead #masthead_right{
+	float: right;
+	padding: 10px;
+}
+
+#masthead #masthead_right h4,
+#masthead #masthead_right p{
+	margin: 0;
+	padding: 0;
 }
 
 p#footer{

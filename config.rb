@@ -1,13 +1,12 @@
 #######################################################################
 # Configs
 #######################################################################
-# @todo: implement this
-project_dir = ''
-
 $configs = {
+	:client_name		=> "Enzo's Pizza",
+
 	# If true, javascript will be embedded directly into the report. If
 	# false, it will be linked to a hosted file.
-	:embed_javascript 	=> true,
+	:embed_javascript 	=> false,
 	
 	# exclude directories from the search
 	:exclude_dirs		=> [
@@ -18,8 +17,18 @@ $configs = {
 	# text to display in the report footer
 	:footer_text => "This is the footer text.",
 	
+	# text to display in the report header
+	:header_text => "
+	<div id='masthead_right'>
+		<h4>Auditor:</h4>
+		<p>Hiro Protagonist
+		<br><a href='#'>hiro@example.com</a>
+		<br><a href='#'>blog.example.com</a>
+		<br><a href='#'>twitter.com/example</a></p>
+	</div>
+	",
+	
 	# for use with HTML reporting
-	# @todo: implement this
 	:stylesheets 		=> [
 		'./lib/static/jquery-ui-1.8.19.custom.css',
 		'./lib/static/main.css',
@@ -34,10 +43,10 @@ $configs = {
 	],
 	
 	# special settings for use with web apps only
-	:web_app			=> {
-		:is_web_app		=> false,
-		:base_url		=> '',
-	}
+	#:web_app			=> {
+	#	:is_web_app		=> false,
+	#	:base_url		=> '',
+	#}
 }
 
 
