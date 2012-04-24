@@ -144,7 +144,14 @@
 							<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
 							<a class='poi_hide_content' onclick='javascript:poiHideContent(this)'>Hide</a>
 							<div class='poi_content'>
-								<p class='snippet'><code><pre><%= h point.snippet %></pre></code></p>
+								<%
+								# apply highlighting to the payload matches								
+								snippet_safe = h point.snippet
+								match_safe   = h point.match
+								snippet_highlighted = snippet_safe.sub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
+								%>
+								<p class='snippet'><code><pre><%= snippet_highlighted %></pre></code></p>
+								<!-- <p class='snippet'><code><pre><%= h point.snippet %></pre></code></p> -->
 							</div>
 						</div>
 						<% end %>

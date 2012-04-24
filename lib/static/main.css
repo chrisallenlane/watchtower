@@ -107,6 +107,11 @@ p.warning{
 	text-align: center;
 }
 
+span.match_highlight{
+	background-color: yellow;
+	color: black;
+}
+
 span.payload_count{
 	color: gray;
 	font-size: x-small;
