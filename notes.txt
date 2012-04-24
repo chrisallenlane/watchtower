@@ -26,7 +26,6 @@ hindsight
 Sort hashes for consistency
 implement CSV format reporting
 --webapp --url
-Client/Auditor block (or header block)
 
 style
 document with rdoc in /docs/
