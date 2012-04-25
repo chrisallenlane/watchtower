@@ -21,7 +21,11 @@ require 'lib/models/vulnscanner'
 #######################################################################
 # Menu options and program flow
 #######################################################################
-opts = Trollop::options do    
+opts = Trollop::options do
+	banner File.read('./lib/static/banner.txt')
+	
+	version "Version: 1.0.0"
+
 	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
 			:required	=> :true,

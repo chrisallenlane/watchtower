@@ -33,7 +33,6 @@ panoptic
  TODO
 ------------------
 Sort hashes for consistency
-implement CSV format reporting
 --webapp --url
 
 create a trollop help banner
@@ -43,6 +42,7 @@ Rakefile
 README
 unit tests
 browser test (at least the good browsers)
+name the thing
 
 publish
 message some twitter people and security mailing lists
