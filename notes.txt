@@ -19,6 +19,14 @@ samus
 deep eyes
 hindsight
 some eye god?
+steadfast
+osiris
+iris
+redeye
+akame
+kantoku (oversight)
+panopticon
+panoptic
 
 ------------------
  TODO
@@ -28,6 +36,7 @@ implement CSV format reporting
 --webapp --url
 implement remaining 
 report file config option?
+html output minification
 
 create a trollop help banner
 fix the "hide" button I broke
@@ -40,4 +49,4 @@ README
 LICENSE
 
 publish
-message some twitter people
+message some twitter people and security mailing lists
