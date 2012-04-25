@@ -80,6 +80,10 @@ body{
 	padding: 0;
 }
 
+.column_nav ul li{
+	overflow: auto;
+}
+
 .column_nav ul li a.payload_hidden{
 	color: silver;
 }
@@ -94,7 +98,7 @@ body{
 }
 
 .column_nav ul li:hover{
-	background-color: #EEE;
+	background-color: #F8F8F8;
 }
 
 .column_nav ul li:hover a.show_hide{
@@ -175,6 +179,8 @@ div.point_of_interest span.poi_mark_content{
 
 div.point_of_interest span.poi_mark_content a{
 	color: #4183C4;
+	padding: 0 2px;
+	border-radius: 2px;
 }
 
 div.point_of_interest span.poi_mark_content a.poi_ok{
@@ -184,8 +190,6 @@ div.point_of_interest span.poi_mark_content a.poi_ok{
 div.point_of_interest span.poi_mark_content a.poi_ok.selected{
 	background-color: green;
 	color: white;
-	padding: 0 3px;
-	border-radius: 2px;
 }
 
 div.point_of_interest span.poi_mark_content a.poi_bad.selected:hover,

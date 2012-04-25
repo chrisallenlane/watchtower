@@ -98,7 +98,7 @@ case opts[:output_format]
 		vulnscanner.sort
 		
 		# parse and display the HTML output
-		erb = ERB.new(File.read('./lib/report.html.erb'), 0, '<>', 'buffer')
+		erb = ERB.new(File.read($configs[:report_file]), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	
 	when 'xml'

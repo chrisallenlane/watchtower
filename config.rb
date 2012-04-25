@@ -2,6 +2,7 @@
 # Configs
 #######################################################################
 $configs = {
+	# the name of the client to display in the HTML report
 	:client_name		=> "Enzo's Pizza",
 
 	# If true, javascript will be embedded directly into the report. If
@@ -27,6 +28,9 @@ $configs = {
 		<br><a href='#'>twitter.com/example</a></p>
 	</div>
 	",
+	
+	# the ERB template to use for HTML reporting
+	:report_file		=> './lib/report/report.html.erb',
 	
 	# for use with HTML reporting
 	:stylesheets 		=> [

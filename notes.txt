@@ -28,25 +28,23 @@ kantoku (oversight)
 panopticon
 panoptic
 
+
 ------------------
  TODO
 ------------------
 Sort hashes for consistency
 implement CSV format reporting
 --webapp --url
-implement remaining 
-report file config option?
 html output minification
 
 create a trollop help banner
-fix the "hide" button I broke
-implement the new JS controls
-style
 document with rdoc in /docs/
 Rakefile
 	+ build docs
 README
 LICENSE
+unit tests
+browser test (at least the good browsers)
 
 publish
 message some twitter people and security mailing lists
