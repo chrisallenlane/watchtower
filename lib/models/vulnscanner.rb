@@ -1,8 +1,22 @@
+# This class encapsulates the main functionality of the application -
+# the scanning of a codebase for potential points of interest as specified
+# in the user-provided payloads.
 class VulnScanner
 
 	attr_accessor :payloads, :points_of_interest, :points_of_interest_sorted, :scan_dir
 	
-	# initializer
+	# Initializes the VulnScanner instance. Accepts a hash containing
+	# the following keys:
+	#
+	# <tt>:payloads</tt>:: A hash of payload strings for which to scan
+	# <tt>:scan_dir</tt>:: The project directory to scan
+	#
+	# Usage:
+	#	data = {
+	#		:payloads => payloads,
+	#		:scan_dir => '/path/to/scan',
+	#	}
+	#
 	def initialize data
 		@payloads	= data[:payloads]
 		@scan_dir 	= data[:scan_dir]
@@ -10,7 +24,11 @@ class VulnScanner
 		@points_of_interest_sorted = {}
 	end
 	
-	# performs a scan of the specified codebase
+	# Performs a scan against the specified project directory.
+	#
+	# Usage:
+	#	vulnscanner.scan
+	#
 	def scan
 		@payloads.each do |file_type, payload_groups|
 			# cast the file_type symbol into a string
@@ -64,7 +82,13 @@ class VulnScanner
 		end		
 	end
 	
-	# structure the points of interest into a hash
+	# Sorts the vulnscanner results into the format expected by the 
+	# HTML report. May only be invoked after performing a scan.
+	#
+	# Usage:
+	#	vulnscanner.scan
+	#	vulnscanner.sort
+	#
 	def sort
 		@points_of_interest.each_with_index do |point, index|
 			@points_of_interest_sorted[point.file_type.to_sym] ||= {}

@@ -1,16 +1,16 @@
-PROGRAM is a language-agnostic Static Code Analysis tool that scans for user-supplied payloads within a specified codebase. Its purpose is to assist security auditors who are tasked with a manual code review.
+watchtower is a language-agnostic Static Code Analysis tool that scans for user-supplied payloads within a specified codebase. Its purpose is to assist security auditors who are tasked with a manual code review.
 
 Example (ouput HTML to file):
-./PROGRAM -s /app/path/to/scan -o html > /path/to/report/file.html -p "The Project Name"
+./watchtower -s /app/path/to/scan -o html > /path/to/report/file.html -p "The Project Name"
 
 Example (ouput CSV to file):
-./PROGRAM -s /app/path/to/scan -o csv > /path/to/report/file.csv
+./watchtower -s /app/path/to/scan -o csv > /path/to/report/file.csv
 
 Example (ouput XML to file):
-./PROGRAM -s /app/path/to/scan -o xml > /path/to/report/file.xml
+./watchtower -s /app/path/to/scan -o xml > /path/to/report/file.xml
 
 Example (output colorized text to STDOUT):
-./PROGRAM -s /app/path/to/scan -o txt -c
+./watchtower -s /app/path/to/scan -o txt -c
 
 Additional information can be found in the README
 

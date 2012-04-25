@@ -27,7 +27,8 @@ akame
 kantoku (oversight)
 panopticon
 panoptic
-
+sentinel
+*watchtower
 
 ------------------
  TODO
@@ -35,14 +36,13 @@ panoptic
 Sort hashes for consistency
 --webapp --url
 
-create a trollop help banner
 document with rdoc in /docs/
 Rakefile
 	+ build docs
 README
 unit tests
 browser test (at least the good browsers)
-name the thing
+name the thing (update the banner)
 
 publish
 message some twitter people and security mailing lists

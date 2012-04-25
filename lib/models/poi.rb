@@ -1,4 +1,5 @@
-# "Point of Interest"
+# This class models the various Points of Interest (hence, PoI) that are
+# detected by the VulnScanner.
 class PoI
 	@@color_file_type   = :red
 	@@color_file        = :cyan
@@ -6,8 +7,28 @@ class PoI
 	@@color_match       = :red
 
 	attr_accessor :file_type, :file, :line_number, :match, :snippet, :group
-	
-	# define the initializer. accept a hash of data
+		
+	# Initializes the Poi (Point of Interest) object. Accepts a hash
+	# containing the following keys:
+	#
+	# <tt>:file_type</tt>:: The file type in which the PoI was found
+	# <tt>:file</tt>:: The file in which the PoI was found
+	# <tt>:line_number</tt>:: The line number at which the PoI was found
+	# <tt>:match</tt>:: The specified payload which this PoI matches
+	# <tt>:snippet</tt>:: A code snippet of the match in context
+	# <tt>:group</tt>:: The group to witch the payload belongs
+	#
+	# Usage:
+	#	data = {
+	#		:file_type   => 'php',
+	#		:file        => 'example.php',
+	#		:line_number => 100,
+	#		:match       => 'exec(',
+	#		:snippet     => 'exec(evilfunction())',
+	#		:group       => 'dangerous_functions',
+	#	}
+	#	poi = PoI.new(data)
+	#
 	def initialize data
 		@file_type   = data[:file_type]
 		@file        = data[:file]
@@ -17,31 +38,51 @@ class PoI
 		@group       = data[:group]
 	end
 	
-	# colorizes command-line output
+	# Colorizes output in the command line
+	#
+	# Usage:
+	#	poi.colorize
+	#
 	def colorize
 		@file 		 = @file.colorize(@@color_file)
 		@line_number = @line_number.colorize(@@color_line_number)
 		@snippet 	 = @snippet.sub(@match, @match.colorize(:background => @@color_match))
 	end
 	
-	# outputs the point of interest to the command line
+	# Formats the PoI object for display as plain text
+	#
+	# Usage:
+	#	puts poi
+	#
 	def to_s
 		text = @file + ':' + @line_number + "\n"
 		text += @snippet
 		text += @group
 	end
-	
-	# implement the concatenation operator
+
+	# Implements the string concatenation operator
+	#
+	# Usage:
+	#	puts poi + "\n\n"
+	#
 	def + arg
 		self.to_s + arg
 	end
 	
-	# outputs as array (for piping to fastercsv)
+	# Converts a PoI object to an array.
+	#
+	# Usage:
+	#	poi.to_a
+	#
 	def to_a
 		[@file_type, @file, @line_number, @match, @snippet, @group]
 	end
 	
-	# outputs as XML
+	# Converts a PoI object into an XML representation
+	#
+	# Usage:
+	#	puts poi.xml
+	#
 	def xml
 		"\t<poi>\n" +
 			"\t\t<file><![CDATA[#{@file}]]></file>\n" + 

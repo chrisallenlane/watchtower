@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class VulnScanner - RDoc Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/models/vulnscanner.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">Object
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-new">::new</a>
+    
+    <li><a href="#method-i-scan">#scan</a>
+    
+    <li><a href="#method-i-sort">#sort</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./PoI.html">PoI</a>
+  
+    <li><a href="./VulnScanner.html">VulnScanner</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class VulnScanner</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <!-- Attributes -->
+    <section id="attribute-method-details" class="method-section section">
+      <h3 class="section-header">Attributes</h3>
+
+      
+      <div id="attribute-i-payloads" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">payloads</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-points_of_interest" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">points_of_interest</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-points_of_interest_sorted" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">points_of_interest_sorted</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-scan_dir" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">scan_dir</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section><!-- attribute-method-details -->
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-scan" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">scan</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Performs a scan against the specified project directory.</p>
+
+<p>Usage:</p>
+
+<pre>vulnscanner.scan</pre>
+          
+
+          
+          <div class="method-source-code" id="scan-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 29</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">scan</span>
+        <span class="ruby-ivar">@payloads</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file_type</span>, <span class="ruby-identifier">payload_groups</span><span class="ruby-operator">|</span>
+                <span class="ruby-comment"># cast the file_type symbol into a string</span>
+                <span class="ruby-identifier">ftype</span> = <span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_s</span>       
+                <span class="ruby-comment"># iterate over the payload groups</span>
+                <span class="ruby-identifier">payload_groups</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">payload_group</span>, <span class="ruby-identifier">payloads</span><span class="ruby-operator">|</span>
+                
+                        <span class="ruby-comment"># iterate over each payload</span>
+                        <span class="ruby-identifier">payloads</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">payload</span><span class="ruby-operator">|</span>
+                                <span class="ruby-comment"># assemble a list of directories to ignore</span>
+                                <span class="ruby-identifier">ignore</span> = <span class="ruby-string">''</span>
+                                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">$configs</span>[<span class="ruby-value">:exclude_dirs</span>].<span class="ruby-identifier">empty?</span>
+                                        <span class="ruby-identifier">$configs</span>[<span class="ruby-value">:exclude_dirs</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+                                                <span class="ruby-identifier">ignore</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; --ignore-dir='#{dir}'&quot;</span>
+                                        <span class="ruby-keyword">end</span>
+                                <span class="ruby-keyword">end</span>
+
+                                <span class="ruby-comment"># do an ack-grep scan</span>
+                                <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype} #{ignore}`</span>
+                                
+                                <span class="ruby-comment"># display the matches</span>
+                                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span>
+                                        <span class="ruby-comment"># iterate over the ack results</span>
+                                        <span class="ruby-identifier">result</span>.<span class="ruby-identifier">each_line</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> 
+                                                <span class="ruby-comment"># parse the result string into components</span>
+                                                <span class="ruby-identifier">first_colon_pos</span>  = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">':'</span>)
+                                                <span class="ruby-identifier">second_colon_pos</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">':'</span>, <span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)
+                                                
+                                                <span class="ruby-comment"># parse out the important information</span>
+                                                <span class="ruby-identifier">file_name</span>        = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) 
+                                                <span class="ruby-identifier">line_num</span>         = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span>(<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) 
+                                                <span class="ruby-identifier">snippet</span>          = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-value">+1</span>), <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>).<span class="ruby-identifier">strip</span>
+
+                                                <span class="ruby-comment"># buffer a new point of interest</span>
+                                                <span class="ruby-identifier">data</span> = {
+                                                        <span class="ruby-value">:file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ftype</span>,
+                                                        <span class="ruby-value">:file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file_name</span>,
+                                                        <span class="ruby-value">:line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">line_num</span>,
+                                                        <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload</span>,
+                                                        <span class="ruby-value">:snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">snippet</span>,
+                                                        <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload_group</span>,
+                                                }
+                                                
+                                                <span class="ruby-comment">#puts data.to_yaml</span>
+                                                
+                                                <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>))
+                                        <span class="ruby-keyword">end</span>
+                                <span class="ruby-keyword">end</span>
+                        <span class="ruby-keyword">end</span> 
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>           
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- scan-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- scan-method -->
+
+    
+      <div id="method-i-sort" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sort</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sorts the vulnscanner results into the format expected by the  HTML report.
+May only be invoked after performing a scan.</p>
+
+<p>Usage:</p>
+
+<pre>vulnscanner.scan
+vulnscanner.sort</pre>
+          
+
+          
+          <div class="method-source-code" id="sort-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 89</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
+        <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_sym</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">point</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- sort-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- sort-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(data)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
+Accepts a hash containing the following keys:</p>
+<dl class="rdoc-list note-list"><dt><code>:payloads</code>
+<dd>
+<p>A hash of payload strings for which to scan</p>
+</dd><dt><code>:scan_dir</code>
+<dd>
+<p>The project directory to scan</p>
+</dd></dl>
+
+<p>Usage:</p>
+
+<pre class="ruby"><span class="ruby-identifier">data</span> = {
+        :<span class="ruby-identifier">payloads</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payloads</span>,
+        :<span class="ruby-identifier">scan_dir</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+}
+</pre>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@payloads</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:payloads</span>]
+        <span class="ruby-ivar">@scan_dir</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@points_of_interest</span>        = []
+        <span class="ruby-ivar">@points_of_interest_sorted</span> = {}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
