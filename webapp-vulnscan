@@ -10,6 +10,7 @@
 
 require 'rubygems'
 require 'digest'
+require 'fastercsv'
 require 'fileutils'
 require 'shellwords'
 require 'trollop'
@@ -87,7 +88,12 @@ end
 # output in the requested format
 case opts[:output_format]
 	when 'csv'
-		vulnscanner.points_of_interest.each {|point| puts point.csv}
+		# kludge in a header row
+		puts '"file_type","file","line_number","match","snippet","group"'
+		csv_string = FasterCSV.generate(:force_quotes => true) do |csv|
+			vulnscanner.points_of_interest.each {|point| csv << point.to_a}
+		end
+		puts csv_string
 		
 	when 'html'
 		# require erb for templating

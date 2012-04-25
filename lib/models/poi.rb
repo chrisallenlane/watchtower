@@ -36,9 +36,9 @@ class PoI
 		self.to_s + arg
 	end
 	
-	# outputs as CSV
-	def csv
-	
+	# outputs as array (for piping to fastercsv)
+	def to_a
+		[@file_type, @file, @line_number, @match, @snippet, @group]
 	end
 	
 	# outputs as XML
