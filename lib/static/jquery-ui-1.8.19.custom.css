@@ -13,7 +13,7 @@
 .ui-widget { font-family: sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: sans-serif; font-size: 1em; }
-.ui-widget-content { border: 1px solid #dddddd; background: #4183C4 50% top repeat-x;}
+.ui-widget-content { border: 1px solid #dddddd; background: #70A2D3 50% top repeat-x;}
 .ui-widget-header { background: 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
 
 /* Interaction states

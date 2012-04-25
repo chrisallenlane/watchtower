@@ -9,25 +9,61 @@ a:hover{
 	text-decoration: underline;
 }
 
-a.poi_hide_content{
-	color: #4183C4;
-	float: right;
-	font-size: x-small;
-}
-
 body{
-	background-color: white;
-	border: 1px solid gray;
-	border-radius: 10px;
-	color: #333;
 	font-family: sans-serif;
 	font-size: small;
-	margin: 10px auto;
+	margin: 0;
+	padding: 0;
+}
+
+#container{
+	background-color: white;
+	border: 1px solid silver;
+	border-radius: 10px;
+	color: #333;
+	margin: 40px auto 10px auto;
 	width: 1000px;
-	/*
-	background: -moz-linear-gradient(#FAFAFA,#EFEFEF);
-	background: -webkit-linear-gradient(#FAFAFA,#EFEFEF);
-	*/
+}
+
+#control_bar{
+	background-color: #4183C4;
+	color: white;
+	line-height: 30px;
+	margin: 0;
+	opacity: .75;
+	padding: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+#control_bar div.inner{
+	margin: 0 auto;
+	width: 1000px;
+}
+
+#control_bar div.inner p{
+	margin: 0;
+	padding: 0;
+}
+
+#control_bar div.inner div.highlighting{
+	float: left;
+	padding: 0 10px;
+}
+
+#control_bar div.inner div.highlighting a{
+	color: white;
+}
+
+#control_bar div.inner div.show{
+	float: right;
+	padding: 0 10px;
+}
+
+#control_bar div.inner div.show a{
+	color: white;
 }
 
 .column_nav{
@@ -121,16 +157,49 @@ div.point_of_interest div.poi_content{
 	padding: 5px;
 }
 
+div.point_of_interest span.poi_mark_content{
+	color: silver;
+	float: right;
+	font-size: x-small;
+}
+
+div.point_of_interest span.poi_mark_content a{
+	color: #4183C4;
+}
+
+div.point_of_interest span.poi_mark_content a.poi_ok{
+	color: green;
+}
+
+div.point_of_interest span.poi_mark_content a.poi_ok.selected{
+	background-color: green;
+	color: white;
+	padding: 0 3px;
+	border-radius: 2px;
+}
+
+div.point_of_interest span.poi_mark_content a.poi_bad{
+	color: #A52A2A;
+}
+
+div.point_of_interest span.poi_mark_content a.poi_bad.selected{
+	background-color: #A52A2A;
+	color: white;
+	padding: 0 3px;
+	border-radius: 2px;
+}
+
 div.point_of_interest span.file_name{
 	font-size: small;
 }
 
 div.point_of_interest span.line_number{
+	color: green;
 	font-size: small;
 }
 
 html{
-	background-color: silver;
+	background-color: #EEE;
 }
 
 #main{

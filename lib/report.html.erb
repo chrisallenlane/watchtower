@@ -53,6 +53,10 @@
 			$(obj).text(next_text);
 			$(obj).siblings('div.poi_content').fadeToggle();
 		}
+		// marks the poi as "ok" or "bad"
+		function poiMark(obj, mark){
+			alert(mark);
+		}		
 		// initializes the tabbed display and sortable pois
 		jQuery(document).ready(function(){
 			$('div#main').tabs();
@@ -63,111 +67,140 @@
 				$('.sortable').sortable('disable');
 			});
 			*/
+			
+			// animate opacity on the control bar
+			$('#control_bar').hover(
+				function(){	$(this).fadeTo('fast', 1); },
+				function(){ $(this).fadeTo('fast', 0.75); }
+			);
 		});
 	</script>
 </head>
 <body>
-	<div id='masthead'>
-		<div id='masthead_left'>
-			<% if opts[:project_name_given] %>
-			<h1><%= opts[:project_name] %></h1>
-			<% else %>
-			<h1><%= opts[:scan_dir] %></h1>
-			<% end %>
-			<p>Source Code Audit - <em><%= Date.today.strftime("%Y-%m-%d") %></em>
-				<% unless $configs[:client_name].empty? %>
-				<br>Prepared for <em><%= $configs[:client_name] %></em>
-				<% end %>
-			</p>
-		</div>
-		
-		<% unless $configs[:header_text].empty? %>
-		<%= $configs[:header_text] %>
-		<% end %>
-		
-		<noscript>
-			<p class='warning'>WARNING: You have JavaScript disabled. You
-			will not have access to this report's advanced functionality.</p>
-		</noscript>
-	</div>
-
-	<div id='main'>
-		<!-- tab navigation -->
-		<ul>
-			<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, dontcare| %>
-			<%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
-			<% end %>
-		</ul>
-
-		<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, payload_groups|%>
-		<!-- @filetype -->
-		<div id='filetype_<%= sym_file_type.to_s %>'>
-			<div class='column_nav'>
-				<% payload_groups.each do |payload_group, payloads| %>
-				<h3><a onclick='javascript:togglePayloadGroup(this, "<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
-				<ul class='payload_group_<%= payload_group.to_s %>'>
-					<%
-					payloads.each do |payload, points|
-						# we only need to calculate this hash once
-						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
-					%>
-					<li class='<%= @payload_hash %>'>
-						<code><a href='#<%= @payload_hash %>'><%= h payload.to_s %></a></code>
-						<span class='payload_count'>(<%= points.count %>)</span>
-						<a class='show_hide' onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
-					</li>
-					<% end %>
-				</ul>
-				<% end %>
+	<div id='control_bar'>
+		<div class='inner'>
+			<div class='highlighting'>
+				Highlighting:
+				<a href='#'>On</a> |
+				<a href='#'>Off</a>
 			</div>
 			
-			<div class='column_content'>
-				<h2><%= sym_file_type.to_s %></h2>
-				<% payload_groups.each do |payload_group, payloads|
-					payloads.each do |payload, points|
-						# we only need to calculate this hash once
-						@payload_hash = Digest::MD5.hexdigest(payload.to_s)
-				%>
-				<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %>'>
-					<a name='<%= @payload_hash %>'></a>
-					<h3>
-						<code><%= h payload.to_s %></code>
-						<span class='payload_count'>(<%= points.count %>)</span>
-						<span class='top_hide'>
-							<a href='#'>Top</a> |
-							<a onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
-						</span>
-					</h3>
-					<div class='sortable'>
-						<% points.each do |point|%>
-						<div class='point_of_interest'>
-							<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
-							<a class='poi_hide_content' onclick='javascript:poiHideContent(this)'>Hide</a>
-							<div class='poi_content'>
-								<%
-								# apply highlighting to the payload matches								
-								snippet_safe = h point.snippet
-								match_safe   = h point.match
-								snippet_highlighted = snippet_safe.sub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
-								%>
-								<p class='snippet'><code><pre><%= snippet_highlighted %></pre></code></p>
-							</div>
-						</div>
-						<% end %>
-					</div>
-				</div>
-				<% end 
-				end
-				%>
-				
-			</div> <!-- column_content -->
-		</div> <!-- @close_filetype -->
-		<% end %>
-
-	</div> <!-- main -->
+			<div class='show'>
+				Show:
+				<a href='#'>All</a> | 
+				<a href='#'>OK</a> | 
+				<a href='#'>Bad</a>
+			</div>
+		</div>
+	</div>
 	
-	<% unless $configs[:footer_text].empty? %>
-	<p id='footer'><%= $configs[:footer_text] %></p>
-	<% end %>
+	<div id='container'>
+		<div id='masthead'>
+			<div id='masthead_left'>
+				<% if opts[:project_name_given] %>
+				<h1><%= opts[:project_name] %></h1>
+				<% else %>
+				<h1><%= opts[:scan_dir] %></h1>
+				<% end %>
+				<p>Source Code Audit - <em><%= Date.today.strftime("%Y-%m-%d") %></em>
+					<% unless $configs[:client_name].empty? %>
+					<br>Prepared for <em><%= $configs[:client_name] %></em>
+					<% end %>
+				</p>
+			</div>
+			
+			<% unless $configs[:header_text].empty? %>
+			<%= $configs[:header_text] %>
+			<% end %>
+			
+			<noscript>
+				<p class='warning'>WARNING: You have JavaScript disabled. You
+				will not have access to this report's advanced functionality.</p>
+			</noscript>
+		</div>
+
+		<div id='main'>
+			<!-- tab navigation -->
+			<ul>
+				<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, dontcare| %>
+				<%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
+				<% end %>
+			</ul>
+
+			<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, payload_groups|%>
+			<!-- @filetype -->
+			<div id='filetype_<%= sym_file_type.to_s %>'>
+				<div class='column_nav'>
+					<% payload_groups.each do |payload_group, payloads| %>
+					<h3><a onclick='javascript:togglePayloadGroup(this, "<%= payload_group.to_s %>")'><%= payload_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
+					<ul class='payload_group_<%= payload_group.to_s %>'>
+						<%
+						payloads.each do |payload, points|
+							# we only need to calculate this hash once
+							@payload_hash = Digest::MD5.hexdigest(payload.to_s)
+						%>
+						<li class='<%= @payload_hash %>'>
+							<code><a href='#<%= @payload_hash %>'><%= h payload.to_s %></a></code>
+							<span class='payload_count'>(<%= points.count %>)</span>
+							<a class='show_hide' onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
+						</li>
+						<% end %>
+					</ul>
+					<% end %>
+				</div>
+				
+				<div class='column_content'>
+					<h2><%= sym_file_type.to_s %></h2>
+					<% payload_groups.each do |payload_group, payloads|
+						payloads.each do |payload, points|
+							# we only need to calculate this hash once
+							@payload_hash = Digest::MD5.hexdigest(payload.to_s)
+					%>
+					<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %>'>
+						<a name='<%= @payload_hash %>'></a>
+						<h3>
+							<code><%= h payload.to_s %></code>
+							<span class='payload_count'>(<%= points.count %>)</span>
+							<span class='top_hide'>
+								<a href='#'>Top</a> |
+								<a onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
+							</span>
+						</h3>
+						<div class='sortable'>
+							<% points.each do |point|%>
+							<div class='point_of_interest'>
+								<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
+								<span class='poi_mark_content'>
+									<a class='poi_ok selected' onclick='javascript:poiMark(this, "ok")'>OK</a> |
+									<a class='poi_bad selected' onclick='javascript:poiMark(this, "bad")'>Bad</a> |
+									<a class='poi_hide' onclick='javascript:poiHideContent(this)'>Hide</a>
+								</span>
+								<div class='poi_content'>
+									<%
+									# apply highlighting to the payload matches								
+									snippet_safe = h point.snippet
+									match_safe   = h point.match
+									snippet_highlighted = snippet_safe.sub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
+									%>
+									<p class='snippet'><code><pre><%= snippet_highlighted %></pre></code></p>
+								</div>
+							</div>
+							<% end %>
+						</div>
+					</div>
+					<% end 
+					end
+					%>
+					
+				</div> <!-- column_content -->
+			</div> <!-- @close_filetype -->
+			<% end %>
+
+		</div> <!-- main -->
+		
+		<% unless $configs[:footer_text].empty? %>
+		<p id='footer'><%= $configs[:footer_text] %></p>
+		<% end %>
+	</div>
 </body>
 </html>

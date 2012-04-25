@@ -18,7 +18,7 @@ chizu
 samus
 deep eyes
 hindsight
-
+some eye god?
 
 ------------------
  TODO
@@ -26,8 +26,18 @@ hindsight
 Sort hashes for consistency
 implement CSV format reporting
 --webapp --url
+implement remaining 
+report file config option?
 
+create a trollop help banner
+fix the "hide" button I broke
+implement the new JS controls
 style
 document with rdoc in /docs/
+Rakefile
+	+ build docs
 README
 LICENSE
+
+publish
+message some twitter people
