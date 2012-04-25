@@ -1,48 +1,12 @@
 ------------------
- Project Name Ideas
-------------------
-overseer / oversight
-vulnerability scanner
-source code auditing tool
-Calcify
-Something in Japanese
-to seek
-to search
-to find
-miru
-blue ____
-aegis
-Slippy
-unlock
-chizu
-samus
-deep eyes
-hindsight
-some eye god?
-steadfast
-osiris
-iris
-redeye
-akame
-kantoku (oversight)
-panopticon
-panoptic
-sentinel
-*watchtower
-
-------------------
  TODO
 ------------------
 Sort hashes for consistency
 --webapp --url
 
-document with rdoc in /docs/
-Rakefile
-	+ build docs
 README
 unit tests
 browser test (at least the good browsers)
-name the thing (update the banner)
 
 publish
 message some twitter people and security mailing lists
