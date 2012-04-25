@@ -7,16 +7,12 @@
 	unless $configs[:stylesheets].empty?
 		$configs[:stylesheets].each do |stylesheet|
 	%>
-	<%# = ERB.new(File.read(stylesheet)).result(binding) %>
+	<%= ERB.new(File.read(stylesheet)).result(binding) %>
 	<%
 		end
 	end
 	%>
 	</style>
-	
-	<link rel='stylesheet' type='text/css' href='///home/chris/Source/terminal/cal-webapp-vulnscan/lib/static/jquery-ui-1.8.19.custom.css'>
-	<link rel='stylesheet' type='text/css' href='///home/chris/Source/terminal/cal-webapp-vulnscan/lib/static/main.css'>
-	
 	<% if $configs[:embed_javascript].eql? true %>
 	<script type='text/javascript'>
 	<%= ERB.new(File.read('./lib/static/jquery-1.7.2.min.js')).result(binding) %>
@@ -94,7 +90,7 @@
 							@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 						%>
 						<li class='<%= @payload_hash %>'>
-							<code><a href='#<%= @payload_hash %>'><%= h payload.to_s %></a></code>
+							<code><a href='#pl_<%= @payload_hash %>'><%= h payload.to_s %></a></code>
 							<span class='payload_count'>(<%= points.count %>)</span>
 							<a class='show_hide' onclick='togglePayload("<%= sym_file_type.to_s %>","<%= @payload_hash %>")'>Hide</a>
 						</li>
@@ -111,7 +107,7 @@
 							@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 					%>
 					<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %>'>
-						<a name='<%= @payload_hash %>'></a>
+						<a name='pl_<%= @payload_hash %>'></a>
 						<h3>
 							<code><%= h payload.to_s %></code>
 							<span class='payload_count'>(<%= points.count %>)</span>
@@ -136,7 +132,7 @@
 									match_safe   = h point.match
 									snippet_highlighted = snippet_safe.sub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
 									%>
-									<p class='snippet'><code><pre><%= snippet_highlighted %></pre></code></p>
+									<pre class='snippet'><code><%= snippet_highlighted %></code></pre>
 								</div>
 							</div>
 							<% end %>
