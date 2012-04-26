@@ -247,10 +247,8 @@ user-provided payloads.</p>
                                                         <span class="ruby-value">:line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">line_num</span>,
                                                         <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload</span>,
                                                         <span class="ruby-value">:snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">snippet</span>,
-                                                        <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload_group</span>,
+                                                        <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">payload_group</span>.<span class="ruby-identifier">to_s</span>,
                                                 }
-                                                
-                                                <span class="ruby-comment">#puts data.to_yaml</span>
                                                 
                                                 <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>))
                                         <span class="ruby-keyword">end</span>
@@ -291,7 +289,7 @@ vulnscanner.sort</pre>
 
           
           <div class="method-source-code" id="sort-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 92</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 90</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
         <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}

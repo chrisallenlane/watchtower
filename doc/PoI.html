@@ -456,12 +456,12 @@ the following keys:</p>
           <div class="method-source-code" id="new-source">
             <pre><span class="ruby-comment"># File lib/models/poi.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@file_type</span>   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file_type</span>]
-        <span class="ruby-ivar">@file</span>        = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file</span>]
-        <span class="ruby-ivar">@line_number</span> = <span class="ruby-identifier">data</span>[<span class="ruby-value">:line_number</span>]
-        <span class="ruby-ivar">@match</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>]
-        <span class="ruby-ivar">@snippet</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:snippet</span>]
-        <span class="ruby-ivar">@group</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:group</span>]
+        <span class="ruby-ivar">@file_type</span>   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file_type</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@file</span>        = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@line_number</span> = <span class="ruby-identifier">data</span>[<span class="ruby-value">:line_number</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@match</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@snippet</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:snippet</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@group</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:group</span>].<span class="ruby-identifier">to_s</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- new-source -->
           
