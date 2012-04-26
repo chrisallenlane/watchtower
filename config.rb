@@ -41,7 +41,7 @@ $configs = {
 	
 	# HTML reporting only: the path to the ERB template to use
 	# for generating the HTML report.
-	:report_file		=> './lib/report/report.html.erb',
+	:report_file		=> './lib/reports/report.html.erb',
 	
 	# HTML reporting only: the stylesheets to embed into the outputted
 	# report.
