@@ -69,7 +69,7 @@ class VulnScanner
 								:line_number => line_num,
 								:match       => payload,
 								:snippet     => snippet,
-								:group		 => payload_group,
+								:group		 => payload_group.to_s,
 							}
 							
 							#puts data.to_yaml

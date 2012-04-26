@@ -7,7 +7,7 @@ $configs = {
 
 	# If true, javascript will be embedded directly into the report. If
 	# false, it will be linked to a hosted file.
-	:embed_javascript 	=> false,
+	:embed_javascript 	=> true,
 	
 	# exclude directories from the search
 	:exclude_dirs		=> [
