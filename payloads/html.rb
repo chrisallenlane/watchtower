@@ -1,7 +1,6 @@
 # Enumerate a hash containing all of the various payloads (grouped
 # topically) for which one may want to scan.
 html_payloads = {
-	# noteworthy HTML tags
 	:inputs => %w[
 		<form
 		<input
