@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #######################################################################
-# webapp-vulnscan - a webapp-vulnscanner, obviously
+# Watchtower - a Static Code Analysis tool for security auditors
 #
 # Chris Lane
 # chris@chris-allen-lane.com
@@ -77,18 +77,6 @@ vulnscanner.scan
 #######################################################################
 # Display
 #######################################################################
-# If color was requested, colorize all of the points. It's probably a bit
-# less efficient to make another pass through the loop just to do this, 
-# but I'm happy to spend a bit of Moore's dividend here to keep the code
-# cleaner. (We would need to do some irritating branching later
-# on otherwise.)
-# @todo: now that I'm only colorizing plain text, I can probably
-# just move this down into the 'else' case
-if opts[:colorize_given] and opts[:output_format].eql? 'txt'
-	require 'colorize' 
-	vulnscanner.points_of_interest.each {|point| point.colorize}
-end
-
 # output in the requested format
 case opts[:output_format]
 	when 'csv'
@@ -117,5 +105,10 @@ case opts[:output_format]
 		puts '</points_of_interest>'
 	
 	else
-		vulnscanner.points_of_interest.each {|point| puts point + "\n\n"}
+		if opts[:colorize_given]
+			require 'colorize'
+			vulnscanner.points_of_interest.each {|point| point.colorize; puts point + "\n\n"}
+		else
+			vulnscanner.points_of_interest.each {|point| puts point + "\n\n"}
+		end
 end
