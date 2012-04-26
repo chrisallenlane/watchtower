@@ -1,7 +1,7 @@
 INSTALLING
 ==========
 "Installing" this program is simple: just copy the project folder onto the
-desired location on your system, and `./watchtower` when you want
+desired location on your system, and run `./watchtower` when you want
 to use the script. Ie:
 
 	cd <the project directory>

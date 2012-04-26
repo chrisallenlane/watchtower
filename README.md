@@ -68,7 +68,7 @@ use upon execution.
 
 Payload Specification
 ---------------------
-Payloads (by default) live in <project root>/payloads/, and are specified
+Payloads (by default) live in `<project root>/payloads/`, and are specified
 by file type, and then by group, thusly:
 
 	$payloads[:filetype][:group]
@@ -79,7 +79,7 @@ As in:
 
 Payload group divisions will be respected when laying out a generated
 HTML report, so creating thoughtful groupings can help to make reports
-more navigable. Use them wisely.
+more navigable.
 
 If you're interested in creating a payload for a new file type, do the following:
 
