@@ -30,12 +30,12 @@ class PoI
 	#	poi = PoI.new(data)
 	#
 	def initialize data
-		@file_type   = data[:file_type]
-		@file        = data[:file]
-		@line_number = data[:line_number]
-		@match       = data[:match]
-		@snippet     = data[:snippet]
-		@group       = data[:group]
+		@file_type   = data[:file_type].to_s
+		@file        = data[:file].to_s
+		@line_number = data[:line_number].to_s
+		@match       = data[:match].to_s
+		@snippet     = data[:snippet].to_s
+		@group       = data[:group].to_s
 	end
 	
 	# Colorizes output in the command line

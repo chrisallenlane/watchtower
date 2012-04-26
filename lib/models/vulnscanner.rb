@@ -72,8 +72,6 @@ class VulnScanner
 								:group		 => payload_group.to_s,
 							}
 							
-							#puts data.to_yaml
-							
 							@points_of_interest.push(PoI.new(data))
 						end
 					end
