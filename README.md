@@ -26,10 +26,10 @@ Just spend a few minutes playing with the report, and you should quickly
 gain a feel for how this program works.
 
 ### Notes: ###
-1. This is a pretty big HTML file. I'd recommend viewing it in a very
-fast browser like Google Chrome.
+1. This is a pretty big HTML file. I'd recommend viewing it in a fast
+browser like Google Chrome.
 2. I chose this plugin because of its popularity. I'm not implying
-at all that I believe this plugin to be insecure.
+at all that I believe it is insecure.
 
 
 Usage
