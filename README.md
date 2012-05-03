@@ -147,7 +147,7 @@ expertise.
 
 Contact Me
 ----------
-Questions, concerns, bug reports, and feature requests may be directted to
+Questions, concerns, bug reports, and feature requests may be directed to
 chris@chris-allen-lane.com. If you're able to express your thoughts in
 144 characters or less ("It's great!", "It sucks!") you can also contact
 me on [twitter](http://twitter.com/#!/chrisallenlane).
