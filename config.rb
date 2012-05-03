@@ -58,7 +58,7 @@ $configs = {
 		'./payloads/js.rb',
 		'./payloads/sql.rb',
 		# './payloads/wordpress.rb',
-	],
+	].sort,
 }
 
 

@@ -395,6 +395,7 @@ wp_mu_site = %w[
 	wpmu_welcome_user_notification
 ]
 
+# verify that the array has been initialized
 $payloads[:php] ||= {}
 $payloads[:php][:wordpress] ||= []
 
