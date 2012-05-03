@@ -57,6 +57,7 @@ $configs = {
 		'./payloads/php.rb',
 		'./payloads/js.rb',
 		'./payloads/sql.rb',
+		# './payloads/wordpress.rb',
 	],
 }
 

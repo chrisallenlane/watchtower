@@ -13,6 +13,7 @@ html_payloads = {
 		<applet
 		<embed
 		<iframe
+		<noscript
 		<object
 		<style
 		<xml

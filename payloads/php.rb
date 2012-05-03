@@ -69,10 +69,6 @@ php_payloads = {
 		@note
 	],
 	
-	:wordpress_specific => %w[
-		$wpdb
-	],
-	
 	:custom_strings => %w[
 		username
 		password
