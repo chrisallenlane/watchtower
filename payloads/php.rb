@@ -1,7 +1,6 @@
 # Enumerate a hash containing all of the various payloads (grouped
 # topically) for which one may want to scan.
 php_payloads = {
-
 	:dangerous_functions => %w[
 		assert(		
 		create_function(

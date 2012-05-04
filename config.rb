@@ -53,10 +53,11 @@ $configs = {
 	# The paths to the files containing the payloads for which you
 	# would like to scan.
 	:payloads 			=> [
+		# './payloads/c.rb',
 		'./payloads/html.rb',
 		'./payloads/php.rb',
 		'./payloads/js.rb',
-		'./payloads/sql.rb',
+		# './payloads/sql.rb',
 		# './payloads/wordpress.rb',
 	].sort,
 }
