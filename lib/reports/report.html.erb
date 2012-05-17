@@ -106,7 +106,7 @@
 							# we only need to calculate this hash once
 							@payload_hash = Digest::MD5.hexdigest(payload.to_s)
 					%>
-					<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %>'>
+					<div class='payload_<%= @payload_hash %> payload_group_<%= payload_group.to_s %> payload_group'>
 						<a name='pl_<%= @payload_hash %>'></a>
 						<h3>
 							<code><%= h payload.to_s %></code>
