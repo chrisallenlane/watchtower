@@ -24,7 +24,7 @@ require 'lib/models/vulnscanner'
 opts = Trollop::options do
 	banner File.read('./lib/static/banner.txt')
 	
-	version 'Version: 1.0.1'
+	version 'Version: 1.0.2'
 
 	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
