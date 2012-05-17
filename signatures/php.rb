@@ -1,6 +1,6 @@
-# Enumerate a hash containing all of the various payloads (grouped
+# Enumerate a hash containing all of the various signatures (grouped
 # topically) for which one may want to scan.
-php_payloads = {
+php_signatures = {
 	:dangerous_functions => %w[
 		assert(		
 		create_function(
@@ -32,7 +32,7 @@ php_payloads = {
 		`
 	],
 
-	:payload_obfuscators => %w[
+	:signature_obfuscators => %w[
 		base64_decode(
 		base64_encode(
 		bzcompress(
@@ -77,13 +77,13 @@ php_payloads = {
 }
 
 
-# While this is obviously not necessary, assembling the payload hash
+# While this is obviously not necessary, assembling the signature hash
 # thusly makes it a bit easier/faster to turn on/off the various
-# payloads to scan for
-$payloads[:php] ||= {}
-$payloads[:php][:dangerous_functions] 	= php_payloads[:dangerous_functions]
-$payloads[:php][:payload_obfuscators] 	= php_payloads[:payload_obfuscators]
-$payloads[:php][:form_data] 			= php_payloads[:form_data]
-$payloads[:php][:globals] 				= php_payloads[:globals]
-$payloads[:php][:developer_notes] 		= php_payloads[:developer_notes]
-$payloads[:php][:custom_strings] 		= php_payloads[:custom_strings]
+# signatures to scan for
+$signatures[:php] ||= {}
+$signatures[:php][:dangerous_functions] 	= php_signatures[:dangerous_functions]
+$signatures[:php][:signature_obfuscators] 	= php_signatures[:signature_obfuscators]
+$signatures[:php][:form_data] 				= php_signatures[:form_data]
+$signatures[:php][:globals] 				= php_signatures[:globals]
+$signatures[:php][:developer_notes] 		= php_signatures[:developer_notes]
+$signatures[:php][:custom_strings] 			= php_signatures[:custom_strings]

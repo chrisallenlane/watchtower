@@ -2,8 +2,8 @@
 # http://sourceforge.net/projects/flawfinder/
 
 # @todo: I'm not an expert at C. It would be great to break up this list
-# into more granular payload groups.
-c_payloads = {
+# into more granular signature groups.
+c_signatures = {
 	:dangerous_functions => %w[
 		strcpy
 		lstrcpy
@@ -168,18 +168,18 @@ c_payloads = {
 }
 
 
-# While this is obviously not necessary, assembling the payload hash
+# While this is obviously not necessary, assembling the signature hash
 # thusly makes it a bit easier/faster to turn on/off the various
-# payloads to scan for.
+# signatures to scan for.
 #
 # @note: actually, the above is incorrect, in this case - at least
 # until we break this up into more than one group.
-$payloads[:cc] ||= {}
-$payloads[:cc][:dangerous_functions] = c_payloads[:dangerous_functions]
+$signatures[:cc] ||= {}
+$signatures[:cc][:dangerous_functions] = c_signatures[:dangerous_functions]
 
 # `ack-grep --help-types` reveals that cc and cpp are used for C and C++
-# files respectively. It'll just be easiest to duplicate the payloads
+# files respectively. It'll just be easiest to duplicate the signatures
 # here. This is probably not ideal, and something to revisit later if
 # I ever choose to move away from ack-grep.
-$payloads[:cpp] ||= {}
-$payloads[:cpp][:dangerous_functions] = c_payloads[:dangerous_functions]
+$signatures[:cpp] ||= {}
+$signatures[:cpp][:dangerous_functions] = c_signatures[:dangerous_functions]

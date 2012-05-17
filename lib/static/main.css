@@ -84,7 +84,7 @@ body{
 	overflow: auto;
 }
 
-.column_nav ul li a.payload_hidden{
+.column_nav ul li a.signature_hidden{
 	color: silver;
 }
 
@@ -265,7 +265,7 @@ span.match_highlight{
 	color: black;
 }
 
-span.payload_count{
+span.signature_count{
 	color: gray;
 	font-size: x-small;
 }

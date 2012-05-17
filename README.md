@@ -60,7 +60,7 @@ directly to the terminal.)
 ### Outputting a Sortable HTML Report for Direct Review
 In my opinion, `Watchtower`'s greatest feature is its ability to output
 an HTML report. Such a report can be a tremendous timesaver when scanning
-for a large number of payloads in large numbers of files.
+for a large number of signatures in large numbers of files.
 
 This report is especially useful when running dual monitors, such that
 you can have the report open on one monitor, and your preferred IDE
@@ -86,32 +86,32 @@ config files (`config-project-one.rb`, etc), and then specify which to
 use upon execution.
 
 
-Payload Specification
+Signature Specification
 ---------------------
-Payloads (by default) live in `<project root>/payloads/`, and are specified
+Signatures (by default) live in `<project root>/signatures/`, and are specified
 by file type, and then by group, thusly:
 
-	$payloads[:filetype][:group]
+	$signatures[:filetype][:group]
 	
 As in:
 
-	$payloads[:php][:dangerous_functions] = %w[payload payload payload ...]
+	$signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
 
-Payload group divisions will be respected when laying out a generated
+Signature group divisions will be respected when laying out a generated
 HTML report, so creating thoughtful groupings can help to make reports
 more navigable.
 
-If you're interested in creating a payload for a new file type, do the following:
+If you're interested in creating a signature for a new file type, do the following:
 
 	# run this in a terminal:
 	ack-grep --help-types
 
 You'll need to use the ack-grep option name (symbolized) as the key
-for your new payload. Thus `--java` will translate to `:java`.
+for your new signature. Thus `--java` will translate to `:java`.
 
 Once you've determined the proper key to use for your new filetype, just
 create a hash that is structured based off of one of the existing
-payloads.
+signatures.
 
 
 Known Issues
@@ -137,22 +137,21 @@ Roadmap
 I plan to make the following changes when I have the time:
 
 * Fix the Known Issues
-* Add more default payloads for different programming languages and frameworks
+* Add more default signatures for different programming languages and frameworks
 * Add `--after-context` and `--before-context` flags, as per `grep`
 * Remove `ack-grep` as a dependency
-* Rename what I'm currently calling "payloads" to "signatures"
 
 
 Contributing
 ------------
-I'm very interested in compiling payload sets for popular 3rd-party frameworks.
-(For an example, look at `/payloads/wordpress.rb`, which is
+I'm very interested in compiling signature sets for popular 3rd-party frameworks.
+(For an example, look at `/signatures/wordpress.rb`, which is
 Wordpress-specific.) If you have expertise in a popular framework
-(Joomla, Drupal, etc), and would like to contribute some payload files,
+(Joomla, Drupal, etc), and would like to contribute some signature files,
 please let me know. 
 
 Likewise, if you have expertise in a language which is not represented
-among the payloads (web or otherwise), I invite you to share your
+among the signatures (web or otherwise), I invite you to share your
 expertise.
 
 

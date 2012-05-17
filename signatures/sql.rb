@@ -1,5 +1,5 @@
 # A hash of interesting PHP data
-$payloads[:sql] = {
+$signatures[:sql] = {
 	:markup_injections => %w[
 		<script
 		<iframe

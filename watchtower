@@ -51,7 +51,7 @@ end
 	
 
 #######################################################################
-# Config and Payloads
+# Config and Signatures
 #######################################################################
 # Load the configuration file
 unless File.exists? opts[:config_file]
@@ -70,7 +70,7 @@ end
 #######################################################################
 # Scan
 #######################################################################
-vulnscanner = VulnScanner.new({:payloads => $payloads, :scan_dir => opts[:scan_dir]})
+vulnscanner = VulnScanner.new({:signatures => $signatures, :scan_dir => opts[:scan_dir]})
 vulnscanner.scan
 
 

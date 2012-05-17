@@ -9,14 +9,14 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	$configs = {}
 	$configs[:exclude_dirs] = []
   
-	# specify the payloads
-	payloads = {}
-	payloads[:php] = {}
-	payloads[:php][:dangerous_functions] = ['eval(', 'base64_decode(']
+	# specify the signatures
+	signatures = {}
+	signatures[:php] = {}
+	signatures[:php][:dangerous_functions] = ['eval(', 'base64_decode(']
 	
 	# specify the directory to scan
 	scandir = File.dirname(__FILE__)
-	@vulnscanner = VulnScanner.new({:payloads => payloads, :scan_dir => scandir})
+	@vulnscanner = VulnScanner.new({:signatures => signatures, :scan_dir => scandir})
   end
   
   must "scan" do

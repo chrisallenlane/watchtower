@@ -14,9 +14,9 @@ class PoI
 	# <tt>:file_type</tt>:: The file type in which the PoI was found
 	# <tt>:file</tt>:: The file in which the PoI was found
 	# <tt>:line_number</tt>:: The line number at which the PoI was found
-	# <tt>:match</tt>:: The specified payload which this PoI matches
+	# <tt>:match</tt>:: The specified signature which this PoI matches
 	# <tt>:snippet</tt>:: A code snippet of the match in context
-	# <tt>:group</tt>:: The group to witch the payload belongs
+	# <tt>:group</tt>:: The group to witch the signature belongs
 	#
 	# Usage:
 	#	data = {

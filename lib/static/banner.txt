@@ -1,4 +1,4 @@
-watchtower is a language-agnostic Static Code Analysis tool that scans for user-supplied payloads within a specified codebase. Its purpose is to assist security auditors who are tasked with a manual code review.
+watchtower is a language-agnostic Static Code Analysis tool that scans for user-supplied signatures within a specified codebase. Its purpose is to assist security auditors who are tasked with a manual code review.
 
 Example (ouput HTML to file):
 ./watchtower -s /app/path/to/scan -o html > /path/to/report/file.html -p "The Project Name"

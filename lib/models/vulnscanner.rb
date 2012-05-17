@@ -1,24 +1,24 @@
 # This class encapsulates the main functionality of the application -
 # the scanning of a codebase for potential points of interest as specified
-# in the user-provided payloads.
+# in the user-provided signatures.
 class VulnScanner
 
-	attr_accessor :payloads, :points_of_interest, :points_of_interest_sorted, :scan_dir
+	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir
 	
 	# Initializes the VulnScanner instance. Accepts a hash containing
 	# the following keys:
 	#
-	# <tt>:payloads</tt>:: A hash of payload strings for which to scan
-	# <tt>:scan_dir</tt>:: The project directory to scan
+	# <tt>:signatures</tt>:: A hash of signature strings for which to scan
+	# <tt>:scan_dir</tt>  :: The project directory to scan
 	#
 	# Usage:
 	#	data = {
-	#		:payloads => payloads,
+	#		:signatures => signatures,
 	#		:scan_dir => '/path/to/scan',
 	#	}
 	#
 	def initialize data
-		@payloads	= data[:payloads]
+		@signatures	= data[:signatures]
 		@scan_dir 	= data[:scan_dir]
 		@points_of_interest        = []
 		@points_of_interest_sorted = {}
@@ -30,14 +30,14 @@ class VulnScanner
 	#	vulnscanner.scan
 	#
 	def scan
-		@payloads.each do |file_type, payload_groups|
+		@signatures.each do |file_type, signature_groups|
 			# cast the file_type symbol into a string
 			ftype = file_type.to_s	
-			# iterate over the payload groups
-			payload_groups.each do |payload_group, payloads|
+			# iterate over the signature groups
+			signature_groups.each do |signature_group, signatures|
 			
-				# iterate over each payload
-				payloads.each do |payload|
+				# iterate over each signature
+				signatures.each do |signature|
 					# assemble a list of directories to ignore
 					ignore = ''
 					unless $configs[:exclude_dirs].empty?
@@ -47,7 +47,7 @@ class VulnScanner
 					end
 
 					# do an ack-grep scan
-					result = `cd #{@scan_dir}; ack-grep '#{payload.shellescape}' --sort --#{ftype} #{ignore}`
+					result = `cd #{@scan_dir}; ack-grep '#{signature.shellescape}' --sort --#{ftype} #{ignore}`
 					
 					# display the matches
 					unless result.strip.empty?
@@ -67,9 +67,9 @@ class VulnScanner
 								:file_type   => ftype,
 								:file        => file_name,
 								:line_number => line_num,
-								:match       => payload,
+								:match       => signature,
 								:snippet     => snippet,
-								:group		 => payload_group.to_s,
+								:group		 => signature_group.to_s,
 							}
 							
 							@points_of_interest.push(PoI.new(data))

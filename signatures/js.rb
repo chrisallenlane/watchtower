@@ -1,5 +1,4 @@
-$payloads[:js] = {
-
+$signatures[:js] = {
 	:dangerous_functions => %w[
 		eval
 	]

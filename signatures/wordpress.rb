@@ -1,6 +1,6 @@
-# Because these payloads themeselves are just a subset of the PHP file-
-# type don't attempt to group these by payload group. These ARE a 
-# payload group.
+# Because these signatures themeselves are just a subset of the PHP file-
+# type don't attempt to group these by signature group. These ARE a 
+# signature group.
 
 # These are a collection of functions which may commonly be used to 
 # alter posts in your Wordpress database (such as overwriting them
@@ -396,37 +396,37 @@ wp_mu_site = %w[
 ]
 
 # verify that the array has been initialized
-$payloads[:php] ||= {}
-$payloads[:php][:wordpress] ||= []
+$signatures[:php] ||= {}
+$signatures[:php][:wordpress] ||= []
 
 # comment out what you don't want loaded here
-$payloads[:php][:wordpress] << wp_database
-$payloads[:php][:wordpress] << wp_post_insertion_or_removal
-$payloads[:php][:wordpress] << wp_post_meta
-$payloads[:php][:wordpress] << wp_attachments
-$payloads[:php][:wordpress] << wp_categories
-$payloads[:php][:wordpress] << wp_taxonomies
-$payloads[:php][:wordpress] << wp_users
-$payloads[:php][:wordpress] << wp_user_meta
-$payloads[:php][:wordpress] << wp_user_insertion_or_removal
-$payloads[:php][:wordpress] << wp_comments
-$payloads[:php][:wordpress] << wp_filters
-$payloads[:php][:wordpress] << wp_user_login_and_logout
-$payloads[:php][:wordpress] << wp_actions
-$payloads[:php][:wordpress] << wp_plugins
-$payloads[:php][:wordpress] << wp_shortcodes
-$payloads[:php][:wordpress] << wp_theme_functions
-$payloads[:php][:wordpress] << wp_formatting
-$payloads[:php][:wordpress] << wp_options
-$payloads[:php][:wordpress] << wp_admin_menu
-$payloads[:php][:wordpress] << wp_toolbar
-$payloads[:php][:wordpress] << wp_nonces_and_security
-$payloads[:php][:wordpress] << wp_localization
-$payloads[:php][:wordpress] << wp_cron
-$payloads[:php][:wordpress] << wp_misc
-$payloads[:php][:wordpress] << wp_mu_admin
-$payloads[:php][:wordpress] << wp_mu_site
+$signatures[:php][:wordpress] << wp_database
+$signatures[:php][:wordpress] << wp_post_insertion_or_removal
+$signatures[:php][:wordpress] << wp_post_meta
+$signatures[:php][:wordpress] << wp_attachments
+$signatures[:php][:wordpress] << wp_categories
+$signatures[:php][:wordpress] << wp_taxonomies
+$signatures[:php][:wordpress] << wp_users
+$signatures[:php][:wordpress] << wp_user_meta
+$signatures[:php][:wordpress] << wp_user_insertion_or_removal
+$signatures[:php][:wordpress] << wp_comments
+$signatures[:php][:wordpress] << wp_filters
+$signatures[:php][:wordpress] << wp_user_login_and_logout
+$signatures[:php][:wordpress] << wp_actions
+$signatures[:php][:wordpress] << wp_plugins
+$signatures[:php][:wordpress] << wp_shortcodes
+$signatures[:php][:wordpress] << wp_theme_functions
+$signatures[:php][:wordpress] << wp_formatting
+$signatures[:php][:wordpress] << wp_options
+$signatures[:php][:wordpress] << wp_admin_menu
+$signatures[:php][:wordpress] << wp_toolbar
+$signatures[:php][:wordpress] << wp_nonces_and_security
+$signatures[:php][:wordpress] << wp_localization
+$signatures[:php][:wordpress] << wp_cron
+$signatures[:php][:wordpress] << wp_misc
+$signatures[:php][:wordpress] << wp_mu_admin
+$signatures[:php][:wordpress] << wp_mu_site
 
 # I only want a single-level array at this depth
-$payloads[:php][:wordpress].flatten!
+$signatures[:php][:wordpress].flatten!
 

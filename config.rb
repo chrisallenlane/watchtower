@@ -50,22 +50,22 @@ $configs = {
 		'./lib/static/main.css',
 	],
 	
-	# The paths to the files containing the payloads for which you
+	# The paths to the files containing the signatures for which you
 	# would like to scan.
-	:payloads 			=> [
-		# './payloads/c.rb',
-		'./payloads/html.rb',
-		'./payloads/php.rb',
-		'./payloads/js.rb',
-		# './payloads/sql.rb',
-		# './payloads/wordpress.rb',
+	:signatures 			=> [
+		# './signatures/c.rb',
+		'./signatures/html.rb',
+		'./signatures/php.rb',
+		'./signatures/js.rb',
+		# './signatures/sql.rb',
+		# './signatures/wordpress.rb',
 	].sort,
 }
 
 
 #######################################################################
-# Payloads
+# Signatures
 #######################################################################
-# assemble the array of payloads
-$payloads ||= {}
-$configs[:payloads].each {|payload| require payload}
+# assemble the array of signatures
+$signatures ||= {}
+$configs[:signatures].each {|signature| require signature}
