@@ -119,17 +119,28 @@ Known Issues
 This program has only been tested on Ubuntu 11.04, and may not work on
 other platforms. Additionally:
 
-* Watchtower is currently unable to recognize ASP/X files, because `ack-grep`
+# Watchtower is currently unable to recognize ASP/X files, because `ack-grep`
   (upon which this program relies) itself cannot. I plan to fix
   this in the future.
 
-* If you attempt to generate the same report more than once, you may find
+# If you attempt to generate the same report more than once, you may find
   that the ordering of the elements contained therein will change. (Only
   the ordering of the information will change - the informational content
   itself will not.) This is because my Ruby-Fu is still weak, and I haven't
   yet figured out how to sort some of the nested hashes which the `VulnScanner`
   model assembles before outputting a report. I plan to address this issue
   very soon.
+
+
+Roadmap
+--------
+I plan to make the following changes when I have the time:
+
+# Fix the Known Issues
+# Add more default payloads for different programming languages and frameworks
+# Add `--after-context` and `--before-context` flags, as per `grep`
+# Remove `ack-grep` as a dependency
+# Rename what I'm currently calling "payloads" to "signatures"
 
 
 Contributing
