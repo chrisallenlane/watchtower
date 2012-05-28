@@ -62,9 +62,9 @@ $configs = {
 	# would like to scan.
 	:signatures 			=> [
 		#'./signatures/c.rb',
-		#'./signatures/html.rb',
+		'./signatures/html.rb',
 		'./signatures/php.rb',
-		#'./signatures/js.rb',
+		'./signatures/js.rb',
 		# './signatures/sql.rb',
 		# './signatures/wordpress.rb',
 	].sort,
