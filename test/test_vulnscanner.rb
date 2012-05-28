@@ -6,9 +6,12 @@ require 'lib/models/vulnscanner.rb'
 class TestVulnscanner < ::Test::Unit::TestCase  
   def setup
 	# mock the config file
-	$configs = {}
-	$configs[:exclude_dirs] = []
-  
+	$configs                    = {}
+	$configs[:exclude_files]    = []
+	$configs[:exclude_dirs]     = []
+    $configs[:ftype_ext]        = {}
+    $configs[:ftype_ext][:php]  = %w[php phpt php3 php4 php5 phtml]
+    
 	# specify the signatures
 	signatures = {}
 	signatures[:php] = {}

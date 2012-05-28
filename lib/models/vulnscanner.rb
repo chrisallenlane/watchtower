@@ -18,10 +18,10 @@ class VulnScanner
 	#	}
 	#
 	def initialize data
-		@signatures	= data[:signatures]
-		@scan_dir 	= data[:scan_dir]
-		@points_of_interest        = []
-		@points_of_interest_sorted = {}
+		@signatures	                = data[:signatures]
+		@scan_dir 	                = data[:scan_dir]
+		@points_of_interest         = []
+		@points_of_interest_sorted  = {}
 	end
 	
 	# Performs a scan against the specified project directory.
@@ -39,16 +39,30 @@ class VulnScanner
 				# iterate over each signature
 				signatures.each do |signature|
 					# assemble a list of directories to ignore
-					ignore = ''
-					unless $configs[:exclude_dirs].empty?
-						$configs[:exclude_dirs].each do |dir|
-							ignore += " --ignore-dir='#{dir}'"
+					exclude_files = ''
+					unless $configs[:exclude_files].empty?
+						$configs[:exclude_files].each do |file|
+							exclude_files += " --exclude='#{file}'"
 						end
 					end
-
-					# do an ack-grep scan
-					result = `cd #{@scan_dir}; ack-grep '#{signature.shellescape}' --sort --#{ftype} #{ignore}`
 					
+                    # assemble a list of directories to ignore
+					exclude_dirs = ''
+					unless $configs[:exclude_dirs].empty?
+						$configs[:exclude_dirs].each do |dir|
+							exclude_dirs += " --exclude-dir='#{dir}'"
+						end
+					end
+                    
+                    # map filetypes to possible file extensions
+                    include_filetypes = ''
+                    $configs[:ftype_ext][file_type].each do |ext|
+                        include_filetypes += " --include='*.#{ext}'"
+                    end
+                    
+					# do a grep scan
+                    result = `cd #{@scan_dir}; grep -RHn '#{signature.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+                    
 					# display the matches
 					unless result.strip.empty?
 						# iterate over the ack results
@@ -62,6 +76,7 @@ class VulnScanner
 							line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
 							snippet          = line.slice((second_colon_pos +1), line.length).strip
 
+                            # this should not change
 							# buffer a new point of interest
 							data = {
 								:file_type   => ftype,

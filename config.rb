@@ -17,16 +17,17 @@ $configs = {
 	# file size of the report.
 	:embed_javascript 	=> true,
 	
-	# You may exclude directories from the scan
-	:exclude_dirs		=> [
-		#'/path/to/ignore/one',
-		#'/path/to/ignore/two',
+	# Exclude filenames to scan, matched anywhere within --scan-dir
+    # or its subdirectories
+	:exclude_files 		=> [
+		#'ignore-1.php',
+		#'ignore-2.php',
 	],
 	
-	# You may exclude directories from the scan
-	:exclude_files		=> [
-		#'/path/to/ignore/one/file.txt',
-		#'/path/to/ignore/two/file2.txt',
+	# Exclude directories to scan, relative to --scan-dir
+	:exclude_dirs 		=> [
+        #'ignore-one',
+        #'ignore-two',
 	],
 	
 	# HTML reporting only: This text will be displayed in the report's
@@ -54,15 +55,16 @@ $configs = {
 	:stylesheets 		=> [
 		'./lib/static/jquery-ui-1.8.19.custom.css',
 		'./lib/static/main.css',
+        # You may add stylesheets to implement your own branding here
 	],
 	
 	# The paths to the files containing the signatures for which you
 	# would like to scan.
 	:signatures 			=> [
-		# './signatures/c.rb',
-		'./signatures/html.rb',
+		#'./signatures/c.rb',
+		#'./signatures/html.rb',
 		'./signatures/php.rb',
-		'./signatures/js.rb',
+		#'./signatures/js.rb',
 		# './signatures/sql.rb',
 		# './signatures/wordpress.rb',
 	].sort,
@@ -75,3 +77,53 @@ $configs = {
 # assemble the array of signatures
 $signatures ||= {}
 $configs[:signatures].each {|signature| require signature}
+
+# Now, map a file-type to the many possible file extensions each may
+# actually have in "in real life".
+#
+# Many thanks to the author of ack-grep (http://betterthangrep.com) for
+# doing 98% of the work in assembling following the hash: 
+$configs[:ftype_ext] = {}
+$configs[:ftype_ext][:actionscript]  = %w[as mxml]
+$configs[:ftype_ext][:ada]           = %w[ada adb ads]
+$configs[:ftype_ext][:asm]           = %w[asm s]
+$configs[:ftype_ext][:asp]           = %w[asp aspx]
+$configs[:ftype_ext][:batch]         = %w[bat cmd]
+$configs[:ftype_ext][:cc]            = %w[c h xs]
+$configs[:ftype_ext][:cfmx]          = %w[cfc cfm cfml]
+$configs[:ftype_ext][:cpp]           = %w[cpp cc cxx m hpp hh h hxx]
+$configs[:ftype_ext][:csharp]        = %w[cs]
+$configs[:ftype_ext][:css]           = %w[css]
+$configs[:ftype_ext][:elisp]         = %w[el]
+$configs[:ftype_ext][:erlang]        = %w[erl hrl]
+$configs[:ftype_ext][:fortran]       = %w[f f77 f90 f95 f03 for ftn fpp]
+$configs[:ftype_ext][:haskell]       = %w[hs lhs]
+$configs[:ftype_ext][:hh]            = %w[h]
+$configs[:ftype_ext][:html]          = %w[htm html shtml xhtml]
+$configs[:ftype_ext][:java]          = %w[java properties]
+$configs[:ftype_ext][:js]            = %w[js]
+$configs[:ftype_ext][:jsp]           = %w[jsp jspx jhtm jhtml]
+$configs[:ftype_ext][:lisp]          = %w[lisp lsp]
+$configs[:ftype_ext][:lua]           = %w[lua]
+$configs[:ftype_ext][:mason]         = %w[mas mhtml mpl mtxt]
+$configs[:ftype_ext][:objc]          = %w[m h]
+$configs[:ftype_ext][:objcpp]        = %w[mm h]
+$configs[:ftype_ext][:ocaml]         = %w[ml mli]
+$configs[:ftype_ext][:parrot]        = %w[pir pasm pmc ops pod pg tg]
+$configs[:ftype_ext][:perl]          = %w[pl pm pod t]
+$configs[:ftype_ext][:php]           = %w[php phpt php3 php4 php5 phtml]
+$configs[:ftype_ext][:plone]         = %w[pt cpt metadata cpy py]
+$configs[:ftype_ext][:python]        = %w[py]
+$configs[:ftype_ext][:rake]          = %w[Rakefiles]
+$configs[:ftype_ext][:ruby]          = %w[rb rhtml rjs rxml erb rake]
+$configs[:ftype_ext][:scala]         = %w[scala]
+$configs[:ftype_ext][:scheme]        = %w[scm ss]
+$configs[:ftype_ext][:shell]         = %w[sh bash csh tcsh ksh zsh]
+$configs[:ftype_ext][:smalltalk]     = %w[st]
+$configs[:ftype_ext][:sql]           = %w[sql ctl]
+$configs[:ftype_ext][:tcl]           = %w[tcl itcl itk]
+$configs[:ftype_ext][:tex]           = %w[tex cls sty]
+$configs[:ftype_ext][:tt]            = %w[tt tt2 ttml]
+$configs[:ftype_ext][:vb]            = %w[bas cls frm ctl vb resx]
+$configs[:ftype_ext][:xml]           = %w[xml dtd xslt ent]
+$configs[:ftype_ext][:yaml]          = %w[yaml yml]
