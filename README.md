@@ -1,4 +1,4 @@
-Watchtower (v1.0.2)
+Watchtower (v1.1.0)
 ===================
 Chris Lane  
 28 May 2012  
@@ -105,30 +105,26 @@ $signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
 Signature groupings will be respected when laying out an HTML report,
 so creating thoughtful groupings can make reports more navigable.
 
-If you're interested in creating a signature for a new file-type, run the
-following in a terminal:
+If you're interested in creating a signature for a new file-type, do the
+following:
 
-```bash
-ack-grep --help-types
-```
-
-You'll need to use the `ack-grep` option name (symbolized) as the key
-for your new signature. Thus `--java` will translate to `:java`.
-
-Once you've determined the proper symbol to use for your new file-type, you
-can create a new signatures file for that file-type. (I'd recommend that
-you simply copy, paste, and modify an existing signatures file so you can
-see the data structure you're trying to build as you work.)
+1. Open the `config.rb` file in your preferred editor, and scroll to the
+bottom of the file.
+2. Locate the `$configs[:ftype_ext]` hash. This hash maps 
+programming languages (like 'php' to the real-world file extensions 
+(like 'php', 'php5', 'phtml', etc) that are associated with that 
+programming language. See if a hash exists for your preferred 
+language, and create one if not.
+3. Create a new signatures file for that file-type. (I'd recommend that
+you simply copy, paste, and modify an existing signatures file.)
+4. Slightly higher up in `config.rb`, list your signatures file in
+`$configs[:signatures]`.
 
 
 Known Issues
 ------------
 This program has only been tested on Ubuntu 11.04, and may not work on
 other platforms. Additionally:
-
-* `Watchtower` is currently unable to recognize ASP/X files, because `ack-grep`
-  (upon which this program relies) itself cannot. I plan to fix
-  this in the future.
 
 * If you attempt to generate the same report more than once, you may find
   that the ordering of the elements contained therein will change. (Only
@@ -146,7 +142,6 @@ I plan to make the following changes when I have the time:
 * Fix the Known Issues
 * Add more default signatures for different programming languages and frameworks
 * Add `--after-context` and `--before-context` flags, as per `grep`
-* Remove `ack-grep` as a dependency
 
 
 Contributing
