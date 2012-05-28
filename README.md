@@ -62,8 +62,8 @@ In my opinion, `Watchtower`'s greatest feature is its ability to output
 an HTML report. Such a report can be a tremendous timesaver when scanning
 for a large number of signatures in large numbers of files.
 
-This report is especially useful when running dual monitors, such that
-you can have the report open on one monitor, and your preferred IDE
+This report is especially useful when auditing while running dual monitors,
+such that you can have the report open on one monitor, and your preferred IDE
 open on the other.
 
 To generate the HTML report, run:
@@ -82,9 +82,9 @@ reporting.) Please read the comments in the config file itself
 Also, note that it's possible to specify which config file to use when
 executing `Watchtower` via the `--config-file` option. This is useful
 when you're working on several projects at once: rather than having
-to repeatedly change config values, you may simply create alternate
-config files (`config-project-one.rb`, etc), and then specify which to
-use upon execution.
+to repeatedly change values within the config file, you may simply create
+alternate config files (`config-project-one.rb`, etc), and then specify
+which to use upon execution.
 
 
 Signature Specification
@@ -102,17 +102,17 @@ As in:
 $signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
 ```
 
-Signature group divisions will be respected when laying out an HTML
-report, so creating thoughtful groupings can make reports more navigable.
+Signature groupings will be respected when laying out an HTML report,
+so creating thoughtful groupings can make reports more navigable.
 
-If you're interested in creating a signature for a new file type, run the
+If you're interested in creating a signature for a new file-type, run the
 following in a terminal:
 
 ```bash
 ack-grep --help-types
 ```
 
-You'll need to use the ack-grep option name (symbolized) as the key
+You'll need to use the `ack-grep` option name (symbolized) as the key
 for your new signature. Thus `--java` will translate to `:java`.
 
 Once you've determined the proper symbol to use for your new file-type, you
@@ -126,7 +126,7 @@ Known Issues
 This program has only been tested on Ubuntu 11.04, and may not work on
 other platforms. Additionally:
 
-* Watchtower is currently unable to recognize ASP/X files, because `ack-grep`
+* `Watchtower` is currently unable to recognize ASP/X files, because `ack-grep`
   (upon which this program relies) itself cannot. I plan to fix
   this in the future.
 
