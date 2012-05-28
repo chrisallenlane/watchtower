@@ -89,7 +89,7 @@ which to use upon execution.
 
 Signature Specification
 ---------------------
-Signatures live in `<project root>/signatures/` (by default), and are
+Signatures live in `<watchtower root>/signatures/` (by default), and are
 organized by file-type, and then by group:
 
 ```ruby
