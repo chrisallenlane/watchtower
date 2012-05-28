@@ -40,16 +40,17 @@ There are essentially two use-cases for `Watchtower`:
 `Watchtower` can be configured (via command-line options) to output its
 analysis data as CSV, XML, or plain text:
 
-	```bash
-	# to output a CSV:
-	./watchtower -s /app/path/to/scan -o csv > /path/to/report/file.csv
+```bash
+# to output a CSV:
+./watchtower -s /app/path/to/scan -o csv > /path/to/report/file.csv
 
-	# to output XML:
-	./watchtower -s /app/path/to/scan -o xml > /path/to/report/file.xml
+# to output XML:
+./watchtower -s /app/path/to/scan -o xml > /path/to/report/file.xml
 
-	# to output plain text:
-	./watchtower -s /app/path/to/scan -o txt
-	```
+# to output plain text:
+./watchtower -s /app/path/to/scan -o txt
+```
+
 The CSV format is useful for importing scan data into a spreadsheet. The
 XML format is useful for importing scan data into a custom application. TXT
 is less likely to be useful, but it's there if you need it. (You can also
@@ -67,9 +68,9 @@ open on the other.
 
 To generate the HTML report, run:
 	
-	```bash
-	./watchtower -s /app/path/to/scan -o html > /path/to/report/file.html -p 'The Project Name'
-	```
+```bash
+./watchtower -s /app/path/to/scan -o html > /path/to/report/file.html -p 'The Project Name'
+```
     
 Configuration
 -------------
@@ -91,14 +92,15 @@ Signature Specification
 Signatures (by default) live in `<project root>/signatures/`, and are specified
 by file type, and then by group, thusly:
 
-	```ruby
-	$signatures[:filetype][:group]
-	```
+```ruby
+$signatures[:filetype][:group]
+```
+
 As in:
 
-	```ruby
-	$signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
-	```
+```ruby
+$signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
+```
 
 Signature group divisions will be respected when laying out a generated
 HTML report, so creating thoughtful groupings can help to make reports
@@ -106,10 +108,10 @@ more navigable.
 
 If you're interested in creating a signature for a new file type, do the following:
 
-	```bash
-	# run this in a terminal:
-	ack-grep --help-types
-	```
+```bash
+# run this in a terminal:
+ack-grep --help-types
+```
 
 You'll need to use the ack-grep option name (symbolized) as the key
 for your new signature. Thus `--java` will translate to `:java`.
@@ -170,7 +172,7 @@ me on [twitter][4].
 
 License
 -------
-This product is licensed under the [GPL 3](http://www.gnu.org/copyleft/gpl.html),
+This product is licensed under the [GPL 3][5],
 and comes with absolutely no warranty, expressed or implied. See the LICENSE file
 for more information.
 
@@ -179,3 +181,4 @@ for more information.
 [2]: https://raw.github.com/chrisallenlane/watchtower/master/examples/sample_report.html
 [3]: http://wordpress.org/extend/plugins/w3-total-cache/
 [4]: http://twitter.com/#!/chrisallenlane
+[5]: http://www.gnu.org/copyleft/gpl.html
