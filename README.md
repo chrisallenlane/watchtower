@@ -111,7 +111,7 @@ following:
 1. Open the `config.rb` file in your preferred editor, and scroll to the
 bottom of the file.
 2. Locate the `$configs[:ftype_ext]` hash. This hash maps 
-programming languages (like 'php' to the real-world file extensions 
+programming languages (like 'php') to the real-world file extensions 
 (like 'php', 'php5', 'phtml', etc) that are associated with that 
 programming language. See if a hash exists for your preferred 
 language, and create one if not.
