@@ -175,11 +175,11 @@ c_signatures = {
 # @note: actually, the above is incorrect, in this case - at least
 # until we break this up into more than one group.
 $signatures[:cc] ||= {}
-$signatures[:cc][:dangerous_functions] = c_signatures[:dangerous_functions]
+$signatures[:cc][:dangerous_functions] = c_signatures[:dangerous_functions].literal
 
 # `ack-grep --help-types` reveals that cc and cpp are used for C and C++
 # files respectively. It'll just be easiest to duplicate the signatures
 # here. This is probably not ideal, and something to revisit later if
 # I ever choose to move away from ack-grep.
 $signatures[:cpp] ||= {}
-$signatures[:cpp][:dangerous_functions] = c_signatures[:dangerous_functions]
+$signatures[:cpp][:dangerous_functions] = c_signatures[:dangerous_functions].literal

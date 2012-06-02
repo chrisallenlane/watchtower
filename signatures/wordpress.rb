@@ -400,32 +400,32 @@ $signatures[:php] ||= {}
 $signatures[:php][:wordpress] ||= []
 
 # comment out what you don't want loaded here
-$signatures[:php][:wordpress] << wp_database
-$signatures[:php][:wordpress] << wp_post_insertion_or_removal
-$signatures[:php][:wordpress] << wp_post_meta
-$signatures[:php][:wordpress] << wp_attachments
-$signatures[:php][:wordpress] << wp_categories
-$signatures[:php][:wordpress] << wp_taxonomies
-$signatures[:php][:wordpress] << wp_users
-$signatures[:php][:wordpress] << wp_user_meta
-$signatures[:php][:wordpress] << wp_user_insertion_or_removal
-$signatures[:php][:wordpress] << wp_comments
-$signatures[:php][:wordpress] << wp_filters
-$signatures[:php][:wordpress] << wp_user_login_and_logout
-$signatures[:php][:wordpress] << wp_actions
-$signatures[:php][:wordpress] << wp_plugins
-$signatures[:php][:wordpress] << wp_shortcodes
-$signatures[:php][:wordpress] << wp_theme_functions
-$signatures[:php][:wordpress] << wp_formatting
-$signatures[:php][:wordpress] << wp_options
-$signatures[:php][:wordpress] << wp_admin_menu
-$signatures[:php][:wordpress] << wp_toolbar
-$signatures[:php][:wordpress] << wp_nonces_and_security
-$signatures[:php][:wordpress] << wp_localization
-$signatures[:php][:wordpress] << wp_cron
-$signatures[:php][:wordpress] << wp_misc
-$signatures[:php][:wordpress] << wp_mu_admin
-$signatures[:php][:wordpress] << wp_mu_site
+$signatures[:php][:wordpress] << wp_database.literal
+$signatures[:php][:wordpress] << wp_post_insertion_or_removal.literal
+$signatures[:php][:wordpress] << wp_post_meta.literal
+$signatures[:php][:wordpress] << wp_attachments.literal
+$signatures[:php][:wordpress] << wp_categories.literal
+$signatures[:php][:wordpress] << wp_taxonomies.literal
+$signatures[:php][:wordpress] << wp_users.literal
+$signatures[:php][:wordpress] << wp_user_meta.literal
+$signatures[:php][:wordpress] << wp_user_insertion_or_removal.literal
+$signatures[:php][:wordpress] << wp_comments.literal
+$signatures[:php][:wordpress] << wp_filters.literal
+$signatures[:php][:wordpress] << wp_user_login_and_logout.literal
+$signatures[:php][:wordpress] << wp_actions.literal
+$signatures[:php][:wordpress] << wp_plugins.literal
+$signatures[:php][:wordpress] << wp_shortcodes.literal
+$signatures[:php][:wordpress] << wp_theme_functions.literal
+$signatures[:php][:wordpress] << wp_formatting.literal
+$signatures[:php][:wordpress] << wp_options.literal
+$signatures[:php][:wordpress] << wp_admin_menu.literal
+$signatures[:php][:wordpress] << wp_toolbar.literal
+$signatures[:php][:wordpress] << wp_nonces_and_security.literal
+$signatures[:php][:wordpress] << wp_localization.literal
+$signatures[:php][:wordpress] << wp_cron.literal
+$signatures[:php][:wordpress] << wp_misc.literal
+$signatures[:php][:wordpress] << wp_mu_admin.literal
+$signatures[:php][:wordpress] << wp_mu_site.literal
 
 # I only want a single-level array at this depth
 $signatures[:php][:wordpress].flatten!

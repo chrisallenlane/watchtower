@@ -81,9 +81,9 @@ php_signatures = {
 # thusly makes it a bit easier/faster to turn on/off the various
 # signatures to scan for
 $signatures[:php] ||= {}
-$signatures[:php][:dangerous_functions] 	= php_signatures[:dangerous_functions]
-$signatures[:php][:signature_obfuscators] 	= php_signatures[:signature_obfuscators]
-$signatures[:php][:form_data] 				= php_signatures[:form_data]
-$signatures[:php][:globals] 				= php_signatures[:globals]
-$signatures[:php][:developer_notes] 		= php_signatures[:developer_notes]
-$signatures[:php][:custom_strings] 			= php_signatures[:custom_strings]
+$signatures[:php][:dangerous_functions] 	= php_signatures[:dangerous_functions].literal
+$signatures[:php][:signature_obfuscators] 	= php_signatures[:signature_obfuscators].literal
+$signatures[:php][:form_data] 				= php_signatures[:form_data].literal
+$signatures[:php][:globals] 				= php_signatures[:globals].literal
+$signatures[:php][:developer_notes] 		= php_signatures[:developer_notes].literal
+$signatures[:php][:custom_strings] 			= php_signatures[:custom_strings].literal

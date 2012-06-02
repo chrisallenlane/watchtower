@@ -56,7 +56,7 @@ class PoI
 	#
 	def to_s
 		text = @file + ':' + @line_number + "\n"
-		text += @snippet
+		text += @snippet + "\n"
 		text += @group
 	end
 

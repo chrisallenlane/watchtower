@@ -28,6 +28,6 @@ html_signatures = {
 # thusly makes it a bit easier/faster to turn on/off the various
 # signatures to scan for
 $signatures[:html] ||= {}
-$signatures[:html][:inputs] 		= html_signatures[:inputs]
-$signatures[:html][:dangerous]	= html_signatures[:dangerous]
-$signatures[:html][:comments]		= html_signatures[:comments]
+$signatures[:html][:inputs] 	= html_signatures[:inputs].literal
+$signatures[:html][:dangerous]	= html_signatures[:dangerous].literal
+$signatures[:html][:comments]	= html_signatures[:comments].literal

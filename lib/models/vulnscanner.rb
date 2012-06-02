@@ -61,7 +61,7 @@ class VulnScanner
                     end
                     
 					# do a grep scan
-                    result = `cd #{@scan_dir}; grep -RHn '#{signature.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+                    result = `cd #{@scan_dir}; grep -ERHn '#{signature.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
                     
 					# display the matches
 					unless result.strip.empty?
