@@ -15,7 +15,7 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	# specify the signatures
 	signatures = {}
 	signatures[:php] = {}
-	signatures[:php][:dangerous_functions] = ['eval(', 'base64_decode(']
+	signatures[:php][:dangerous_functions] = ['eval(', 'base64_decode('].literal
 	
 	# specify the directory to scan
 	scandir = File.dirname(__FILE__)

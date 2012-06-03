@@ -51,15 +51,6 @@ end
 #######################################################################
 # Config and Signatures
 #######################################################################
-# Monkey-patch the Array class. This method may be invoked upon a signature
-# hash to shell-escape all signatures in bulk, thus causing `grep` to
-# search for these strings literally, rather than as regular expressions.
-class Array
-	def literal
-		self.each {|sig| sig.replace Regexp.escape sig}
-	end
-end
-
 # Load the configuration file
 unless File.exists? opts[:config_file]
 	warn 'The specified config file does not exist.'
