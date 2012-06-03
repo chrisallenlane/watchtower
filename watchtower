@@ -10,9 +10,7 @@
 
 require 'rubygems'
 require 'digest'
-require 'fastercsv'
 require 'fileutils'
-require 'shellwords'
 require 'trollop'
 require 'lib/models/poi'
 require 'lib/models/vulnscanner'
@@ -58,7 +56,7 @@ end
 # search for these strings literally, rather than as regular expressions.
 class Array
 	def literal
-		self.each {|sig| sig.replace sig.shellescape; sig.gsub!('$', '\$')}
+		self.each {|sig| sig.replace Regexp.escape sig}
 	end
 end
 
@@ -89,6 +87,7 @@ vulnscanner.scan
 # output in the requested format
 case opts[:output_format]
 	when 'csv'
+		require 'fastercsv'
 		# kludge in a header row
 		puts '"file_type","file","line_number","match","snippet","group"'
 		csv_string = FasterCSV.generate(:force_quotes => true) do |csv|
