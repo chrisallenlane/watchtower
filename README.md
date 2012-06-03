@@ -1,4 +1,4 @@
-Watchtower (v1.1.0)
+Watchtower (1.1.1)
 ===================
 Chris Lane  
 28 May 2012  

@@ -74,6 +74,16 @@ php_signatures = {
 		host
 		database
 	],
+	
+	# the following represents:
+	# 1. MD5 Hashes
+	# 2. SHA1 Hashes
+	# 3. Any Base 64 encoded data
+	:regex			=> %w[
+		[0-9a-f]{32}
+		[0-9a-f]{40}
+		^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+	]
 }
 
 
@@ -87,3 +97,4 @@ $signatures[:php][:form_data] 				= php_signatures[:form_data].literal
 $signatures[:php][:globals] 				= php_signatures[:globals].literal
 $signatures[:php][:developer_notes] 		= php_signatures[:developer_notes].literal
 $signatures[:php][:custom_strings] 			= php_signatures[:custom_strings].literal
+$signatures[:php][:regex]		 			= php_signatures[:regex]

@@ -214,80 +214,6 @@ href="VulnScanner.html">VulnScanner</a>.</p>
 
     <!-- Methods -->
     
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
-
-    
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">(data)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Initializes the Poi (Point of Interest) object. Accepts a hash containing
-the following keys:</p>
-<dl class="rdoc-list note-list"><dt><code>:file_type</code>
-<dd>
-<p>The file type in which the <a href="PoI.html">PoI</a> was found</p>
-</dd><dt><code>:file</code>
-<dd>
-<p>The file in which the <a href="PoI.html">PoI</a> was found</p>
-</dd><dt><code>:line_number</code>
-<dd>
-<p>The line number at which the <a href="PoI.html">PoI</a> was found</p>
-</dd><dt><code>:match</code>
-<dd>
-<p>The specified signature which this <a href="PoI.html">PoI</a> matches</p>
-</dd><dt><code>:snippet</code>
-<dd>
-<p>A code snippet of the match in context</p>
-</dd><dt><code>:group</code>
-<dd>
-<p>The group to witch the signature belongs</p>
-</dd></dl>
-
-<p>Usage:</p>
-
-<pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'php'</span>,
-        :<span class="ruby-identifier">file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'example.php'</span>,
-        :<span class="ruby-identifier">line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span>,
-        :<span class="ruby-identifier">match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'exec('</span>,
-        :<span class="ruby-identifier">snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'exec(evilfunction())'</span>,
-        :<span class="ruby-identifier">group</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'dangerous_functions'</span>,
-}
-<span class="ruby-identifier">poi</span> = <span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>)
-</pre>
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/poi.rb, line 32</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@file_type</span>   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file_type</span>].<span class="ruby-identifier">to_s</span>
-        <span class="ruby-ivar">@file</span>        = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file</span>].<span class="ruby-identifier">to_s</span>
-        <span class="ruby-ivar">@line_number</span> = <span class="ruby-identifier">data</span>[<span class="ruby-value">:line_number</span>].<span class="ruby-identifier">to_s</span>
-        <span class="ruby-ivar">@match</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>].<span class="ruby-identifier">to_s</span>
-        <span class="ruby-ivar">@snippet</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:snippet</span>].<span class="ruby-identifier">to_s</span>
-        <span class="ruby-ivar">@group</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:group</span>].<span class="ruby-identifier">to_s</span>
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
-    </section><!-- public-class-method-details -->
-  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
@@ -419,7 +345,7 @@ the following keys:</p>
             <pre><span class="ruby-comment"># File lib/models/poi.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>
         <span class="ruby-identifier">text</span> = <span class="ruby-ivar">@file</span> <span class="ruby-operator">+</span> <span class="ruby-string">':'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@line_number</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>
-        <span class="ruby-identifier">text</span> <span class="ruby-operator">+=</span> <span class="ruby-ivar">@snippet</span>
+        <span class="ruby-identifier">text</span> <span class="ruby-operator">+=</span> <span class="ruby-ivar">@snippet</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;\n&quot;</span>
         <span class="ruby-identifier">text</span> <span class="ruby-operator">+=</span> <span class="ruby-ivar">@group</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- to_s-source -->
@@ -474,6 +400,80 @@ the following keys:</p>
 
     
     </section><!-- public-instance-method-details -->
+  
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(data)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the Poi (Point of Interest) object. Accepts a hash containing
+the following keys:</p>
+<dl class="rdoc-list note-list"><dt><code>:file_type</code>
+<dd>
+<p>The file type in which the <a href="PoI.html">PoI</a> was found</p>
+</dd><dt><code>:file</code>
+<dd>
+<p>The file in which the <a href="PoI.html">PoI</a> was found</p>
+</dd><dt><code>:line_number</code>
+<dd>
+<p>The line number at which the <a href="PoI.html">PoI</a> was found</p>
+</dd><dt><code>:match</code>
+<dd>
+<p>The specified signature which this <a href="PoI.html">PoI</a> matches</p>
+</dd><dt><code>:snippet</code>
+<dd>
+<p>A code snippet of the match in context</p>
+</dd><dt><code>:group</code>
+<dd>
+<p>The group to witch the signature belongs</p>
+</dd></dl>
+
+<p>Usage:</p>
+
+<pre class="ruby"><span class="ruby-identifier">data</span> = {
+        :<span class="ruby-identifier">file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'php'</span>,
+        :<span class="ruby-identifier">file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'example.php'</span>,
+        :<span class="ruby-identifier">line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span>,
+        :<span class="ruby-identifier">match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'exec('</span>,
+        :<span class="ruby-identifier">snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'exec(evilfunction())'</span>,
+        :<span class="ruby-identifier">group</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'dangerous_functions'</span>,
+}
+<span class="ruby-identifier">poi</span> = <span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>)
+</pre>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/models/poi.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@file_type</span>   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file_type</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@file</span>        = <span class="ruby-identifier">data</span>[<span class="ruby-value">:file</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@line_number</span> = <span class="ruby-identifier">data</span>[<span class="ruby-value">:line_number</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@match</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@snippet</span>     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:snippet</span>].<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@group</span>       = <span class="ruby-identifier">data</span>[<span class="ruby-value">:group</span>].<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 
