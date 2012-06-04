@@ -1,5 +1,3 @@
-# TODO: THIS SHOULD BE YAML
-
 # Enumerate a hash containing all of the various signatures (grouped
 # topically) for which one may want to scan.
 $signatures[:php] ||= {}

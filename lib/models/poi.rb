@@ -25,6 +25,7 @@ class PoI
 	#		:file        => 'example.php',
 	#		:line_number => 100,
 	#		:match       => 'exec(',
+	#		:name        => 'exec(',
 	#		:snippet     => 'exec(evilfunction())',
 	#		:group       => 'dangerous_functions',
 	#	}

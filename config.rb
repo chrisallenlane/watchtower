@@ -15,7 +15,7 @@ $configs = {
 	# to use all of the functionality of the HTML report even when
 	# no Internet connection is available, but will increase the
 	# file size of the report.
-	:embed_javascript 	=> true,
+	:embed_javascript 	=> false,
 	
 	# Exclude filenames to scan, matched anywhere within --scan-dir
     # or its subdirectories
@@ -62,9 +62,9 @@ $configs = {
 	# would like to scan.
 	:signatures 			=> [
 		#'./signatures/c.rb',
-		#'./signatures/html.rb',
+		'./signatures/html.rb',
 		'./signatures/php.rb',
-		# './signatures/js.rb',
+		 './signatures/js.rb',
 		# './signatures/sql.rb',
 		# './signatures/wordpress.rb',
 	].sort,
@@ -127,3 +127,6 @@ $configs[:ftype_ext][:tt]            = %w[tt tt2 ttml]
 $configs[:ftype_ext][:vb]            = %w[bas cls frm ctl vb resx]
 $configs[:ftype_ext][:xml]           = %w[xml dtd xslt ent]
 $configs[:ftype_ext][:yaml]          = %w[yaml yml]
+
+# map the Wordpress API signatures to PHP files
+$configs[:ftype_ext][:wordpress]     = %w[php phpt php3 php4 php5 phtml]

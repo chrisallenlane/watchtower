@@ -3,183 +3,169 @@
 
 # @todo: I'm not an expert at C. It would be great to break up this list
 # into more granular signature groups.
-c_signatures = {
-	:dangerous_functions => %w[
-		strcpy
-		lstrcpy
-		wcscpy
-		_tcscpy
-		_mbscpy
-		memcpy
-		CopyMemory
-		bcopy
-		strcat
-		lstrcat
-		wcscat
-		_tcscat
-		_mbscat
-		strncpy
-		lstrcpyn
-		wcsncpy
-		_tcsncpy
-		_mbsnbcpy
-		strncat
-		lstrcatn
-		wcsncat
-		_tcsncat
-		_mbsnbcat
-		strccpy
-		strcadd
-		gets
-		_getts
-		sprintf
-		vsprintf
-		swprintf
-		vswprintf
-		_stprintf
-		_vstprintf
-		printf
-		vprintf
-		vwprintf
-		vfwprintf
-		_vtprintf
-		fprintf
-		vfprintf
-		_ftprintf
-		_vftprintf
-		syslog
-		snprintf
-		vsnprintf
-		_snprintf
-		_sntprintf
-		_vsntprintf
-		scanf
-		vscanf
-		wscanf
-		_tscanf
-		fscanf
-		sscanf
-		vsscanf
-		vfscanf
-		_ftscanf
-		strlen
-		wcslen
-		_tcslen
-		_mbslen
-		streadd
-		strecpy
-		strtrns
-		realpath
-		getopt
-		getopt_long
-		getpass
-		getwd
-		getchar
-		fgetc
-		getc
-		read
-		_gettc
-		chown
-		chgrp
-		chmod
-		vfork
-		readlink
-		tmpfile
-		tmpnam
-		tempnam
-		mktemp
-		mkstemp
-		fopen
-		open
-		umask
-		GetTempFileName
-		execl
-		execlp
-		execle
-		execv
-		execvp
-		system
-		popen
-		WinExec
-		ShellExecute
-		execl
-		execlp
-		execle
-		execv
-		execvp
-		system
-		popen
-		WinExec
-		ShellExecute
-		CreateProcessAsUser
-		CreateProcessWithLogon
-		CreateProcess
-		atoi
-		atol
-		drand48
-		erand48
-		jrand48
-		lcong48
-		lrand48
-		mrand48
-		nrand48
-		random
-		seed48
-		setstate
-		srand
-		strfry
-		srandom
-		crypt
-		EVP_des_ecb
-		EVP_des_cbc
-		EVP_des_cfb
-		EVP_des_ofb
-		EVP_desx_cbc
-		EVP_rc4_40
-		EVP_rc2_40_cbc
-		EVP_rc2_64_cbc
-		chroot
-		getenv
-		curl_getenv
-		g_get_home_dir
-		g_get_tmp_dir
-		SetThreadToken
-		InitializeCriticalSection
-		EnterCriticalSection
-		LoadLibrary
-		LoadLibraryEx
-		SetSecurityDescriptorDacl
-		AddAccessAllowedAce
-		getlogin
-		cuserid
-		getpw
-		getpass
-		gsignal
-		ssignal
-		memalign
-		ulimit
-		usleep
-		recv
-		recvfrom
-		recvmsg
-		fread
-		readv
-	]
-}
-
-
-# While this is obviously not necessary, assembling the signature hash
-# thusly makes it a bit easier/faster to turn on/off the various
-# signatures to scan for.
-#
-# @note: actually, the above is incorrect, in this case - at least
-# until we break this up into more than one group.
-$signatures[:cc] ||= {}
-$signatures[:cc][:dangerous_functions] = c_signatures[:dangerous_functions].literal
-
-# `ack-grep --help-types` reveals that cc and cpp are used for C and C++
-# files respectively. It'll just be easiest to duplicate the signatures
-# here. This is probably not ideal, and something to revisit later if
-# I ever choose to move away from ack-grep.
 $signatures[:cpp] ||= {}
-$signatures[:cpp][:dangerous_functions] = c_signatures[:dangerous_functions].literal
+$signatures[:cpp][:dangerous_functions] = [
+	Signature.new({:sig => 'strcpy'}),
+	Signature.new({:sig => 'lstrcpy'}),
+	Signature.new({:sig => 'wcscpy'}),
+	Signature.new({:sig => '_tcscpy'}),
+	Signature.new({:sig => '_mbscpy'}),
+	Signature.new({:sig => 'memcpy'}),
+	Signature.new({:sig => 'CopyMemory'}),
+	Signature.new({:sig => 'bcopy'}),
+	Signature.new({:sig => 'strcat'}),
+	Signature.new({:sig => 'lstrcat'}),
+	Signature.new({:sig => 'wcscat'}),
+	Signature.new({:sig => '_tcscat'}),
+	Signature.new({:sig => '_mbscat'}),
+	Signature.new({:sig => 'strncpy'}),
+	Signature.new({:sig => 'lstrcpyn'}),
+	Signature.new({:sig => 'wcsncpy'}),
+	Signature.new({:sig => '_tcsncpy'}),
+	Signature.new({:sig => '_mbsnbcpy'}),
+	Signature.new({:sig => 'strncat'}),
+	Signature.new({:sig => 'lstrcatn'}),
+	Signature.new({:sig => 'wcsncat'}),
+	Signature.new({:sig => '_tcsncat'}),
+	Signature.new({:sig => '_mbsnbcat'}),
+	Signature.new({:sig => 'strccpy'}),
+	Signature.new({:sig => 'strcadd'}),
+	Signature.new({:sig => 'gets'}),
+	Signature.new({:sig => '_getts'}),
+	Signature.new({:sig => 'sprintf'}),
+	Signature.new({:sig => 'vsprintf'}),
+	Signature.new({:sig => 'swprintf'}),
+	Signature.new({:sig => 'vswprintf'}),
+	Signature.new({:sig => 'vswprintf'}),
+	Signature.new({:sig => '_stprintf'}),
+	Signature.new({:sig => '_vstprintf'}),
+	Signature.new({:sig => 'printf'}),
+	Signature.new({:sig => 'vprintf'}),
+	Signature.new({:sig => 'vwprintf'}),
+	Signature.new({:sig => 'vfwprintf'}),
+	Signature.new({:sig => '_vtprintf'}),
+	Signature.new({:sig => 'fprintf'}),
+	Signature.new({:sig => 'vfprintf'}),
+	Signature.new({:sig => '_ftprintf'}),
+	Signature.new({:sig => '_vftprintf'}),
+	Signature.new({:sig => 'syslog'}),
+	Signature.new({:sig => 'snprintf'}),
+	Signature.new({:sig => 'vsnprintf'}),
+	Signature.new({:sig => '_snprintf'}),
+	Signature.new({:sig => '_sntprintf'}),
+	Signature.new({:sig => '_vsntprintf'}),
+	Signature.new({:sig => 'scanf'}),
+	Signature.new({:sig => 'vscanf'}),
+	Signature.new({:sig => 'wscanf'}),
+	Signature.new({:sig => '_tscanf'}),
+	Signature.new({:sig => 'fscanf'}),
+	Signature.new({:sig => 'sscanf'}),
+	Signature.new({:sig => 'vsscanf'}),
+	Signature.new({:sig => 'vfscanf'}),
+	Signature.new({:sig => '_ftscanf'}),
+	Signature.new({:sig => 'strlen'}),
+	Signature.new({:sig => 'wcslen'}),
+	Signature.new({:sig => '_tcslen'}),
+	Signature.new({:sig => '_mbslen'}),
+	Signature.new({:sig => 'streadd'}),
+	Signature.new({:sig => 'strecpy'}),
+	Signature.new({:sig => 'strtrns'}),
+	Signature.new({:sig => 'realpath'}),
+	Signature.new({:sig => 'realpath'}),
+	Signature.new({:sig => 'getopt'}),
+	Signature.new({:sig => 'getopt_long'}),
+	Signature.new({:sig => 'getpass'}),
+	Signature.new({:sig => 'getwd'}),
+	Signature.new({:sig => 'getchar'}),
+	Signature.new({:sig => 'fgetc'}),
+	Signature.new({:sig => 'getc'}),
+	Signature.new({:sig => 'read'}),
+	Signature.new({:sig => '_gettc'}),
+	Signature.new({:sig => 'chown'}),
+	Signature.new({:sig => 'chgrp'}),
+	Signature.new({:sig => 'chmod'}),
+	Signature.new({:sig => 'vfork'}),
+	Signature.new({:sig => 'readlink'}),
+	Signature.new({:sig => 'tmpfile'}),
+	Signature.new({:sig => 'tmpnam'}),
+	Signature.new({:sig => 'tempnam'}),
+	Signature.new({:sig => 'mktemp'}),
+	Signature.new({:sig => 'mkstemp'}),
+	Signature.new({:sig => 'fopen'}),
+	Signature.new({:sig => 'open'}),
+	Signature.new({:sig => 'umask'}),
+	Signature.new({:sig => 'umask'}),
+	Signature.new({:sig => 'GetTempFileName'}),
+	Signature.new({:sig => 'execl'}),
+	Signature.new({:sig => 'execlp'}),
+	Signature.new({:sig => 'execle'}),
+	Signature.new({:sig => 'execv'}),
+	Signature.new({:sig => 'execvp'}),
+	Signature.new({:sig => 'system'}),
+	Signature.new({:sig => 'popen'}),
+	Signature.new({:sig => 'WinExec'}),
+	Signature.new({:sig => 'ShellExecute'}),
+	Signature.new({:sig => 'execl'}),
+	Signature.new({:sig => 'execlp'}),
+	Signature.new({:sig => 'execle'}),
+	Signature.new({:sig => 'execv'}),
+	Signature.new({:sig => 'execvp'}),
+	Signature.new({:sig => 'execvp'}),
+	Signature.new({:sig => 'system'}),
+	Signature.new({:sig => 'popen'}),
+	Signature.new({:sig => 'WinExec'}),
+	Signature.new({:sig => 'ShellExecute'}),
+	Signature.new({:sig => 'CreateProcessAsUser'}),
+	Signature.new({:sig => 'CreateProcessWithLogon'}),
+	Signature.new({:sig => 'CreateProcess'}),
+	Signature.new({:sig => 'atoi'}),
+	Signature.new({:sig => 'atol'}),
+	Signature.new({:sig => 'atol'}),
+	Signature.new({:sig => 'drand48'}),
+	Signature.new({:sig => 'erand48'}),
+	Signature.new({:sig => 'jrand48'}),
+	Signature.new({:sig => 'lcong48'}),
+	Signature.new({:sig => 'lrand48'}),
+	Signature.new({:sig => 'mrand48'}),
+	Signature.new({:sig => 'nrand48'}),
+	Signature.new({:sig => 'random'}),
+	Signature.new({:sig => 'seed48'}),
+	Signature.new({:sig => 'setstate'}),
+	Signature.new({:sig => 'srand'}),
+	Signature.new({:sig => 'srandom'}),
+	Signature.new({:sig => 'crypt'}),
+	Signature.new({:sig => 'EVP_des_ecb'}),
+	Signature.new({:sig => 'EVP_des_cbc'}),
+	Signature.new({:sig => 'EVP_des_cfb'}),
+	Signature.new({:sig => 'EVP_des_ofb'}),
+	Signature.new({:sig => 'EVP_desx_cbc'}),
+	Signature.new({:sig => 'EVP_rc4_40'}),
+	Signature.new({:sig => 'EVP_rc2_40_cbc'}),
+	Signature.new({:sig => 'EVP_rc2_64_cbc'}),
+	Signature.new({:sig => 'chroot'}),
+	Signature.new({:sig => 'getenv'}),
+	Signature.new({:sig => 'curl_getenv'}),
+	Signature.new({:sig => 'g_get_home_dir'}),
+	Signature.new({:sig => 'g_get_tmp_dir'}),
+	Signature.new({:sig => 'SetThreadToken'}),
+	Signature.new({:sig => 'InitializeCriticalSection'}),
+	Signature.new({:sig => 'EnterCriticalSection'}),
+	Signature.new({:sig => 'LoadLibrary'}),
+	Signature.new({:sig => 'LoadLibraryEx'}),
+	Signature.new({:sig => 'SetSecurityDescriptorDacl'}),
+	Signature.new({:sig => 'AddAccessAllowedAce'}),
+	Signature.new({:sig => 'getlogin'}),
+	Signature.new({:sig => 'cuserid'}),
+	Signature.new({:sig => 'getpw'}),
+	Signature.new({:sig => 'getpass'}),
+	Signature.new({:sig => 'gsignal'}),
+	Signature.new({:sig => 'ssignal'}),
+	Signature.new({:sig => 'memalign'}),
+	Signature.new({:sig => 'ulimit'}),
+	Signature.new({:sig => 'usleep'}),
+	Signature.new({:sig => 'recv'}),
+	Signature.new({:sig => 'recvfrom'}),
+	Signature.new({:sig => 'recvmsg'}),
+	Signature.new({:sig => 'fread'}),
+	Signature.new({:sig => 'readv'}),
+]
