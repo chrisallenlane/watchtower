@@ -127,6 +127,7 @@ you simply copy, paste, and modify an existing signatures file.)
 
 ### Signature Types ###
 Signatures can be specified in two ways:
+
 1. As a literal string
 2. As a regular expression
 
