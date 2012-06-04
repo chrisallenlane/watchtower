@@ -81,7 +81,7 @@ case opts[:output_format]
 	when 'csv'
 		require 'fastercsv'
 		# kludge in a header row
-		puts '"file_type","file","line_number","match","snippet","group"'
+		puts '"file_type","file","line_number","match","name","snippet","group"'
 		csv_string = FasterCSV.generate(:force_quotes => true) do |csv|
 			vulnscanner.points_of_interest.each {|point| csv << point.to_a}
 		end

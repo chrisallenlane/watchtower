@@ -76,7 +76,7 @@ class VulnScanner
 						match  = signature.sig
 					else
 						result = `cd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
-						match  = signature.name || signature.regex
+						match  = nil
 					end
                     
 					# display the matches
@@ -92,6 +92,11 @@ class VulnScanner
 							line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
 							snippet          = line.slice((second_colon_pos +1), line.length).strip
 
+							# parse out the match if a regex was specified
+							if match.to_s.empty?
+								match = snippet.match(signature.regex)
+							end
+
                             # this should not change
 							# buffer a new point of interest
 							data = {
@@ -99,6 +104,7 @@ class VulnScanner
 								:file        => file_name,
 								:line_number => line_num,
 								:match       => match,
+								:name	     => signature.name || signature.sig,
 								:snippet     => snippet,
 								:group		 => signature_group.to_s,
 							}
@@ -122,8 +128,8 @@ class VulnScanner
 		@points_of_interest.each_with_index do |point, index|
 			@points_of_interest_sorted[point.file_type.to_sym] ||= {}
 			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym] ||= {}
-			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym] ||= []
-			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.match.to_sym].push point
+			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.name.to_sym] ||= []
+			@points_of_interest_sorted[point.file_type.to_sym][point.group.to_sym][point.name.to_sym].push point
 		end
 	end
 end

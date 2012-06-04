@@ -6,7 +6,7 @@ class PoI
 	@@color_line_number = :yellow
 	@@color_match       = :red
 
-	attr_accessor :file_type, :file, :line_number, :match, :snippet, :group
+	attr_accessor :file_type, :file, :line_number, :match, :name, :snippet, :group
 		
 	# Initializes the Poi (Point of Interest) object. Accepts a hash
 	# containing the following keys:
@@ -15,6 +15,7 @@ class PoI
 	# <tt>:file</tt>:: The file in which the PoI was found
 	# <tt>:line_number</tt>:: The line number at which the PoI was found
 	# <tt>:match</tt>:: The specified signature which this PoI matches
+	# <tt>:name</tt>:: The name of this PoI
 	# <tt>:snippet</tt>:: A code snippet of the match in context
 	# <tt>:group</tt>:: The group to witch the signature belongs
 	#
@@ -34,6 +35,7 @@ class PoI
 		@file        = data[:file].to_s
 		@line_number = data[:line_number].to_s
 		@match       = data[:match].to_s
+		@name        = data[:name].to_s
 		@snippet     = data[:snippet].to_s
 		@group       = data[:group].to_s
 	end
@@ -56,6 +58,8 @@ class PoI
 	#
 	def to_s
 		text = @file + ':' + @line_number + "\n"
+		text += @name + "\n"
+		text += @match + "\n"
 		text += @snippet + "\n"
 		text += @group
 	end
@@ -75,7 +79,7 @@ class PoI
 	#	poi.to_a
 	#
 	def to_a
-		[@file_type, @file, @line_number, @match, @snippet, @group]
+		[@file_type, @file, @line_number, @match, @name, @snippet, @group]
 	end
 	
 	# Converts a PoI object into an XML representation
@@ -89,6 +93,7 @@ class PoI
 			"\t\t<file_type><![CDATA[#{@file_type}]]></file_type>\n" + 
 			"\t\t<line_number><![CDATA[#{@line_number}]]></line_number>\n" + 
 			"\t\t<match><![CDATA[#{@match}]]></match>\n" + 
+			"\t\t<name><![CDATA[#{@name}]]></name>\n" + 
 			"\t\t<snippet><![CDATA[#{@snippet}]]></snippet>\n" + 
 			"\t\t<group><![CDATA[#{@group}]]></group>\n" + 
 		"\t</poi>\n"
