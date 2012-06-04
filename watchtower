@@ -101,7 +101,7 @@ case opts[:output_format]
 	
 	when 'xml'
 		puts '<points_of_interest>'
-		vulnscanner.points_of_interest.each {|point| puts point.xml}
+		vulnscanner.points_of_interest.each {|point| puts point.to_xml}
 		puts '</points_of_interest>'
 	
 	else

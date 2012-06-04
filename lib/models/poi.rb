@@ -87,7 +87,7 @@ class PoI
 	# Usage:
 	#	puts poi.xml
 	#
-	def xml
+	def to_xml
 		"\t<poi>\n" +
 			"\t\t<file><![CDATA[#{@file}]]></file>\n" + 
 			"\t\t<file_type><![CDATA[#{@file_type}]]></file_type>\n" + 

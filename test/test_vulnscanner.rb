@@ -1,4 +1,5 @@
 require 'test/test_helper.rb'
+require 'lib/models/signature.rb'
 require 'lib/models/vulnscanner.rb'
 
 # @todo: I should probably beef up the testing on this class in the
@@ -15,7 +16,10 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	# specify the signatures
 	signatures = {}
 	signatures[:php] = {}
-	signatures[:php][:dangerous_functions] = ['eval(', 'base64_decode('].literal
+	signatures[:php][:dangerous_functions] = [
+		Signature.new({:sig => 'eval('}),
+		Signature.new({:sig => 'base64_decode('}),
+	]
 	
 	# specify the directory to scan
 	scandir = File.dirname(__FILE__)

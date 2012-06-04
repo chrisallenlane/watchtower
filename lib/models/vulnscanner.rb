@@ -1,13 +1,3 @@
-# Monkey-patch the Array class. This method may be invoked upon a signature
-# hash to shell-escape all signatures in bulk, thus causing `grep` to
-# search for these strings literally, rather than as regular expressions.
-class Array
-	def literal
-		self.each {|sig| sig.replace Regexp.escape sig}
-	end
-end
-
-
 # This class encapsulates the main functionality of the application -
 # the scanning of a codebase for potential points of interest as specified
 # in the user-provided signatures.
