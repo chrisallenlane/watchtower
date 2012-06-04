@@ -88,8 +88,6 @@
 
   <ul class="link-list">
   
-    <li><a href="./Array.html">Array</a>
-  
     <li><a href="./PoI.html">PoI</a>
   
     <li><a href="./VulnScanner.html">VulnScanner</a>
@@ -184,61 +182,6 @@ user-provided signatures.</p>
 
     <!-- Methods -->
     
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
-
-    
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">(data)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
-Accepts a hash containing the following keys:</p>
-<dl class="rdoc-list note-list"><dt><code>:signatures</code>
-<dd>
-<p>A hash of signature strings for which to scan</p>
-</dd><dt><code>:scan_dir</code>  
-<dd>
-<p>The project directory to scan</p>
-</dd></dl>
-
-<p>Usage:</p>
-
-<pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">signatures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
-        :<span class="ruby-identifier">scan_dir</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
-}
-</pre>
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 30</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
-        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
-        <span class="ruby-ivar">@points_of_interest</span>         = []
-        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
-    </section><!-- public-class-method-details -->
-  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
@@ -263,7 +206,7 @@ Accepts a hash containing the following keys:</p>
 
           
           <div class="method-source-code" id="scan-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 42</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">scan</span>
         <span class="ruby-ivar">@signatures</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file_type</span>, <span class="ruby-identifier">signature_groups</span><span class="ruby-operator">|</span>
                 <span class="ruby-comment"># cast the file_type symbol into a string</span>
@@ -272,7 +215,7 @@ Accepts a hash containing the following keys:</p>
                 <span class="ruby-identifier">signature_groups</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">signature_group</span>, <span class="ruby-identifier">signatures</span><span class="ruby-operator">|</span>
                 
                         <span class="ruby-comment"># iterate over each signature</span>
-                        <span class="ruby-identifier">signatures</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">signature</span><span class="ruby-operator">|</span>
+                        <span class="ruby-identifier">signatures</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">signature</span><span class="ruby-operator">|</span>                              
                                 <span class="ruby-comment"># assemble a list of directories to ignore</span>
                                 <span class="ruby-identifier">exclude_files</span> = <span class="ruby-string">''</span>
                                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">$configs</span>[<span class="ruby-value">:exclude_files</span>].<span class="ruby-identifier">empty?</span>
@@ -296,7 +239,13 @@ Accepts a hash containing the following keys:</p>
             <span class="ruby-keyword">end</span>
             
                                 <span class="ruby-comment"># do a grep scan</span>
-            <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHn '#{signature.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                <span class="ruby-keyword">if</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
+                                        <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; grep -RHn '#{signature.sig.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">match</span>  = <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">sig</span>
+                                <span class="ruby-keyword">else</span>
+                                        <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">match</span>  = <span class="ruby-keyword">nil</span>
+                                <span class="ruby-keyword">end</span>
             
                                 <span class="ruby-comment"># display the matches</span>
                                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span>
@@ -311,13 +260,19 @@ Accepts a hash containing the following keys:</p>
                                                 <span class="ruby-identifier">line_num</span>         = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span>(<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) 
                                                 <span class="ruby-identifier">snippet</span>          = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-value">+1</span>), <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>).<span class="ruby-identifier">strip</span>
 
+                                                <span class="ruby-comment"># parse out the match if a regex was specified</span>
+                                                <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
+                                                        <span class="ruby-identifier">match</span> = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>)
+                                                <span class="ruby-keyword">end</span>
+
                     <span class="ruby-comment"># this should not change</span>
                                                 <span class="ruby-comment"># buffer a new point of interest</span>
                                                 <span class="ruby-identifier">data</span> = {
                                                         <span class="ruby-value">:file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ftype</span>,
                                                         <span class="ruby-value">:file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file_name</span>,
                                                         <span class="ruby-value">:line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">line_num</span>,
-                                                        <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature</span>,
+                                                        <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">match</span>,
+                                                        <span class="ruby-value">:name</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">sig</span>,
                                                         <span class="ruby-value">:snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">snippet</span>,
                                                         <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature_group</span>.<span class="ruby-identifier">to_s</span>,
                                                 }
@@ -361,13 +316,13 @@ vulnscanner.sort</pre>
 
           
           <div class="method-source-code" id="sort-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 115</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 117</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
         <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
-                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []
-                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_sym</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">point</span>
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []
+                <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">point</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- sort-source -->
@@ -381,6 +336,61 @@ vulnscanner.sort</pre>
 
     
     </section><!-- public-instance-method-details -->
+  
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(data)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
+Accepts a hash containing the following keys:</p>
+<dl class="rdoc-list note-list"><dt><code>:signatures</code>
+<dd>
+<p>A hash of signature strings for which to scan</p>
+</dd><dt><code>:scan_dir</code>  
+<dd>
+<p>The project directory to scan</p>
+</dd></dl>
+
+<p>Usage:</p>
+
+<pre class="ruby"><span class="ruby-identifier">data</span> = {
+        :<span class="ruby-identifier">signatures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
+        :<span class="ruby-identifier">scan_dir</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+}
+</pre>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
+        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@points_of_interest</span>         = []
+        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 
