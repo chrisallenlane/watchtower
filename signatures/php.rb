@@ -79,6 +79,6 @@ $signatures[:php][:custom_strings] = [
 ]
 
 $signatures[:php][:hashes] = [
-	Signature.new({:name => 'MD5',  :regex => '[0-9a-f]{32}),'}),
-	Signature.new({:name => 'SHA1', :regex => '[0-9a-f]{40}),'}),
+	Signature.new({:name => 'MD5',  :regex => '[0-9a-f]{32}'}),
+	Signature.new({:name => 'SHA1', :regex => '[0-9a-f]{40}'}),
 ]

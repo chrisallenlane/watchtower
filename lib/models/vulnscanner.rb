@@ -47,7 +47,7 @@ class VulnScanner
 			signature_groups.each do |signature_group, signatures|
 			
 				# iterate over each signature
-				signatures.each do |signature|
+				signatures.each do |signature|				
 					# assemble a list of directories to ignore
 					exclude_files = ''
 					unless $configs[:exclude_files].empty?
@@ -71,7 +71,13 @@ class VulnScanner
                     end
                     
 					# do a grep scan
-                    result = `cd #{@scan_dir}; grep -ERHn '#{signature.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+					if signature.regex.to_s.empty?
+						result = `cd #{@scan_dir}; grep -RHn '#{signature.sig.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						match  = signature.sig
+					else
+						result = `cd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						match  = signature.name || signature.regex
+					end
                     
 					# display the matches
 					unless result.strip.empty?
@@ -92,7 +98,7 @@ class VulnScanner
 								:file_type   => ftype,
 								:file        => file_name,
 								:line_number => line_num,
-								:match       => signature,
+								:match       => match,
 								:snippet     => snippet,
 								:group		 => signature_group.to_s,
 							}

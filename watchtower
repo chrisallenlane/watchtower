@@ -13,6 +13,7 @@ require 'digest'
 require 'fileutils'
 require 'trollop'
 require 'lib/models/poi'
+require 'lib/models/signature'
 require 'lib/models/vulnscanner'
 
 
