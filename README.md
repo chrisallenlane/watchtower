@@ -1,7 +1,7 @@
-Watchtower (1.1.1)
+Watchtower (1.2.0)
 ===================
 Chris Lane  
-28 May 2012  
+4 Jun 2012  
 chris@chris-allen-lane.com  
 http://chris-allen-lane.com  
 http://twitter.com/#!/chrisallenlane
@@ -99,12 +99,17 @@ $signatures[:filetype][:group]
 As in:
 
 ```ruby
-$signatures[:php][:dangerous_functions] = %w[signature signature signature ...]
+$signatures[:php][:dangerous_functions] = %w[
+	Signature.new({:sig => 'base64_decode('}),
+	Signature.new({:sig => 'eval('}),
+	Signature.new({:sig => 'exec('}),
+]
 ```
 
 Signature groupings will be respected when laying out an HTML report,
 so creating thoughtful groupings can make reports more navigable.
 
+### Creating New Signatures ###
 If you're interested in creating a signature for a new file-type, do the
 following:
 
@@ -120,6 +125,30 @@ you simply copy, paste, and modify an existing signatures file.)
 4. Slightly higher up in `config.rb`, list your signatures file in
 `$configs[:signatures]`.
 
+### Signature Types ###
+Signatures can be specified in two ways:
+1. As a literal string
+2. As a regular expression
+
+To create a signature that matches a literal string, use the following
+structure:
+
+```ruby
+$signatures[:php][:dangerous_functions] = %w[
+	Signature.new({:sig => 'base64_decode('}),
+	Signature.new({:sig => 'eval('}),
+	Signature.new({:sig => 'exec('}),
+]
+```
+
+To create a signature that matches a regular expression, do the following:
+
+```ruby
+$signatures[:php][:dangerous_functions] = %w[
+	Signature.new({:name => 'MD5',  :regex => '[0-9a-f]{32}'}),
+	Signature.new({:name => 'SHA1', :regex => '[0-9a-f]{40}'}),
+]
+```
 
 Known Issues
 ------------

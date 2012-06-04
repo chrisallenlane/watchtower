@@ -182,6 +182,61 @@ user-provided signatures.</p>
 
     <!-- Methods -->
     
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(data)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
+Accepts a hash containing the following keys:</p>
+<dl class="rdoc-list note-list"><dt><code>:signatures</code>
+<dd>
+<p>A hash of signature strings for which to scan</p>
+</dd><dt><code>:scan_dir</code>  
+<dd>
+<p>The project directory to scan</p>
+</dd></dl>
+
+<p>Usage:</p>
+
+<pre class="ruby"><span class="ruby-identifier">data</span> = {
+        :<span class="ruby-identifier">signatures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
+        :<span class="ruby-identifier">scan_dir</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+}
+</pre>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 20</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
+        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@points_of_interest</span>         = []
+        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
@@ -336,61 +391,6 @@ vulnscanner.sort</pre>
 
     
     </section><!-- public-instance-method-details -->
-  
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
-
-    
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">(data)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
-Accepts a hash containing the following keys:</p>
-<dl class="rdoc-list note-list"><dt><code>:signatures</code>
-<dd>
-<p>A hash of signature strings for which to scan</p>
-</dd><dt><code>:scan_dir</code>  
-<dd>
-<p>The project directory to scan</p>
-</dd></dl>
-
-<p>Usage:</p>
-
-<pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">signatures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
-        :<span class="ruby-identifier">scan_dir</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
-}
-</pre>
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 20</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
-        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
-        <span class="ruby-ivar">@points_of_interest</span>         = []
-        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
-    </section><!-- public-class-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 
