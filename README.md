@@ -145,7 +145,7 @@ $signatures[:php][:dangerous_functions] = [
 To create a signature that matches a regular expression, do the following:
 
 ```ruby
-$signatures[:php][:dangerous_functions] = [
+$signatures[:php][:hashes] = [
 	Signature.new({:name => 'MD5',  :regex => '[0-9a-f]{32}'}),
 	Signature.new({:name => 'SHA1', :regex => '[0-9a-f]{40}'}),
 ]
