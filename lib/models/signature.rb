@@ -1,10 +1,10 @@
 class Signature
-	attr_accessor :name, :sig, :regex
+	attr_accessor :name, :literal, :regex
 	
 	def initialize data
-		@name   = data[:name]
-		@sig    = data[:sig]
-		@regex  = data[:regex]
+		@name    = data[:name]
+		@literal = data[:literal]
+		@regex   = data[:regex]
 	end
 
 end
