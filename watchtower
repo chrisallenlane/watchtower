@@ -46,6 +46,18 @@ opts = Trollop::options do
 	opt :project_name, 'The name of the project (useful when outputting an HTML report)',
 			:type 		=> :string,
 			:short 		=> 'p'
+			
+	opt :before_context, 'print NUM lines of leading context',
+			:type 		=> :int,
+			:required	=> :false,
+			:default	=> 0,
+			:short		=> 'B'
+
+	opt :after_context, 'print NUM lines of trailing context',
+			:type 		=> :int,
+			:required	=> :false,
+			:default	=> 0,
+			:short		=> 'A'
 end
 	
 
@@ -69,7 +81,12 @@ end
 #######################################################################
 # Scan
 #######################################################################
-vulnscanner = VulnScanner.new({:signatures => $signatures, :scan_dir => opts[:scan_dir]})
+vulnscanner = VulnScanner.new({
+	:signatures		=> $signatures,
+	:scan_dir		=> opts[:scan_dir]
+	:before_context	=> opts[:before_context],
+	:after_context	=> opts[:after_context],
+})
 vulnscanner.scan
 
 

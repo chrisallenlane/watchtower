@@ -3,7 +3,7 @@
 # in the user-provided signatures.
 class VulnScanner
 
-	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir
+	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context
 	
 	# Initializes the VulnScanner instance. Accepts a hash containing
 	# the following keys:
@@ -20,6 +20,8 @@ class VulnScanner
 	def initialize data
 		@signatures	                = data[:signatures]
 		@scan_dir 	                = data[:scan_dir]
+		@before_context				= data[:before_context]
+		@after_context				= data[:after_context]
 		@points_of_interest         = []
 		@points_of_interest_sorted  = {}
 	end
@@ -60,12 +62,17 @@ class VulnScanner
                         include_filetypes += " --include='*.#{ext}'"
                     end
                     
+                    # build the before and after contexts
+                    bc = ''; ac = ''
+                    bc = " -B=#{@before_context}" unless @before_context.eql? 0
+                    ac = " -A=#{@after_context}"  unless @after_context.eql? 0
+                    
 					# do a grep scan
 					if signature.regex.to_s.empty?
-						result = `cd #{@scan_dir}; grep -RHn '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						result = `cd #{@scan_dir}; grep -RHn #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match  = signature.literal
 					else
-						result = `cd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						result = `cd #{@scan_dir}; grep -ERHn #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match  = nil
 					end
                     

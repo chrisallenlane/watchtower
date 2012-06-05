@@ -23,7 +23,12 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	
 	# specify the directory to scan
 	scandir = File.dirname(__FILE__)
-	@vulnscanner = VulnScanner.new({:signatures => signatures, :scan_dir => scandir})
+	@vulnscanner = VulnScanner.new({
+		:signatures 	=> signatures,
+		:scan_dir 		=> scandir,
+		:before_context => 0,
+		:after_context	=> 0
+	})
   end
   
   must "scan" do
