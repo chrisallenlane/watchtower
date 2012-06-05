@@ -37,7 +37,7 @@ class TestVulnscanner < ::Test::Unit::TestCase
   end
   
   must "sort" do
-	@vulnscanner.scan # why do I seem to need to do this here?
+	@vulnscanner.scan
 	@vulnscanner.sort
 	assert_equal @vulnscanner.points_of_interest.count, 2
 	assert_equal @vulnscanner.points_of_interest_sorted.count, 1

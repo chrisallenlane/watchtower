@@ -62,10 +62,15 @@ class VulnScanner
                         include_filetypes += " --include='*.#{ext}'"
                     end
                     
-                    # build the before and after contexts
+                    # build the --before-context and --after-context flags
                     bc = ''; ac = ''
                     bc = " -B=#{@before_context}" unless @before_context.eql? 0
                     ac = " -A=#{@after_context}"  unless @after_context.eql? 0
+                    
+                    # -------------------------------------------------
+                    # @todo: I am here, trying to get context lines in
+                    # the grep search
+                    # -------------------------------------------------
                     
 					# do a grep scan
 					if signature.regex.to_s.empty?
