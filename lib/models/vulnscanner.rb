@@ -63,55 +63,64 @@ class VulnScanner
                     end
                     
                     # build the --before-context and --after-context flags
-                    bc = ''; ac = ''
-                    bc = " -B=#{@before_context}" unless @before_context.eql? 0
-                    ac = " -A=#{@after_context}"  unless @after_context.eql? 0
-                    
-                    # -------------------------------------------------
-                    # @todo: I am here, trying to get context lines in
-                    # the grep search
-                    # -------------------------------------------------
+                    bc = " -B #{@before_context}"
+                    ac = " -A #{@after_context}"
                     
 					# do a grep scan
 					if signature.regex.to_s.empty?
-						result = `cd #{@scan_dir}; grep -RHn #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						result = `cd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match  = signature.literal
 					else
-						result = `cd #{@scan_dir}; grep -ERHn #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						result = `cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match  = nil
 					end
                     
 					# display the matches
 					unless result.strip.empty?
+                    
+                        # -------------------------------------------------
+                        # @todo: I am here, trying to get context lines in
+                        # the grep search
+                        # -------------------------------------------------
+                    
+                        #puts result
+                        #break
+                    
 						# iterate over the ack results
 						result.each_line do |line| 
 							# parse the result string into components
-							first_colon_pos  = line.index(':')
-							second_colon_pos = line.index(':', first_colon_pos + 1)
+							filename_terminator_pos = line.index(?\x00)
+							line_terminator_pos     = line.index(':', filename_terminator_pos + 1) || line.index('-', filename_terminator_pos + 1)
 							
 							# parse out the important information
-							file_name        = line.slice(0..(first_colon_pos - 1)) 
-							line_num         = line.slice((first_colon_pos + 1)..(second_colon_pos - 1)) 
-							snippet          = line.slice((second_colon_pos +1), line.length).strip
+							file_name        = line.slice(0..(filename_terminator_pos - 1)) 
+							line_num         = line.slice((filename_terminator_pos + 1)..(line_terminator_pos - 1)) 
+							snippet          = line.slice((line_terminator_pos +1), line.length).strip
+                            
+                            puts "RAW      : " + line;
+                            puts "FILE NAME: " + file_name;
+                            puts "LINE NUM : " + line_num;
+                            puts "SNIPPET  : " + snippet;
+                            puts
 
-							# parse out the match if a regex was specified
-							if match.to_s.empty?
-								match = snippet.match(signature.regex)
-							end
+							## parse out the match if a regex was specified
+							#if match.to_s.empty?
+								#match = snippet.match(signature.regex)
+							#end
 
-                            # this should not change
-							# buffer a new point of interest
-							data = {
-								:file_type   => ftype,
-								:file        => file_name,
-								:line_number => line_num,
-								:match       => match,
-								:name	     => signature.name || signature.literal,
-								:snippet     => snippet,
-								:group		 => signature_group.to_s,
-							}
+                            ## this should not change
+							## buffer a new point of interest
+							#data = {
+								#:file_type   => ftype,
+								#:file        => file_name,
+								#:line_number => line_num,
+								#:match       => match,
+								#:name	     => signature.name || signature.literal,
+								#:snippet     => snippet,
+								#:group		 => signature_group.to_s,
+							#}
 							
-							@points_of_interest.push(PoI.new(data))
+							#@points_of_interest.push(PoI.new(data))
 						end
 					end
 				end	

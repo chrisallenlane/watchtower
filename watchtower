@@ -27,7 +27,7 @@ opts = Trollop::options do
 
 	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
-			:required	=> :true,
+			:required	=> true,
 			:short 		=> 's'
 
 	opt :colorize,		'Colorizes command-line output',
@@ -49,13 +49,13 @@ opts = Trollop::options do
 			
 	opt :before_context, 'print NUM lines of leading context',
 			:type 		=> :int,
-			:required	=> :false,
+			:required	=> false,
 			:default	=> 0,
 			:short		=> 'B'
 
 	opt :after_context, 'print NUM lines of trailing context',
 			:type 		=> :int,
-			:required	=> :false,
+			:required	=> false,
 			:default	=> 0,
 			:short		=> 'A'
 end
@@ -83,7 +83,7 @@ end
 #######################################################################
 vulnscanner = VulnScanner.new({
 	:signatures		=> $signatures,
-	:scan_dir		=> opts[:scan_dir]
+	:scan_dir		=> opts[:scan_dir],
 	:before_context	=> opts[:before_context],
 	:after_context	=> opts[:after_context],
 })
