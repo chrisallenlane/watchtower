@@ -99,7 +99,7 @@ $signatures[:filetype][:group]
 As in:
 
 ```ruby
-$signatures[:php][:dangerous_functions] = %w[
+$signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => 'base64_decode('}),
 	Signature.new({:literal => 'eval('}),
 	Signature.new({:literal => 'exec('}),
@@ -135,7 +135,7 @@ To create a signature that matches a literal string, use the following
 structure:
 
 ```ruby
-$signatures[:php][:dangerous_functions] = %w[
+$signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => 'base64_decode('}),
 	Signature.new({:literal => 'eval('}),
 	Signature.new({:literal => 'exec('}),
