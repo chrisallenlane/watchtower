@@ -17,8 +17,8 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	signatures = {}
 	signatures[:php] = {}
 	signatures[:php][:dangerous_functions] = [
-		Signature.new({:sig => 'eval('}),
-		Signature.new({:sig => 'base64_decode('}),
+		Signature.new({:literal => 'eval('}),
+		Signature.new({:literal => 'base64_decode('}),
 	]
 	
 	# specify the directory to scan

@@ -1,4 +1,4 @@
 $signatures[:js] ||= {}
 $signatures[:js][:dangerous_functions] = [
-	Signature.new({:sig => 'eval'}),
+	Signature.new({:literal => 'eval'}),
 ]

@@ -2,23 +2,23 @@
 # topically) for which one may want to scan.
 $signatures[:html] ||= {}
 $signatures[:html][:inputs] = [
-	Signature.new({:sig => '<form'}),
-	Signature.new({:sig => '<input'}),
-	Signature.new({:sig => '<select'}),
-	Signature.new({:sig => '<script'}),
-	Signature.new({:sig => '<textarea'}),
+	Signature.new({:literal => '<form'}),
+	Signature.new({:literal => '<input'}),
+	Signature.new({:literal => '<select'}),
+	Signature.new({:literal => '<script'}),
+	Signature.new({:literal => '<textarea'}),
 ]
 
 $signatures[:html][:dangerous] = [
-	Signature.new({:sig => '<applet'}),
-	Signature.new({:sig => '<embed'}),
-	Signature.new({:sig => '<iframe'}),
-	Signature.new({:sig => '<noscript'}),
-	Signature.new({:sig => '<object'}),
-	Signature.new({:sig => '<style'}),
-	Signature.new({:sig => '<xml'}),
+	Signature.new({:literal => '<applet'}),
+	Signature.new({:literal => '<embed'}),
+	Signature.new({:literal => '<iframe'}),
+	Signature.new({:literal => '<noscript'}),
+	Signature.new({:literal => '<object'}),
+	Signature.new({:literal => '<style'}),
+	Signature.new({:literal => '<xml'}),
 ]
 
 $signatures[:html][:comments] = [
-	Signature.new({:sig => '<!--'}),
+	Signature.new({:literal => '<!--'}),
 ]

@@ -100,9 +100,9 @@ As in:
 
 ```ruby
 $signatures[:php][:dangerous_functions] = %w[
-	Signature.new({:sig => 'base64_decode('}),
-	Signature.new({:sig => 'eval('}),
-	Signature.new({:sig => 'exec('}),
+	Signature.new({:literal => 'base64_decode('}),
+	Signature.new({:literal => 'eval('}),
+	Signature.new({:literal => 'exec('}),
 ]
 ```
 
@@ -123,7 +123,7 @@ language, and create one if not.
 3. Create a new signatures file for that file-type. (I'd recommend that
 you simply copy, paste, and modify an existing signatures file.)
 4. Slightly higher up in `config.rb`, list your signatures file in
-`$configs[:signatures]`.
+`$configs[:literalnatures]`.
 
 ### Signature Types ###
 Signatures can be specified in two ways:
@@ -135,9 +135,9 @@ structure:
 
 ```ruby
 $signatures[:php][:dangerous_functions] = %w[
-	Signature.new({:sig => 'base64_decode('}),
-	Signature.new({:sig => 'eval('}),
-	Signature.new({:sig => 'exec('}),
+	Signature.new({:literal => 'base64_decode('}),
+	Signature.new({:literal => 'eval('}),
+	Signature.new({:literal => 'exec('}),
 ]
 ```
 

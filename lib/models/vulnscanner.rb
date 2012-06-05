@@ -62,8 +62,8 @@ class VulnScanner
                     
 					# do a grep scan
 					if signature.regex.to_s.empty?
-						result = `cd #{@scan_dir}; grep -RHn '#{signature.sig.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
-						match  = signature.sig
+						result = `cd #{@scan_dir}; grep -RHn '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						match  = signature.literal
 					else
 						result = `cd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match  = nil
@@ -94,7 +94,7 @@ class VulnScanner
 								:file        => file_name,
 								:line_number => line_num,
 								:match       => match,
-								:name	     => signature.name || signature.sig,
+								:name	     => signature.name || signature.literal,
 								:snippet     => snippet,
 								:group		 => signature_group.to_s,
 							}

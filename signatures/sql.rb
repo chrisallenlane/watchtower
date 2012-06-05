@@ -1,12 +1,12 @@
 # A hash of interesting SQL data
 $signatures[:sql] ||= {}
 $signatures[:sql][:markup_injections] = [
-	Signature.new({:sig => '<script'}),
-	Signature.new({:sig => '<iframe'}),
+	Signature.new({:literal => '<script'}),
+	Signature.new({:literal => '<iframe'}),
 ]
 
 $signatures[:sql][:php_injections] = [
-	Signature.new({:sig => '<?php'}),
-	Signature.new({:sig => '<?'}),
-	Signature.new({:sig => '<?='}),
+	Signature.new({:literal => '<?php'}),
+	Signature.new({:literal => '<?'}),
+	Signature.new({:literal => '<?='}),
 ]
