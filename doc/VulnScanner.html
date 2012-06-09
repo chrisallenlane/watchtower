@@ -125,6 +125,32 @@ user-provided signatures.</p>
       <h3 class="section-header">Attributes</h3>
 
       
+      <div id="attribute-i-after_context" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">after_context</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-before_context" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">before_context</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
       <div id="attribute-i-points_of_interest" class="method-detail">
         <div class="method-heading attribute-method-heading">
           <span class="method-name">points_of_interest</span><span
@@ -206,7 +232,7 @@ user-provided signatures.</p>
 
           
           <div class="method-source-code" id="scan-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 32</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">scan</span>
         <span class="ruby-ivar">@signatures</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file_type</span>, <span class="ruby-identifier">signature_groups</span><span class="ruby-operator">|</span>
                 <span class="ruby-comment"># cast the file_type symbol into a string</span>
@@ -238,47 +264,68 @@ user-provided signatures.</p>
                 <span class="ruby-identifier">include_filetypes</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot; --include='*.#{ext}'&quot;</span>
             <span class="ruby-keyword">end</span>
             
+            <span class="ruby-comment"># build the --before-context and --after-context flags</span>
+            <span class="ruby-identifier">bc</span> = <span class="ruby-node">&quot; -B #{@before_context}&quot;</span>
+            <span class="ruby-identifier">ac</span> = <span class="ruby-node">&quot; -A #{@after_context}&quot;</span>
+            
                                 <span class="ruby-comment"># do a grep scan</span>
                                 <span class="ruby-keyword">if</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
-                                        <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; grep -RHn '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
-                                        <span class="ruby-identifier">match</span>  = <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">literal</span>
+                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">%xcd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">match</span>   = <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">literal</span>
                                 <span class="ruby-keyword">else</span>
-                                        <span class="ruby-identifier">result</span> = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHn '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
-                                        <span class="ruby-identifier">match</span>  = <span class="ruby-keyword">nil</span>
+                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">match</span>   = <span class="ruby-keyword">nil</span>
                                 <span class="ruby-keyword">end</span>
             
                                 <span class="ruby-comment"># display the matches</span>
                                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span>
-                                        <span class="ruby-comment"># iterate over the ack results</span>
-                                        <span class="ruby-identifier">result</span>.<span class="ruby-identifier">each_line</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> 
-                                                <span class="ruby-comment"># parse the result string into components</span>
-                                                <span class="ruby-identifier">first_colon_pos</span>  = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">':'</span>)
-                                                <span class="ruby-identifier">second_colon_pos</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">index</span>(<span class="ruby-string">':'</span>, <span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)
-                                                
-                                                <span class="ruby-comment"># parse out the important information</span>
-                                                <span class="ruby-identifier">file_name</span>        = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) 
-                                                <span class="ruby-identifier">line_num</span>         = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">first_colon_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)<span class="ruby-operator">..</span>(<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) 
-                                                <span class="ruby-identifier">snippet</span>          = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">slice</span>((<span class="ruby-identifier">second_colon_pos</span> <span class="ruby-value">+1</span>), <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>).<span class="ruby-identifier">strip</span>
-
-                                                <span class="ruby-comment"># parse out the match if a regex was specified</span>
-                                                <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
-                                                        <span class="ruby-identifier">match</span> = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>)
-                                                <span class="ruby-keyword">end</span>
-
-                    <span class="ruby-comment"># this should not change</span>
-                                                <span class="ruby-comment"># buffer a new point of interest</span>
-                                                <span class="ruby-identifier">data</span> = {
-                                                        <span class="ruby-value">:file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ftype</span>,
-                                                        <span class="ruby-value">:file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file_name</span>,
-                                                        <span class="ruby-value">:line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">line_num</span>,
-                                                        <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">match</span>,
-                                                        <span class="ruby-value">:name</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">literal</span>,
-                                                        <span class="ruby-value">:snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">snippet</span>,
-                                                        <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature_group</span>.<span class="ruby-identifier">to_s</span>,
-                                                }
-                                                
-                                                <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>))
-                                        <span class="ruby-keyword">end</span>
+                <span class="ruby-comment"># parse the grep output into blocks</span>
+                <span class="ruby-identifier">grep_blocks</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">%r^--$/</span>)
+                
+                                        <span class="ruby-comment">## iterate over the grep results</span>
+                                        <span class="ruby-identifier">grep_blocks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">grep_block</span><span class="ruby-operator">|</span>                         
+                    <span class="ruby-comment"># Discard the first (empty) line.</span>
+                    <span class="ruby-comment"># See: http://stackoverflow.com/questions/1469986/how-do-i-remove-the-first-n-lines-from-a-string-in-ruby</span>
+                    <span class="ruby-identifier">grep_block</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">to_a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">join</span>
+                    
+                    <span class="ruby-comment"># buffer the grep data in a hash until the context</span>
+                    <span class="ruby-comment"># lines have been parsed out proerly</span>
+                    <span class="ruby-identifier">block_data</span> = {
+                        <span class="ruby-value">:file_type</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ftype</span>,
+                        <span class="ruby-value">:file</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>,
+                        <span class="ruby-value">:line_number</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">nil</span>,
+                        <span class="ruby-value">:match</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">match</span>,
+                        <span class="ruby-value">:name</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">literal</span>,
+                        <span class="ruby-value">:snippet</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-string">''</span>,
+                        <span class="ruby-value">:group</span>           =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signature_group</span>.<span class="ruby-identifier">to_s</span>,
+                    }
+                                                                
+                    <span class="ruby-comment"># parse out the block metadata</span>
+                                                <span class="ruby-identifier">filename_terminator_pos</span>         = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value">\x00\</span>)
+                    <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
+                    <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:file</span>]               = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">filename_terminator_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>))
+                    
+                    <span class="ruby-comment"># now iterate over each line, removing filenames</span>
+                    <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">each_line</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">grep_line</span><span class="ruby-operator">|</span>
+                        <span class="ruby-comment"># buffer the snippet</span>
+                        <span class="ruby-identifier">snippet</span> = <span class="ruby-identifier">grep_line</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">block_data</span>[<span class="ruby-value">:file</span>], <span class="ruby-string">''</span>)
+                        <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:snippet</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">snippet</span>
+                        
+                        <span class="ruby-comment"># determine if we're on the line number with the match</span>
+                        <span class="ruby-keyword">if</span> <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">eql?</span> <span class="ruby-string">':'</span>
+                            <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
+                            <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:line_number</span>]        = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">line_number_terminator_position</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:line_number</span>].<span class="ruby-identifier">nil?</span>
+                        <span class="ruby-keyword">end</span>
+                    <span class="ruby-keyword">end</span>
+                    
+                    <span class="ruby-comment"># parse out the match if a regex was specified</span>
+                    <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:match</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
+                        <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:match</span>] = <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:snippet</span>].<span class="ruby-identifier">match</span>(<span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>)
+                    <span class="ruby-keyword">end</span>
+                    
+                    <span class="ruby-comment"># create a new PoI object based on block_data{}</span>
+                    <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">push</span>(<span class="ruby-constant">PoI</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">block_data</span>))
+                <span class="ruby-keyword">end</span>
                                 <span class="ruby-keyword">end</span>
                         <span class="ruby-keyword">end</span> 
                 <span class="ruby-keyword">end</span>
@@ -316,7 +363,7 @@ vulnscanner.sort</pre>
 
           
           <div class="method-source-code" id="sort-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 117</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
         <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
@@ -365,18 +412,22 @@ Accepts a hash containing the following keys:</p>
 <p>Usage:</p>
 
 <pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">signatures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
-        :<span class="ruby-identifier">scan_dir</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+        :<span class="ruby-identifier">signatures</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
+        :<span class="ruby-identifier">scan_dir</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+        :<span class="ruby-identifier">before_context</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
+        :<span class="ruby-identifier">after_context</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
 }
 </pre>
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 20</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
         <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
         <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@before_context</span>                               = <span class="ruby-identifier">data</span>[<span class="ruby-value">:before_context</span>]
+        <span class="ruby-ivar">@after_context</span>                                = <span class="ruby-identifier">data</span>[<span class="ruby-value">:after_context</span>]
         <span class="ruby-ivar">@points_of_interest</span>         = []
         <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
 <span class="ruby-keyword">end</span></pre>
