@@ -70,11 +70,11 @@ class VulnScanner
                     
 					# do a grep scan
 					if signature.regex.to_s.empty?
-						result          = `cd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
-						match    = signature.literal
+						result  = `cd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						match   = signature.literal
 					else
-						result          = `cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
-						match    = nil
+						result  = `cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
+						match   = nil
 					end
                     
 					# display the matches
@@ -103,13 +103,19 @@ class VulnScanner
                             # parse out the block metadata
 							filename_terminator_pos         = grep_block.index(?\x00)
                             line_number_terminator_position = grep_block.index(grep_block.match(/[:\-]+/).to_s)
-                            block_data[:file]               = grep_block.slice(0..(filename_terminator_pos - 1)) if block_data[:file].nil?
-                            block_data[:line_number]        = grep_block.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1)) if block_data[:line_number].nil?
+                            block_data[:file]               = grep_block.slice(0..(filename_terminator_pos - 1))
                             
                             # now iterate over each line, removing filenames
                             grep_block.each_line do |grep_line|
-                                block_data[:snippet] += grep_line.gsub!(block_data[:file], '')
+                                # buffer the snippet
+                                snippet = grep_line.gsub!(block_data[:file], '')
+                                block_data[:snippet] += snippet
                                 
+                                # determine if we're on the line number with the match
+                                if snippet.match(/[:\-]+/).to_s.eql? ':'
+                                    line_number_terminator_position = snippet.index(snippet.match(/[:\-]+/).to_s)
+                                    block_data[:line_number]        = snippet.slice(0..(line_number_terminator_position - 1))
+                                end
                             end
                             
                             # parse out the match if a regex was specified
@@ -125,10 +131,7 @@ class VulnScanner
 			end
 		end		
 	end
-	
-    
-    
-    
+
 	# Sorts the vulnscanner results into the format expected by the 
 	# HTML report. May only be invoked after performing a scan.
 	#
