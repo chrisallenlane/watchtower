@@ -114,7 +114,7 @@ class VulnScanner
                                 # determine if we're on the line number with the match
                                 if snippet.match(/[:\-]+/).to_s.eql? ':'
                                     line_number_terminator_position = snippet.index(snippet.match(/[:\-]+/).to_s)
-                                    block_data[:line_number]        = snippet.slice(0..(line_number_terminator_position - 1))
+                                    block_data[:line_number]        = snippet.slice(0..(line_number_terminator_position - 1)) if block_data[:line_number].nil?
                                 end
                             end
                             

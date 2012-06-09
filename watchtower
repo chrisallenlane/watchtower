@@ -50,19 +50,19 @@ opts = Trollop::options do
 	opt :before_context, 'print NUM lines of leading context',
 			:type 		=> :int,
 			:required	=> false,
-			:default	=> 0,
+			:default	=> 1,
 			:short		=> 'B'
 
 	opt :after_context, 'print NUM lines of trailing context',
 			:type 		=> :int,
 			:required	=> false,
-			:default	=> 0,
+			:default	=> 1,
 			:short		=> 'A'
 end
 	
 
 #######################################################################
-# Config and Signatures
+# Configs, Signatures, and Option Validation
 #######################################################################
 # Load the configuration file
 unless File.exists? opts[:config_file]
@@ -75,6 +75,12 @@ require opts[:config_file]
 unless File.exists? opts[:scan_dir]
 	warn 'The specified directory to scan does not exist.'
 	exit
+end
+
+# Verify that -A and -B are >= 1
+if (opts[:before_context] < 1) or (opts[:after_context] < 1)
+    warn 'Options --before-context and --after-context may not be less than 1.'
+    exit
 end
 
 

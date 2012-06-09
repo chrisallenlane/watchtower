@@ -26,8 +26,8 @@ class TestVulnscanner < ::Test::Unit::TestCase
 	@vulnscanner = VulnScanner.new({
 		:signatures 	=> signatures,
 		:scan_dir 		=> scandir,
-		:before_context => 0,
-		:after_context	=> 0
+		:before_context => 1,
+		:after_context	=> 1
 	})
   end
   
