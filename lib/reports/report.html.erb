@@ -130,7 +130,7 @@
 									# apply highlighting to the signature matches								
 									snippet_safe = h point.snippet
 									match_safe   = h point.match
-									snippet_highlighted = snippet_safe.sub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
+									snippet_highlighted = snippet_safe.gsub(match_safe, "<span class='match_highlight'>#{match_safe}</span>")
 									%>
 									<pre class='snippet'><code><%= snippet_highlighted %></code></pre>
 								</div>

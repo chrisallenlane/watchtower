@@ -92,22 +92,30 @@ class VulnScanner
                         }
                         
                         # parse the grep output into blocks
-                        grep_blocks = result.split("--\n")
+                        grep_blocks = result.split(/^--$/)
                     
-						# iterate over the ack results
-						grep_blocks.each do |line| 
+						# iterate over the grep results
+						grep_blocks.each do |grep_block| 
 							# parse the result string into components
-							filename_terminator_pos = line.index(?\x00)
-							line_terminator_pos     = line.index('-', filename_terminator_pos + 1) || line.index(':', filename_terminator_pos + 1)
+							filename_terminator_pos         = grep_block.index(?\x00)
+							line_number_terminator_position = grep_block.index('-', filename_terminator_pos + 1) || grep_block.index(':', filename_terminator_pos + 1)
 							
-							# parse out the important information
-							data[:file]         = line.slice(0..(filename_terminator_pos - 1)) if data[:file].nil?
-                            data[:line_number]  = line.slice((filename_terminator_pos + 1)..(line_terminator_pos - 1)) if data[:line_number].nil?
+							# parse out the metadata
+							data[:file]         = grep_block.slice(0..(filename_terminator_pos - 1)) if data[:file].nil?
+                            data[:line_number]  = grep_block.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1)) if data[:line_number].nil?
                             
-                            #data[:snippet]     += line.slice((line_terminator_pos +1), line.length)
-                            
-                            snippet     = line.slice((line_terminator_pos +1), line.length)
-                            puts snippet
+                            # now iterate over the entire grep block line-by-line,
+                            # beautifying each line                            
+                            grep_block.each_line do |snippet_line|
+                                # gracefully handle empty lines
+                                unless snippet_line.to_s.chomp.empty?
+                                    # identify where the filename and line number information ends
+                                    filename_terminator_pos         = snippet_line.index(?\x00)
+                                    line_number_terminator_position = snippet_line.index('-', filename_terminator_pos + 1) || snippet_line.index(':', filename_terminator_pos + 1)
+                                    line_number                     = snippet_line.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1))
+                                    data[:snippet]                 += line_number + ': ' + snippet_line.slice((line_number_terminator_position + 1), snippet_line.length)
+                                end                                
+                            end
                         end
                         
                         # parse out the match if a regex was specified
@@ -116,8 +124,7 @@ class VulnScanner
                         end
                         
                         # create a new PoI object based on data{}
-                        #@points_of_interest.push(PoI.new(data))
-                        #puts data
+                        @points_of_interest.push(PoI.new(data))
 					end
 				end	
 			end
