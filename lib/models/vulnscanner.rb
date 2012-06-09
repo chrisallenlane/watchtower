@@ -79,58 +79,56 @@ class VulnScanner
                     
 					# display the matches
 					unless result.strip.empty?
-                        # buffer the grep data in a hash until the context
-                        # lines have been parsed out proerly
-                        data = {
-                            :file_type   => ftype,
-                            :file        => nil,
-                            :line_number => nil,
-                            :match       => match,
-                            :name	     => signature.name || signature.literal,
-                            :snippet     => '',
-                            :group		 => signature_group.to_s,
-                        }
-                        
                         # parse the grep output into blocks
                         grep_blocks = result.split(/^--$/)
-                    
-						# iterate over the grep results
-						grep_blocks.each do |grep_block| 
-							# parse the result string into components
-							filename_terminator_pos         = grep_block.index(?\x00)
-							line_number_terminator_position = grep_block.index('-', filename_terminator_pos + 1) || grep_block.index(':', filename_terminator_pos + 1)
-							
-							# parse out the metadata
-							data[:file]         = grep_block.slice(0..(filename_terminator_pos - 1)) if data[:file].nil?
-                            data[:line_number]  = grep_block.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1)) if data[:line_number].nil?
+                        
+						## iterate over the grep results
+						grep_blocks.each do |grep_block|                         
+                            # Discard the first (empty) line.
+                            # See: http://stackoverflow.com/questions/1469986/how-do-i-remove-the-first-n-lines-from-a-string-in-ruby
+                            grep_block = grep_block.to_a[1..-1].join
                             
-                            # now iterate over the entire grep block line-by-line,
-                            # beautifying each line                            
-                            grep_block.each_line do |snippet_line|
-                                # gracefully handle empty lines
-                                unless snippet_line.to_s.chomp.empty?
-                                    # identify where the filename and line number information ends
-                                    filename_terminator_pos         = snippet_line.index(?\x00)
-                                    line_number_terminator_position = snippet_line.index('-', filename_terminator_pos + 1) || snippet_line.index(':', filename_terminator_pos + 1)
-                                    line_number                     = snippet_line.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1))
-                                    data[:snippet]                 += line_number + ': ' + snippet_line.slice((line_number_terminator_position + 1), snippet_line.length)
-                                end                                
+                            # buffer the grep data in a hash until the context
+                            # lines have been parsed out proerly
+                            block_data = {
+                                :file_type   => ftype,
+                                :file        => nil,
+                                :line_number => nil,
+                                :match       => match,
+                                :name	     => signature.name || signature.literal,
+                                :snippet     => '',
+                                :group		 => signature_group.to_s,
+                            }
+                            						
+                            # parse out the block metadata
+							filename_terminator_pos         = grep_block.index(?\x00)
+                            line_number_terminator_position = grep_block.index(grep_block.match(/[:\-]+/).to_s)
+                            block_data[:file]               = grep_block.slice(0..(filename_terminator_pos - 1)) if block_data[:file].nil?
+                            block_data[:line_number]        = grep_block.slice((filename_terminator_pos + 1)..(line_number_terminator_position - 1)) if block_data[:line_number].nil?
+                            
+                            # now iterate over each line, removing filenames
+                            grep_block.each_line do |grep_line|
+                                block_data[:snippet] += grep_line.gsub!(block_data[:file], '')
+                                
                             end
+                            
+                            # parse out the match if a regex was specified
+                            if block_data[:match].to_s.empty?
+                                block_data[:match] = block_data[:snippet].match(signature.regex)
+                            end
+                            
+                            # create a new PoI object based on block_data{}
+                            @points_of_interest.push(PoI.new(block_data))
                         end
-                        
-                        # parse out the match if a regex was specified
-                        if data[:match].to_s.empty?
-                            data[:match] = data[:snippet].match(signature.regex)
-                        end
-                        
-                        # create a new PoI object based on data{}
-                        @points_of_interest.push(PoI.new(data))
 					end
 				end	
 			end
 		end		
 	end
 	
+    
+    
+    
 	# Sorts the vulnscanner results into the format expected by the 
 	# HTML report. May only be invoked after performing a scan.
 	#
