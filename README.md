@@ -1,7 +1,6 @@
 Watchtower (1.3.0)
 ===================
 Chris Lane  
-4 Jun 2012  
 chris@chris-allen-lane.com  
 http://chris-allen-lane.com  
 http://twitter.com/#!/chrisallenlane
@@ -88,7 +87,7 @@ which to use upon execution.
 
 
 Signature Specification
----------------------
+-----------------------
 Signatures live in `<watchtower root>/signatures/` (by default), and are
 organized by file-type, and then by group:
 
@@ -171,7 +170,6 @@ I plan to make the following changes when I have the time:
 
 * Fix the Known Issues
 * Add more default signatures for different programming languages and frameworks
-* Add `--after-context` and `--before-context` flags, as per `grep`
 
 
 Contributing
