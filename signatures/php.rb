@@ -33,7 +33,7 @@ $signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => '`'}),
 ]
 
-$signatures[:php][:literalnature_obfuscators] = [
+$signatures[:php][:payload_obfuscators] = [
 	Signature.new({:literal => 'base64_decode('}),
 	Signature.new({:literal => 'base64_encode('}),
 	Signature.new({:literal => 'bzcompress('}),
