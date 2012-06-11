@@ -27,7 +27,8 @@ class TestVulnscanner < ::Test::Unit::TestCase
 		:signatures 	=> signatures,
 		:scan_dir 		=> scandir,
 		:before_context => 1,
-		:after_context	=> 1
+		:after_context	=> 1,
+		:context	    => 3
 	})
   end
   

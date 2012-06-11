@@ -23,7 +23,7 @@ require 'lib/models/vulnscanner'
 opts = Trollop::options do
 	banner File.read('./lib/static/banner.txt')
 	
-	version 'Version: 1.3.0'
+	version 'Version: 1.3.1'
 
 	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
@@ -58,6 +58,12 @@ opts = Trollop::options do
 			:required	=> false,
 			:default	=> 1,
 			:short		=> 'A'
+
+	opt :context, 'print NUM lines of output context',
+			:type 		=> :int,
+			:required	=> false,
+			:default	=> 3,
+			:short		=> 'C'
 end
 	
 
@@ -83,6 +89,12 @@ if (opts[:before_context] < 1) or (opts[:after_context] < 1)
     exit
 end
 
+# Verify that -C is >= 3
+if opts[:context] < 3
+    warn 'Option --context may not be less than 3.'
+    exit
+end
+
 
 #######################################################################
 # Scan
@@ -92,6 +104,7 @@ vulnscanner = VulnScanner.new({
 	:scan_dir		=> opts[:scan_dir],
 	:before_context	=> opts[:before_context],
 	:after_context	=> opts[:after_context],
+	:context    	=> (opts[:context_given]) ? opts[:context] : false,
 })
 vulnscanner.scan
 

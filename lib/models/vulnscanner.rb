@@ -3,7 +3,7 @@
 # in the user-provided signatures.
 class VulnScanner
 
-	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context
+	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context, :context
 	
 	# Initializes the VulnScanner instance. Accepts a hash containing
 	# the following keys:
@@ -24,6 +24,7 @@ class VulnScanner
 		@scan_dir 	                = data[:scan_dir]
 		@before_context				= data[:before_context]
 		@after_context				= data[:after_context]
+		@context    				= data[:context]
 		@points_of_interest         = []
 		@points_of_interest_sorted  = {}
 	end
@@ -65,8 +66,20 @@ class VulnScanner
                     end
                     
                     # build the --before-context and --after-context flags
-                    bc = " -B #{@before_context}"
-                    ac = " -A #{@after_context}"
+                    if @context.eql? false
+                        bc = " -B #{@before_context}"
+                        ac = " -A #{@after_context}"
+                    else 
+                        context_lines = @context - 1
+                        if context_lines.even?
+                            a = b = context_lines / 2
+                        else
+                            a = (context_lines / 2).floor
+                            b = a + 1
+                        end
+                        bc = " -B #{b}"
+                        ac = " -A #{a}"
+                    end
                     
 					# do a grep scan
 					if signature.regex.to_s.empty?
