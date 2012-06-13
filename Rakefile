@@ -27,23 +27,23 @@ namespace :docs do
         # build sample reports for all file types
         ## plain text ##
         print 'Generating a plain-text report...'
-        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o txt > #{cwd}/examples/sample_report.txt`
+        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o txt > #{cwd}/examples/report.txt`
         puts 'Done.'
         ## csv ##
         print 'Generating a CSV report...'
-        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o csv > #{cwd}/examples/sample_report.csv`
+        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o csv > #{cwd}/examples/report.csv`
         puts 'Done.'
         ## xml ##
         print 'Generating an XML report...'
-        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o xml > #{cwd}/examples/sample_report.xml`
+        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o xml > #{cwd}/examples/report.xml`
         puts 'Done.'
         ## xml ##
         print 'Generating a Markdown report...'
-        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o markdown > #{cwd}/examples/sample_report.markdown`
+        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o markdown > #{cwd}/examples/report.markdown`
         puts 'Done.'
         ## html ##
         print 'Generating an HTML report...'
-        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o html > #{cwd}/examples/sample_report.html`
+        `#{cwd}/watchtower -s /tmp/w3-total-cache/ -p 'W3 Total Cache Plugin' -C 7 -o html > #{cwd}/examples/report.html`
         puts 'Done.'
         
         # clean up
