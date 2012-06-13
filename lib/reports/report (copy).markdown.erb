@@ -1,0 +1,29 @@
+<%
+title       = "Watchtower"
+title       += ' - ' + opts[:project_name] if opts[:project_name_given]
+num_chars   = title.length
+%><%= title %>
+<% num_chars.times do |x| %>=<% end %>  
+
+Source Code Audit - _<%= Date.today.strftime("%Y-%m-%d") %>_  
+<% unless $configs[:client_name].empty? %>
+Prepared for _<%= $configs[:client_name] %>_  
+<% end %>
+
+<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, signature_groups|%>
+## <%= sym_file_type.to_s %> ##
+<% signature_groups.each do |signature_group, signatures| %>
+
+### <%= signature_group.to_s %> ###
+<% signatures.each do |signature, points| %>
+#### <%= signature.to_s %> ####
+<% points.each do |point|%>
+<%= point.file %>:<%= point.line_number %>
+
+<% point.snippet.each_line do |line| %>  
+    <%= line.strip %><% end %>
+
+<% end %>
+<% end %>
+<% end %>
+<% end %>

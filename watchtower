@@ -39,7 +39,7 @@ opts = Trollop::options do
 			:short 		=> 'f'
 
 	opt :output_format,	'Specify the output format. Valid options are "csv", ' + 
-			'"html", "txt", and "xml"',
+			'"html", "markdown", "txt", and "xml"',
 			:default	=> 'txt',
 			:short 		=> 'o'
 			
@@ -132,7 +132,19 @@ case opts[:output_format]
 		vulnscanner.sort
 		
 		# parse and display the HTML output
-		erb = ERB.new(File.read($configs[:report_file]), 0, '<>', 'buffer')
+		erb = ERB.new(File.read($configs[:report_file_html]), 0, '<>', 'buffer')
+		puts erb.result(binding)
+		
+	when 'markdown'
+		# require erb for templating
+		require 'erb'
+		include ERB::Util
+		
+		# sort the points of interest for HTML output
+		vulnscanner.sort
+		
+		# parse and display the HTML output
+		erb = ERB.new(File.read($configs[:report_file_markdown]), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	
 	when 'xml'

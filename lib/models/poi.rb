@@ -32,13 +32,14 @@ class PoI
 	#	poi = PoI.new(data)
 	#
 	def initialize data
-		@file_type   = data[:file_type].to_s
-		@file        = data[:file].to_s
-		@line_number = data[:line_number].to_s
-		@match       = data[:match].to_s
-		@name        = data[:name].to_s
-		@snippet     = data[:snippet].to_s
-		@group       = data[:group].to_s
+        # stip null bytes, especially from grep's -Z option
+		@file_type   = data[:file_type].to_s.gsub(/\x00/, '')
+		@file        = data[:file].to_s.gsub(/\x00/, '')
+		@line_number = data[:line_number].to_s.gsub(/\x00/, '')
+		@match       = data[:match].to_s.gsub(/\x00/, '')
+		@name        = data[:name].to_s.gsub(/\x00/, '')
+		@snippet     = data[:snippet].to_s.gsub(/\x00/, '')
+		@group       = data[:group].to_s.gsub(/\x00/, '')
 	end
 	
 	# Colorizes output in the command line
