@@ -23,7 +23,7 @@ require 'lib/models/vulnscanner'
 opts = Trollop::options do
 	banner File.read('./lib/static/banner.txt')
 	
-	version 'Version: 1.3.1'
+	version 'Version: 1.3.2'
 
 	opt :scan_dir,		'The directory to scan',
 			:type 		=> :string,
@@ -132,7 +132,7 @@ case opts[:output_format]
 		vulnscanner.sort
 		
 		# parse and display the HTML output
-		erb = ERB.new(File.read($configs[:report_file_html]), 0, '<>', 'buffer')
+		erb = ERB.new(File.read($configs[:report_file][:html]), 0, '<>', 'buffer')
 		puts erb.result(binding)
 		
 	when 'markdown'
@@ -144,7 +144,7 @@ case opts[:output_format]
 		vulnscanner.sort
 		
 		# parse and display the HTML output
-		erb = ERB.new(File.read($configs[:report_file_markdown]), 0, '<>', 'buffer')
+		erb = ERB.new(File.read($configs[:report_file][:markdown]), 0, '<>', 'buffer')
 		puts erb.result(binding)
 	
 	when 'xml'

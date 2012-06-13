@@ -46,10 +46,12 @@ $configs = {
 	</div>
 	",
 	
-	# HTML reporting only: the path to the ERB template to use
-	# for generating the HTML report.
-	:report_file_html		=> './lib/reports/report.html.erb',
-	:report_file_markdown   => './lib/reports/report.markdown.erb',
+	# HTML and Markdown reporting only: the path to the ERB templates to
+	# use for generating the reports.
+	:report_file		=> {
+        :html           => './lib/reports/report.html.erb',
+        :markdown       => './lib/reports/report.markdown.erb',
+    },
 	
 	# HTML reporting only: the stylesheets to embed into the outputted
 	# report.
