@@ -33,13 +33,13 @@ class PoI
 	#
 	def initialize data
         # stip null bytes, especially from grep's -Z option
-		@file_type   = data[:file_type].to_s.gsub(/\x00/, '')
-		@file        = data[:file].to_s.gsub(/\x00/, '')
-		@line_number = data[:line_number].to_s.gsub(/\x00/, '')
-		@match       = data[:match].to_s.gsub(/\x00/, '')
-		@name        = data[:name].to_s.gsub(/\x00/, '')
-		@snippet     = data[:snippet].to_s.gsub(/\x00/, '')
-		@group       = data[:group].to_s.gsub(/\x00/, '')
+		@file_type   = data[:file_type].to_s.gsub(/\x00/, '').strip
+		@file        = data[:file].to_s.gsub(/\x00/, '').strip
+		@line_number = data[:line_number].to_s.gsub(/\x00/, '').strip
+		@match       = data[:match].to_s.gsub(/\x00/, '').strip
+		@name        = data[:name].to_s.gsub(/\x00/, '').strip
+		@snippet     = data[:snippet].to_s.gsub(/\x00/, '').strip
+		@group       = data[:group].to_s.gsub(/\x00/, '').strip
 	end
 	
 	# Colorizes output in the command line
@@ -90,13 +90,17 @@ class PoI
 	#	puts poi.xml
 	#
 	def to_xml
+        # kludge: the ]]> sequence was causing invalid XML to be 
+        # formed. I don't know if there's a more proper way to handle this.
+        snippet = @snippet.gsub(']]>', '\]\]>')
+    
 		"\t<poi>\n" +
 			"\t\t<file><![CDATA[#{@file}]]></file>\n" + 
 			"\t\t<file_type><![CDATA[#{@file_type}]]></file_type>\n" + 
 			"\t\t<line_number><![CDATA[#{@line_number}]]></line_number>\n" + 
 			"\t\t<match><![CDATA[#{@match}]]></match>\n" + 
 			"\t\t<name><![CDATA[#{@name}]]></name>\n" + 
-			"\t\t<snippet><![CDATA[#{@snippet}]]></snippet>\n" + 
+			"\t\t<snippet><![CDATA[#{snippet}]]></snippet>\n" + 
 			"\t\t<group><![CDATA[#{@group}]]></group>\n" + 
 		"\t</poi>\n"
 	end
