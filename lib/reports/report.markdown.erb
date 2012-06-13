@@ -11,17 +11,17 @@ Prepared for _<%= $configs[:client_name] %>_
 <% end %>
 
 <% vulnscanner.points_of_interest_sorted.each do |sym_file_type, signature_groups|%>
-- ## <%= sym_file_type.to_s %> ##
+## <%= sym_file_type.to_s %> ##
 <% signature_groups.each do |signature_group, signatures| %>
 
-  - ### <%= signature_group.to_s %> ###
+### <%= signature_group.to_s %> ###
 <% signatures.each do |signature, points| %>
-    - #### <%= signature.to_s %> ####
+#### <%= signature.to_s %> ####
 <% points.each do |point|%>
 <%= point.file %>:<%= point.line_number %>
 
-        <% point.snippet.each_line do |line| %>  
-<%= line.strip %><% end %>
+<% point.snippet.each_line do |line| %>  
+    <%= line.strip %><% end %>
 
 <% end %>
 <% end %>
