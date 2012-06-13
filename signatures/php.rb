@@ -45,6 +45,11 @@ $signatures[:php][:payload_obfuscators] = [
 	Signature.new({:literal => 'zlib_encode('}),
 	Signature.new({:literal => 'zlib_decode('}),
 	Signature.new({:literal => '$$'}),
+    # note: this is a somewhat liberal/invalid regex for parsing 
+    #base64, but I'd rather catch as much as possible rather than 
+    #miss an interesting string simply because it's not valid 
+    #base64.
+	Signature.new({:name    => 'Base64', :regex => '(?:[A-Za-z0-9+/]{4})*[=]{1-2}'}),
 ]
 
 $signatures[:php][:form_data] = [
