@@ -1,7127 +1,12 @@
 Watchtower - W3 Total Cache Plugin
 ==================================  
 
-Source Code Audit - _2012-06-13_  
+Source Code Audit - _2012-06-14_  
 Prepared for _Enzo's Pizza_  
 
 ## php ##
 
-### dangerous_functions ###
-#### unserialize( ####
-./lib/W3/Minify.php:827
-  
-    825-  
-    826-        if ($data) {  
-    827:            $value = @unserialize($data);  
-    828-  
-    829-            return $value;  
-    830-        }
-
-./lib/W3/Cache/File.php:156
-  
-    153-                                $data .= @fread($fp, 4096);  
-    154-                            }  
-    155-  
-    156:                            $var = @unserialize($data);  
-    157-                        }  
-    158-                    }  
-    159-
-
-./lib/W3/Cache/Eaccelerator.php:51
-  
-    48-     * @return mixed  
-    49-     */  
-    50-    function get($key) {  
-    51:        return @unserialize(eaccelerator_get($key));  
-    52-    }  
-    53-  
-    54-    /**
-
-./lib/W3/Cache/Wincache.php:47
-  
-    44-     * @return mixed  
-    45-     */  
-    46-    function get($key) {  
-    47:        return @unserialize(wincache_ucache_get($key));  
-    48-    }  
-    49-  
-    50-    /**
-
-./lib/W3/Cache/Xcache.php:51
-  
-    48-     * @return mixed  
-    49-     */  
-    50-    function get($key) {  
-    51:        return @unserialize(xcache_get($key));  
-    52-    }  
-    53-  
-    54-    /**
-
-./lib/W3/Cache/Apc.php:51
-  
-    48-     * @return mixed  
-    49-     */  
-    50-    function get($key) {  
-    51:        return @unserialize(apc_fetch($key));  
-    52-    }  
-    53-  
-    54-    /**
-
-./lib/W3/PageSpeed.php:240
-  
-    237-            $data = @file_get_contents($file);  
-    238-  
-    239-            if ($data) {  
-    240:                return @unserialize($data);  
-    241-            }  
-    242-        }  
-    243-
-
-./lib/W3/Plugin/CdnEnabled.php:875
-  
-    872-                    }  
-    873-  
-    874-                    if ($post->metadata) {  
-    875:                        $metadata = @unserialize($post->metadata);  
-    876-  
-    877-                        $post_files = array_merge($post_files, $this->get_metadata_files($metadata));  
-    878-                    }
-
-./lib/W3/Plugin/CdnAdmin.php:344
-  
-    341-                    }  
-    342-  
-    343-                    if ($post->metadata) {  
-    344:                        $metadata = @unserialize($post->metadata);  
-    345-  
-    346-                        $post_files = array_merge($post_files, $this->_get_common()->get_metadata_files($metadata));  
-    347-                    }
-
-./lib/Nusoap/class.wsdlcache.php:112
-  
-    109-				$this->debug("$wsdl ($filename) not in cache (2)");  
-    110-			}  
-    111-			$this->releaseMutex($filename);  
-    112:			return (!is_null($s)) ? unserialize($s) : null;  
-    113-		} else {  
-    114-			$this->debug("Unable to obtain mutex for $filename in get");  
-    115-		}
-
-#### fread( ####
-./lib/W3/Cache/File.php:143
-  
-    141-                    }  
-    142-  
-    143:                    $expires = @fread($fp, 4);  
-    144-  
-    145-                    if ($expires !== false) {  
-    146-                        list(, $expire) = @unpack('L', $expires);
-
-./lib/W3/Cache/File.php:153
-  
-    150-                            $data = '';  
-    151-  
-    152-                            while (!@feof($fp)) {  
-    153:                                $data .= @fread($fp, 4096);  
-    154-                            }  
-    155-  
-    156-                            $var = @unserialize($data);
-
-./lib/W3/Cache/File/Generic.php:108
-  
-    105-                    $var = '';  
-    106-  
-    107-                    while (!@feof($fp)) {  
-    108:                        $var .= @fread($fp, 4096);  
-    109-                    }  
-    110-  
-    111-                    @fclose($fp);
-
-./lib/W3/Cache/File/Cleaner.php:124
-  
-    121-                $fp = @fopen($file, 'rb');  
-    122-  
-    123-                if ($fp) {  
-    124:                    $expires = @fread($fp, 4);  
-    125-  
-    126-                    if ($expires !== false) {  
-    127-                        list(, $expire) = @unpack('L', $expires);
-
-./lib/CF/cloudfiles_http.php:1078
-  
-    1075-  
-    1076-    private function _read_cb($ch, $fd, $length)  
-    1077-    {  
-    1078:        $data = fread($fd, $length);  
-    1079-        $len = strlen($data);  
-    1080-        if (isset($this->_user_write_progress_callback_func)) {  
-    1081-            call_user_func($this->_user_write_progress_callback_func, $len);
-
-./lib/CF/cloudfiles.php:1923
-  
-    1920-        } else {  
-    1921-            $this->content_length = $bytes;  
-    1922-            $fp = $data;  
-    1923:            $ct_data = fread($data, 64);  
-    1924-            rewind($data);  
-    1925-        }  
-    1926-
-
-./lib/Nusoap/class.wsdl.php:245
-  
-    242-            $this->debug('getting WSDL file ' . $path);  
-    243-            if ($fp = @fopen($path, 'r')) {  
-    244-                $wsdl_string = '';  
-    245:                while ($data = fread($fp, 32768)) {  
-    246-                    $wsdl_string .= $data;  
-    247-                }  
-    248-                fclose($fp);
-
-./lib/Nusoap/class.soap_transport_http.php:902
-  
-    899-			$strlen = 0;  
-    900-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
-    901-		    	$readlen = min(8192, $content_length - $strlen);  
-    902:				$tmp = fread($this->fp, $readlen);  
-    903-				$tmplen = strlen($tmp);  
-    904-				$this->debug("read buffer of $tmplen bytes");  
-    905-				if (($tmplen == 0) && (!feof($this->fp))) {
-
-./lib/Nusoap/nusoap.php:3055
-  
-    3052-			$strlen = 0;  
-    3053-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
-    3054-		    	$readlen = min(8192, $content_length - $strlen);  
-    3055:				$tmp = fread($this->fp, $readlen);  
-    3056-				$tmplen = strlen($tmp);  
-    3057-				$this->debug("read buffer of $tmplen bytes");  
-    3058-				if (($tmplen == 0) && (!feof($this->fp))) {
-
-./lib/Nusoap/nusoap.php:4826
-  
-    4823-            $this->debug('getting WSDL file ' . $path);  
-    4824-            if ($fp = @fopen($path, 'r')) {  
-    4825-                $wsdl_string = '';  
-    4826:                while ($data = fread($fp, 32768)) {  
-    4827-                    $wsdl_string .= $data;  
-    4828-                }  
-    4829-                fclose($fp);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:773
-  
-    770-			fseek($fp, $i * self::MAX_BLOB_TRANSFER_SIZE);  
-    771-  
-    772-			// Read contents  
-    773:			$fileContents = fread($fp, self::MAX_BLOB_TRANSFER_SIZE);  
-    774-  
-    775-			// Put block  
-    776-			$this->putBlock($containerName, $blobName, $blockIdentifiers[$i], $fileContents, $leaseId);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:256
-  
-    253-            return false;  
-    254-        }  
-    255-  
-    256:        return fread($this->_temporaryFileHandle, $count);  
-    257-    }  
-    258-  
-    259-    /**
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:389
-  
-    386-                              break;  
-    387-                             }  
-    388-                        } else {  
-    389:                            $line = @fread($this->socket, $read_to - $current_pos);  
-    390-                            if ($line === false || strlen($line) === 0) {  
-    391-                                $this->_checkSocketReadTimeout();  
-    392-                                break;
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:432
-  
-    429-                          break;  
-    430-                     }  
-    431-                 } else {  
-    432:                    $chunk = @fread($this->socket, $read_to - $current_pos);  
-    433-                    if ($chunk === false || strlen($chunk) === 0) {  
-    434-                        $this->_checkSocketReadTimeout();  
-    435-                        break;
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:455
-  
-    452-                          break;  
-    453-                     }  
-    454-                }  else {  
-    455:                    $buff = @fread($this->socket, 8192);  
-    456-                    if ($buff === false || strlen($buff) === 0) {  
-    457-                        $this->_checkSocketReadTimeout();  
-    458-                        break;
-
-./lib/W3/Cache/File.php:143
-  
-    141-                    }  
-    142-  
-    143:                    $expires = @fread($fp, 4);  
-    144-  
-    145-                    if ($expires !== false) {  
-    146-                        list(, $expire) = @unpack('L', $expires);
-
-./lib/W3/Cache/File.php:153
-  
-    150-                            $data = '';  
-    151-  
-    152-                            while (!@feof($fp)) {  
-    153:                                $data .= @fread($fp, 4096);  
-    154-                            }  
-    155-  
-    156-                            $var = @unserialize($data);
-
-./lib/W3/Cache/File/Generic.php:108
-  
-    105-                    $var = '';  
-    106-  
-    107-                    while (!@feof($fp)) {  
-    108:                        $var .= @fread($fp, 4096);  
-    109-                    }  
-    110-  
-    111-                    @fclose($fp);
-
-./lib/W3/Cache/File/Cleaner.php:124
-  
-    121-                $fp = @fopen($file, 'rb');  
-    122-  
-    123-                if ($fp) {  
-    124:                    $expires = @fread($fp, 4);  
-    125-  
-    126-                    if ($expires !== false) {  
-    127-                        list(, $expire) = @unpack('L', $expires);
-
-./lib/CF/cloudfiles_http.php:1078
-  
-    1075-  
-    1076-    private function _read_cb($ch, $fd, $length)  
-    1077-    {  
-    1078:        $data = fread($fd, $length);  
-    1079-        $len = strlen($data);  
-    1080-        if (isset($this->_user_write_progress_callback_func)) {  
-    1081-            call_user_func($this->_user_write_progress_callback_func, $len);
-
-./lib/CF/cloudfiles.php:1923
-  
-    1920-        } else {  
-    1921-            $this->content_length = $bytes;  
-    1922-            $fp = $data;  
-    1923:            $ct_data = fread($data, 64);  
-    1924-            rewind($data);  
-    1925-        }  
-    1926-
-
-./lib/Nusoap/class.wsdl.php:245
-  
-    242-            $this->debug('getting WSDL file ' . $path);  
-    243-            if ($fp = @fopen($path, 'r')) {  
-    244-                $wsdl_string = '';  
-    245:                while ($data = fread($fp, 32768)) {  
-    246-                    $wsdl_string .= $data;  
-    247-                }  
-    248-                fclose($fp);
-
-./lib/Nusoap/class.soap_transport_http.php:902
-  
-    899-			$strlen = 0;  
-    900-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
-    901-		    	$readlen = min(8192, $content_length - $strlen);  
-    902:				$tmp = fread($this->fp, $readlen);  
-    903-				$tmplen = strlen($tmp);  
-    904-				$this->debug("read buffer of $tmplen bytes");  
-    905-				if (($tmplen == 0) && (!feof($this->fp))) {
-
-./lib/Nusoap/nusoap.php:3055
-  
-    3052-			$strlen = 0;  
-    3053-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
-    3054-		    	$readlen = min(8192, $content_length - $strlen);  
-    3055:				$tmp = fread($this->fp, $readlen);  
-    3056-				$tmplen = strlen($tmp);  
-    3057-				$this->debug("read buffer of $tmplen bytes");  
-    3058-				if (($tmplen == 0) && (!feof($this->fp))) {
-
-./lib/Nusoap/nusoap.php:4826
-  
-    4823-            $this->debug('getting WSDL file ' . $path);  
-    4824-            if ($fp = @fopen($path, 'r')) {  
-    4825-                $wsdl_string = '';  
-    4826:                while ($data = fread($fp, 32768)) {  
-    4827-                    $wsdl_string .= $data;  
-    4828-                }  
-    4829-                fclose($fp);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:773
-  
-    770-			fseek($fp, $i * self::MAX_BLOB_TRANSFER_SIZE);  
-    771-  
-    772-			// Read contents  
-    773:			$fileContents = fread($fp, self::MAX_BLOB_TRANSFER_SIZE);  
-    774-  
-    775-			// Put block  
-    776-			$this->putBlock($containerName, $blobName, $blockIdentifiers[$i], $fileContents, $leaseId);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:256
-  
-    253-            return false;  
-    254-        }  
-    255-  
-    256:        return fread($this->_temporaryFileHandle, $count);  
-    257-    }  
-    258-  
-    259-    /**
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:389
-  
-    386-                              break;  
-    387-                             }  
-    388-                        } else {  
-    389:                            $line = @fread($this->socket, $read_to - $current_pos);  
-    390-                            if ($line === false || strlen($line) === 0) {  
-    391-                                $this->_checkSocketReadTimeout();  
-    392-                                break;
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:432
-  
-    429-                          break;  
-    430-                     }  
-    431-                 } else {  
-    432:                    $chunk = @fread($this->socket, $read_to - $current_pos);  
-    433-                    if ($chunk === false || strlen($chunk) === 0) {  
-    434-                        $this->_checkSocketReadTimeout();  
-    435-                        break;
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:455
-  
-    452-                          break;  
-    453-                     }  
-    454-                }  else {  
-    455:                    $buff = @fread($this->socket, 8192);  
-    456-                    if ($buff === false || strlen($buff) === 0) {  
-    457-                        $this->_checkSocketReadTimeout();  
-    458-                        break;
-
-#### proc_open( ####
-./lib/Minify/Minify/YUICompressor.php:121
-  
-    119-  
-    120-        $pipes = null;  
-    121:        $process = proc_open($cmd, $descriptors, $pipes);  
-    122-  
-    123-        if (!$process) {  
-    124-            throw new Exception(sprintf('Unable to open process (%s).', $cmd));
-
-./lib/Minify/Minify/ClosureCompiler.php:78
-  
-    75-        );  
-    76-  
-    77-        $pipes = null;  
-    78:        $process = proc_open($cmd, $descriptors, $pipes);  
-    79-  
-    80-        if (!$process) {  
-    81-            throw new Exception(sprintf('Unable to open process (%s).', $cmd));
-
-#### exec( ####
-./lib/CF/cloudfiles_http.php:219
-  
-    217-        curl_setopt($curl_ch, CURLOPT_CONNECTTIMEOUT, 10);  
-    218-        curl_setopt($curl_ch, CURLOPT_URL, $url);  
-    219:        curl_exec($curl_ch);  
-    220-        curl_close($curl_ch);  
-    221-  
-    222-        return array($this->response_status, $this->response_reason,
-
-./lib/CF/cloudfiles_http.php:1312
-  
-    1309-        curl_setopt($this->connections[$conn_type],  
-    1310-            CURLOPT_URL, $url_path);  
-    1311-  
-    1312:        if (!curl_exec($this->connections[$conn_type]) && curl_errno($this->connections[$conn_type]) !== 0) {  
-    1313-            $this->error_str = "(curl error: "  
-    1314-                . curl_errno($this->connections[$conn_type]) . ") ";  
-    1315-            $this->error_str .= curl_error($this->connections[$conn_type]);
-
-./lib/Nusoap/class.soap_transport_http.php:964
-  
-    961-	  } else if ($this->io_method() == 'curl') {  
-    962-		// send and receive  
-    963-		$this->debug('send and receive with cURL');  
-    964:		$this->incoming_payload = curl_exec($this->ch);  
-    965-		$data = $this->incoming_payload;  
-    966-  
-    967-        $cErr = curl_error($this->ch);
-
-./lib/Nusoap/nusoap.php:3117
-  
-    3114-	  } else if ($this->io_method() == 'curl') {  
-    3115-		// send and receive  
-    3116-		$this->debug('send and receive with cURL');  
-    3117:		$this->incoming_payload = curl_exec($this->ch);  
-    3118-		$data = $this->incoming_payload;  
-    3119-  
-    3120-        $cErr = curl_error($this->ch);
-
-./lib/S3.php:1499
-  
-    1496-		}  
-    1497-  
-    1498-		// Execute, grab errors  
-    1499:		if (curl_exec($curl))  
-    1500-			$this->response->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
-    1501-		else  
-    1502-			$this->response->error = array(
-
-./lib/Microsoft/Http/Client/Adapter/Curl.php:405
-  
-    402-        }  
-    403-  
-    404-        // send the request  
-    405:        $response = curl_exec($this->_curl);  
-    406-  
-    407-        // if we used streaming, headers are already there  
-    408-        if(!is_resource($this->out_stream)) {
-
-#### fsockopen( ####
-./lib/Nusoap/class.soap_transport_http.php:219
-  
-    217-		// open socket  
-    218-		if($connection_timeout > 0){  
-    219:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str, $connection_timeout);  
-    220-		} else {  
-    221:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str);  
-    222-		}  
-    223-  
-    224-		// test pointer
-
-./lib/Nusoap/nusoap.php:2372
-  
-    2369-  
-    2370-		// open socket  
-    2371-		if($connection_timeout > 0){  
-    2372:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str, $connection_timeout);  
-    2373-		} else {  
-    2374:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str);  
-    2375-		}  
-    2376-  
-    2377-		// test pointer
-
-#### readfile( ####
-./lib/W3/Plugin/TotalCacheAdmin.php:2060
-  
-    2058-    function action_config_export() {  
-    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
-    2060:        @readfile(W3TC_CONFIG_PATH);  
-    2061-        die();  
-    2062-    }  
-    2063-
-
-./lib/Minify/Minify/Cache/File.php:109
-  
-    106-                return true;  
-    107-            }  
-    108-        } else {  
-    109:            return @readfile($path);  
-    110-        }  
-    111-  
-    112-        return false;
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2060
-  
-    2058-    function action_config_export() {  
-    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
-    2060:        @readfile(W3TC_CONFIG_PATH);  
-    2061-        die();  
-    2062-    }  
-    2063-
-
-./lib/Minify/Minify/Cache/File.php:109
-  
-    106-                return true;  
-    107-            }  
-    108-        } else {  
-    109:            return @readfile($path);  
-    110-        }  
-    111-  
-    112-        return false;
-
-#### fclose( ####
-./lib/W3/Cache/File.php:109
-  
-    107-                @fputs($fp, pack('L', $expire));  
-    108-                @fputs($fp, @serialize($var));  
-    109:                @fclose($fp);  
-    110-  
-    111-                if ($this->_locking) {  
-    112-                    @flock($fp, LOCK_UN);
-
-./lib/W3/Cache/File.php:164
-  
-    161-                        @flock($fp, LOCK_UN);  
-    162-                    }  
-    163-  
-    164:                    @fclose($fp);  
-    165-                }  
-    166-            }  
-    167-        }
-
-./lib/W3/Cache/File/Generic.php:71
-  
-    68-                }  
-    69-  
-    70-                @fputs($fp, $var);  
-    71:                @fclose($fp);  
-    72-  
-    73-                if ($this->_locking) {  
-    74-                    @flock($fp, LOCK_UN);
-
-./lib/W3/Cache/File/Generic.php:111
-  
-    108-                        $var .= @fread($fp, 4096);  
-    109-                    }  
-    110-  
-    111:                    @fclose($fp);  
-    112-  
-    113-                    if ($this->_locking) {  
-    114-                        @flock($fp, LOCK_UN);
-
-./lib/W3/Cache/File/Cleaner.php:136
-  
-    133-                        }  
-    134-                    }  
-    135-  
-    136:                    @fclose($fp);  
-    137-                }  
-    138-            }  
-    139-        }
-
-./lib/W3/Config.php:1265
-  
-    1262-            }  
-    1263-  
-    1264-            @fputs($fp, ");");  
-    1265:            @fclose($fp);  
-    1266-  
-    1267-            return true;  
-    1268-        }
-
-./lib/CF/cloudfiles.php:1785
-  
-    1782-     * header("Content-Type: " . $doc->content_type);  
-    1783-     * $output = fopen("php://output", "w");  
-    1784-     * $doc->stream($output); # stream object content to PHP's output buffer  
-    1785:     * fclose($output);  
-    1786-     * ?>  
-    1787-     *  
-    1788-     * # See read() above for a more simple example.
-
-./lib/CF/cloudfiles.php:1935
-  
-    1932-        #    return $this->write($data, $bytes, $verify);  
-    1933-        #}  
-    1934-        if ($status == 412) {  
-    1935:            if ($close_fh) { fclose($fp); }  
-    1936-            throw new SyntaxException("Missing Content-Type header");  
-    1937-        }  
-    1938-        if ($status == 422) {  
-    1939:            if ($close_fh) { fclose($fp); }  
-    1940-            throw new MisMatchedChecksumException(  
-    1941-                "Supplied and computed checksums do not match.");  
-    1942-        }  
-    1943-        if ($status != 201) {  
-    1944:            if ($close_fh) { fclose($fp); }  
-    1945-            throw new InvalidResponseException("Invalid response (".$status."): "  
-    1946-                . $this->container->cfs_http->get_error());  
-    1947-        }  
-    1948-        if (!$verify) {  
-    1949-            $this->etag = $etag;  
-    1950-        }  
-    1951:        if ($close_fh) { fclose($fp); }  
-    1952-        return True;  
-    1953-    }  
-    1954-
-
-./lib/CF/cloudfiles.php:2001
-  
-    1998-        $this->_guess_content_type($filename);  
-    1999-  
-    2000-        $this->write($fp, $size, $verify);  
-    2001:        fclose($fp);  
-    2002-        return True;  
-    2003-    }  
-    2004-
-
-./lib/CF/cloudfiles.php:2036
-  
-    2033-            throw new IOException("Could not open file for writing: ".$filename);  
-    2034-        }  
-    2035-        $result = $this->stream($fp);  
-    2036:        fclose($fp);  
-    2037-        return $result;  
-    2038-    }  
-    2039-
-
-./lib/Nusoap/class.wsdl.php:248
-  
-    245-                while ($data = fread($fp, 32768)) {  
-    246-                    $wsdl_string .= $data;  
-    247-                }  
-    248:                fclose($fp);  
-    249-            } else {  
-    250-            	$errstr = "Bad path to WSDL file $path";  
-    251-            	$this->debug($errstr);
-
-./lib/Nusoap/class.soap_transport_http.php:207
-  
-    204-				$this->debug('Re-use persistent connection');  
-    205-				return true;  
-    206-			}  
-    207:			fclose($this->fp);  
-    208-			$this->debug('Closed persistent connection at EOF');  
-    209-		}  
-    210-
-
-./lib/Nusoap/class.soap_transport_http.php:939
-  
-    936-		if(  
-    937-			(isset($this->incoming_headers['connection']) && strtolower($this->incoming_headers['connection']) == 'close') ||  
-    938-			(! $this->persistentConnection) || feof($this->fp)){  
-    939:			fclose($this->fp);  
-    940-			$this->fp = false;  
-    941-			$this->debug('closed socket');  
-    942-		}
-
-./lib/Nusoap/class.wsdlcache.php:105
-  
-    102-			$fp = @fopen($filename, "r");  
-    103-			if ($fp) {  
-    104-				$s = implode("", @file($filename));  
-    105:				fclose($fp);  
-    106-				$this->debug("Got $wsdl ($filename) from cache");  
-    107-			} else {  
-    108-				$s = null;
-
-./lib/Nusoap/class.wsdlcache.php:158
-  
-    155-				return false;  
-    156-			}  
-    157-			fputs($fp, $s);  
-    158:			fclose($fp);  
-    159-			$this->debug("Put $wsdl_instance->wsdl ($filename) in cache");  
-    160-			$this->releaseMutex($filename);  
-    161-			return true;
-
-./lib/Nusoap/class.wsdlcache.php:177
-  
-    174-	*/  
-    175-	function releaseMutex($filename) {  
-    176-		$ret = flock($this->fplock[md5($filename)], LOCK_UN);  
-    177:		fclose($this->fplock[md5($filename)]);  
-    178-		unset($this->fplock[md5($filename)]);  
-    179-		if (! $ret) {  
-    180-			$this->debug("Not able to release lock for $filename");
-
-./lib/Nusoap/nusoap.php:2360
-  
-    2357-				$this->debug('Re-use persistent connection');  
-    2358-				return true;  
-    2359-			}  
-    2360:			fclose($this->fp);  
-    2361-			$this->debug('Closed persistent connection at EOF');  
-    2362-		}  
-    2363-
-
-./lib/Nusoap/nusoap.php:3092
-  
-    3089-		if(  
-    3090-			(isset($this->incoming_headers['connection']) && strtolower($this->incoming_headers['connection']) == 'close') ||  
-    3091-			(! $this->persistentConnection) || feof($this->fp)){  
-    3092:			fclose($this->fp);  
-    3093-			$this->fp = false;  
-    3094-			$this->debug('closed socket');  
-    3095-		}
-
-./lib/Nusoap/nusoap.php:4829
-  
-    4826-                while ($data = fread($fp, 32768)) {  
-    4827-                    $wsdl_string .= $data;  
-    4828-                }  
-    4829:                fclose($fp);  
-    4830-            } else {  
-    4831-            	$errstr = "Bad path to WSDL file $path";  
-    4832-            	$this->debug($errstr);
-
-./lib/S3.php:1529
-  
-    1526-		}  
-    1527-  
-    1528-		// Clean up file resources  
-    1529:		if ($this->fp !== false && is_resource($this->fp)) fclose($this->fp);  
-    1530-  
-    1531-		return $this->response;  
-    1532-	}
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:784
-  
-    781-		}  
-    782-  
-    783-		// Close file  
-    784:		fclose($fp);  
-    785-  
-    786-		// Put block list  
-    787-		$this->putBlockList($containerName, $blobName, $blockIdentifiers, $metadata, $leaseId, $additionalHeaders);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:179
-  
-    176-        if ($fh === false) {  
-    177-            return false;  
-    178-        }  
-    179:        fclose($fh);  
-    180-  
-    181-        // Write mode?  
-    182-        if (strpbrk($mode, 'wax+')) {
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:211
-  
-    208-     */  
-    209-    public function stream_close()  
-    210-    {  
-    211:        @fclose($this->_temporaryFileHandle);  
-    212-  
-    213-        // Upload the file?  
-    214-        if ($this->_writeMode) {
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:483
-  
-    480-     */  
-    481-    public function close()  
-    482-    {  
-    483:        if (is_resource($this->socket)) @fclose($this->socket);  
-    484-        $this->socket = null;  
-    485-        $this->connected_to = array(null, null);  
-    486-    }
-
-./lib/Microsoft/Http/Response/Stream.php:223
-  
-    220-        } else {  
-    221-            $this->body = stream_get_contents($this->stream);  
-    222-        }  
-    223:        fclose($this->stream);  
-    224-        $this->stream = null;  
-    225-    }  
-    226-  
-    227-    public function __destruct()  
-    228-    {  
-    229-        if(is_resource($this->stream)) {  
-    230:            fclose($this->stream);  
-    231-            $this->stream = null;  
-    232-        }  
-    233-        if($this->_cleanup) {
-
-./lib/Minify/Minify/YUICompressor.php:128
-  
-    125-        }  
-    126-  
-    127-        fwrite($pipes[0], $input);  
-    128:        fclose($pipes[0]);  
-    129-  
-    130-        $output = stream_get_contents($pipes[1]);  
-    131:        fclose($pipes[1]);  
-    132-  
-    133-        $error = stream_get_contents($pipes[2]);  
-    134:        fclose($pipes[2]);  
-    135-  
-    136-        $return = proc_close($process);  
-    137-
-
-./lib/Minify/Minify/Cache/File.php:104
-  
-    101-                @flock($fp, LOCK_SH);  
-    102-                @fpassthru($fp);  
-    103-                @flock($fp, LOCK_UN);  
-    104:                @fclose($fp);  
-    105-  
-    106-                return true;  
-    107-            }
-
-./lib/Minify/Minify/Cache/File.php:135
-  
-    132-                    $ret = @stream_get_contents($fp);  
-    133-  
-    134-                    @flock($fp, LOCK_UN);  
-    135:                    @fclose($fp);  
-    136-  
-    137-                    return $ret;  
-    138-                }
-
-./lib/Minify/Minify/ClosureCompiler.php:85
-  
-    82-        }  
-    83-  
-    84-        fwrite($pipes[0], $input);  
-    85:        fclose($pipes[0]);  
-    86-  
-    87-        $output = stream_get_contents($pipes[1]);  
-    88:        fclose($pipes[1]);  
-    89-  
-    90-        $error = stream_get_contents($pipes[2]);  
-    91:        fclose($pipes[2]);  
-    92-  
-    93-        $return = proc_close($process);  
-    94-
-
-./inc/file.php:96
-  
-    93-    $fp = @fopen($file, 'a');  
-    94-  
-    95-    if ($fp) {  
-    96:        fclose($fp);  
-    97-  
-    98-        if (!$exists) {  
-    99-            @unlink($file);
-
-./inc/functions/file.php:96
-  
-    93-    $fp = @fopen($file, 'a');  
-    94-  
-    95-    if ($fp) {  
-    96:        fclose($fp);  
-    97-  
-    98-        if (!$exists) {  
-    99-            @unlink($file);
-
-./inc/functions/compat.php:13
-  
-    10-  
-    11-        if ($fp) {  
-    12-            fputs($fp, $data);  
-    13:            fclose($fp);  
-    14-  
-    15-            return true;  
-    16-        }
-
-#### include( ####
-./lib/W3/Minify.php:71
-  
-    69-        if (preg_match('~^([a-f0-9]+)\\.[a-f0-9]+\\.(css|js)$~', $file, $matches)) {  
-    70-            list(, $hash, $type) = $matches;  
-    71:        } elseif (preg_match('~^([a-f0-9]+)\\/(.+)\\.(include(\\-(footer|body))?(-nb)?)\\.[a-f0-9]+\\.(css|js)$~', $file, $matches)) {  
-    72-            list(, $theme, $template, $location, , , , $type) = $matches;  
-    73-        } else {  
-    74-            $this->error(sprintf('Bad file param format: "%s"', $file), false);
-
-./lib/W3/Cdn/Base.php:492
-  
-    489-     * @return boolean  
-    490-     */  
-    491-    function _is_js($path) {  
-    492:        return preg_match('~[a-z0-9\-_]+\.include(-nb)?\.[0-9]+\.js$~', $path);  
-    493-    }  
-    494-  
-    495-    /**
-
-./lib/W3/Plugin/CdnEnabled.php:540
-  
-    537-                    if ($this->_config->get_boolean('minify.auto')) {  
-    538-                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+\.[a-f0-9]+\.(css|js)))~U';  
-    539-                    } else {  
-    540:                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+/.+\.include(-(footer|body))?(-nb)?\.[a-f0-9]+\.(css|js)))~U';  
-    541-                    }  
-    542-                }  
-    543-
-
-./lib/W3/Plugin/Cdn.php:285
-  
-    282-                    if ($this->_config->get_boolean('minify.auto')) {  
-    283-                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+\.[a-f0-9]+\.(css|js)))~U';  
-    284-                    } else {  
-    285:                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+/.+\.include(-(footer|body))?(-nb)?\.[a-f0-9]+\.(css|js)))~U';  
-    286-                    }  
-    287-                }  
-    288-
-
-#### ` ####
-./lib/JSON.php:36
-  
-    34- * distribution.  
-    35- *  
-    36: * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED  
-    37- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF  
-    38- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN  
-    39- * NO EVENT SHALL CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-
-./lib/W3/Db/mssql.php:882
-  
-    879-         * Both %d and %s should be left unquoted in the query string.  
-    880-         *  
-    881-         * <code>  
-    882:         * wpdb::prepare( "SELECT * FROM `table` WHERE `column` = %s AND `field` = %d", 'foo', 1337 )  
-    883:         * wpdb::prepare( "SELECT DATE_FORMAT(`field`, '%%c') FROM `table` WHERE `column` = %s", 'foo' );  
-    884-         * </code>  
-    885-         *  
-    886-         * @link http://php.net/sprintf Description of syntax.
-
-./lib/W3/Db/mssql.php:1363
-  
-    1360-                                $form = '%s';  
-    1361-                        $formatted_fields[] = $form;  
-    1362-                }  
-    1363:                $sql = "{$type} INTO `$table` (`" . implode( '`,`', $fields ) . "`) VALUES ('" . implode( "','", $formatted_fields ) . "')";  
-    1364-                return $this->query( $this->prepare( $sql, $data ) );  
-    1365-        }  
-    1366-
-
-./lib/W3/Db/mssql.php:1401
-  
-    1398-                                $form = $this->field_types[$field];  
-    1399-                        else  
-    1400-                                $form = '%s';  
-    1401:                        $bits[] = "`$field` = {$form}";  
-    1402-                }  
-    1403-  
-    1404-                $where_formats = $where_format = (array) $where_format;
-
-./lib/W3/Db/mssql.php:1412
-  
-    1409-                                $form = $this->field_types[$field];  
-    1410-                        else  
-    1411-                                $form = '%s';  
-    1412:                        $wheres[] = "`$field` = {$form}";  
-    1413-                }  
-    1414-  
-    1415:                $sql = "UPDATE `$table` SET " . implode( ', ', $bits ) . ' WHERE ' . implode( ' AND ', $wheres );  
-    1416-                return $this->query( $this->prepare( $sql, array_merge( array_values( $data ), array_values( $where ) ) ) );  
-    1417-        }  
-    1418-
-
-./lib/W3/Db/mssql.php:2346
-  
-    2343-        $query = str_replace('LENGTH (', 'LEN (', $query);  
-    2344-  
-    2345-        // TICKS  
-    2346:        $query = str_replace('`', '', $query);  
-    2347-  
-    2348-        // avoiding some nested as Computed issues  
-    2349-        if (stristr($query, 'SELECT COUNT(DISTINCT(' . $this->prefix . 'users.ID))') !== FALSE) {
-
-./lib/W3/Plugin/CdnEnabled.php:182
-  
-    179-        global $wpdb;  
-    180-  
-    181-        if ($drop) {  
-    182:            $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    183-  
-    184-            $wpdb->query($sql);  
-    185-        }  
-    186-  
-    187:        $sql = sprintf("CREATE TABLE IF NOT EXISTS `%s%s` (  
-    188:            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,  
-    189:            `local_path` varchar(150) NOT NULL DEFAULT '',  
-    190:            `remote_path` varchar(150) NOT NULL DEFAULT '',  
-    191:            `command` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1 - Upload, 2 - Delete, 3 - Purge',  
-    192:            `last_error` varchar(150) NOT NULL DEFAULT '',  
-    193:            `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  
-    194:            PRIMARY KEY (`id`),  
-    195:            UNIQUE KEY `path` (`local_path`, `remote_path`),  
-    196:            KEY `date` (`date`)  
-    197-        ) /*!40100 CHARACTER SET latin1 */", $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    198-  
-    199-        $wpdb->query($sql);
-
-./lib/W3/Plugin/CdnEnabled.php:212
-  
-    209-    function table_delete() {  
-    210-        global $wpdb;  
-    211-  
-    212:        $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    213-  
-    214-        return $wpdb->query($sql);  
-    215-    }
-
-./lib/W3/Plugin/CdnAdmin.php:116
-  
-    113-        global $wpdb;  
-    114-  
-    115-        if ($drop) {  
-    116:            $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    117-  
-    118-            $wpdb->query($sql);  
-    119-        }  
-    120-  
-    121:        $sql = sprintf("CREATE TABLE IF NOT EXISTS `%s%s` (  
-    122:            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,  
-    123:            `local_path` varchar(150) NOT NULL DEFAULT '',  
-    124:            `remote_path` varchar(150) NOT NULL DEFAULT '',  
-    125:            `command` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1 - Upload, 2 - Delete, 3 - Purge',  
-    126:            `last_error` varchar(150) NOT NULL DEFAULT '',  
-    127:            `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  
-    128:            PRIMARY KEY (`id`),  
-    129:            UNIQUE KEY `path` (`local_path`, `remote_path`),  
-    130:            KEY `date` (`date`)  
-    131-        ) /*!40100 CHARACTER SET latin1 */", $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    132-  
-    133-        $wpdb->query($sql);
-
-./lib/W3/Plugin/CdnAdmin.php:146
-  
-    143-    function table_delete() {  
-    144-        global $wpdb;  
-    145-  
-    146:        $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
-    147-  
-    148-        return $wpdb->query($sql);  
-    149-    }
-
-./lib/CSSTidy/data.inc.php:49
-  
-    46- * @global string $GLOBALS['csstidy']['tokens']  
-    47- * @version 1.0  
-    48- */  
-    49:$GLOBALS['csstidy']['tokens'] = '/@}{;:=\'"(,\\!$%&)*+.<>?[]^`|~';  
-    50-  
-    51-/**  
-    52- * All CSS units (CSS 3 units included)
-
-./lib/Microsoft/Uri/Http.php:48
-  
-    45-    const CHAR_MARK     = '-_.!~*\'()\[\]';  
-    46-    const CHAR_RESERVED = ';\/?:@&=+$,';  
-    47-    const CHAR_SEGMENT  = ':@&=+$,;';  
-    48:    const CHAR_UNWISE   = '{}|\\\\^`';  
-    49-  
-    50-    /**  
-    51-     * HTTP username
-
-./lib/Minify/FirePHP.php:1049
-  
-    1046-   * in the documentation and/or other materials provided with the  
-    1047-   * distribution.  
-    1048-   *  
-    1049:   * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED  
-    1050-   * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF  
-    1051-   * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN  
-    1052-   * NO EVENT SHALL CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-
-#### require( ####
-./lib/W3/Db/mssql.php:1916
-  
-    1914-        if (empty($this->fields_map)) {  
-    1915-            if (file_exists($this->filepath)) {  
-    1916:                $this->fields_map = require($this->filepath);  
-    1917-            } else {  
-    1918-                $this->fields_map = array();  
-    1919-            }
-
-./lib/CF/cloudfiles.php:75
-  
-    72-/**  
-    73- */  
-    74-require_once("cloudfiles_exceptions.php");  
-    75:require("cloudfiles_http.php");  
-    76-define("DEFAULT_CF_API_VERSION", 1);  
-    77-define("MAX_CONTAINER_NAME_LEN", 256);  
-    78-define("MAX_OBJECT_NAME_LEN", 1024);
-
-./lib/CSSTidy/class.csstidy.php:33
-  
-    30- *  
-    31- * @version 1.3  
-    32- */  
-    33:require('data.inc.php');  
-    34-  
-    35-/**  
-    36- * Contains a class for printing CSS code  
-    37- *  
-    38- * @version 1.0  
-    39- */  
-    40:require('class.csstidy_print.php');  
-    41-  
-    42-/**  
-    43- * Contains a class for optimising CSS code  
-    44- *  
-    45- * @version 1.0  
-    46- */  
-    47:require('class.csstidy_optimise.php');  
-    48-  
-    49-/**  
-    50- * CSS Parser class
-
-#### file( ####
-./lib/W3/Minify.php:276
-  
-    274-  
-    275-                    if (w3_is_url($file)) {  
-    276:                        $precached_file = $this->_precache_file($file, $type);  
-    277-  
-    278-                        if ($precached_file) {  
-    279-                            $result[$location][$file] = $precached_file;
-
-./lib/W3/Minify.php:561
-  
-    558-     * @param string $type  
-    559-     * @return string  
-    560-     */  
-    561:    function _precache_file($url, $type) {  
-    562-        $lifetime = $this->_config->get_integer('minify.lifetime');  
-    563-        $cache_path = sprintf('%s/minify_%s.%s', W3TC_CACHE_FILE_MINIFY_DIR, md5($url), $type);  
-    564-
-
-./lib/W3/PageSpeed.php:234
-  
-    231-     * @return mixed|null  
-    232-     */  
-    233-    function _load($url) {  
-    234:        $file = $this->_get_cache_file($url);  
-    235-  
-    236-        if (is_readable($file)) {  
-    237-            $data = @file_get_contents($file);
-
-./lib/W3/PageSpeed.php:255
-  
-    252-     * @return bool|int  
-    253-     */  
-    254-    function _store($url, $results) {  
-    255:        $file = $this->_get_cache_file($url);  
-    256-        $data = serialize($results);  
-    257-  
-    258-        return @file_put_contents($file, $data);
-
-./lib/W3/PageSpeed.php:267
-  
-    264-     * @param string $url  
-    265-     * @return string  
-    266-     */  
-    267:    function _get_cache_file($url) {  
-    268-        return W3TC_TMP_DIR . '/pagespeed_' . md5($url);  
-    269-    }  
-    270-
-
-./lib/W3/Cdn/Base.php:356
-  
-    353-  
-    354-        if (isset($this->cache_config[$mime_type])) {  
-    355-            if ($this->cache_config[$mime_type]['etag']) {  
-    356:                $headers['Etag'] = @md5_file($file);  
-    357-            }  
-    358-  
-    359-            if ($this->cache_config[$mime_type]['w3tc']) {
-
-./lib/W3/Cdn/Azure.php:131
-  
-    128-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
-    129-        }  
-    130-  
-    131:        $md5 = @md5_file($local_path);  
-    132-        $content_md5 = $this->_get_content_md5($md5);  
-    133-  
-    134-        if (!$force_rewrite) {
-
-./lib/W3/Cdn/Rscf.php:182
-  
-    179-                }  
-    180-  
-    181-                if ($status >= 200 && $status < 300) {  
-    182:                    $hash = @md5_file($local_path);  
-    183-  
-    184-                    if ($hash === $etag) {  
-    185-                        $results[] = $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_OK, 'Object up-to-date.');
-
-./lib/W3/Cdn/S3.php:131
-  
-    128-            $this->_restore_error_handler();  
-    129-  
-    130-            if ($info) {  
-    131:                $hash = @md5_file($local_path);  
-    132-                $s3_hash = (isset($info['hash']) ? $info['hash'] : '');  
-    133-  
-    134-                if ($hash === $s3_hash) {
-
-./lib/W3/Plugin/CdnEnabled.php:269
-  
-    266-     * @param string $attached_file  
-    267-     * @return string  
-    268-     */  
-    269:    function update_attached_file($attached_file) {  
-    270-        $files = $this->get_files_for_upload($attached_file);  
-    271-        $files = apply_filters('w3tc_cdn_update_attachment', $files);  
-    272-
-
-./lib/W3/Plugin/CdnEnabled.php:402
-  
-    399-        $upload_info = w3_upload_info();  
-    400-  
-    401-        if ($upload_info) {  
-    402:            $file = $this->normalize_attachment_file($file);  
-    403-  
-    404-            $local_file = $upload_info['basedir'] . '/' . $file;  
-    405-            $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
-
-./lib/W3/Plugin/CdnEnabled.php:553
-  
-    550-  
-    551-                        foreach ($masks as $mask) {  
-    552-                            if ($mask != '') {  
-    553:                                $mask = w3_normalize_file($mask);  
-    554-                                $mask_regexps[] = $this->get_regexp_by_mask($mask);  
-    555-                            }  
-    556-                        }
-
-./lib/W3/Plugin/CdnEnabled.php:866
-  
-    863-                    $post_files = array();  
-    864-  
-    865-                    if ($post->file) {  
-    866:                        $file = $this->normalize_attachment_file($post->file);  
-    867-  
-    868-                        $local_file = $upload_info['basedir'] . '/' . $file;  
-    869-                        $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
-
-./lib/W3/Plugin/CdnEnabled.php:1389
-  
-    1386-            } else {  
-    1387-                foreach ($urls as $url) {  
-    1388-                    $file = w3_normalize_file_minify($url);  
-    1389:                    $file = w3_translate_file($file);  
-    1390-  
-    1391-                    if (!w3_is_url($file)) {  
-    1392-                        $file = $document_root . '/' . $file;
-
-./lib/W3/Plugin/CdnEnabled.php:1425
-  
-    1422-  
-    1423-        foreach ($custom_files as $custom_file) {  
-    1424-            if ($custom_file != '') {  
-    1425:                $custom_file = w3_normalize_file($custom_file);  
-    1426-                $dir = trim(dirname($custom_file), '/\\');  
-    1427-  
-    1428-                if ($dir == '.') {
-
-./lib/W3/Plugin/CdnEnabled.php:1470
-  
-    1467-  
-    1468-        foreach ($reject_files as $reject_file) {  
-    1469-            if ($reject_file != '') {  
-    1470:                $reject_file = w3_normalize_file($reject_file);  
-    1471-                $reject_file_regexp = '~^(' . $this->get_regexp_by_mask($reject_file) . ')~i';  
-    1472-  
-    1473-                if (preg_match($reject_file_regexp, $path)) {
-
-./lib/W3/Plugin/CdnEnabled.php:1596
-  
-    1593-     * @param string $file  
-    1594-     * @return string  
-    1595-     */  
-    1596:    function normalize_attachment_file($file) {  
-    1597-        $upload_info = w3_upload_info();  
-    1598-        if ($upload_info) {  
-    1599-            $file = ltrim(str_replace($upload_info['basedir'], '', $file), '/\\');
-
-./lib/W3/Plugin/TotalCacheActivation.php:50
-  
-    47-        }  
-    48-  
-    49-        if (count($nonexistent_files)) {  
-    50:            $error = sprintf('Unfortunately core file(s): (<strong>%s</strong>) are missing, so activation will fail. Please re-start the installation process from the beginning.', implode(', ', $nonexistent_files));  
-    51-  
-    52-            w3_activate_error($error);  
-    53-        }
-
-./lib/W3/Plugin/CdnAdmin.php:335
-  
-    332-                    $post_files = array();  
-    333-  
-    334-                    if ($post->file) {  
-    335:                        $file = $this->_get_common()->normalize_attachment_file($post->file);  
-    336-  
-    337-                        $local_file = $upload_info['basedir'] . '/' . $file;  
-    338-                        $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
-
-./lib/W3/Plugin/Cdn.php:149
-  
-    146-     * @param string $attached_file  
-    147-     * @return string  
-    148-     */  
-    149:    function update_attached_file($attached_file) {  
-    150-        $files = $this->_get_common()->get_files_for_upload($attached_file);  
-    151-        $files = apply_filters('w3tc_cdn_update_attachment', $files);  
-    152-
-
-./lib/W3/Plugin/Cdn.php:298
-  
-    295-  
-    296-                        foreach ($masks as $mask) {  
-    297-                            if ($mask != '') {  
-    298:                                $mask = w3_normalize_file($mask);  
-    299-                                $mask_regexps[] = $this->get_regexp_by_mask($mask);  
-    300-                            }  
-    301-                        }
-
-./lib/W3/Plugin/Cdn.php:419
-  
-    416-            } else {  
-    417-                foreach ($urls as $url) {  
-    418-                    $file = w3_normalize_file_minify($url);  
-    419:                    $file = w3_translate_file($file);  
-    420-  
-    421-                    if (!w3_is_url($file)) {  
-    422-                        $file = $document_root . '/' . $file;
-
-./lib/W3/Plugin/Cdn.php:455
-  
-    452-  
-    453-        foreach ($custom_files as $custom_file) {  
-    454-            if ($custom_file != '') {  
-    455:                $custom_file = w3_normalize_file($custom_file);  
-    456-                $dir = trim(dirname($custom_file), '/\\');  
-    457-  
-    458-                if ($dir == '.') {
-
-./lib/W3/Plugin/Cdn.php:500
-  
-    497-  
-    498-        foreach ($reject_files as $reject_file) {  
-    499-            if ($reject_file != '') {  
-    500:                $reject_file = w3_normalize_file($reject_file);  
-    501-                $reject_file_regexp = '~^(' . $this->get_regexp_by_mask($reject_file) . ')~i';  
-    502-  
-    503-                if (preg_match($reject_file_regexp, $path)) {
-
-./lib/W3/Plugin/CdnCommon.php:56
-  
-    53-        $upload_info = w3_upload_info();  
-    54-  
-    55-        if ($upload_info) {  
-    56:            $file = $this->normalize_attachment_file($file);  
-    57-  
-    58-            $local_file = $upload_info['basedir'] . '/' . $file;  
-    59-            $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
-
-./lib/W3/Plugin/CdnCommon.php:247
-  
-    244-     * @param string $file  
-    245-     * @return string  
-    246-     */  
-    247:    function normalize_attachment_file($file) {  
-    248-        require_once W3TC_INC_DIR . '/functions/http.php';  
-    249-  
-    250-        $upload_info = w3_upload_info();
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1926
-  
-    1923-     *  
-    1924-     * @return void  
-    1925-     */  
-    1926:    function action_flush_file() {  
-    1927:        $this->flush_file();  
-    1928-  
-    1929-        $this->redirect(array(  
-    1930-            'w3tc_note' => 'flush_file'
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2060
-  
-    2057-     */  
-    2058-    function action_config_export() {  
-    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
-    2060:        @readfile(W3TC_CONFIG_PATH);  
-    2061-        die();  
-    2062-    }  
-    2063-
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2458
-  
-    2455-            for ($i = 0, $l = count($files); $i < $l; $i++) {  
-    2456-                if (isset($files['tmp_name'][$i]) && isset($files['name'][$i]) && isset($files['error'][$i]) && $files['error'][$i] == UPLOAD_ERR_OK) {  
-    2457-                    $path = W3TC_TMP_DIR . '/' . $files['name'][$i];  
-    2458:                    if (@move_uploaded_file($files['tmp_name'][$i], $path)) {  
-    2459-                        $attachments[] = $path;  
-    2460-                    }  
-    2461-                }
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2788
-  
-    2785-        $results = array();  
-    2786-  
-    2787-        foreach ($files as $remote_file) {  
-    2788:            $local_file = $document_root . '/' . w3_translate_file($remote_file);  
-    2789-            $upload[$local_file] = $remote_file;  
-    2790-        }  
-    2791-
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2830
-  
-    2827-        $purge = array();  
-    2828-  
-    2829-        foreach ($files as $remote_file) {  
-    2830:            $local_file = $document_root . '/' . w3_translate_file($remote_file);  
-    2831-            $purge[$local_file] = $remote_file;  
-    2832-        }  
-    2833-
-
-./lib/W3/Plugin/TotalCacheAdmin.php:4474
-  
-    4471-     *  
-    4472-     * @return void  
-    4473-     */  
-    4474:    function flush_file() {  
-    4475-        $this->flush('file');  
-    4476-        $this->flush('file_generic');  
-    4477-    }
-
-./lib/W3/Plugin/TotalCacheAdmin.php:4487
-  
-    4484-    function flush_all() {  
-    4485-        $this->flush_memcached();  
-    4486-        $this->flush_opcode();  
-    4487:        $this->flush_file();  
-    4488-    }  
-    4489-  
-    4490-    /**
-
-./lib/CF/cloudfiles.php:2092
-  
-    2089-            }  
-    2090-            $md5 = hash_final($ctx, false);  
-    2091-            rewind($data);  
-    2092:        } elseif ((string)is_file($data)) {  
-    2093:            $md5 = md5_file($data);  
-    2094-        } else {  
-    2095-            $md5 = md5($data);  
-    2096-        }
-
-./lib/Nusoap/class.xmlschema.php:91
-  
-    88-	function parseFile($xml,$type){  
-    89-		// parse xml file  
-    90-		if($xml != ""){  
-    91:			$xmlStr = @join("",@file($xml));  
-    92-			if($xmlStr == ""){  
-    93-				$msg = 'Error reading XML from '.$xml;  
-    94-				$this->setError($msg);
-
-./lib/Nusoap/class.wsdlcache.php:104
-  
-    101-			}  
-    102-			$fp = @fopen($filename, "r");  
-    103-			if ($fp) {  
-    104:				$s = implode("", @file($filename));  
-    105-				fclose($fp);  
-    106-				$this->debug("Got $wsdl ($filename) from cache");  
-    107-			} else {
-
-./lib/Nusoap/nusoap.php:1170
-  
-    1167-	function parseFile($xml,$type){  
-    1168-		// parse xml file  
-    1169-		if($xml != ""){  
-    1170:			$xmlStr = @join("",@file($xml));  
-    1171-			if($xmlStr == ""){  
-    1172-				$msg = 'Error reading XML from '.$xml;  
-    1173-				$this->setError($msg);
-
-./lib/S3.php:283
-  
-    280-	* @return array | false  
-    281-	*/  
-    282-	public static function inputFile($file, $md5sum = true) {  
-    283:		if (!file_exists($file) || !is_file($file) || !is_readable($file)) {  
-    284-			trigger_error('S3::inputFile(): Unable to open input file: '.$file, E_USER_WARNING);  
-    285-			return false;  
-    286-		}  
-    287-		return array('file' => $file, 'size' => filesize($file),  
-    288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :  
-    289:		base64_encode(md5_file($file, true))) : '');  
-    290-	}  
-    291-  
-    292-
-
-./lib/Microsoft/Http/Client.php:1314
-  
-    1311-            }  
-    1312-  
-    1313-            if (self::$_fileInfoDb) {  
-    1314:                $type = finfo_file(self::$_fileInfoDb, $file);  
-    1315-            }  
-    1316-  
-    1317-        } elseif (function_exists('mime_content_type')) {
-
-./lib/Minify/Minify.php:427
-  
-    424-            $source->minifier = array('Minify_Lines', 'minify');  
-    425-            $id = $source->getId();  
-    426-            $source->minifyOptions = array_merge((array) $source->minifyOptions, array(  
-    427:            	'id' => (is_file($id) ? basename($id) : $id))  
-    428-            );  
-    429-        }  
-    430-    }
-
-./lib/Minify/Minify/YUICompressor.php:70
-  
-    67-    }  
-    68-  
-    69-    protected static function _getCmd($type, $options) {  
-    70:        if (!is_file(self::$_pathJava)) {  
-    71-            throw new Exception(sprintf('JAVA executable (%s) is not a valid file.', self::$_pathJava));  
-    72-        }  
-    73-  
-    74:        if (!is_file(self::$_pathJar)) {  
-    75-            throw new Exception(sprintf('JAR file (%s) is not a valid file.', self::$_pathJar));  
-    76-        }  
-    77-
-
-./lib/Minify/Minify/Build.php:99
-  
-    96-                if (0 === strpos($source, '//')) {  
-    97-                    $source = $_SERVER['DOCUMENT_ROOT'] . substr($source, 1);  
-    98-                }  
-    99:                if (is_file($source)) {  
-    100-                    $max = max($max, filemtime($source));  
-    101-                }  
-    102-            }
-
-./lib/Minify/Minify/Cache/File.php:37
-  
-    34-        $path = $this->_path . '/' . $id;  
-    35-        $flag = $this->_locking ? LOCK_EX : null;  
-    36-  
-    37:        if (is_file($path)) {  
-    38-            @unlink($path);  
-    39-        }  
-    40-
-
-./lib/Minify/Minify/Cache/File.php:79
-  
-    76-     *  
-    77-     * @param string $id cache id (e.g. a filename)  
-    78-     *  
-    79:     * @param int $srcMtime mtime of the original source file(s)  
-    80-     *  
-    81-     * @return bool exists  
-    82-     */  
-    83-    public function isValid($id, $srcMtime) {  
-    84-        $path = $this->_path . '/' . $id;  
-    85-  
-    86:        return (is_file($path) && (filemtime($path) >= $srcMtime));  
-    87-    }  
-    88-  
-    89-    /**
-
-./lib/Minify/Minify/Cache/File.php:109
-  
-    106-                return true;  
-    107-            }  
-    108-        } else {  
-    109:            return @readfile($path);  
-    110-        }  
-    111-  
-    112-        return false;
-
-./lib/Minify/Minify/Cache/Eaccelerator.php:64
-  
-    61-     *  
-    62-     * @param string $id cache id  
-    63-     *  
-    64:     * @param int $srcMtime mtime of the original source file(s)  
-    65-     *  
-    66-     * @return bool exists  
-    67-     */
-
-./lib/Minify/Minify/Cache/Wincache.php:64
-  
-    61-     *  
-    62-     * @param string $id cache id  
-    63-     *  
-    64:     * @param int $srcMtime mtime of the original source file(s)  
-    65-     *  
-    66-     * @return bool exists  
-    67-     */
-
-./lib/Minify/Minify/Cache/Memcache.php:72
-  
-    69-     *  
-    70-     * @param string $id cache id  
-    71-     *  
-    72:     * @param int $srcMtime mtime of the original source file(s)  
-    73-     *  
-    74-     * @return bool exists  
-    75-     */
-
-./lib/Minify/Minify/Cache/XCache.php:64
-  
-    61-     *  
-    62-     * @param string $id cache id  
-    63-     *  
-    64:     * @param int $srcMtime mtime of the original source file(s)  
-    65-     *  
-    66-     * @return bool exists  
-    67-     */
-
-./lib/Minify/Minify/Cache/APC.php:64
-  
-    61-     *  
-    62-     * @param string $id cache id  
-    63-     *  
-    64:     * @param int $srcMtime mtime of the original source file(s)  
-    65-     *  
-    66-     * @return bool exists  
-    67-     */
-
-./lib/Minify/Minify/Controller/Base.php:132
-  
-    129-            }  
-    130-        }  
-    131-        $base = basename($file);  
-    132:        if (! $pathOk || ! is_file($file) || $base[0] === '.') {  
-    133-            return false;  
-    134-        }  
-    135-        list($revExt) = explode('.', strrev($base));
-
-./lib/Minify/Minify/Controller/Files.php:66
-  
-    63-                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    64-            }  
-    65-            $realPath = realpath($file);  
-    66:            if (is_file($realPath)) {  
-    67-                $sources[] = new Minify_Source(array(  
-    68-                    'filepath' => $realPath  
-    69-                ));
-
-./lib/Minify/Minify/Controller/Groups.php:82
-  
-    79-                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    80-            }  
-    81-            $realPath = realpath($file);  
-    82:            if (is_file($realPath)) {  
-    83-                $sources[] = new Minify_Source(array(  
-    84-                    'filepath' => $realPath  
-    85-                ));
-
-./lib/Minify/Minify/Controller/MinApp.php:63
-  
-    60-                    $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    61-                }  
-    62-                $realPath = realpath($file);  
-    63:                if (is_file($realPath)) {  
-    64-                    $sources[] = new Minify_Source(array(  
-    65-                        'filepath' => $realPath  
-    66-                    ));
-
-./lib/Minify/Minify/ClosureCompiler.php:44
-  
-    41-    }  
-    42-  
-    43-    protected static function _getCmd($options) {  
-    44:        if (!is_file(self::$_pathJava)) {  
-    45-            throw new Exception(sprintf('JAVA executable (%s) is not a valid file.', self::$_pathJava));  
-    46-        }  
-    47-  
-    48:        if (!is_file(self::$_pathJar)) {  
-    49-            throw new Exception(sprintf('JAR file (%s) is not a valid file.', self::$_pathJar));  
-    50-        }  
-    51-
-
-./inc/functions/mime.php:38
-  
-    35-            }  
-    36-  
-    37-            if ($finfo) {  
-    38:                $mime_type = @finfo_file($finfo, $file);  
-    39-  
-    40-                if ($mime_type) {  
-    41-                    $extra_mime_type_info = strpos($mime_type, "; ");
-
-./inc/define.php:888
-  
-    885- * @param string $file  
-    886- * @return string  
-    887- */  
-    888:function w3_normalize_file($file) {  
-    889-    if (w3_is_url($file)) {  
-    890-        if (strstr($file, '?') === false) {  
-    891-            $home_url_regexp = '~' . w3_get_home_url_regexp() . '~i';
-
-./inc/define.php:941
-  
-    938-function w3_normalize_file_minify2($file) {  
-    939-    $file = w3_remove_query($file);  
-    940-    $file = w3_normalize_file_minify($file);  
-    941:    $file = w3_translate_file($file);  
-    942-  
-    943-    return $file;  
-    944-}
-
-./inc/define.php:952
-  
-    949- * @param string $file  
-    950- * @return string  
-    951- */  
-    952:function w3_translate_file($file) {  
-    953-    if (!w3_is_url($file)) {  
-    954-        $file = '/' . ltrim($file, '/');  
-    955-        $regexp = '~^' . w3_preg_quote(w3_get_site_path()) . '~';
-
-#### mail( ####
-./lib/W3/Minify.php:701
-  
-    699-        @set_time_limit($this->_config->get_integer('timelimit.email_send'));  
-    700-  
-    701:        $result = @wp_mail($to_email, 'W3 Total Cache Error Notification', $body, implode("\n", $headers));  
-    702-  
-    703-        return $result;  
-    704-    }
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2521
-  
-    2518-  
-    2519-        @set_time_limit($this->_config->get_integer('timelimit.email_send'));  
-    2520-  
-    2521:        $result = @wp_mail(W3TC_EMAIL, $subject, $body, implode("\n", $headers), $attachments);  
-    2522-  
-    2523-        /**  
-    2524-         * Remove temporary files
-
-#### curl_exec( ####
-./lib/CF/cloudfiles_http.php:219
-  
-    217-        curl_setopt($curl_ch, CURLOPT_CONNECTTIMEOUT, 10);  
-    218-        curl_setopt($curl_ch, CURLOPT_URL, $url);  
-    219:        curl_exec($curl_ch);  
-    220-        curl_close($curl_ch);  
-    221-  
-    222-        return array($this->response_status, $this->response_reason,
-
-./lib/CF/cloudfiles_http.php:1312
-  
-    1309-        curl_setopt($this->connections[$conn_type],  
-    1310-            CURLOPT_URL, $url_path);  
-    1311-  
-    1312:        if (!curl_exec($this->connections[$conn_type]) && curl_errno($this->connections[$conn_type]) !== 0) {  
-    1313-            $this->error_str = "(curl error: "  
-    1314-                . curl_errno($this->connections[$conn_type]) . ") ";  
-    1315-            $this->error_str .= curl_error($this->connections[$conn_type]);
-
-./lib/Nusoap/class.soap_transport_http.php:964
-  
-    961-	  } else if ($this->io_method() == 'curl') {  
-    962-		// send and receive  
-    963-		$this->debug('send and receive with cURL');  
-    964:		$this->incoming_payload = curl_exec($this->ch);  
-    965-		$data = $this->incoming_payload;  
-    966-  
-    967-        $cErr = curl_error($this->ch);
-
-./lib/Nusoap/nusoap.php:3117
-  
-    3114-	  } else if ($this->io_method() == 'curl') {  
-    3115-		// send and receive  
-    3116-		$this->debug('send and receive with cURL');  
-    3117:		$this->incoming_payload = curl_exec($this->ch);  
-    3118-		$data = $this->incoming_payload;  
-    3119-  
-    3120-        $cErr = curl_error($this->ch);
-
-./lib/S3.php:1499
-  
-    1496-		}  
-    1497-  
-    1498-		// Execute, grab errors  
-    1499:		if (curl_exec($curl))  
-    1500-			$this->response->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
-    1501-		else  
-    1502-			$this->response->error = array(
-
-./lib/Microsoft/Http/Client/Adapter/Curl.php:405
-  
-    402-        }  
-    403-  
-    404-        // send the request  
-    405:        $response = curl_exec($this->_curl);  
-    406-  
-    407-        // if we used streaming, headers are already there  
-    408-        if(!is_resource($this->out_stream)) {
-
-#### require_once( ####
-./lib/W3/Plugin/PgCacheAdmin.php:51
-  
-    49-                $reactivate_url = wp_nonce_url('plugins.php?action=activate&plugin=' . W3TC_FILE, 'activate-plugin_' . W3TC_FILE);  
-    50-                $reactivate_button = sprintf('<input type="button" value="re-activate plugin" onclick="top.location.href = \'%s\'" />', addslashes($reactivate_url));  
-    51:                $error = sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'WP_CACHE\', true);</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong><br />then %s.', ABSPATH, $reactivate_button);  
-    52-  
-    53-                w3_activate_error($error);  
-    54-            }
-
-./lib/W3/Plugin/TotalCacheAdmin.php:677
-  
-    674-            'cdn_purge_attachment' => 'Unable to purge attachment.',  
-    675-            'pgcache_purge_post' => 'Unable to purge post.',  
-    676-            'pgcache_purge_page' => 'Unable to purge page.',  
-    677:            'enable_cookie_domain' => sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'COOKIE_DOMAIN\', \'%s\');</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong>.', ABSPATH, addslashes($cookie_domain)),  
-    678:            'disable_cookie_domain' => sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'COOKIE_DOMAIN\', false);</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong>.', ABSPATH),  
-    679-            'cloudflare_api_request' => 'Unable to make CloudFlare API request.'  
-    680-        );  
-    681-
-
-./lib/CF/cloudfiles_http.php:30
-  
-    27-  
-    28-/**  
-    29- */  
-    30:require_once("cloudfiles_exceptions.php");  
-    31-  
-    32-define("PHP_CF_VERSION", "1.7.6");  
-    33-define("USER_AGENT", sprintf("PHP-CloudFiles/%s", PHP_CF_VERSION));
-
-./lib/CF/cloudfiles.php:74
-  
-    71-  
-    72-/**  
-    73- */  
-    74:require_once("cloudfiles_exceptions.php");  
-    75-require("cloudfiles_http.php");  
-    76-define("DEFAULT_CF_API_VERSION", 1);  
-    77-define("MAX_CONTAINER_NAME_LEN", 256);
-
-./lib/Nusoap/class.nusoap_base.php:57
-  
-    54-/* load classes  
-    55-  
-    56-// necessary classes  
-    57:require_once('class.soapclient.php');  
-    58:require_once('class.soap_val.php');  
-    59:require_once('class.soap_parser.php');  
-    60:require_once('class.soap_fault.php');  
-    61-  
-    62-// transport classes  
-    63:require_once('class.soap_transport_http.php');  
-    64-  
-    65-// optional add-on classes  
-    66:require_once('class.xmlschema.php');  
-    67:require_once('class.wsdl.php');  
-    68-  
-    69-// server class  
-    70:require_once('class.soap_server.php');*/  
-    71-  
-    72-// class variable emulation  
-    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html
-
-./lib/Nusoap/nusoap.php:57
-  
-    54-/* load classes  
-    55-  
-    56-// necessary classes  
-    57:require_once('class.soapclient.php');  
-    58:require_once('class.soap_val.php');  
-    59:require_once('class.soap_parser.php');  
-    60:require_once('class.soap_fault.php');  
-    61-  
-    62-// transport classes  
-    63:require_once('class.soap_transport_http.php');  
-    64-  
-    65-// optional add-on classes  
-    66:require_once('class.xmlschema.php');  
-    67:require_once('class.wsdl.php');  
-    68-  
-    69-// server class  
-    70:require_once('class.soap_server.php');*/  
-    71-  
-    72-// class variable emulation  
-    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html
-
-./lib/Microsoft/Http/Client.php:837
-  
-    834-    {  
-    835-        if (is_string($adapter)) {  
-    836-            if (!class_exists($adapter)) {  
-    837:            	@require_once( str_replace('_', '/', $adapter) . '.php' );  
-    838-            }  
-    839-  
-    840-            $adapter = new $adapter;
-
-#### file_get_contents( ####
-./lib/JSON.php:111
-  
-    109- *  
-    110- * // accept incoming POST data, assumed to be in JSON notation  
-    111: * $input = file_get_contents('php://input', 1000000);  
-    112- * $value = $json->decode($input);  
-    113- * </code>  
-    114- */
-
-./lib/W3/Minify.php:691
-  
-    688-        $from_email = 'wordpress@' . w3_get_domain($_SERVER['SERVER_NAME']);  
-    689-        $from_name = get_option('blogname');  
-    690-        $to_name = $to_email = get_option('admin_email');  
-    691:        $body = @file_get_contents(W3TC_INC_DIR . '/email/minify_error_notification.php');  
-    692-  
-    693-        $headers = array(  
-    694-            sprintf('From: "%s" <%s>', addslashes($from_name), $from_email),
-
-./lib/W3/Minify.php:718
-  
-    715-  
-    716-        foreach ($sources as $source) {  
-    717-            if (file_exists($source)) {  
-    718:                $data = @file_get_contents($source);  
-    719-  
-    720-                if ($data !== false) {  
-    721-                    $values[] = md5($data);
-
-./lib/W3/PageSpeed.php:237
-  
-    234-        $file = $this->_get_cache_file($url);  
-    235-  
-    236-        if (is_readable($file)) {  
-    237:            $data = @file_get_contents($file);  
-    238-  
-    239-            if ($data) {  
-    240-                return @unserialize($data);
-
-./lib/W3/Cdn/Azure.php:177
-  
-    174-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
-    175-        }  
-    176-  
-    177:        $contents = @file_get_contents($local_path);  
-    178-  
-    179-        if ($contents === false) {  
-    180-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Unable to read file.');
-
-./lib/W3/Cdn/S3.php:170
-  
-    167-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
-    168-        }  
-    169-  
-    170:        $contents = @file_get_contents($local_path);  
-    171-  
-    172-        if ($contents === false) {  
-    173-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Unable to read file.');
-
-./lib/W3/Plugin/MinifyEnabled.php:1439
-  
-    1436-        $path = w3_get_minify_rules_core_path();  
-    1437-  
-    1438-        if (file_exists($path)) {  
-    1439:            $data = @file_get_contents($path);  
-    1440-  
-    1441-            if ($data !== false) {  
-    1442-                $data = $this->erase_rules_legacy($data);
-
-./lib/W3/Plugin/MinifyEnabled.php:1498
-  
-    1495-        $path = w3_get_minify_rules_cache_path();  
-    1496-  
-    1497-        if (file_exists($path)) {  
-    1498:            $data = @file_get_contents($path);  
-    1499-  
-    1500-            if ($data !== false) {  
-    1501-                $data = $this->erase_rules_legacy($data);
-
-./lib/W3/Plugin/MinifyEnabled.php:1593
-  
-    1590-        $path = w3_get_minify_rules_core_path();  
-    1591-  
-    1592-        if (file_exists($path)) {  
-    1593:            if (($data = @file_get_contents($path)) !== false) {  
-    1594-                $data = $this->erase_rules_core($data);  
-    1595-  
-    1596-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyEnabled.php:1614
-  
-    1611-        $path = w3_get_minify_rules_cache_path();  
-    1612-  
-    1613-        if (file_exists($path)) {  
-    1614:            if (($data = @file_get_contents($path)) !== false) {  
-    1615-                $data = $this->erase_rules_cache($data);  
-    1616-  
-    1617-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyEnabled.php:1635
-  
-    1632-        $path = w3_get_minify_rules_cache_path();  
-    1633-  
-    1634-        if (file_exists($path)) {  
-    1635:            if (($data = @file_get_contents($path)) !== false) {  
-    1636-                $data = $this->erase_rules_legacy($data);  
-    1637-  
-    1638-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyEnabled.php:1656
-  
-    1653-        $path = w3_get_minify_rules_core_path();  
-    1654-        $search = $this->generate_rules_core();  
-    1655-  
-    1656:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    1657-    }  
-    1658-  
-    1659-    /**
-
-./lib/W3/Plugin/MinifyEnabled.php:1668
-  
-    1665-        $path = w3_get_minify_rules_cache_path();  
-    1666-        $search = $this->generate_rules_cache();  
-    1667-  
-    1668:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    1669-    }  
-    1670-  
-    1671-
-
-./lib/W3/Plugin/MinifyEnabled.php:1680
-  
-    1677-    function check_rules_legacy() {  
-    1678-        $path = w3_get_minify_rules_core_path();  
-    1679-  
-    1680:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_LEGACY, W3TC_MARKER_END_MINIFY_LEGACY));  
-    1681-    }  
-    1682-}
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:549
-  
-    546-        $path = w3_get_browsercache_rules_cache_path();  
-    547-  
-    548-        if (file_exists($path)) {  
-    549:            $data = @file_get_contents($path);  
-    550-  
-    551-            if ($data === false) {  
-    552-                return false;
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:606
-  
-    603-        $path = w3_get_browsercache_rules_no404wp_path();  
-    604-  
-    605-        if (file_exists($path)) {  
-    606:            $data = @file_get_contents($path);  
-    607-  
-    608-            if ($data === false) {  
-    609-                return false;
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:687
-  
-    684-        $path = w3_get_browsercache_rules_cache_path();  
-    685-  
-    686-        if (file_exists($path)) {  
-    687:            if (($data = @file_get_contents($path)) !== false) {  
-    688-                $data = $this->erase_rules_cache($data);  
-    689-  
-    690-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:708
-  
-    705-        $path = w3_get_browsercache_rules_no404wp_path();  
-    706-  
-    707-        if (file_exists($path)) {  
-    708:            if (($data = @file_get_contents($path)) !== false) {  
-    709-                $data = $this->erase_rules_no404wp($data);  
-    710-  
-    711-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:729
-  
-    726-        $path = w3_get_browsercache_rules_cache_path();  
-    727-        $search = $this->generate_rules_cache();  
-    728-  
-    729:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    730-    }  
-    731-  
-    732-    /**
-
-./lib/W3/Plugin/BrowserCacheAdmin.php:741
-  
-    738-        $path = w3_get_browsercache_rules_no404wp_path();  
-    739-        $search = $this->generate_rules_no404wp();  
-    740-  
-    741:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    742-    }  
-    743-}
-
-./lib/W3/Plugin/MinifyAdmin.php:484
-  
-    481-        $path = w3_get_minify_rules_core_path();  
-    482-  
-    483-        if (file_exists($path)) {  
-    484:            $data = @file_get_contents($path);  
-    485-  
-    486-            if ($data !== false) {  
-    487-                $data = $this->erase_rules_legacy($data);
-
-./lib/W3/Plugin/MinifyAdmin.php:543
-  
-    540-        $path = w3_get_minify_rules_cache_path();  
-    541-  
-    542-        if (file_exists($path)) {  
-    543:            $data = @file_get_contents($path);  
-    544-  
-    545-            if ($data !== false) {  
-    546-                $data = $this->erase_rules_legacy($data);
-
-./lib/W3/Plugin/MinifyAdmin.php:638
-  
-    635-        $path = w3_get_minify_rules_core_path();  
-    636-  
-    637-        if (file_exists($path)) {  
-    638:            if (($data = @file_get_contents($path)) !== false) {  
-    639-                $data = $this->erase_rules_core($data);  
-    640-  
-    641-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyAdmin.php:659
-  
-    656-        $path = w3_get_minify_rules_cache_path();  
-    657-  
-    658-        if (file_exists($path)) {  
-    659:            if (($data = @file_get_contents($path)) !== false) {  
-    660-                $data = $this->erase_rules_cache($data);  
-    661-  
-    662-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyAdmin.php:680
-  
-    677-        $path = w3_get_minify_rules_cache_path();  
-    678-  
-    679-        if (file_exists($path)) {  
-    680:            if (($data = @file_get_contents($path)) !== false) {  
-    681-                $data = $this->erase_rules_legacy($data);  
-    682-  
-    683-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/MinifyAdmin.php:700
-  
-    697-    function check_rules_has_core() {  
-    698-        $path = w3_get_minify_rules_core_path();  
-    699-  
-    700:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_CORE, W3TC_MARKER_END_MINIFY_CORE));  
-    701-    }  
-    702-  
-    703-    /**
-
-./lib/W3/Plugin/MinifyAdmin.php:711
-  
-    708-    function check_rules_has_legacy() {  
-    709-        $path = w3_get_minify_rules_core_path();  
-    710-  
-    711:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_LEGACY, W3TC_MARKER_END_MINIFY_LEGACY));  
-    712-    }  
-    713-  
-    714-    /**
-
-./lib/W3/Plugin/MinifyAdmin.php:723
-  
-    720-        $path = w3_get_minify_rules_core_path();  
-    721-        $search = $this->generate_rules_core();  
-    722-  
-    723:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    724-    }  
-    725-  
-    726-    /**
-
-./lib/W3/Plugin/MinifyAdmin.php:735
-  
-    732-        $path = w3_get_minify_rules_cache_path();  
-    733-        $search = $this->generate_rules_cache();  
-    734-  
-    735:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    736-    }  
-    737-}
-
-./lib/W3/Plugin/PgCacheAdmin.php:343
-  
-    340-     */  
-    341-    function enable_wp_cache() {  
-    342-        $config_path = w3_get_wp_config_path();  
-    343:        $config_data = @file_get_contents($config_path);  
-    344-  
-    345-        if ($config_data === false) {  
-    346-            return false;
-
-./lib/W3/Plugin/PgCacheAdmin.php:368
-  
-    365-     */  
-    366-    function disable_wp_cache() {  
-    367-        $config_path = w3_get_wp_config_path();  
-    368:        $config_data = @file_get_contents($config_path);  
-    369-  
-    370-        if ($config_data === false) {  
-    371-            return false;
-
-./lib/W3/Plugin/PgCacheAdmin.php:1213
-  
-    1210-        $path = w3_get_pgcache_rules_core_path();  
-    1211-  
-    1212-        if (file_exists($path)) {  
-    1213:            $data = @file_get_contents($path);  
-    1214-  
-    1215-            if ($data !== false) {  
-    1216-                $data = $this->erase_rules_legacy($data);
-
-./lib/W3/Plugin/PgCacheAdmin.php:1273
-  
-    1270-        $path = w3_get_pgcache_rules_cache_path();  
-    1271-  
-    1272-        if (file_exists($path)) {  
-    1273:            $data = @file_get_contents($path);  
-    1274-  
-    1275-            if ($data === false) {  
-    1276-                return false;
-
-./lib/W3/Plugin/PgCacheAdmin.php:1378
-  
-    1375-        $path = w3_get_pgcache_rules_core_path();  
-    1376-  
-    1377-        if (file_exists($path)) {  
-    1378:            if (($data = @file_get_contents($path)) !== false) {  
-    1379-                $data = $this->erase_rules_core($data);  
-    1380-  
-    1381-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/PgCacheAdmin.php:1399
-  
-    1396-        $path = w3_get_pgcache_rules_cache_path();  
-    1397-  
-    1398-        if (file_exists($path)) {  
-    1399:            if (($data = @file_get_contents($path)) !== false) {  
-    1400-                $data = $this->erase_rules_cache($data);  
-    1401-  
-    1402-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/PgCacheAdmin.php:1420
-  
-    1417-        $path = w3_get_pgcache_rules_core_path();  
-    1418-  
-    1419-        if (file_exists($path)) {  
-    1420:            if (($data = @file_get_contents($path)) !== false) {  
-    1421-                $data = $this->erase_rules_legacy($data);  
-    1422-  
-    1423-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/PgCacheAdmin.php:1441
-  
-    1438-        $path = w3_get_pgcache_rules_core_path();  
-    1439-  
-    1440-        if (file_exists($path)) {  
-    1441:            if (($data = @file_get_contents($path)) !== false) {  
-    1442-                $data = $this->erase_rules_wpsc($data);  
-    1443-  
-    1444-                return @file_put_contents($path, $data);
-
-./lib/W3/Plugin/PgCacheAdmin.php:1461
-  
-    1458-    function check_rules_has_legacy() {  
-    1459-        $path = w3_get_pgcache_rules_core_path();  
-    1460-  
-    1461:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_LEGACY, W3TC_MARKER_END_PGCACHE_LEGACY));  
-    1462-    }  
-    1463-  
-    1464-    /**
-
-./lib/W3/Plugin/PgCacheAdmin.php:1472
-  
-    1469-    function check_rules_has_core() {  
-    1470-        $path = w3_get_pgcache_rules_core_path();  
-    1471-  
-    1472:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_CORE, W3TC_MARKER_END_PGCACHE_CORE));  
-    1473-    }  
-    1474-  
-    1475-    /**
-
-./lib/W3/Plugin/PgCacheAdmin.php:1484
-  
-    1481-        $path = w3_get_pgcache_rules_core_path();  
-    1482-        $search = $this->generate_rules_core();  
-    1483-  
-    1484:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    1485-    }  
-    1486-  
-    1487-    /**
-
-./lib/W3/Plugin/PgCacheAdmin.php:1496
-  
-    1493-        $path = w3_get_pgcache_rules_cache_path();  
-    1494-        $search = $this->generate_rules_cache();  
-    1495-  
-    1496:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
-    1497-    }  
-    1498-  
-    1499-    /**
-
-./lib/W3/Plugin/PgCacheAdmin.php:1507
-  
-    1504-    function check_rules_wpsc() {  
-    1505-        $path = w3_get_pgcache_rules_core_path();  
-    1506-  
-    1507:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_WPSC, W3TC_MARKER_END_PGCACHE_WPSC));  
-    1508-    }  
-    1509-}
-
-./lib/W3/Plugin/TotalCacheAdmin.php:4585
-  
-    4582-                /**  
-    4583-                 * Check get_header function call  
-    4584-                 */  
-    4585:                $template_content = @file_get_contents($template_file);  
-    4586-  
-    4587-                if ($template_content && preg_match('~\s*get_header[0-9_]*\s*\(~', $template_content)) {  
-    4588-                    $templates[] = $template_file;
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5270
-  
-    5267-     * @return boolean  
-    5268-     */  
-    5269-    function advanced_cache_check() {  
-    5270:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_ADVANCED_CACHE)) && strstr($script_data, 'W3_PgCache') !== false);  
-    5271-    }  
-    5272-  
-    5273-    /**
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5288
-  
-    5285-     * @return boolean  
-    5286-     */  
-    5287-    function db_check() {  
-    5288:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_DB)) && strstr($script_data, 'W3_Db') !== false);  
-    5289-    }  
-    5290-  
-    5291-    /**
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5306
-  
-    5303-     * @return boolean  
-    5304-     */  
-    5305-    function objectcache_check() {  
-    5306:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_OBJECT_CACHE)) && strstr($script_data, 'W3_ObjectCache') !== false);  
-    5307-    }  
-    5308-  
-    5309-    /**
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5427
-  
-    5424-     */  
-    5425-    function enable_cookie_domain() {  
-    5426-        $config_path = w3_get_wp_config_path();  
-    5427:        $config_data = @file_get_contents($config_path);  
-    5428-  
-    5429-        if ($config_data === false) {  
-    5430-            return false;
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5457
-  
-    5454-     */  
-    5455-    function disable_cookie_domain() {  
-    5456-        $config_path = w3_get_wp_config_path();  
-    5457:        $config_data = @file_get_contents($config_path);  
-    5458-  
-    5459-        if ($config_data === false) {  
-    5460-            return false;
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5750
-  
-    5747-        $faq = array();  
-    5748-        $file = W3TC_INC_DIR . '/options/faq.xml';  
-    5749-  
-    5750:        $xml = @file_get_contents($file);  
-    5751-  
-    5752-        if ($xml) {  
-    5753-            if (function_exists('xml_parser_create')) {
-
-./lib/CSSTidy/class.csstidy.php:416
-  
-    413-  
-    414-	if($from_file)  
-    415-	{  
-    416:		$content = strip_tags(file_get_contents($content),'<span>');  
-    417-	}  
-    418-	$content = str_replace("\r\n","\n",$content); // Unify newlines (because the output also only uses \n)  
-    419-	$template = explode('|',$content);
-
-./lib/CSSTidy/class.csstidy.php:435
-  
-    432- */  
-    433-function parse_from_url($url)  
-    434-{  
-    435:	return $this->parse(@file_get_contents($url));  
-    436-}  
-    437-  
-    438-/**
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:643
-  
-    640-		}  
-    641-  
-    642-		// Put the data to Windows Azure Storage  
-    643:		return $this->putBlobData($containerName, $blobName, file_get_contents($localFileName), $metadata, $leaseId, $additionalHeaders);  
-    644-	}  
-    645-  
-    646-	/**
-
-./lib/Microsoft/Http/Client.php:698
-  
-    695-    public function setFileUpload($filename, $formname, $data = null, $ctype = null)  
-    696-    {  
-    697-        if ($data === null) {  
-    698:            if (($data = @file_get_contents($filename)) === false) {  
-    699-                /** @see Microsoft_Http_Client_Exception */  
-    700-                require_once 'Microsoft/Http/Client/Exception.php';  
-    701-                throw new Microsoft_Http_Client_Exception("Unable to read file '{$filename}' for upload");
-
-./lib/Minify/HTTP/Encoder.php:17
-  
-    14- * <code>  
-    15- * // Send a CSS file, compressed if possible  
-    16- * $he = new HTTP_Encoder(array(  
-    17: *     'content' => file_get_contents($cssFile)  
-    18- *     ,'type' => 'text/css'  
-    19- * ));  
-    20- * $he->encode();
-
-./lib/Minify/Minify/Cache/File.php:140
-  
-    137-                    return $ret;  
-    138-                }  
-    139-            } else {  
-    140:                return @file_get_contents($path);  
-    141-            }  
-    142-        }  
-    143-
-
-./lib/Minify/Minify/ImportProcessor.php:50
-  
-    47-        $file = realpath($file);  
-    48-        if (! $file  
-    49-            || in_array($file, self::$filesIncluded)  
-    50:            || false === ($content = @file_get_contents($file))  
-    51-        ) {  
-    52-            // file missing, already included, or failed read  
-    53-            return '';
-
-./lib/Minify/Minify/Source.php:114
-  
-    111-            $content = Minify_ImportProcessor::process($this->filepath);  
-    112-        } else {  
-    113-            $content = (null !== $this->filepath)  
-    114:                ? file_get_contents($this->filepath)  
-    115-                : ((null !== $this->_content)  
-    116-                    ? $this->_content  
-    117-                    : call_user_func($this->_getContentFunc, $this->_id)
-
-./inc/functions/rule.php:12
-  
-    9-    if ((w3_is_apache() || w3_is_litespeed()) && !w3_is_network()) {  
-    10-        $path = w3_get_home_root() . '/.htaccess';  
-    11-  
-    12:        return (($data = @file_get_contents($path)) && strstr($data, W3TC_MARKER_BEGIN_WORDPRESS) !== false);  
-    13-    }  
-    14-  
-    15-    return true;
-
-#### ob_get_contents( ####
-./lib/W3/PgCache.php:1285
-  
-    1283-            ob_start();  
-    1284-            $result = eval($code);  
-    1285:            $output = ob_get_contents();  
-    1286-            ob_end_clean();  
-    1287-  
-    1288-            if ($result === false) {
-
-./lib/W3/PgCache.php:1315
-  
-    1312-            if (file_exists($file) && is_readable($file)) {  
-    1313-                ob_start();  
-    1314-                include $file;  
-    1315:                $output = ob_get_contents();  
-    1316-                ob_end_clean();  
-    1317-            } else {  
-    1318-                $output = sprintf('Unable to open file: %s', htmlspecialchars($file));
-
-./lib/W3/Plugin/TotalCacheAdmin.php:449
-  
-    446-  
-    447-            ob_start();  
-    448-            include W3TC_INC_DIR . '/options/common/help.php';  
-    449:            $help = ob_get_contents();  
-    450-            ob_end_clean();  
-    451-  
-    452-            $hook = get_plugin_page_hookname($this->_page, 'w3tc_general');
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2418
-  
-    2415-         */  
-    2416-        ob_start();  
-    2417-        phpinfo();  
-    2418:        $php_info = ob_get_contents();  
-    2419-        ob_end_clean();  
-    2420-  
-    2421-        $php_info_path = W3TC_TMP_DIR . '/php_info.html';
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2432
-  
-    2429-         */  
-    2430-        ob_start();  
-    2431-        $this->action_self_test();  
-    2432:        $self_test = ob_get_contents();  
-    2433-        ob_end_clean();  
-    2434-  
-    2435-        $self_test_path = W3TC_TMP_DIR . '/self_test.html';
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2498
-  
-    2495-         */  
-    2496-        ob_start();  
-    2497-        include W3TC_INC_DIR . '/email/support_request.php';  
-    2498:        $body = ob_get_contents();  
-    2499-        ob_end_clean();  
-    2500-  
-    2501-        /**
-
-./lib/Nusoap/class.nusoap_base.php:876
-  
-    873-    function varDump($data) {  
-    874-		ob_start();  
-    875-		var_dump($data);  
-    876:		$ret_val = ob_get_contents();  
-    877-		ob_end_clean();  
-    878-		return $ret_val;  
-    879-	}
-
-./lib/Nusoap/nusoap.php:876
-  
-    873-    function varDump($data) {  
-    874-		ob_start();  
-    875-		var_dump($data);  
-    876:		$ret_val = ob_get_contents();  
-    877-		ob_end_clean();  
-    878-		return $ret_val;  
-    879-	}
-
-#### curl_init( ####
-./lib/CF/cloudfiles_http.php:204
-  
-    202-        $url = implode("/", $path);  
-    203-  
-    204:        $curl_ch = curl_init();  
-    205-        if (!is_null($this->cabundle_path)) {  
-    206-            curl_setopt($curl_ch, CURLOPT_SSL_VERIFYPEER, True);  
-    207-            curl_setopt($curl_ch, CURLOPT_CAINFO, $this->cabundle_path);
-
-./lib/CF/cloudfiles_http.php:1174
-  
-    1171-        }  
-    1172-  
-    1173-        if (is_null($this->connections[$conn_type]) || $force_new) {  
-    1174:            $ch = curl_init();  
-    1175-        } else {  
-    1176-            return;  
-    1177-        }
-
-./lib/Nusoap/class.soap_transport_http.php:277
-  
-    274-  
-    275-		$this->debug('connect using cURL');  
-    276-		// init CURL  
-    277:		$this->ch = curl_init();  
-    278-		// set url  
-    279-		$hostURL = ($this->port != '') ? "$this->scheme://$this->host:$this->port" : "$this->scheme://$this->host";  
-    280-		// add path
-
-./lib/Nusoap/nusoap.php:2430
-  
-    2427-  
-    2428-		$this->debug('connect using cURL');  
-    2429-		// init CURL  
-    2430:		$this->ch = curl_init();  
-    2431-		// set url  
-    2432-		$hostURL = ($this->port != '') ? "$this->scheme://$this->host:$this->port" : "$this->scheme://$this->host";  
-    2433-		// add path
-
-./lib/S3.php:1429
-  
-    1426-		//var_dump($this->bucket, $this->uri, $this->resource, $url);  
-    1427-  
-    1428-		// Basic setup  
-    1429:		$curl = curl_init();  
-    1430-		curl_setopt($curl, CURLOPT_USERAGENT, 'S3/php');  
-    1431-  
-    1432-		if (S3::$useSSL) {
-
-./lib/Microsoft/Http/Client/Adapter/Curl.php:218
-  
-    215-        }  
-    216-  
-    217-        // Do the actual connection  
-    218:        $this->_curl = curl_init();  
-    219-        if ($port != 80) {  
-    220-            curl_setopt($this->_curl, CURLOPT_PORT, intval($port));  
-    221-        }
-
-#### system( ####
-./lib/CF/cloudfiles.php:326
-  
-    324- * $auth->authenticate();  
-    325- *  
-    326: * # Create a connection to the storage/cdn system(s) and pass in the  
-    327- * # validated CF_Authentication instance.  
-    328- * #  
-    329- * $conn = new CF_Connection($auth);
-
-./lib/CF/cloudfiles.php:360
-  
-    357-     * #  
-    358-     * $auth->authenticate();  
-    359-     *  
-    360:     * # Create a connection to the storage/cdn system(s) and pass in the  
-    361-     * # validated CF_Authentication instance.  
-    362-     * #  
-    363-     * $conn = new CF_Connection($auth);
-
-#### fopen( ####
-./lib/W3/Cache/File.php:100
-  
-    98-  
-    99-        if ((@is_dir($dir) || w3_mkdir($sub_dir, 0777, $this->_cache_dir))) {  
-    100:            $fp = @fopen($path, 'wb');  
-    101-  
-    102-            if ($fp) {  
-    103-                if ($this->_locking) {
-
-./lib/W3/Cache/File.php:136
-  
-    133-            $ftime = @filemtime($path);  
-    134-  
-    135-            if ($ftime) {  
-    136:                $fp = @fopen($path, 'rb');  
-    137-  
-    138-                if ($fp) {  
-    139-                    if ($this->_locking) {
-
-./lib/W3/Cache/File/Generic.php:63
-  
-    60-        $dir = dirname($path);  
-    61-  
-    62-        if ((@is_dir($dir) || w3_mkdir($sub_dir, 0777, $this->_cache_dir))) {  
-    63:            $fp = @fopen($path, 'w');  
-    64-  
-    65-            if ($fp) {  
-    66-                if ($this->_locking) {
-
-./lib/W3/Cache/File/Generic.php:98
-  
-    95-            $ftime = @filemtime($path);  
-    96-  
-    97-            if ($ftime && $ftime > (time() - $this->_expire)) {  
-    98:                $fp = @fopen($path, 'r');  
-    99-  
-    100-                if ($fp) {  
-    101-                    if ($this->_locking) {
-
-./lib/W3/Cache/File/Cleaner.php:121
-  
-    118-            $ftime = @filemtime($file);  
-    119-  
-    120-            if ($ftime) {  
-    121:                $fp = @fopen($file, 'rb');  
-    122-  
-    123-                if ($fp) {  
-    124-                    $expires = @fread($fp, 4);
-
-./lib/W3/Config.php:1253
-  
-    1250-     * @return boolean  
-    1251-     */  
-    1252-    function write($file) {  
-    1253:        $fp = @fopen($file, 'w');  
-    1254-  
-    1255-        if ($fp) {  
-    1256-            @fputs($fp, "<?php\r\n\r\nreturn array(\r\n");
-
-./lib/CF/cloudfiles.php:1758
-  
-    1755-    /**  
-    1756-     * Streaming read of Object's data  
-    1757-     *  
-    1758:     * Given an open PHP resource (see PHP's fopen() method), fetch the Object's  
-    1759-     * data and write it to the open resource handle.  This is useful for  
-    1760-     * streaming an Object's content to the browser (videos, images) or for  
-    1761-     * fetching content to a local file.
-
-./lib/CF/cloudfiles.php:1783
-  
-    1780-     * // Hand it back to user's browser with appropriate content-type  
-    1781-     * //  
-    1782-     * header("Content-Type: " . $doc->content_type);  
-    1783:     * $output = fopen("php://output", "w");  
-    1784-     * $doc->stream($output); # stream object content to PHP's output buffer  
-    1785-     * fclose($output);  
-    1786-     * ?>
-
-./lib/CF/cloudfiles.php:1862
-  
-    1859-     * Upload Object's data to Cloud Files  
-    1860-     *  
-    1861-     * Write data to the remote Object.  The $data argument can either be a  
-    1862:     * PHP resource open for reading (see PHP's fopen() method) or an in-memory  
-    1863-     * variable.  If passing in a PHP resource, you must also include the $bytes  
-    1864-     * parameter.  
-    1865-     *
-
-./lib/CF/cloudfiles.php:1910
-  
-    1907-            # like a better option, but it seems to break on Windows so use  
-    1908-            # a temporary file instead.  
-    1909-            #  
-    1910:            $fp = fopen("php://temp", "wb+");  
-    1911:            #$fp = fopen("php://memory", "wb+");  
-    1912-            fwrite($fp, $data, strlen($data));  
-    1913-            rewind($fp);  
-    1914-            $close_fh = True;
-
-./lib/CF/cloudfiles.php:1986
-  
-    1983-     */  
-    1984-    function load_from_filename($filename, $verify=True)  
-    1985-    {  
-    1986:        $fp = @fopen($filename, "r");  
-    1987-        if (!$fp) {  
-    1988-            throw new IOException("Could not open file for reading: ".$filename);  
-    1989-        }
-
-./lib/CF/cloudfiles.php:2031
-  
-    2028-     */  
-    2029-    function save_to_filename($filename)  
-    2030-    {  
-    2031:        $fp = @fopen($filename, "wb");  
-    2032-        if (!$fp) {  
-    2033-            throw new IOException("Could not open file for writing: ".$filename);  
-    2034-        }
-
-./lib/Nusoap/class.wsdl.php:243
-  
-    240-        		$path = $wsdl;  
-    241-        	}  
-    242-            $this->debug('getting WSDL file ' . $path);  
-    243:            if ($fp = @fopen($path, 'r')) {  
-    244-                $wsdl_string = '';  
-    245-                while ($data = fread($fp, 32768)) {  
-    246-                    $wsdl_string .= $data;
-
-./lib/Nusoap/class.wsdlcache.php:102
-  
-    99-				$this->releaseMutex($filename);  
-    100-				return null;  
-    101-			}  
-    102:			$fp = @fopen($filename, "r");  
-    103-			if ($fp) {  
-    104-				$s = implode("", @file($filename));  
-    105-				fclose($fp);
-
-./lib/Nusoap/class.wsdlcache.php:132
-  
-    129-			$this->debug("Lock for $filename already exists");  
-    130-			return false;  
-    131-		}  
-    132:		$this->fplock[md5($filename)] = fopen($filename.".lock", "w");  
-    133-		if ($mode == "r") {  
-    134-			return flock($this->fplock[md5($filename)], LOCK_SH);  
-    135-		} else {
-
-./lib/Nusoap/class.wsdlcache.php:151
-  
-    148-		$filename = $this->createFilename($wsdl_instance->wsdl);  
-    149-		$s = serialize($wsdl_instance);  
-    150-		if ($this->obtainMutex($filename, "w")) {  
-    151:			$fp = fopen($filename, "w");  
-    152-			if (! $fp) {  
-    153-				$this->debug("Cannot write $wsdl_instance->wsdl ($filename) in cache");  
-    154-				$this->releaseMutex($filename);
-
-./lib/Nusoap/nusoap.php:3739
-  
-    3736-				} else {  
-    3737-					$filename = substr($this->externalWSDLURL, $pos + 7);  
-    3738-				}  
-    3739:                $fp = fopen($this->externalWSDLURL, 'r');  
-    3740-                fpassthru($fp);  
-    3741-              }  
-    3742-			} elseif ($this->wsdl) {
-
-./lib/Nusoap/nusoap.php:4824
-  
-    4821-        		$path = $wsdl;  
-    4822-        	}  
-    4823-            $this->debug('getting WSDL file ' . $path);  
-    4824:            if ($fp = @fopen($path, 'r')) {  
-    4825-                $wsdl_string = '';  
-    4826-                while ($data = fread($fp, 32768)) {  
-    4827-                    $wsdl_string .= $data;
-
-./lib/S3.php:336
-  
-    333-		if (isset($input['fp']))  
-    334-			$rest->fp =& $input['fp'];  
-    335-		elseif (isset($input['file']))  
-    336:			$rest->fp = @fopen($input['file'], 'rb');  
-    337-		elseif (isset($input['data']))  
-    338-			$rest->data = $input['data'];  
-    339-
-
-./lib/S3.php:436
-  
-    433-			if (is_resource($saveTo))  
-    434-				$rest->fp =& $saveTo;  
-    435-			else  
-    436:				if (($rest->fp = @fopen($saveTo, 'wb')) !== false)  
-    437-					$rest->file = realpath($saveTo);  
-    438-				else  
-    439-					$rest->response->error = array('code' => 0, 'message' => 'Unable to open save file for writing: '.$saveTo);
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:762
-  
-    759-		}  
-    760-  
-    761-		// Open file  
-    762:		$fp = fopen($localFileName, 'r');  
-    763-		if ($fp === false) {  
-    764-			throw new Microsoft_WindowsAzure_Exception('Could not open local file.');  
-    765-		}
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:175
-  
-    172-        $this->_temporaryFileName = tempnam(sys_get_temp_dir(), 'azure');  
-    173-  
-    174-        // Check the file can be opened  
-    175:        $fh = @fopen($this->_temporaryFileName, $mode);  
-    176-        if ($fh === false) {  
-    177-            return false;  
-    178-        }
-
-./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:198
-  
-    195-        }  
-    196-  
-    197-        // Open temporary file handle  
-    198:        $this->_temporaryFileHandle = fopen($this->_temporaryFileName, $mode);  
-    199-  
-    200-        // Ok!  
-    201-        return true;
-
-./lib/Microsoft/Http/Client.php:900
-  
-    897-                 'Microsoft_Http_Client');  
-    898-        }  
-    899-  
-    900:        $fp = fopen($this->_stream_name, "w+b");  
-    901-        if(!$fp) {  
-    902-                $this->close();  
-    903-                require_once 'Microsoft/Http/Client/Exception.php';
-
-./lib/Minify/Minify/Cache/File.php:98
-  
-    95-        $path = $this->_path . '/' . $id;  
-    96-  
-    97-        if ($this->_locking) {  
-    98:            $fp = @fopen($path, 'rb');  
-    99-  
-    100-            if ($fp) {  
-    101-                @flock($fp, LOCK_SH);
-
-./lib/Minify/Minify/Cache/File.php:127
-  
-    124-  
-    125-        if (is_readable($path)) {  
-    126-            if ($this->_locking) {  
-    127:                $fp = @fopen($path, 'rb');  
-    128-  
-    129-                if ($fp) {  
-    130-                    @flock($fp, LOCK_SH);
-
-./inc/file.php:93
-  
-    90-function w3_is_writable($file) {  
-    91-    $exists = file_exists($file);  
-    92-  
-    93:    $fp = @fopen($file, 'a');  
-    94-  
-    95-    if ($fp) {  
-    96-        fclose($fp);
-
-./inc/functions/file.php:93
-  
-    90-function w3_is_writable($file) {  
-    91-    $exists = file_exists($file);  
-    92-  
-    93:    $fp = @fopen($file, 'a');  
-    94-  
-    95-    if ($fp) {  
-    96-        fclose($fp);
-
-./inc/functions/compat.php:9
-  
-    6-    }  
-    7-  
-    8-    function file_put_contents($filename, $data, $flags = 0) {  
-    9:        $fp = fopen($filename, ($flags & FILE_APPEND ? 'a' : 'w'));  
-    10-  
-    11-        if ($fp) {  
-    12-            fputs($fp, $data);
-
-#### passthru( ####
-./lib/Nusoap/nusoap.php:3740
-  
-    3738-				}  
-    3739-                $fp = fopen($this->externalWSDLURL, 'r');  
-    3740:                fpassthru($fp);  
-    3741-              }  
-    3742-			} elseif ($this->wsdl) {  
-    3743-				$this->debug("In service, serialize WSDL");
-
-./lib/Minify/Minify/Cache/File.php:102
-  
-    99-  
-    100-            if ($fp) {  
-    101-                @flock($fp, LOCK_SH);  
-    102:                @fpassthru($fp);  
-    103-                @flock($fp, LOCK_UN);  
-    104-                @fclose($fp);  
-    105-
-
-#### eval( ####
-./lib/JSON.php:22
-  
-    20- * be encoded into JSON notation for use in a client-side javascript, or  
-    21- * decoded from incoming Javascript requests. JSON format is native to  
-    22: * Javascript, and can be directly eval()'ed with no further parsing  
-    23- * overhead  
-    24- *  
-    25- * All strings should be in ASCII or UTF-8 format!
-
-./lib/W3/PgCache.php:1284
-  
-    1281-            $code = trim($code, ';') . ';';  
-    1282-  
-    1283-            ob_start();  
-    1284:            $result = eval($code);  
-    1285-            $output = ob_get_contents();  
-    1286-            ob_end_clean();  
-    1287-
-
-./lib/Nusoap/class.soapclient.php:711
-  
-    708-			return null;  
-    709-		}  
-    710-		// eval the class  
-    711:		eval($evalStr);  
-    712-		// instantiate proxy object  
-    713:		eval("\$proxy = new nusoap_proxy_$r('');");  
-    714-		// transfer current wsdl data to the proxy thereby avoiding parsing the wsdl twice  
-    715-		$proxy->endpointType = 'wsdl';  
-    716-		$proxy->wsdlFile = $this->wsdlFile;
-
-./lib/Nusoap/nusoap.php:4047
-  
-    4044-		$this->debug("in invoke_method, calling '$this->methodname'");  
-    4045-		if (!function_exists('call_user_func_array')) {  
-    4046-			if ($class == '') {  
-    4047:				$this->debug('in invoke_method, calling function using eval()');  
-    4048-				$funcCall = "\$this->methodreturn = $this->methodname(";  
-    4049-			} else {  
-    4050-				if ($delim == '..') {  
-    4051:					$this->debug('in invoke_method, calling class method using eval()');  
-    4052-					$funcCall = "\$this->methodreturn = ".$class."::".$method."(";  
-    4053-				} else {  
-    4054:					$this->debug('in invoke_method, calling instance method using eval()');  
-    4055-					// generate unique instance name  
-    4056-					$instname = "\$inst_".time();  
-    4057-					$funcCall = $instname." = new ".$class."(); ";
-
-./lib/Nusoap/nusoap.php:4073
-  
-    4070-			}  
-    4071-			$funcCall .= ');';  
-    4072-			$this->debug('in invoke_method, function call: '.$funcCall);  
-    4073:			@eval($funcCall);  
-    4074-		} else {  
-    4075-			if ($class == '') {  
-    4076-				$this->debug('in invoke_method, calling function using call_user_func_array()');
-
-./lib/Nusoap/nusoap.php:7867
-  
-    7864-			return null;  
-    7865-		}  
-    7866-		// eval the class  
-    7867:		eval($evalStr);  
-    7868-		// instantiate proxy object  
-    7869:		eval("\$proxy = new nusoap_proxy_$r('');");  
-    7870-		// transfer current wsdl data to the proxy thereby avoiding parsing the wsdl twice  
-    7871-		$proxy->endpointType = 'wsdl';  
-    7872-		$proxy->wsdlFile = $this->wsdlFile;
-
-./lib/Minify/FirePHP.php:1035
-  
-    1032-   * use of HTTPRequest to perform server communication functions - data can  
-    1033-   * be encoded into JSON notation for use in a client-side javascript, or  
-    1034-   * decoded from incoming Javascript requests. JSON format is native to  
-    1035:   * Javascript, and can be directly eval()'ed with no further parsing  
-    1036-   * overhead  
-    1037-   *  
-    1038-   * All strings should be in ASCII or UTF-8 format!
-
-
-### hashes ###
-#### MD5 ####
-./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:106
-  
-    104-		$rawData = null  
-    105-	) {  
-    106:		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py  
-    107-  
-    108-		// Table storage?  
-    109-		if ($forTableStorage) {
-
-#### SHA1 ####
-./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:106
-  
-    104-		$rawData = null  
-    105-	) {  
-    106:		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py  
-    107-  
-    108-		// Table storage?  
-    109-		if ($forTableStorage) {
-
-
-### payload_obfuscators ###
-#### gzuncompress( ####
-./lib/Nusoap/nusoap.php:3914
-  
-    3912-		    	// if decoding works, use it. else assume data wasn't gzencoded  
-    3913-				if (function_exists('gzuncompress')) {  
-    3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {  
-    3915-						$data = $degzdata;  
-    3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {  
-    3917-						$data = $degzdata;
-
-./lib/Microsoft/Http/Response.php:642
-  
-    639-         */  
-    640-        $zlibHeader = unpack('n', substr($body, 0, 2));  
-    641-        if ($zlibHeader[1] % 31 == 0) {  
-    642:            return gzuncompress($body);  
-    643-        } else {  
-    644-            return gzinflate($body);  
-    645-        }
-
-#### base64_decode( ####
-./lib/Nusoap/class.soap_parser.php:504
-  
-    502-		if ($type == 'base64' || $type == 'base64Binary') {  
-    503-			$this->debug('Decode base64 value');  
-    504:			return base64_decode($value);  
-    505-		}  
-    506-		// obscure numeric types  
-    507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'
-
-./lib/Nusoap/nusoap.php:7020
-  
-    7017-		}  
-    7018-		if ($type == 'base64' || $type == 'base64Binary') {  
-    7019-			$this->debug('Decode base64 value');  
-    7020:			return base64_decode($value);  
-    7021-		}  
-    7022-		// obscure numeric types  
-    7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'
-
-./lib/Microsoft/WindowsAzure/SessionHandler.php:150
-  
-    147-                $this->_sessionTablePartition,  
-    148-                $id  
-    149-            );  
-    150:            return base64_decode($sessionRecord->serializedData);  
-    151-        }  
-    152-        catch (Microsoft_WindowsAzure_Exception $ex)  
-    153-        {
-
-./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:111
-  
-    108-		$usePathStyleUri = false  
-    109-	) {  
-    110-		$this->_accountName = $accountName;  
-    111:		$this->_accountKey = base64_decode($accountKey);  
-    112-		$this->_usePathStyleUri = $usePathStyleUri;  
-    113-	}  
-    114-
-
-./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:135
-  
-    132-	 */  
-    133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)  
-    134-	{  
-    135:		$this->_accountKey = base64_decode($value);  
-    136-		return $this;  
-    137-	}  
-    138-
-
-./lib/Microsoft/WindowsAzure/Storage/Queue.php:467
-  
-    464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),  
-    465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),  
-    466-					(string)$xmlMessages[$i]->DequeueCount,  
-    467:					base64_decode((string)$xmlMessages[$i]->MessageText)  
-    468-			    );  
-    469-			}  
-    470-
-
-#### base64_encode( ####
-./lib/W3/Cdn/Azure.php:404
-  
-    402-     */  
-    403-    function _get_content_md5($md5) {  
-    404:        return base64_encode(pack('H*', $md5));  
-    405-    }  
-    406-  
-    407-    /**
-
-./lib/Nusoap/class.soap_transport_http.php:476
-  
-    473-		$this->appendDebug($this->varDump($certRequest));  
-    474-		// cf. RFC 2617  
-    475-		if ($authtype == 'basic') {  
-    476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
-    477-		} elseif ($authtype == 'digest') {  
-    478-			if (isset($digestRequest['nonce'])) {  
-    479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;
-
-./lib/Nusoap/class.soap_transport_http.php:587
-  
-    584-				'authtype' => $proxyauthtype  
-    585-			);  
-    586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
-    587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
-    588-			}  
-    589-		} else {  
-    590-			$this->debug('remove proxy');
-
-./lib/Nusoap/nusoap.php:2629
-  
-    2626-		$this->appendDebug($this->varDump($certRequest));  
-    2627-		// cf. RFC 2617  
-    2628-		if ($authtype == 'basic') {  
-    2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
-    2630-		} elseif ($authtype == 'digest') {  
-    2631-			if (isset($digestRequest['nonce'])) {  
-    2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;
-
-./lib/Nusoap/nusoap.php:2740
-  
-    2737-				'authtype' => $proxyauthtype  
-    2738-			);  
-    2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
-    2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
-    2741-			}  
-    2742-		} else {  
-    2743-			$this->debug('remove proxy');
-
-./lib/S3.php:289
-  
-    286-		}  
-    287-		return array('file' => $file, 'size' => filesize($file),  
-    288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :  
-    289:		base64_encode(md5_file($file, true))) : '');  
-    290-	}  
-    291-  
-    292-
-
-./lib/S3.php:329
-  
-    326-  
-    327-		if (is_string($input)) $input = array(  
-    328-			'data' => $input, 'size' => strlen($input),  
-    329:			'md5sum' => base64_encode(md5($input, true))  
-    330-		);  
-    331-  
-    332-		// Data
-
-./lib/S3.php:860
-  
-    857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);  
-    858-		}  
-    859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));  
-    860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));  
-    861-  
-    862-		// Create parameters  
-    863-		$params = new stdClass;
-
-./lib/S3.php:1310
-  
-    1307-	* @return string  
-    1308-	*/  
-    1309-	private static function __getHash($string) {  
-    1310:		return base64_encode(extension_loaded('hash') ?  
-    1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(  
-    1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .  
-    1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^
-
-./lib/Microsoft/WindowsAzure/SessionHandler.php:168
-  
-    165-    {  
-    166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);  
-    167-        $sessionRecord->sessionExpires = time();  
-    168:        $sessionRecord->serializedData = base64_encode($serializedData);  
-    169-  
-    170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');  
-    171-
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:194
-  
-    191-  
-    192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource  
-    193-    	$stringToSign   = implode("\n", $stringToSign);  
-    194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
-    195-  
-    196-    	// Sign request  
-    197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php:163
-  
-    160-    	$stringToSign[] = $identifier;  
-    161-  
-    162-    	$stringToSign = implode("\n", $stringToSign);  
-    163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
-    164-  
-    165-    	return $signature;  
-    166-    }
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php:142
-  
-    139-    	$stringToSign[] = $requestDate; // Date  
-    140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource  
-    141-    	$stringToSign   = implode("\n", $stringToSign);  
-    142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
-    143-  
-    144-    	// Sign request  
-    145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:831
-  
-    828-		$resourceName = self::createResourceName($containerName , $blobName);  
-    829-  
-    830-		// Upload  
-    831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);  
-    832-		if (!$response->isSuccessful()) {  
-    833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));  
-    834-		}
-
-./lib/Microsoft/WindowsAzure/Storage/Blob.php:869
-  
-    866-		// Generate block list  
-    867-		$blocks = '';  
-    868-		foreach ($blockList as $block) {  
-    869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . "\n";  
-    870-		}  
-    871-  
-    872-		// Generate block list request
-
-./lib/Microsoft/WindowsAzure/Storage/Queue.php:393
-  
-    390-	    // Build body  
-    391-	    $rawData = '';  
-    392-	    $rawData .= '<QueueMessage>';  
-    393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';  
-    394-	    $rawData .= '</QueueMessage>';  
-    395-  
-    396-		// Perform request
-
-./lib/Microsoft/Http/Client.php:1382
-  
-    1379-                    throw new Microsoft_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");  
-    1380-                }  
-    1381-  
-    1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);  
-    1383-                break;  
-    1384-  
-    1385-            //case self::AUTH_DIGEST:
-
-#### $$ ####
-./lib/JSON.php:54
-  
-    52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>  
-    53- * @copyright	2005 Michal Migurski  
-    54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $  
-    55- * @license		http://www.opensource.org/licenses/bsd-license.php  
-    56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198  
-    57- */
-
-./lib/S3.php:3
-  
-    1-<?php  
-    2-/**  
-    3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $  
-    4-*  
-    5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.  
-    6-*
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:32
-  
-    29- * @package    Microsoft_WindowsAzure  
-    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
-    31- * @license    http://phpazure.codeplex.com/license  
-    32: * @version    $Id$  
-    33- */  
-    34-if (!defined('W3TC')) {  
-    35-    die();
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php:32
-  
-    29- * @package    Microsoft_WindowsAzure  
-    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
-    31- * @license    http://phpazure.codeplex.com/license  
-    32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $  
-    33- */  
-    34-if (!defined('W3TC')) {  
-    35-    die();
-
-./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php:32
-  
-    29- * @package    Microsoft_WindowsAzure  
-    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
-    31- * @license    http://phpazure.codeplex.com/license  
-    32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $  
-    33- */  
-    34-if (!defined('W3TC')) {  
-    35-    die();
-
-./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:32
-  
-    29- * @package    Microsoft_WindowsAzure  
-    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
-    31- * @license    http://phpazure.codeplex.com/license  
-    32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $  
-    33- */  
-    34-if (!defined('W3TC')) {  
-    35-    die();
-
-./lib/Microsoft/Uri/Http.php:19
-  
-    16- * @package   Microsoft_Uri  
-    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
-    19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $  
-    20- */  
-    21-if (!defined('W3TC')) {  
-    22-    die();
-
-./lib/Microsoft/Uri/Exception.php:19
-  
-    16- * @package   Microsoft_Uri  
-    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
-    19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $  
-    20- */  
-    21-if (!defined('W3TC')) {  
-    22-    die();
-
-./lib/Microsoft/Uri.php:19
-  
-    16- * @package   Microsoft_Uri  
-    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
-    19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $  
-    20- */  
-    21-  
-    22-/**
-
-./lib/Microsoft/Http/Client/Adapter/Proxy.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client_Adapter  
-    19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Client/Adapter/Stream.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client_Adapter  
-    19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Client/Adapter/Curl.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client_Adapter  
-    19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Client/Adapter/Interface.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client_Adapter  
-    19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Client/Adapter/Socket.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client_Adapter  
-    19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Client/Adapter/Exception.php:18
-  
-    15- * @category   Microsoft  
-    16- * @package    Microsoft_Http  
-    17- * @subpackage Client_Adapter_Exception  
-    18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $  
-    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    21- */
-
-./lib/Microsoft/Http/Client/Exception.php:18
-  
-    15- * @category   Microsoft  
-    16- * @package    Microsoft_Http  
-    17- * @subpackage Client_Exception  
-    18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $  
-    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    21- */
-
-./lib/Microsoft/Http/Cookie.php:20
-  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Cookie  
-    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */  
-    23-if (!defined('W3TC')) {
-
-./lib/Microsoft/Http/Client.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Client  
-    19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Response.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Response  
-    19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/Response/Stream.php:19
-  
-    16- * @category   Microsoft  
-    17- * @package    Microsoft_Http  
-    18- * @subpackage Response  
-    19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $  
-    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    22- */
-
-./lib/Microsoft/Http/CookieJar.php:18
-  
-    15- * @category   Microsoft  
-    16- * @package    Microsoft_Http  
-    17- * @subpackage CookieJar  
-    18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $  
-    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
-    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
-    21- */
-
-./lib/Minify/FirePHP.php:1068
-  
-    1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>  
-    1066-   * @author      Christoph Dorn <christoph@christophdorn.com>  
-    1067-   * @copyright   2005 Michal Migurski  
-    1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $  
-    1069-   * @license     http://www.opensource.org/licenses/bsd-license.php  
-    1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198  
-    1071-   */
-
-./lib/Minify/Solar/Dir.php:14
-  
-    11- *  
-    12- * @license http://opensource.org/licenses/bsd-license.php BSD  
-    13- *  
-    14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $  
-    15- *  
-    16- */  
-    17-class Solar_Dir {
-
-#### gzdeflate( ####
-./lib/W3/PgCache.php:770
-  
-    768-  
-    769-            case 'deflate':  
-    770:                $data = gzdeflate($data);  
-    771-                break;  
-    772-        }  
-    773-    }
-
-./lib/Nusoap/nusoap.php:4260
-  
-    4257-						$payload .= "<!-- Content being deflated -->";  
-    4258-					}  
-    4259-					$this->outgoing_headers[] = "Content-Encoding: deflate";  
-    4260:					$payload = gzdeflate($payload);  
-    4261-				} else {  
-    4262-					if (isset($this->debug_flag) && $this->debug_flag) {  
-    4263-						$payload .= "<!-- Content will not be deflated: no gzcompress -->";
-
-./lib/Minify/HTTP/Encoder.php:238
-  
-    235-            return false;  
-    236-        }  
-    237-        if ($this->_encodeMethod[0] === 'deflate') {  
-    238:            $encoded = gzdeflate($this->_content, $compressionLevel);  
-    239-        } elseif ($this->_encodeMethod[0] === 'gzip') {  
-    240-            $encoded = gzencode($this->_content, $compressionLevel);  
-    241-        } else {
-
-./lib/Minify/Minify.php:302
-  
-    299-                    break;  
-    300-  
-    301-                case 'deflate':  
-    302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);  
-    303-                    break;  
-    304-            }  
-    305-            // still need to encode
-
-
-### form_data ###
-#### $_GET ####
-./lib/W3/Request.php:106
-  
-    104-     */  
-    105-    function get_request() {  
-    106:        if (!isset($_GET)) {  
-    107:            $_GET = array();  
-    108-        }  
-    109-  
-    110-        if (!isset($_POST)) {  
-    111-            $_POST = array();  
-    112-        }  
-    113-  
-    114:        return array_merge($_GET, $_POST);  
-    115-    }  
-    116-}
-
-./lib/W3/Minify.php:130
-  
-    127-         * Set sources  
-    128-         */  
-    129-        if ($hash) {  
-    130:            $_GET['f'] = $this->get_files($hash, $type);  
-    131-        } else {  
-    132:            $_GET['g'] = $location;  
-    133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);  
-    134-        }  
-    135-
-
-./lib/W3/Plugin/TotalCacheActivation.php:28
-  
-    25-        /**  
-    26-         * Disable buggy sitewide activation in WPMU and WP 3.0  
-    27-         */  
-    28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {  
-    29-            w3_network_activate_error();  
-    30-        }  
-    31-
-
-./lib/Minify/Minify/Controller/Version1.php:44
-  
-    41-  
-    42-        // The following restrictions are to limit the URLs that minify will  
-    43-        // respond to. Ideally there should be only one way to reference a file.  
-    44:        if (! isset($_GET['files'])  
-    45-            // verify at least one file, files are single comma separated,  
-    46-            // and are all same extension  
-    47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)  
-    48-            // no "//" (makes URL rewriting easier)  
-    49:            || strpos($_GET['files'], '//') !== false  
-    50-            // no "\"  
-    51:            || strpos($_GET['files'], '\\') !== false  
-    52-            // no "./"  
-    53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])  
-    54-        ) {  
-    55-            return $options;  
-    56-        }  
-    57-        $extension = $m[1];  
-    58-  
-    59:        $files = explode(',', $_GET['files']);  
-    60-        if (count($files) > MINIFY_MAX_FILES) {  
-    61-            return $options;  
-    62-        }
-
-./lib/Minify/Minify/Controller/MinApp.php:40
-  
-    37-        );  
-    38-        unset($options['minApp']);  
-    39-        $sources = array();  
-    40:        if (isset($_GET['g'])) {  
-    41-            // try groups  
-    42:            if (! isset($cOptions['groups'][$_GET['g']])) {  
-    43:                $this->log("A group configuration for \"{$_GET['g']}\" was not set");  
-    44-                return $options;  
-    45-            }  
-    46-  
-    47:            $files = $cOptions['groups'][$_GET['g']];  
-    48-            // if $files is a single object, casting will break it  
-    49-            if (is_object($files)) {  
-    50-                $files = array($files);
-
-./lib/Minify/Minify/Controller/MinApp.php:72
-  
-    69-                    continue;  
-    70-                }  
-    71-            }  
-    72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {  
-    73-            // try user files  
-    74-            // The following restrictions are to limit the URLs that minify will  
-    75-            // respond to. Ideally there should be only one way to reference a file.  
-    76-            if (// verify at least one file, files are single comma separated,  
-    77-                // and are all same extension  
-    78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])  
-    79-                // no "//"  
-    80:                || strpos($_GET['f'], '//') !== false  
-    81-                // no "\"  
-    82:                || strpos($_GET['f'], '\\') !== false  
-    83-                // no "./"  
-    84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])  
-    85-            ) {  
-    86:                $this->log("GET['f'] param invalid: \"{$_GET['f']}\"");  
-    87-                return $options;  
-    88-            }  
-    89:            $files = explode(',', $_GET['f']);  
-    90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {  
-    91-                $this->log("Too many or duplicate files specified: \"" . implode(', ', $files) . "\"");  
-    92-                return $options;  
-    93-            }  
-    94:            if (!empty($_GET['b'])) {  
-    95-                // check for validity  
-    96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])  
-    97:                    && false === strpos($_GET['b'], '..')  
-    98:                    && $_GET['b'] !== '.') {  
-    99-                    // valid base  
-    100:                    $base = "/{$_GET['b']}/";  
-    101-                } else {  
-    102:                    $this->log("GET['b'] param invalid: \"{$_GET['b']}\"");  
-    103-                    return $options;  
-    104-                }  
-    105-            } else {
-
-#### $_POST ####
-./lib/W3/Request.php:110
-  
-    108-        }  
-    109-  
-    110:        if (!isset($_POST)) {  
-    111:            $_POST = array();  
-    112-        }  
-    113-  
-    114:        return array_merge($_GET, $_POST);  
-    115-    }  
-    116-}
-
-
-### globals ###
-#### $_FILES ####
-./lib/W3/Plugin/TotalCacheAdmin.php:2021
-  
-    2019-        @$config = & new W3_Config();  
-    2020-  
-    2021:        if (!isset($_FILES['config_file']['error']) || $_FILES['config_file']['error'] == UPLOAD_ERR_NO_FILE) {  
-    2022-            $error = 'config_import_no_file';  
-    2023:        } elseif ($_FILES['config_file']['error'] != UPLOAD_ERR_OK) {  
-    2024-            $error = 'config_import_upload';  
-    2025-        } else {  
-    2026-            ob_start();  
-    2027:            $imported = $config->read($_FILES['config_file']['tmp_name']);  
-    2028-            ob_end_clean();  
-    2029-  
-    2030-            if (!$imported) {
-
-./lib/W3/Plugin/TotalCacheAdmin.php:2453
-  
-    2450-        /**  
-    2451-         * Attach other files  
-    2452-         */  
-    2453:        if (!empty($_FILES['files'])) {  
-    2454:            $files = (array) $_FILES['files'];  
-    2455-            for ($i = 0, $l = count($files); $i < $l; $i++) {  
-    2456-                if (isset($files['tmp_name'][$i]) && isset($files['name'][$i]) && isset($files['error'][$i]) && $files['error'][$i] == UPLOAD_ERR_OK) {  
-    2457-                    $path = W3TC_TMP_DIR . '/' . $files['name'][$i];
-
-#### $GLOBALS ####
-./lib/W3/PgCacheFlush.php:386
-  
-    384-     */  
-    385-    function _get_comments_pagenum_link($post_id, $pagenum = 1, $max_page = 0) {  
-    386:        if (isset($GLOBALS['post']) && is_object($GLOBALS['post'])) {  
-    387:            $old_post = &$GLOBALS['post'];  
-    388-        } else {  
-    389:            @$GLOBALS['post'] = & new stdClass();  
-    390-            $old_post = null;  
-    391-        }  
-    392-  
-    393:        $GLOBALS['post']->ID = $post_id;  
-    394-  
-    395-        $link = get_comments_pagenum_link($pagenum, $max_page);  
-    396-  
-    397-        if ($old_post) {  
-    398:            $GLOBALS['post'] = &$old_post;  
-    399-        }  
-    400-  
-    401-        return $link;
-
-./lib/W3/Plugin/CdnEnabled.php:1076
-  
-    1073-                                            $guid = ltrim($upload_info['baseurlpath'] . $title, ',');  
-    1074-                                            $mime_type = w3_get_mime_type($dst);  
-    1075-  
-    1076:                                            $GLOBALS['wp_rewrite'] = & new WP_Rewrite();  
-    1077-  
-    1078-                                            /**  
-    1079-                                             * Insert attachment
-
-./lib/W3/Plugin/CdnAdmin.php:543
-  
-    540-                                            $guid = ltrim($upload_info['baseurlpath'] . $title, ',');  
-    541-                                            $mime_type = w3_get_mime_type($dst);  
-    542-  
-    543:                                            @$GLOBALS['wp_rewrite'] = & new WP_Rewrite();  
-    544-  
-    545-                                            /**  
-    546-                                             * Insert attachment
-
-./lib/W3/Plugin/TotalCacheAdmin.php:4764
-  
-    4761-                     */  
-    4762-                    case ($template == 'taxonomy'):  
-    4763-                        $taxonomy = '';  
-    4764:                        if (isset($GLOBALS['wp_taxonomies']) && is_array($GLOBALS['wp_taxonomies'])) {  
-    4765:                            foreach ($GLOBALS['wp_taxonomies'] as $wp_taxonomy) {  
-    4766-                                if (!in_array($wp_taxonomy->name, array(  
-    4767-                                    'category',  
-    4768-                                    'post_tag',
-
-./lib/CSSTidy/class.csstidy_optimise.php:105
-  
-    102-     */  
-    103-    function value()  
-    104-    {  
-    105:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
-    106-  
-    107-        // optimise shorthand properties  
-    108-        if(isset($shorthands[$this->property]))
-
-./lib/CSSTidy/class.csstidy_optimise.php:132
-  
-    129-     */  
-    130-    function shorthands()  
-    131-    {  
-    132:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
-    133-  
-    134-        if(!$this->parser->get_cfg('optimise_shorthands') || $this->parser->get_cfg('preserve_css')) {  
-    135-            return;
-
-./lib/CSSTidy/class.csstidy_optimise.php:160
-  
-    157-     */  
-    158-    function subvalue()  
-    159-    {  
-    160:        $replace_colors =& $GLOBALS['csstidy']['replace_colors'];  
-    161-  
-    162-        $this->sub_value = trim($this->sub_value);  
-    163-        if($this->sub_value == '') // caution : '0'
-
-./lib/CSSTidy/class.csstidy_optimise.php:297
-  
-    294-     */  
-    295-    function cut_color($color)  
-    296-    {  
-    297:        $replace_colors =& $GLOBALS['csstidy']['replace_colors'];  
-    298-  
-    299-        // rgb(0,0,0) -> #000000 (or #000 in this case later)  
-    300-        if(strtolower(substr($color,0,4)) == 'rgb(')
-
-./lib/CSSTidy/class.csstidy_optimise.php:372
-  
-    369-     */  
-    370-    function compress_numbers($subvalue)  
-    371-    {  
-    372:        $units =& $GLOBALS['csstidy']['units'];  
-    373:        $unit_values =& $GLOBALS['csstidy']['unit_values'];  
-    374:        $color_values =& $GLOBALS['csstidy']['color_values'];  
-    375-  
-    376-        // for font:1em/1em sans-serif...;  
-    377-        if($this->property == 'font')
-
-./lib/CSSTidy/class.csstidy_optimise.php:497
-  
-    494-     */  
-    495-    function dissolve_4value_shorthands($property,$value)  
-    496-    {  
-    497:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
-    498-        if(!is_array($shorthands[$property]))  
-    499-        {  
-    500-            $return[$property] = $value;
-
-./lib/CSSTidy/class.csstidy_optimise.php:611
-  
-    608-    function merge_4value_shorthands($array)  
-    609-    {  
-    610-        $return = $array;  
-    611:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
-    612-  
-    613-        foreach($shorthands as $key => $value)  
-    614-        {
-
-./lib/CSSTidy/class.csstidy_optimise.php:651
-  
-    648-     */  
-    649-    function dissolve_short_bg($str_value)  
-    650-    {  
-    651:        $background_prop_default =& $GLOBALS['csstidy']['background_prop_default'];  
-    652-        $repeat = array('repeat','repeat-x','repeat-y','no-repeat','space');  
-    653-        $attachment = array('scroll','fixed','local');  
-    654-        $clip = array('border','padding');
-
-./lib/CSSTidy/class.csstidy_optimise.php:737
-  
-    734-     */  
-    735-    function merge_bg($input_css)  
-    736-    {  
-    737:        $background_prop_default =& $GLOBALS['csstidy']['background_prop_default'];  
-    738-        // Max number of background images. CSS3 not yet fully implemented  
-    739-        $number_of_values = @max(count(csstidy_optimise::explode_ws(',',$input_css['background-image'])),count(csstidy_optimise::explode_ws(',',$input_css['background-color'])),1);  
-    740-        // Array with background images to check if BG image exists
-
-./lib/CSSTidy/data.inc.php:38
-  
-    35-/**  
-    36- * All whitespace allowed in CSS  
-    37- *  
-    38: * @global array $GLOBALS['csstidy']['whitespace']  
-    39- * @version 1.0  
-    40- */  
-    41:$GLOBALS['csstidy']['whitespace'] = array(' ',"\n","\t","\r","\x0B");  
-    42-  
-    43-/**  
-    44- * All CSS tokens used by csstidy  
-    45- *  
-    46: * @global string $GLOBALS['csstidy']['tokens']  
-    47- * @version 1.0  
-    48- */  
-    49:$GLOBALS['csstidy']['tokens'] = '/@}{;:=\'"(,\\!$%&)*+.<>?[]^`|~';  
-    50-  
-    51-/**  
-    52- * All CSS units (CSS 3 units included)  
-    53- *  
-    54- * @see compress_numbers()  
-    55: * @global array $GLOBALS['csstidy']['units']  
-    56- * @version 1.0  
-    57- */  
-    58:$GLOBALS['csstidy']['units'] = array('in','cm','mm','pt','pc','px','rem','em','%','ex','gd','vw','vh','vm','deg','grad','rad','ms','s','khz','hz');  
-    59-  
-    60-/**  
-    61- * Available at-rules  
-    62- *  
-    63: * @global array $GLOBALS['csstidy']['at_rules']  
-    64- * @version 1.0  
-    65- */  
-    66:$GLOBALS['csstidy']['at_rules'] = array('page' => 'is','font-face' => 'is','charset' => 'iv', 'import' => 'iv','namespace' => 'iv','media' => 'at');  
-    67-  
-    68- /**  
-    69- * Properties that need a value with unit  
-    70- *  
-    71- * @todo CSS3 properties  
-    72- * @see compress_numbers();  
-    73: * @global array $GLOBALS['csstidy']['unit_values']  
-    74- * @version 1.2  
-    75- */  
-    76:$GLOBALS['csstidy']['unit_values'] = array ('background', 'background-position', 'border', 'border-top', 'border-right', 'border-bottom', 'border-left', 'border-width',  
-    77-                                            'border-top-width', 'border-right-width', 'border-left-width', 'border-bottom-width', 'bottom', 'border-spacing', 'font-size',  
-    78-                                            'height', 'left', 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'max-height', 'max-width',  
-    79-                                            'min-height', 'min-width', 'outline-width', 'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-
-./lib/CSSTidy/data.inc.php:87
-  
-    84- *  
-    85- * @todo CSS3 properties  
-    86- * @see compress_numbers();  
-    87: * @global array $GLOBALS['csstidy']['color_values']  
-    88- * @version 1.0  
-    89- */  
-    90:$GLOBALS['csstidy']['color_values'] = array();  
-    91:$GLOBALS['csstidy']['color_values'][] = 'background-color';  
-    92:$GLOBALS['csstidy']['color_values'][] = 'border-color';  
-    93:$GLOBALS['csstidy']['color_values'][] = 'border-top-color';  
-    94:$GLOBALS['csstidy']['color_values'][] = 'border-right-color';  
-    95:$GLOBALS['csstidy']['color_values'][] = 'border-bottom-color';  
-    96:$GLOBALS['csstidy']['color_values'][] = 'border-left-color';  
-    97:$GLOBALS['csstidy']['color_values'][] = 'color';  
-    98:$GLOBALS['csstidy']['color_values'][] = 'outline-color';  
-    99-  
-    100-  
-    101-/**  
-    102- * Default values for the background properties  
-    103- *  
-    104- * @todo Possibly property names will change during CSS3 development  
-    105: * @global array $GLOBALS['csstidy']['background_prop_default']  
-    106- * @see dissolve_short_bg()  
-    107- * @see merge_bg()  
-    108- * @version 1.0  
-    109- */  
-    110:$GLOBALS['csstidy']['background_prop_default'] = array();  
-    111:$GLOBALS['csstidy']['background_prop_default']['background-image'] = 'none';  
-    112:$GLOBALS['csstidy']['background_prop_default']['background-size'] = 'auto';  
-    113:$GLOBALS['csstidy']['background_prop_default']['background-repeat'] = 'repeat';  
-    114:$GLOBALS['csstidy']['background_prop_default']['background-position'] = '0 0';  
-    115:$GLOBALS['csstidy']['background_prop_default']['background-attachment'] = 'scroll';  
-    116:$GLOBALS['csstidy']['background_prop_default']['background-clip'] = 'border';  
-    117:$GLOBALS['csstidy']['background_prop_default']['background-origin'] = 'padding';  
-    118:$GLOBALS['csstidy']['background_prop_default']['background-color'] = 'transparent';  
-    119-  
-    120-/**  
-    121- * A list of non-W3C color names which get replaced by their hex-codes  
-    122- *  
-    123: * @global array $GLOBALS['csstidy']['replace_colors']  
-    124- * @see cut_color()  
-    125- * @version 1.0  
-    126- */  
-    127:$GLOBALS['csstidy']['replace_colors'] = array();  
-    128:$GLOBALS['csstidy']['replace_colors']['aliceblue'] = '#F0F8FF';  
-    129:$GLOBALS['csstidy']['replace_colors']['antiquewhite'] = '#FAEBD7';  
-    130:$GLOBALS['csstidy']['replace_colors']['aquamarine'] = '#7FFFD4';  
-    131:$GLOBALS['csstidy']['replace_colors']['azure'] = '#F0FFFF';  
-    132:$GLOBALS['csstidy']['replace_colors']['beige'] = '#F5F5DC';  
-    133:$GLOBALS['csstidy']['replace_colors']['bisque'] = '#FFE4C4';  
-    134:$GLOBALS['csstidy']['replace_colors']['blanchedalmond'] = '#FFEBCD';  
-    135:$GLOBALS['csstidy']['replace_colors']['blueviolet'] = '#8A2BE2';  
-    136:$GLOBALS['csstidy']['replace_colors']['brown'] = '#A52A2A';  
-    137:$GLOBALS['csstidy']['replace_colors']['burlywood'] = '#DEB887';  
-    138:$GLOBALS['csstidy']['replace_colors']['cadetblue'] = '#5F9EA0';  
-    139:$GLOBALS['csstidy']['replace_colors']['chartreuse'] = '#7FFF00';  
-    140:$GLOBALS['csstidy']['replace_colors']['chocolate'] = '#D2691E';  
-    141:$GLOBALS['csstidy']['replace_colors']['coral'] = '#FF7F50';  
-    142:$GLOBALS['csstidy']['replace_colors']['cornflowerblue'] = '#6495ED';  
-    143:$GLOBALS['csstidy']['replace_colors']['cornsilk'] = '#FFF8DC';  
-    144:$GLOBALS['csstidy']['replace_colors']['crimson'] = '#DC143C';  
-    145:$GLOBALS['csstidy']['replace_colors']['cyan'] = '#00FFFF';  
-    146:$GLOBALS['csstidy']['replace_colors']['darkblue'] = '#00008B';  
-    147:$GLOBALS['csstidy']['replace_colors']['darkcyan'] = '#008B8B';  
-    148:$GLOBALS['csstidy']['replace_colors']['darkgoldenrod'] = '#B8860B';  
-    149:$GLOBALS['csstidy']['replace_colors']['darkgray'] = '#A9A9A9';  
-    150:$GLOBALS['csstidy']['replace_colors']['darkgreen'] = '#006400';  
-    151:$GLOBALS['csstidy']['replace_colors']['darkkhaki'] = '#BDB76B';  
-    152:$GLOBALS['csstidy']['replace_colors']['darkmagenta'] = '#8B008B';  
-    153:$GLOBALS['csstidy']['replace_colors']['darkolivegreen'] = '#556B2F';  
-    154:$GLOBALS['csstidy']['replace_colors']['darkorange'] = '#FF8C00';  
-    155:$GLOBALS['csstidy']['replace_colors']['darkorchid'] = '#9932CC';  
-    156:$GLOBALS['csstidy']['replace_colors']['darkred'] = '#8B0000';  
-    157:$GLOBALS['csstidy']['replace_colors']['darksalmon'] = '#E9967A';  
-    158:$GLOBALS['csstidy']['replace_colors']['darkseagreen'] = '#8FBC8F';  
-    159:$GLOBALS['csstidy']['replace_colors']['darkslateblue'] = '#483D8B';  
-    160:$GLOBALS['csstidy']['replace_colors']['darkslategray'] = '#2F4F4F';  
-    161:$GLOBALS['csstidy']['replace_colors']['darkturquoise'] = '#00CED1';  
-    162:$GLOBALS['csstidy']['replace_colors']['darkviolet'] = '#9400D3';  
-    163:$GLOBALS['csstidy']['replace_colors']['deeppink'] = '#FF1493';  
-    164:$GLOBALS['csstidy']['replace_colors']['deepskyblue'] = '#00BFFF';  
-    165:$GLOBALS['csstidy']['replace_colors']['dimgray'] = '#696969';  
-    166:$GLOBALS['csstidy']['replace_colors']['dodgerblue'] = '#1E90FF';  
-    167:$GLOBALS['csstidy']['replace_colors']['feldspar'] = '#D19275';  
-    168:$GLOBALS['csstidy']['replace_colors']['firebrick'] = '#B22222';  
-    169:$GLOBALS['csstidy']['replace_colors']['floralwhite'] = '#FFFAF0';  
-    170:$GLOBALS['csstidy']['replace_colors']['forestgreen'] = '#228B22';  
-    171:$GLOBALS['csstidy']['replace_colors']['gainsboro'] = '#DCDCDC';  
-    172:$GLOBALS['csstidy']['replace_colors']['ghostwhite'] = '#F8F8FF';  
-    173:$GLOBALS['csstidy']['replace_colors']['gold'] = '#FFD700';  
-    174:$GLOBALS['csstidy']['replace_colors']['goldenrod'] = '#DAA520';  
-    175:$GLOBALS['csstidy']['replace_colors']['greenyellow'] = '#ADFF2F';  
-    176:$GLOBALS['csstidy']['replace_colors']['honeydew'] = '#F0FFF0';  
-    177:$GLOBALS['csstidy']['replace_colors']['hotpink'] = '#FF69B4';  
-    178:$GLOBALS['csstidy']['replace_colors']['indianred'] = '#CD5C5C';  
-    179:$GLOBALS['csstidy']['replace_colors']['indigo'] = '#4B0082';  
-    180:$GLOBALS['csstidy']['replace_colors']['ivory'] = '#FFFFF0';  
-    181:$GLOBALS['csstidy']['replace_colors']['khaki'] = '#F0E68C';  
-    182:$GLOBALS['csstidy']['replace_colors']['lavender'] = '#E6E6FA';  
-    183:$GLOBALS['csstidy']['replace_colors']['lavenderblush'] = '#FFF0F5';  
-    184:$GLOBALS['csstidy']['replace_colors']['lawngreen'] = '#7CFC00';  
-    185:$GLOBALS['csstidy']['replace_colors']['lemonchiffon'] = '#FFFACD';  
-    186:$GLOBALS['csstidy']['replace_colors']['lightblue'] = '#ADD8E6';  
-    187:$GLOBALS['csstidy']['replace_colors']['lightcoral'] = '#F08080';  
-    188:$GLOBALS['csstidy']['replace_colors']['lightcyan'] = '#E0FFFF';  
-    189:$GLOBALS['csstidy']['replace_colors']['lightgoldenrodyellow'] = '#FAFAD2';  
-    190:$GLOBALS['csstidy']['replace_colors']['lightgrey'] = '#D3D3D3';  
-    191:$GLOBALS['csstidy']['replace_colors']['lightgreen'] = '#90EE90';  
-    192:$GLOBALS['csstidy']['replace_colors']['lightpink'] = '#FFB6C1';  
-    193:$GLOBALS['csstidy']['replace_colors']['lightsalmon'] = '#FFA07A';  
-    194:$GLOBALS['csstidy']['replace_colors']['lightseagreen'] = '#20B2AA';  
-    195:$GLOBALS['csstidy']['replace_colors']['lightskyblue'] = '#87CEFA';  
-    196:$GLOBALS['csstidy']['replace_colors']['lightslateblue'] = '#8470FF';  
-    197:$GLOBALS['csstidy']['replace_colors']['lightslategray'] = '#778899';  
-    198:$GLOBALS['csstidy']['replace_colors']['lightsteelblue'] = '#B0C4DE';  
-    199:$GLOBALS['csstidy']['replace_colors']['lightyellow'] = '#FFFFE0';  
-    200:$GLOBALS['csstidy']['replace_colors']['limegreen'] = '#32CD32';  
-    201:$GLOBALS['csstidy']['replace_colors']['linen'] = '#FAF0E6';  
-    202:$GLOBALS['csstidy']['replace_colors']['magenta'] = '#FF00FF';  
-    203:$GLOBALS['csstidy']['replace_colors']['mediumaquamarine'] = '#66CDAA';  
-    204:$GLOBALS['csstidy']['replace_colors']['mediumblue'] = '#0000CD';  
-    205:$GLOBALS['csstidy']['replace_colors']['mediumorchid'] = '#BA55D3';  
-    206:$GLOBALS['csstidy']['replace_colors']['mediumpurple'] = '#9370D8';  
-    207:$GLOBALS['csstidy']['replace_colors']['mediumseagreen'] = '#3CB371';  
-    208:$GLOBALS['csstidy']['replace_colors']['mediumslateblue'] = '#7B68EE';  
-    209:$GLOBALS['csstidy']['replace_colors']['mediumspringgreen'] = '#00FA9A';  
-    210:$GLOBALS['csstidy']['replace_colors']['mediumturquoise'] = '#48D1CC';  
-    211:$GLOBALS['csstidy']['replace_colors']['mediumvioletred'] = '#C71585';  
-    212:$GLOBALS['csstidy']['replace_colors']['midnightblue'] = '#191970';  
-    213:$GLOBALS['csstidy']['replace_colors']['mintcream'] = '#F5FFFA';  
-    214:$GLOBALS['csstidy']['replace_colors']['mistyrose'] = '#FFE4E1';  
-    215:$GLOBALS['csstidy']['replace_colors']['moccasin'] = '#FFE4B5';  
-    216:$GLOBALS['csstidy']['replace_colors']['navajowhite'] = '#FFDEAD';  
-    217:$GLOBALS['csstidy']['replace_colors']['oldlace'] = '#FDF5E6';  
-    218:$GLOBALS['csstidy']['replace_colors']['olivedrab'] = '#6B8E23';  
-    219:$GLOBALS['csstidy']['replace_colors']['orangered'] = '#FF4500';  
-    220:$GLOBALS['csstidy']['replace_colors']['orchid'] = '#DA70D6';  
-    221:$GLOBALS['csstidy']['replace_colors']['palegoldenrod'] = '#EEE8AA';  
-    222:$GLOBALS['csstidy']['replace_colors']['palegreen'] = '#98FB98';  
-    223:$GLOBALS['csstidy']['replace_colors']['paleturquoise'] = '#AFEEEE';  
-    224:$GLOBALS['csstidy']['replace_colors']['palevioletred'] = '#D87093';  
-    225:$GLOBALS['csstidy']['replace_colors']['papayawhip'] = '#FFEFD5';  
-    226:$GLOBALS['csstidy']['replace_colors']['peachpuff'] = '#FFDAB9';  
-    227:$GLOBALS['csstidy']['replace_colors']['peru'] = '#CD853F';  
-    228:$GLOBALS['csstidy']['replace_colors']['pink'] = '#FFC0CB';  
-    229:$GLOBALS['csstidy']['replace_colors']['plum'] = '#DDA0DD';  
-    230:$GLOBALS['csstidy']['replace_colors']['powderblue'] = '#B0E0E6';  
-    231:$GLOBALS['csstidy']['replace_colors']['rosybrown'] = '#BC8F8F';  
-    232:$GLOBALS['csstidy']['replace_colors']['royalblue'] = '#4169E1';  
-    233:$GLOBALS['csstidy']['replace_colors']['saddlebrown'] = '#8B4513';  
-    234:$GLOBALS['csstidy']['replace_colors']['salmon'] = '#FA8072';  
-    235:$GLOBALS['csstidy']['replace_colors']['sandybrown'] = '#F4A460';  
-    236:$GLOBALS['csstidy']['replace_colors']['seagreen'] = '#2E8B57';  
-    237:$GLOBALS['csstidy']['replace_colors']['seashell'] = '#FFF5EE';  
-    238:$GLOBALS['csstidy']['replace_colors']['sienna'] = '#A0522D';  
-    239:$GLOBALS['csstidy']['replace_colors']['skyblue'] = '#87CEEB';  
-    240:$GLOBALS['csstidy']['replace_colors']['slateblue'] = '#6A5ACD';  
-    241:$GLOBALS['csstidy']['replace_colors']['slategray'] = '#708090';  
-    242:$GLOBALS['csstidy']['replace_colors']['snow'] = '#FFFAFA';  
-    243:$GLOBALS['csstidy']['replace_colors']['springgreen'] = '#00FF7F';  
-    244:$GLOBALS['csstidy']['replace_colors']['steelblue'] = '#4682B4';  
-    245:$GLOBALS['csstidy']['replace_colors']['tan'] = '#D2B48C';  
-    246:$GLOBALS['csstidy']['replace_colors']['thistle'] = '#D8BFD8';  
-    247:$GLOBALS['csstidy']['replace_colors']['tomato'] = '#FF6347';  
-    248:$GLOBALS['csstidy']['replace_colors']['turquoise'] = '#40E0D0';  
-    249:$GLOBALS['csstidy']['replace_colors']['violet'] = '#EE82EE';  
-    250:$GLOBALS['csstidy']['replace_colors']['violetred'] = '#D02090';  
-    251:$GLOBALS['csstidy']['replace_colors']['wheat'] = '#F5DEB3';  
-    252:$GLOBALS['csstidy']['replace_colors']['whitesmoke'] = '#F5F5F5';  
-    253:$GLOBALS['csstidy']['replace_colors']['yellowgreen'] = '#9ACD32';  
-    254-  
-    255-  
-    256-/**  
-    257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues  
-    258- *  
-    259: * @global array $GLOBALS['csstidy']['shorthands']  
-    260- * @todo Are there new ones in CSS3?  
-    261- * @see dissolve_4value_shorthands()  
-    262- * @see merge_4value_shorthands()  
-    263- * @version 1.0  
-    264- */  
-    265:$GLOBALS['csstidy']['shorthands'] = array();  
-    266:$GLOBALS['csstidy']['shorthands']['border-color'] = array('border-top-color','border-right-color','border-bottom-color','border-left-color');  
-    267:$GLOBALS['csstidy']['shorthands']['border-style'] = array('border-top-style','border-right-style','border-bottom-style','border-left-style');  
-    268:$GLOBALS['csstidy']['shorthands']['border-width'] = array('border-top-width','border-right-width','border-bottom-width','border-left-width');  
-    269:$GLOBALS['csstidy']['shorthands']['margin'] = array('margin-top','margin-right','margin-bottom','margin-left');  
-    270:$GLOBALS['csstidy']['shorthands']['padding'] = array('padding-top','padding-right','padding-bottom','padding-left');  
-    271:$GLOBALS['csstidy']['shorthands']['-moz-border-radius'] = 0;  
-    272-  
-    273-/**  
-    274- * All CSS Properties. Needed for csstidy::property_is_next()  
-    275- *  
-    276: * @global array $GLOBALS['csstidy']['all_properties']  
-    277- * @todo Add CSS3 properties  
-    278- * @version 1.0  
-    279- * @see csstidy::property_is_next()  
-    280- */  
-    281:$GLOBALS['csstidy']['all_properties'] = array();  
-    282:$GLOBALS['csstidy']['all_properties']['background'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    283:$GLOBALS['csstidy']['all_properties']['background-color'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    284:$GLOBALS['csstidy']['all_properties']['background-image'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    285:$GLOBALS['csstidy']['all_properties']['background-repeat'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    286:$GLOBALS['csstidy']['all_properties']['background-attachment'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    287:$GLOBALS['csstidy']['all_properties']['background-position'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    288:$GLOBALS['csstidy']['all_properties']['border'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    289:$GLOBALS['csstidy']['all_properties']['border-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    290:$GLOBALS['csstidy']['all_properties']['border-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    291:$GLOBALS['csstidy']['all_properties']['border-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    292:$GLOBALS['csstidy']['all_properties']['border-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    293:$GLOBALS['csstidy']['all_properties']['border-color'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    294:$GLOBALS['csstidy']['all_properties']['border-top-color'] = 'CSS2.0,CSS2.1';  
-    295:$GLOBALS['csstidy']['all_properties']['border-bottom-color'] = 'CSS2.0,CSS2.1';  
-    296:$GLOBALS['csstidy']['all_properties']['border-left-color'] = 'CSS2.0,CSS2.1';  
-    297:$GLOBALS['csstidy']['all_properties']['border-right-color'] = 'CSS2.0,CSS2.1';  
-    298:$GLOBALS['csstidy']['all_properties']['border-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    299:$GLOBALS['csstidy']['all_properties']['border-top-style'] = 'CSS2.0,CSS2.1';  
-    300:$GLOBALS['csstidy']['all_properties']['border-right-style'] = 'CSS2.0,CSS2.1';  
-    301:$GLOBALS['csstidy']['all_properties']['border-left-style'] = 'CSS2.0,CSS2.1';  
-    302:$GLOBALS['csstidy']['all_properties']['border-bottom-style'] = 'CSS2.0,CSS2.1';  
-    303:$GLOBALS['csstidy']['all_properties']['border-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    304:$GLOBALS['csstidy']['all_properties']['border-top-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    305:$GLOBALS['csstidy']['all_properties']['border-right-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    306:$GLOBALS['csstidy']['all_properties']['border-left-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    307:$GLOBALS['csstidy']['all_properties']['border-bottom-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    308:$GLOBALS['csstidy']['all_properties']['border-collapse'] = 'CSS2.0,CSS2.1';  
-    309:$GLOBALS['csstidy']['all_properties']['border-spacing'] = 'CSS2.0,CSS2.1';  
-    310:$GLOBALS['csstidy']['all_properties']['bottom'] = 'CSS2.0,CSS2.1';  
-    311:$GLOBALS['csstidy']['all_properties']['caption-side'] = 'CSS2.0,CSS2.1';  
-    312:$GLOBALS['csstidy']['all_properties']['content'] = 'CSS2.0,CSS2.1';  
-    313:$GLOBALS['csstidy']['all_properties']['clear'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    314:$GLOBALS['csstidy']['all_properties']['clip'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    315:$GLOBALS['csstidy']['all_properties']['color'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    316:$GLOBALS['csstidy']['all_properties']['counter-reset'] = 'CSS2.0,CSS2.1';  
-    317:$GLOBALS['csstidy']['all_properties']['counter-increment'] = 'CSS2.0,CSS2.1';  
-    318:$GLOBALS['csstidy']['all_properties']['cursor'] = 'CSS2.0,CSS2.1';  
-    319:$GLOBALS['csstidy']['all_properties']['empty-cells'] = 'CSS2.0,CSS2.1';  
-    320:$GLOBALS['csstidy']['all_properties']['display'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    321:$GLOBALS['csstidy']['all_properties']['direction'] = 'CSS2.0,CSS2.1';  
-    322:$GLOBALS['csstidy']['all_properties']['float'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    323:$GLOBALS['csstidy']['all_properties']['font'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    324:$GLOBALS['csstidy']['all_properties']['font-family'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    325:$GLOBALS['csstidy']['all_properties']['font-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    326:$GLOBALS['csstidy']['all_properties']['font-variant'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    327:$GLOBALS['csstidy']['all_properties']['font-weight'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    328:$GLOBALS['csstidy']['all_properties']['font-stretch'] = 'CSS2.0';  
-    329:$GLOBALS['csstidy']['all_properties']['font-size-adjust'] = 'CSS2.0';  
-    330:$GLOBALS['csstidy']['all_properties']['font-size'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    331:$GLOBALS['csstidy']['all_properties']['height'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    332:$GLOBALS['csstidy']['all_properties']['left'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    333:$GLOBALS['csstidy']['all_properties']['line-height'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    334:$GLOBALS['csstidy']['all_properties']['list-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    335:$GLOBALS['csstidy']['all_properties']['list-style-type'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    336:$GLOBALS['csstidy']['all_properties']['list-style-image'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    337:$GLOBALS['csstidy']['all_properties']['list-style-position'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    338:$GLOBALS['csstidy']['all_properties']['margin'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    339:$GLOBALS['csstidy']['all_properties']['margin-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    340:$GLOBALS['csstidy']['all_properties']['margin-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    341:$GLOBALS['csstidy']['all_properties']['margin-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    342:$GLOBALS['csstidy']['all_properties']['margin-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    343:$GLOBALS['csstidy']['all_properties']['marks'] = 'CSS1.0,CSS2.0';  
-    344:$GLOBALS['csstidy']['all_properties']['marker-offset'] = 'CSS2.0';  
-    345:$GLOBALS['csstidy']['all_properties']['max-height'] = 'CSS2.0,CSS2.1';  
-    346:$GLOBALS['csstidy']['all_properties']['max-width'] = 'CSS2.0,CSS2.1';  
-    347:$GLOBALS['csstidy']['all_properties']['min-height'] = 'CSS2.0,CSS2.1';  
-    348:$GLOBALS['csstidy']['all_properties']['min-width'] = 'CSS2.0,CSS2.1';  
-    349:$GLOBALS['csstidy']['all_properties']['overflow'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    350:$GLOBALS['csstidy']['all_properties']['orphans'] = 'CSS2.0,CSS2.1';  
-    351:$GLOBALS['csstidy']['all_properties']['outline'] = 'CSS2.0,CSS2.1';  
-    352:$GLOBALS['csstidy']['all_properties']['outline-width'] = 'CSS2.0,CSS2.1';  
-    353:$GLOBALS['csstidy']['all_properties']['outline-style'] = 'CSS2.0,CSS2.1';  
-    354:$GLOBALS['csstidy']['all_properties']['outline-color'] = 'CSS2.0,CSS2.1';  
-    355:$GLOBALS['csstidy']['all_properties']['padding'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    356:$GLOBALS['csstidy']['all_properties']['padding-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    357:$GLOBALS['csstidy']['all_properties']['padding-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    358:$GLOBALS['csstidy']['all_properties']['padding-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    359:$GLOBALS['csstidy']['all_properties']['padding-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    360:$GLOBALS['csstidy']['all_properties']['page-break-before'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    361:$GLOBALS['csstidy']['all_properties']['page-break-after'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    362:$GLOBALS['csstidy']['all_properties']['page-break-inside'] = 'CSS2.0,CSS2.1';  
-    363:$GLOBALS['csstidy']['all_properties']['page'] = 'CSS2.0';  
-    364:$GLOBALS['csstidy']['all_properties']['position'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    365:$GLOBALS['csstidy']['all_properties']['quotes'] = 'CSS2.0,CSS2.1';  
-    366:$GLOBALS['csstidy']['all_properties']['right'] = 'CSS2.0,CSS2.1';  
-    367:$GLOBALS['csstidy']['all_properties']['size'] = 'CSS1.0,CSS2.0';  
-    368:$GLOBALS['csstidy']['all_properties']['speak-header'] = 'CSS2.0,CSS2.1';  
-    369:$GLOBALS['csstidy']['all_properties']['table-layout'] = 'CSS2.0,CSS2.1';  
-    370:$GLOBALS['csstidy']['all_properties']['top'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    371:$GLOBALS['csstidy']['all_properties']['text-indent'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    372:$GLOBALS['csstidy']['all_properties']['text-align'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    373:$GLOBALS['csstidy']['all_properties']['text-decoration'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    374:$GLOBALS['csstidy']['all_properties']['text-shadow'] = 'CSS2.0';  
-    375:$GLOBALS['csstidy']['all_properties']['letter-spacing'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    376:$GLOBALS['csstidy']['all_properties']['word-spacing'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    377:$GLOBALS['csstidy']['all_properties']['text-transform'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    378:$GLOBALS['csstidy']['all_properties']['white-space'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    379:$GLOBALS['csstidy']['all_properties']['unicode-bidi'] = 'CSS2.0,CSS2.1';  
-    380:$GLOBALS['csstidy']['all_properties']['vertical-align'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    381:$GLOBALS['csstidy']['all_properties']['visibility'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    382:$GLOBALS['csstidy']['all_properties']['width'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    383:$GLOBALS['csstidy']['all_properties']['widows'] = 'CSS2.0,CSS2.1';  
-    384:$GLOBALS['csstidy']['all_properties']['z-index'] = 'CSS1.0,CSS2.0,CSS2.1';  
-    385-/* Speech */  
-    386:$GLOBALS['csstidy']['all_properties']['volume'] = 'CSS2.0,CSS2.1';  
-    387:$GLOBALS['csstidy']['all_properties']['speak'] = 'CSS2.0,CSS2.1';  
-    388:$GLOBALS['csstidy']['all_properties']['pause'] = 'CSS2.0,CSS2.1';  
-    389:$GLOBALS['csstidy']['all_properties']['pause-before'] = 'CSS2.0,CSS2.1';  
-    390:$GLOBALS['csstidy']['all_properties']['pause-after'] = 'CSS2.0,CSS2.1';  
-    391:$GLOBALS['csstidy']['all_properties']['cue'] = 'CSS2.0,CSS2.1';  
-    392:$GLOBALS['csstidy']['all_properties']['cue-before'] = 'CSS2.0,CSS2.1';  
-    393:$GLOBALS['csstidy']['all_properties']['cue-after'] = 'CSS2.0,CSS2.1';  
-    394:$GLOBALS['csstidy']['all_properties']['play-during'] = 'CSS2.0,CSS2.1';  
-    395:$GLOBALS['csstidy']['all_properties']['azimuth'] = 'CSS2.0,CSS2.1';  
-    396:$GLOBALS['csstidy']['all_properties']['elevation'] = 'CSS2.0,CSS2.1';  
-    397:$GLOBALS['csstidy']['all_properties']['speech-rate'] = 'CSS2.0,CSS2.1';  
-    398:$GLOBALS['csstidy']['all_properties']['voice-family'] = 'CSS2.0,CSS2.1';  
-    399:$GLOBALS['csstidy']['all_properties']['pitch'] = 'CSS2.0,CSS2.1';  
-    400:$GLOBALS['csstidy']['all_properties']['pitch-range'] = 'CSS2.0,CSS2.1';  
-    401:$GLOBALS['csstidy']['all_properties']['stress'] = 'CSS2.0,CSS2.1';  
-    402:$GLOBALS['csstidy']['all_properties']['richness'] = 'CSS2.0,CSS2.1';  
-    403:$GLOBALS['csstidy']['all_properties']['speak-punctuation'] = 'CSS2.0,CSS2.1';  
-    404:$GLOBALS['csstidy']['all_properties']['speak-numeral'] = 'CSS2.0,CSS2.1';  
-    405-  
-    406-/**  
-    407- * An array containing all predefined templates.  
-    408- *  
-    409: * @global array $GLOBALS['csstidy']['predefined_templates']  
-    410- * @version 1.0  
-    411- * @see csstidy::load_template()  
-    412- */  
-    413:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="at">'; //string before @rule  
-    414:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>'."\n"; //bracket after @-rule  
-    415:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="selector">'; //string before selector  
-    416:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>'."\n"; //bracket after selector  
-    417:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="property">'; //string before property  
-    418:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span><span class="value">'; //string after property+before value  
-    419:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span><span class="format">;</span>'."\n"; //string after value  
-    420:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="format">}</span>'; //closing bracket - selector  
-    421:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n\n"; //space between blocks {...}  
-    422:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n".'<span class="format">}</span>'. "\n\n"; //closing bracket @-rule  
-    423:$GLOBALS['csstidy']['predefined_templates']['default'][] = ''; //indent in @-rule  
-    424:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="comment">'; // before comment  
-    425:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span>'."\n"; // after comment  
-    426:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n"; // after last line @-rule  
-    427-  
-    428:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="at">';  
-    429:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span> <span class="format">{</span>'."\n";  
-    430:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="selector">';  
-    431:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">{</span>';  
-    432:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="property">';  
-    433:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="value">';  
-    434:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">;</span>';  
-    435:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="format">}</span>';  
-    436:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n";  
-    437:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n". '<span class="format">}'."\n".'</span>';  
-    438:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '';  
-    439:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="comment">'; // before comment  
-    440:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span>'; // after comment  
-    441:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n";  
-    442-  
-    443:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="at">';  
-    444:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';  
-    445:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="selector">';  
-    446:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';  
-    447:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="property">';  
-    448:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="value">';  
-    449:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">;</span>';  
-    450:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';  
-    451:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
-    452:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';  
-    453:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
-    454:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="comment">'; // before comment  
-    455:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span>'; // after comment  
-    456:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
-    457-  
-    458:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="at">';  
-    459:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span> <span class="format">{</span>'."\n";  
-    460:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="selector">';  
-    461:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span>'."\n".'<span class="format">{</span>'."\n";  
-    462:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '	<span class="property">';  
-    463:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="value">';  
-    464:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="format">;</span>'."\n";  
-    465:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="format">}</span>';  
-    466:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n\n";  
-    467:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n".'<span class="format">}</span>'."\n\n";  
-    468:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '	';  
-    469:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="comment">'; // before comment  
-    470:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span>'."\n"; // after comment  
-    471:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n";  
-    472-  
-    473-?>
-
-./lib/CSSTidy/class.csstidy.php:359
-  
-    356-{  
-    357-	++$i;  
-    358-	$add = '';  
-    359:	$tokens =& $GLOBALS['csstidy']['tokens'];  
-    360-	$replaced = false;  
-    361-  
-    362-	while($i < strlen($string) && (ctype_xdigit($string{$i}) || ctype_space($string{$i})) && strlen($add) < 6)
-
-./lib/CSSTidy/class.csstidy.php:407
-  
-    404- */  
-    405-function load_template($content, $from_file=true)  
-    406-{  
-    407:	$predefined_templates =& $GLOBALS['csstidy']['predefined_templates'];  
-    408-	if($content == 'high_compression' || $content == 'default' || $content == 'highest_compression' || $content == 'low_compression')  
-    409-	{  
-    410-		$this->template = $predefined_templates[$content];
-
-./lib/CSSTidy/class.csstidy.php:447
-  
-    444- */  
-    445-function is_token(&$string, $i)  
-    446-{  
-    447:	$tokens =& $GLOBALS['csstidy']['tokens'];  
-    448-	return (strpos($tokens, $string{$i}) !== false && !csstidy::escaped($string,$i));  
-    449-}  
-    450-
-
-./lib/CSSTidy/class.csstidy.php:464
-  
-    461-    $this->print = new csstidy_print($this);  
-    462-    $this->optimise = new csstidy_optimise($this);  
-    463-  
-    464:    $all_properties =& $GLOBALS['csstidy']['all_properties'];  
-    465:    $at_rules =& $GLOBALS['csstidy']['at_rules'];  
-    466-  
-    467-    $this->css = array();  
-    468-    $this->print->input_css = $string;
-
-./lib/CSSTidy/class.csstidy.php:785
-  
-    782-                $temp_add = "\\A ";  
-    783-                $this->log('Fixed incorrect newline in string','Warning');  
-    784-            }  
-    785:            if (!($this->str_char == ')' && in_array($string{$i}, $GLOBALS['csstidy']['whitespace']) && !$this->str_in_str)) {  
-    786-                $this->cur_string .= $temp_add;  
-    787-            }  
-    788-            if($string{$i} == $this->str_char && !csstidy::escaped($string,$i) && !$this->str_in_str)  
-    789-            {  
-    790-                $this->status = $this->from;  
-    791:                if (!preg_match('|[' . implode('', $GLOBALS['csstidy']['whitespace']) . ']|uis', $this->cur_string) && $this->property != 'content') {  
-    792-                    if ($this->str_char == '"' || $this->str_char == '\'') {  
-    793-						$this->cur_string = substr($this->cur_string, 1, -1);  
-    794-					} else if (strlen($this->cur_string) > 3 && ($this->cur_string[1] == '"' || $this->cur_string[1] == '\'')) /* () */ {
-
-./lib/CSSTidy/class.csstidy.php:936
-  
-    933- */  
-    934-function is_important(&$value)  
-    935-{  
-    936:	return (!strcasecmp(substr(str_replace($GLOBALS['csstidy']['whitespace'],'',$value),-10,10),'!important'));  
-    937-}  
-    938-  
-    939-/**
-
-./lib/CSSTidy/class.csstidy.php:970
-  
-    967- */  
-    968-function property_is_next($istring, $pos)  
-    969-{  
-    970:	$all_properties =& $GLOBALS['csstidy']['all_properties'];  
-    971-	$istring = substr($istring,$pos,strlen($istring)-$pos);  
-    972-	$pos = strpos($istring,':');  
-    973-	if($pos === false)
-
-./lib/CSSTidy/class.csstidy.php:994
-  
-    991- * @version 1.0  
-    992- */  
-    993-function property_is_valid($property) {  
-    994:    $all_properties =& $GLOBALS['csstidy']['all_properties'];  
-    995-    return (isset($all_properties[$property]) && strpos($all_properties[$property],strtoupper($this->get_cfg('css_level'))) !== false );  
-    996-}  
-    997-
-
-./lib/Nusoap/class.nusoap_base.php:74
-  
-    71-  
-    72-// class variable emulation  
-    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html  
-    74:$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = 9;  
-    75-  
-    76-/**  
-    77-*
-
-./lib/Nusoap/class.nusoap_base.php:226
-  
-    223-	* @access	public  
-    224-	*/  
-    225-	function nusoap_base() {  
-    226:		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
-    227-	}  
-    228-  
-    229-	/**
-
-./lib/Nusoap/class.nusoap_base.php:236
-  
-    233-	* @access	public  
-    234-	*/  
-    235-	function getGlobalDebugLevel() {  
-    236:		return $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
-    237-	}  
-    238-  
-    239-	/**
-
-./lib/Nusoap/class.nusoap_base.php:246
-  
-    243-	* @access	public  
-    244-	*/  
-    245-	function setGlobalDebugLevel($level) {  
-    246:		$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = $level;  
-    247-	}  
-    248-  
-    249-	/**
-
-./lib/Nusoap/nusoap.php:74
-  
-    71-  
-    72-// class variable emulation  
-    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html  
-    74:$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = 9;  
-    75-  
-    76-/**  
-    77-*
-
-./lib/Nusoap/nusoap.php:226
-  
-    223-	* @access	public  
-    224-	*/  
-    225-	function nusoap_base() {  
-    226:		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
-    227-	}  
-    228-  
-    229-	/**
-
-./lib/Nusoap/nusoap.php:236
-  
-    233-	* @access	public  
-    234-	*/  
-    235-	function getGlobalDebugLevel() {  
-    236:		return $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
-    237-	}  
-    238-  
-    239-	/**
-
-./lib/Nusoap/nusoap.php:246
-  
-    243-	* @access	public  
-    244-	*/  
-    245-	function setGlobalDebugLevel($level) {  
-    246:		$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = $level;  
-    247-	}  
-    248-  
-    249-	/**
-
-./lib/Minify/FirePHP.php:963
-  
-    960-  
-    961-        foreach ($Object as $key => $val) {  
-    962-  
-    963:          // Encoding the $GLOBALS PHP array causes an infinite loop  
-    964-          // if the recursion is not reset here as it contains  
-    965-          // a reference to itself. This is the only way I have come up  
-    966-          // with to stop infinite recursion in this case.
-
-./lib/Minify/FirePHP.php:1352
-  
-    1349-  */  
-    1350-  private function json_name_value($name, $value)  
-    1351-  {  
-    1352:      // Encoding the $GLOBALS PHP array causes an infinite loop  
-    1353-      // if the recursion is not reset here as it contains  
-    1354-      // a reference to itself. This is the only way I have come up  
-    1355-      // with to stop infinite recursion in this case.
-
-./inc/functions/plugin.php:15
-  
-    12- * @return void  
-    13- */  
-    14-function w3tc_add_action($action, $callback) {  
-    15:    $GLOBALS['_w3tc_actions'][$action][] = $callback;  
-    16-}  
-    17-  
-    18-/**
-
-./inc/functions/plugin.php:26
-  
-    23- * @return mixed  
-    24- */  
-    25-function w3tc_do_action($action, $value = null) {  
-    26:    if (isset($GLOBALS['_w3tc_actions'][$action])) {  
-    27:        foreach ((array) $GLOBALS['_w3tc_actions'][$action] as $callback) {  
-    28-            if (is_callable($callback)) {  
-    29-                $value = call_user_func($callback, $value);  
-    30-            }
-
-./inc/define.php:416
-  
-    413-        if (file_exists(W3TC_BLOGNAMES_PATH)) {  
-    414-            // Get blognames from cache  
-    415-            $blognames = w3_load_blognames();  
-    416:        } elseif (isset($GLOBALS['wpdb'])) {  
-    417-            // Get blognames from DB  
-    418-            $blognames = w3_get_blognames();  
-    419-        } else {
-
-./inc/define.php:437
-  
-    434- * @return integer  
-    435- */  
-    436-function w3_get_blog_id() {  
-    437:    return (isset($GLOBALS['blog_id']) ? (int) $GLOBALS['blog_id'] : 0);  
-    438-}  
-    439-  
-    440-/**
-
-./inc/define.php:869
-  
-    866-        '%DOMAIN%',  
-    867-        '%BASE_PATH%'  
-    868-    ), array(  
-    869:        (isset($GLOBALS['blog_id']) ? (int) $GLOBALS['blog_id'] : 0),  
-    870:        (isset($GLOBALS['post_id']) ? (int) $GLOBALS['post_id'] : 0),  
-    871-        w3_get_blogname(),  
-    872-        w3_get_host(),  
-    873-        w3_get_domain(w3_get_host()),
-
-./wp-content/object-cache.php:30
-  
-    27-     * @return void  
-    28-     */  
-    29-    function wp_cache_init() {  
-    30:        $GLOBALS['wp_object_cache'] = & w3_instance('W3_ObjectCache');  
-    31-    }  
-    32-  
-    33-    /**
-
-./wp-content/db.php:38
-  
-    35-  
-    36-        require_once W3TC_LIB_W3_DIR . '/Db.php';  
-    37-  
-    38:        @$GLOBALS['wpdb'] = & W3_Db::instance();  
-    39-    }  
-    40-}
-
-#### $_SERVER ####
-./lib/W3/Minify.php:84
-  
-    82-         * Fix DOCUMENT_ROOT  
-    83-         */  
-    84:        $_SERVER['DOCUMENT_ROOT'] = w3_get_document_root();  
-    85-  
-    86-        /**  
-    87-         * Set cache engine
-
-./lib/W3/Minify.php:217
-  
-    214-     * @return bool  
-    215-     */  
-    216-    function log($msg) {  
-    217:        $data = sprintf("[%s] [%s] [%s] %s\n", date('r'), $_SERVER['REQUEST_URI'], (!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'), $msg);  
-    218-  
-    219-        return @file_put_contents(W3TC_MINIFY_LOG_FILE, $data, FILE_APPEND);  
-    220-    }
-
-./lib/W3/Minify.php:688
-  
-    685-     * @return boolean  
-    686-     */  
-    687-    function _send_notification() {  
-    688:        $from_email = 'wordpress@' . w3_get_domain($_SERVER['SERVER_NAME']);  
-    689-        $from_name = get_option('blogname');  
-    690-        $to_name = $to_email = get_option('admin_email');  
-    691-        $body = @file_get_contents(W3TC_INC_DIR . '/email/minify_error_notification.php');
-
-./lib/W3/PgCacheFlush.php:367
-  
-    364-     * @return string  
-    365-     */  
-    366-    function _get_pagenum_link($url, $pagenum = 1) {  
-    367:        $request_uri = $_SERVER['REQUEST_URI'];  
-    368:        $_SERVER['REQUEST_URI'] = $url;  
-    369-  
-    370-        $link = get_pagenum_link($pagenum);  
-    371-  
-    372:        $_SERVER['REQUEST_URI'] = $request_uri;  
-    373-  
-    374-        return $link;  
-    375-    }
-
-./lib/W3/Mobile.php:45
-  
-    42-            foreach ($this->groups as $group => $config) {  
-    43-                if (isset($config['enabled']) && $config['enabled'] && isset($config['agents'])) {  
-    44-                    foreach ((array) $config['agents'] as $agent) {  
-    45:                        if ($agent && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('~' . $agent . '~i', $_SERVER['HTTP_USER_AGENT'])) {  
-    46-                            $mobile_group = $group;  
-    47-  
-    48-                            return $mobile_group;
-
-./lib/W3/Db.php:553
-  
-    550-        /**  
-    551-         * Check User Agent  
-    552-         */  
-    553:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
-    554-            return false;  
-    555-        }  
-    556-
-
-./lib/W3/Db.php:611
-  
-    608-        );  
-    609-  
-    610-        foreach ($auto_reject_uri as $uri) {  
-    611:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
-    612-                return false;  
-    613-            }  
-    614-        }
-
-./lib/W3/Db.php:621
-  
-    618-  
-    619-        foreach ($reject_uri as $expr) {  
-    620-            $expr = trim($expr);  
-    621:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
-    622-                return false;  
-    623-            }  
-    624-        }
-
-./lib/W3/ObjectCache.php:578
-  
-    575-        /**  
-    576-         * Check User Agent  
-    577-         */  
-    578:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
-    579-            return false;  
-    580-        }  
-    581-
-
-./lib/W3/CloudFlare.php:116
-  
-    113-     * @return void  
-    114-     */  
-    115-    function fix_remote_addr() {  
-    116:        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {  
-    117-            foreach ($this->_ip_ranges as $range) {  
-    118:                if ($this->_ip_in_range($_SERVER['REMOTE_ADDR'], $range)) {  
-    119:                    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];  
-    120-                    break;  
-    121-                }  
-    122-            }
-
-./lib/W3/Minifier.php:200
-  
-    197-                $symlinks = $this->_config->get_array('minify.symlinks');  
-    198-  
-    199-                foreach ($symlinks as $link => $target) {  
-    200:                    $link = str_replace('//', realpath($_SERVER['DOCUMENT_ROOT']), $link);  
-    201-                    $link = strtr($link, '/', DIRECTORY_SEPARATOR);  
-    202-                    $options['symlinks'][$link] = realpath($target);  
-    203-                }
-
-./lib/W3/PgCache.php:113
-  
-    110-    function __construct() {  
-    111-        $this->_config = & w3_instance('W3_Config');  
-    112-        $this->_debug = $this->_config->get_boolean('pgcache.debug');  
-    113:        $this->_request_uri = $_SERVER['REQUEST_URI'];  
-    114-        $this->_lifetime = $this->_config->get_integer('browsercache.html.lifetime');  
-    115-        $this->_enhanced_mode = ($this->_config->get_string('pgcache.engine') == 'file_generic');  
-    116-
-
-./lib/W3/PgCache.php:474
-  
-    471-        /**  
-    472-         * Skip if posting  
-    473-         */  
-    474:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
-    475-            $this->cache_reject_reason = 'Requested method is POST';  
-    476-  
-    477-            return false;
-
-./lib/W3/PgCache.php:492
-  
-    489-        /**  
-    490-         * Check request URI  
-    491-         */  
-    492:        if (!in_array($_SERVER['PHP_SELF'], $this->_config->get_array('pgcache.accept.files')) && !$this->_check_request_uri()) {  
-    493-            $this->cache_reject_reason = 'Requested URI is rejected';  
-    494-  
-    495-            return false;
-
-./lib/W3/PgCache.php:704
-  
-    701-        }  
-    702-  
-    703-        foreach ($uas as $ua) {  
-    704:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
-    705-                return false;  
-    706-            }  
-    707-        }
-
-./lib/W3/PgCache.php:824
-  
-    821-            $compressions = $this->_get_compressions();  
-    822-  
-    823-            foreach ($compressions as $compression) {  
-    824:                if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && stristr($_SERVER['HTTP_ACCEPT_ENCODING'], $compression) !== false) {  
-    825-                    return $compression;  
-    826-                }  
-    827-            }
-
-./lib/W3/PgCache.php:877
-  
-    874-     * @return boolean  
-    875-     */  
-    876-    function _is_buggy_ie() {  
-    877:        if (isset($_SERVER['HTTP_USER_AGENT'])) {  
-    878:            $ua = $_SERVER['HTTP_USER_AGENT'];  
-    879-  
-    880-            if (strpos($ua, 'Mozilla/4.0 (compatible; MSIE ') === 0 && strpos($ua, 'Opera') === false) {  
-    881-                $version = (float) substr($ua, 30);
-
-./lib/W3/PgCache.php:1200
-  
-    1197-     * @return boolean  
-    1198-     */  
-    1199-    function _check_modified_since($time) {  
-    1200:        if (!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {  
-    1201:            $if_modified_since = $_SERVER['HTTP_IF_MODIFIED_SINCE'];  
-    1202-  
-    1203-            // IE has tacked on extra data to this header, strip it  
-    1204-            if (($semicolon = strrpos($if_modified_since, ';')) !== false) {
-
-./lib/W3/PgCache.php:1220
-  
-    1217-     * @return boolean  
-    1218-     */  
-    1219-    function _check_match($etag) {  
-    1220:        if (!empty($_SERVER['HTTP_IF_NONE_MATCH'])) {  
-    1221:            $if_none_match = (get_magic_quotes_gpc() ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : $_SERVER['HTTP_IF_NONE_MATCH']);  
-    1222-            $client_etags = explode(',', $if_none_match);  
-    1223-  
-    1224-            foreach ($client_etags as $client_etag) {
-
-./lib/W3/Cdn/Base.php:231
-  
-    228-    function format_url($path) {  
-    229-        $url = $this->_format_url($path);  
-    230-  
-    231:        if ($url && $this->_config['compression'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && stristr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && $this->_may_gzip($path)) {  
-    232-            if (($qpos = strpos($url, '?')) !== false) {  
-    233-                $url = substr_replace($url, $this->_gzip_extension, $qpos, 0);  
-    234-            } else {
-
-./lib/W3/Plugin/Minify.php:996
-  
-    993-        ));  
-    994-  
-    995-        foreach ($uas as $ua) {  
-    996:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
-    997-                return false;  
-    998-            }  
-    999-        }
-
-./lib/W3/Plugin/Minify.php:1034
-  
-    1031-        );  
-    1032-  
-    1033-        foreach ($auto_reject_uri as $uri) {  
-    1034:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
-    1035-                return false;  
-    1036-            }  
-    1037-        }
-
-./lib/W3/Plugin/Minify.php:1044
-  
-    1041-  
-    1042-        foreach ($reject_uri as $expr) {  
-    1043-            $expr = trim($expr);  
-    1044:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
-    1045-                return false;  
-    1046-            }  
-    1047-        }
-
-./lib/W3/Plugin/CdnEnabled.php:1869
-  
-    1866-        ));  
-    1867-  
-    1868-        foreach ($uas as $ua) {  
-    1869:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
-    1870-                return false;  
-    1871-            }  
-    1872-        }
-
-./lib/W3/Plugin/CdnEnabled.php:1889
-  
-    1886-        );  
-    1887-  
-    1888-        foreach ($auto_reject_uri as $uri) {  
-    1889:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
-    1890-                return false;  
-    1891-            }  
-    1892-        }
-
-./lib/W3/Plugin/CdnEnabled.php:1899
-  
-    1896-  
-    1897-        foreach ($reject_uri as $expr) {  
-    1898-            $expr = trim($expr);  
-    1899:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
-    1900-                return false;  
-    1901-            }  
-    1902-        }
-
-./lib/W3/Plugin/MinifyEnabled.php:1054
-  
-    1051-        ));  
-    1052-  
-    1053-        foreach ($uas as $ua) {  
-    1054:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
-    1055-                return false;  
-    1056-            }  
-    1057-        }
-
-./lib/W3/Plugin/MinifyEnabled.php:1092
-  
-    1089-        );  
-    1090-  
-    1091-        foreach ($auto_reject_uri as $uri) {  
-    1092:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
-    1093-                return false;  
-    1094-            }  
-    1095-        }
-
-./lib/W3/Plugin/MinifyEnabled.php:1102
-  
-    1099-  
-    1100-        foreach ($reject_uri as $expr) {  
-    1101-            $expr = trim($expr);  
-    1102:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
-    1103-                return false;  
-    1104-            }  
-    1105-        }
-
-./lib/W3/Plugin/BrowserCache.php:116
-  
-    113-        /**  
-    114-         * Check User Agent  
-    115-         */  
-    116:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
-    117-            return false;  
-    118-        }  
-    119-
-
-./lib/W3/Plugin/TotalCache.php:43
-  
-    40-            'admin_bar_menu'  
-    41-        ), 150);  
-    42-  
-    43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&  
-    44:                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {  
-    45-            add_filter('template', array(  
-    46-                &$this,  
-    47-                'template_preview'
-
-./lib/W3/Plugin/TotalCache.php:148
-  
-    145-        /**  
-    146-         * Check request and handle w3tc_request_data requests  
-    147-         */  
-    148:        $pos = strpos($_SERVER['REQUEST_URI'], '/w3tc_request_data/');  
-    149-  
-    150-        if ($pos !== false) {  
-    151:            $hash = substr($_SERVER['REQUEST_URI'], $pos + 19, 32);  
-    152-  
-    153-            if (strlen($hash) == 32) {  
-    154-                $request_data = (array) get_option('w3tc_request_data');
-
-./lib/W3/Plugin/TotalCache.php:370
-  
-    367-                /**  
-    368-                 * Replace links for preview mode  
-    369-                 */  
-    370:                if (w3_is_preview_mode() && isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] != W3TC_POWERED_BY) {  
-    371-                    $domain_url_regexp = w3_get_domain_url_regexp();  
-    372-  
-    373-                    $buffer = preg_replace_callback('~(href|src|action)=([\'"])(' . $domain_url_regexp . ')?(/[^\'"]*)~', array(
-
-./lib/W3/Plugin/TotalCache.php:383
-  
-    380-                 * Add footer comment  
-    381-                 */  
-    382-                $date = date_i18n('Y-m-d H:i:s');  
-    383:                $host = (!empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');  
-    384-  
-    385-                if ($this->_config->get_string('common.support') != '' || $this->_config->get_boolean('common.tweeted')) {  
-    386-                    $buffer .= sprintf("\r\n<!-- Served from: %s @ %s by W3 Total Cache -->", w3_escape_comment($host), $date);
-
-./lib/W3/Plugin/TotalCache.php:523
-  
-    520-        /**  
-    521-         * Check User Agent  
-    522-         */  
-    523:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
-    524-            return false;  
-    525-        }  
-    526-
-
-./lib/W3/Plugin/Cdn.php:738
-  
-    735-        ));  
-    736-  
-    737-        foreach ($uas as $ua) {  
-    738:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
-    739-                return false;  
-    740-            }  
-    741-        }
-
-./lib/W3/Plugin/Cdn.php:758
-  
-    755-        );  
-    756-  
-    757-        foreach ($auto_reject_uri as $uri) {  
-    758:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
-    759-                return false;  
-    760-            }  
-    761-        }
-
-./lib/W3/Plugin/Cdn.php:768
-  
-    765-  
-    766-        foreach ($reject_uri as $expr) {  
-    767-            $expr = trim($expr);  
-    768:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
-    769-                return false;  
-    770-            }  
-    771-        }
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1833
-  
-    1830-     * @return void  
-    1831-     */  
-    1832-    function widget_latest_control($widget_id, $form_inputs = array()) {  
-    1833:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
-    1834-            require_once W3TC_LIB_W3_DIR . '/Request.php';  
-    1835-  
-    1836-            $this->_config->set('widget.latest.items', W3_Request::get_integer('w3tc_widget_latest_items', 3));
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1872
-  
-    1869-     * @return void  
-    1870-     */  
-    1871-    function widget_pagespeed_control($widget_id, $form_inputs = array()) {  
-    1872:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
-    1873-            require_once W3TC_LIB_W3_DIR . '/Request.php';  
-    1874-  
-    1875-            $this->_config->set('widget.pagespeed.key', W3_Request::get_string('w3tc_widget_pagespeed_key'));
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5396
-  
-    5393-            return $parse_url['host'];  
-    5394-        }  
-    5395-  
-    5396:        return $_SERVER['HTTP_HOST'];  
-    5397-    }  
-    5398-  
-    5399-    /**
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5648
-  
-    5645-        $server_info = array(  
-    5646-            'w3tc' => array(  
-    5647-                'version' => W3TC_VERSION,  
-    5648:                'server' => (!empty($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown'),  
-    5649-                'dir' => W3TC_DIR,  
-    5650-                'content_dir' => W3TC_CONTENT_DIR,  
-    5651-                'blogname' => W3TC_BLOGNAME,
-
-./lib/W3/Plugin/TotalCacheAdmin.php:5728
-  
-    5725-        $url = W3_Request::get_string('redirect');  
-    5726-  
-    5727-        if ($url == '') {  
-    5728:            if ($check_referrer && !empty($_SERVER['HTTP_REFERER'])) {  
-    5729:                $url = $_SERVER['HTTP_REFERER'];  
-    5730-            } else {  
-    5731-                $url = 'admin.php';  
-    5732-                $params = array_merge(array(
-
-./lib/W3/Referrer.php:44
-  
-    41-  
-    42-        if (isset($_COOKIE[W3TC_REFERRER_COOKIE_NAME])) {  
-    43-            $http_referrer = $_COOKIE[W3TC_REFERRER_COOKIE_NAME];  
-    44:        } elseif (isset($_SERVER['HTTP_REFERER'])) {  
-    45:            $http_referrer = $_SERVER['HTTP_REFERER'];  
-    46-  
-    47-            setcookie(W3TC_REFERRER_COOKIE_NAME, $http_referrer, 0, w3_get_base_path());  
-    48-        }
-
-./lib/Nusoap/class.wsdl.php:760
-  
-    757-    function webDescription(){  
-    758-    	global $HTTP_SERVER_VARS;  
-    759-  
-    760:		if (isset($_SERVER)) {  
-    761:			$PHP_SELF = $_SERVER['PHP_SELF'];  
-    762-		} elseif (isset($HTTP_SERVER_VARS)) {  
-    763-			$PHP_SELF = $HTTP_SERVER_VARS['PHP_SELF'];  
-    764-		} else {
-
-./lib/Nusoap/nusoap.php:3637
-  
-    3634-		global $debug;  
-    3635-		global $HTTP_SERVER_VARS;  
-    3636-  
-    3637:		if (isset($_SERVER)) {  
-    3638-			$this->debug("_SERVER is defined:");  
-    3639:			$this->appendDebug($this->varDump($_SERVER));  
-    3640-		} elseif (isset($HTTP_SERVER_VARS)) {  
-    3641-			$this->debug("HTTP_SERVER_VARS is defined:");  
-    3642-			$this->appendDebug($this->varDump($HTTP_SERVER_VARS));
-
-./lib/Nusoap/nusoap.php:3650
-  
-    3647-		if (isset($debug)) {  
-    3648-			$this->debug("In nusoap_server, set debug_flag=$debug based on global flag");  
-    3649-			$this->debug_flag = $debug;  
-    3650:		} elseif (isset($_SERVER['QUERY_STRING'])) {  
-    3651:			$qs = explode('&', $_SERVER['QUERY_STRING']);  
-    3652-			foreach ($qs as $v) {  
-    3653-				if (substr($v, 0, 6) == 'debug=') {  
-    3654-					$this->debug("In nusoap_server, set debug_flag=" . substr($v, 6) . " based on query string #1");
-
-./lib/Nusoap/nusoap.php:3697
-  
-    3694-	function service($data){  
-    3695-		global $HTTP_SERVER_VARS;  
-    3696-  
-    3697:		if (isset($_SERVER['REQUEST_METHOD'])) {  
-    3698:			$rm = $_SERVER['REQUEST_METHOD'];  
-    3699-		} elseif (isset($HTTP_SERVER_VARS['REQUEST_METHOD'])) {  
-    3700-			$rm = $HTTP_SERVER_VARS['REQUEST_METHOD'];  
-    3701-		} else {  
-    3702-			$rm = '';  
-    3703-		}  
-    3704-  
-    3705:		if (isset($_SERVER['QUERY_STRING'])) {  
-    3706:			$qs = $_SERVER['QUERY_STRING'];  
-    3707-		} elseif (isset($HTTP_SERVER_VARS['QUERY_STRING'])) {  
-    3708-			$qs = $HTTP_SERVER_VARS['QUERY_STRING'];  
-    3709-		} else {
-
-./lib/Nusoap/nusoap.php:3808
-  
-    3805-				// should be US-ASCII for HTTP 1.0 or ISO-8859-1 for HTTP 1.1  
-    3806-				$this->xml_encoding = 'ISO-8859-1';  
-    3807-			}  
-    3808:		} elseif(isset($_SERVER) && is_array($_SERVER)){  
-    3809-			$this->debug("In parse_http_headers, use _SERVER");  
-    3810:			foreach ($_SERVER as $k => $v) {  
-    3811-				if (substr($k, 0, 5) == 'HTTP_') {  
-    3812-					$k = str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($k, 5))));  
-    3813-				} else {
-
-./lib/Nusoap/nusoap.php:4436
-  
-    4433-		if(false == $namespace) {  
-    4434-		}  
-    4435-		if(false == $soapaction) {  
-    4436:			if (isset($_SERVER)) {  
-    4437:				$SERVER_NAME = $_SERVER['SERVER_NAME'];  
-    4438:				$SCRIPT_NAME = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];  
-    4439:				$HTTPS = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : (isset($HTTP_SERVER_VARS['HTTPS']) ? $HTTP_SERVER_VARS['HTTPS'] : 'off');  
-    4440-			} elseif (isset($HTTP_SERVER_VARS)) {  
-    4441-				$SERVER_NAME = $HTTP_SERVER_VARS['SERVER_NAME'];  
-    4442-				$SCRIPT_NAME = isset($HTTP_SERVER_VARS['PHP_SELF']) ? $HTTP_SERVER_VARS['PHP_SELF'] : $HTTP_SERVER_VARS['SCRIPT_NAME'];
-
-./lib/Nusoap/nusoap.php:4510
-  
-    4507-    {  
-    4508-    	global $HTTP_SERVER_VARS;  
-    4509-  
-    4510:		if (isset($_SERVER)) {  
-    4511:			$SERVER_NAME = $_SERVER['SERVER_NAME'];  
-    4512:			$SERVER_PORT = $_SERVER['SERVER_PORT'];  
-    4513:			$SCRIPT_NAME = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];  
-    4514:			$HTTPS = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : (isset($HTTP_SERVER_VARS['HTTPS']) ? $HTTP_SERVER_VARS['HTTPS'] : 'off');  
-    4515-		} elseif (isset($HTTP_SERVER_VARS)) {  
-    4516-			$SERVER_NAME = $HTTP_SERVER_VARS['SERVER_NAME'];  
-    4517-			$SERVER_PORT = $HTTP_SERVER_VARS['SERVER_PORT'];
-
-./lib/Nusoap/nusoap.php:5341
-  
-    5338-    function webDescription(){  
-    5339-    	global $HTTP_SERVER_VARS;  
-    5340-  
-    5341:		if (isset($_SERVER)) {  
-    5342:			$PHP_SELF = $_SERVER['PHP_SELF'];  
-    5343-		} elseif (isset($HTTP_SERVER_VARS)) {  
-    5344-			$PHP_SELF = $HTTP_SERVER_VARS['PHP_SELF'];  
-    5345-		} else {
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:114
-  
-    111-	/**  
-    112-	 * Checks if a configuration for a specific role instance exists.  
-    113-	 *  
-    114:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
-    115-	 * @return boolean  
-    116-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
-    117-	 */  
-    118-	public function configurationForRoleInstanceExists($roleInstance = null)  
-    119-	{  
-    120-		if (is_null($roleInstance)) {  
-    121:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
-    122-		}  
-    123-  
-    124-		return $this->_blobStorageClient->blobExists($this->_controlContainer, $roleInstance);
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:135
-  
-    132-	 */  
-    133-	public function configurationForCurrentRoleInstanceExists()  
-    134-	{  
-    135:		if (!isset($_SERVER['RdRoleId'])) {  
-    136-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
-    137-		}  
-    138-
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:150
-  
-    147-	 */  
-    148-	public function getConfigurationForCurrentRoleInstance()  
-    149-	{  
-    150:		if (!isset($_SERVER['RdRoleId'])) {  
-    151-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
-    152-		}  
-    153-		return $this->getConfigurationForRoleInstance($this->_getCurrentRoleInstanceId());
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:164
-  
-    161-	 */  
-    162-	protected function _getCurrentRoleInstanceId()  
-    163-	{  
-    164:		if (!isset($_SERVER['RdRoleId'])) {  
-    165-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
-    166-		}  
-    167-  
-    168:		if (strpos($_SERVER['RdRoleId'], 'deployment(') === false) {  
-    169:			return $_SERVER['RdRoleId'];  
-    170-		} else {  
-    171:			$roleIdParts = explode('.', $_SERVER['RdRoleId']);  
-    172:			return $roleIdParts[0] . '/' . $roleIdParts[2] . '/' . $_SERVER['RdRoleId'];  
-    173-		}  
-    174-	}  
-    175-
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:184
-  
-    181-	 */  
-    182-	public function setConfigurationForCurrentRoleInstance(Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration)  
-    183-	{  
-    184:		if (!isset($_SERVER['RdRoleId'])) {  
-    185-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
-    186-		}  
-    187-
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:194
-  
-    191-	/**  
-    192-	 * Get configuration for a specific role instance  
-    193-	 *  
-    194:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
-    195-	 * @return Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance  
-    196-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
-    197-	 */  
-    198-	public function getConfigurationForRoleInstance($roleInstance = null)  
-    199-	{  
-    200-		if (is_null($roleInstance)) {  
-    201:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
-    202-		}  
-    203-  
-    204-		if ($this->_blobStorageClient->blobExists($this->_controlContainer, $roleInstance)) {
-
-./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:216
-  
-    213-	/**  
-    214-	 * Set configuration for a specific role instance  
-    215-	 *  
-    216:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
-    217-	 * @param Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration Configuration to apply  
-    218-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
-    219-	 */  
-    220-	public function setConfigurationForRoleInstance($roleInstance = null, Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration)  
-    221-	{  
-    222-		if (is_null($roleInstance)) {  
-    223:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
-    224-		}  
-    225-  
-    226-		$this->_blobStorageClient->putBlobData($this->_controlContainer, $roleInstance, $configuration->toXml(), array(), null, array('Content-Type' => 'text/xml'));
-
-./lib/Minify/HTTP/ConditionalGet.php:126
-  
-    123-  
-    124-        // backwards compatibility (can be removed later)  
-    125-        if (isset($spec['setExpires']) && is_numeric($spec['setExpires']) && !isset($spec['maxAge'])) {  
-    126:            $spec['maxAge'] = $spec['setExpires'] - $_SERVER['REQUEST_TIME'];  
-    127-        }  
-    128-  
-    129-        if (isset($spec['maxAge'])) {  
-    130-            $maxAge = $spec['maxAge'];  
-    131-  
-    132-            if ($this->_cacheHeaders['expires_enabled'] && $maxAge) {  
-    133:                $this->_headers['Expires'] = self::gmtDate($_SERVER['REQUEST_TIME'] + $maxAge);  
-    134-            }  
-    135-        }  
-    136-
-
-./lib/Minify/HTTP/ConditionalGet.php:352
-  
-    349-  
-    350-    protected function resourceMatchedEtag()  
-    351-    {  
-    352:        if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) {  
-    353-            return false;  
-    354-        }  
-    355:        $clientEtagList = get_magic_quotes_gpc() ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : $_SERVER['HTTP_IF_NONE_MATCH'];  
-    356-        $clientEtags = explode(',', $clientEtagList);  
-    357-  
-    358-        $compareTo = $this->normalizeEtag($this->_etag);
-
-./lib/Minify/HTTP/ConditionalGet.php:380
-  
-    377-  
-    378-    protected function resourceNotModified()  
-    379-    {  
-    380:        if (!isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {  
-    381-            return false;  
-    382-        }  
-    383:        $ifModifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'];  
-    384-        if (false !== ($semicolon = strrpos($ifModifiedSince, ';'))) {  
-    385-            // IE has tacked on extra data to this header, strip it  
-    386-            $ifModifiedSince = substr($ifModifiedSince, 0, $semicolon);
-
-./lib/Minify/HTTP/Encoder.php:193
-  
-    190-    {  
-    191-        // @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html  
-    192-  
-    193:        if (! isset($_SERVER['HTTP_ACCEPT_ENCODING'])  
-    194-            || w3_zlib_output_compression()  
-    195-            || headers_sent()  
-    196-            || self::_isBuggyIe())
-
-./lib/Minify/HTTP/Encoder.php:201
-  
-    198-            return array('', '');  
-    199-        }  
-    200-  
-    201:        if (stristr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode')) {  
-    202-            return array('gzip', 'gzip');  
-    203-        }  
-    204-
-
-./lib/Minify/HTTP/Encoder.php:285
-  
-    282-     */  
-    283-    protected static function _isBuggyIe()  
-    284-    {  
-    285:        $ua = $_SERVER['HTTP_USER_AGENT'];  
-    286-        // quick escape for non-IEs  
-    287-        if (0 !== strpos($ua, 'Mozilla/4.0 (compatible; MSIE ')  
-    288-            || false !== strpos($ua, 'Opera')) {
-
-./lib/Minify/Minify.php:372
-  
-    369-    }  
-    370-  
-    371-    /**  
-    372:     * On IIS, create $_SERVER['DOCUMENT_ROOT']  
-    373-     *  
-    374:     * @param bool $unsetPathInfo (default false) if true, $_SERVER['PATH_INFO']  
-    375-     * will be unset (it is inconsistent with Apache's setting)  
-    376-     *  
-    377-     * @return null  
-    378-     */  
-    379-    public static function setDocRoot($unsetPathInfo = false)  
-    380-    {  
-    381:        if (isset($_SERVER['SERVER_SOFTWARE'])  
-    382:            && 0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/')  
-    383-        ) {  
-    384:            $_SERVER['PATH_TRANSLATED']= preg_replace('~[/\\\]+~', '/', $_SERVER['PATH_TRANSLATED']);  
-    385-  
-    386:            $_SERVER['DOCUMENT_ROOT'] = rtrim(substr(  
-    387:                $_SERVER['PATH_TRANSLATED']  
-    388-                ,0  
-    389:                ,strlen($_SERVER['PATH_TRANSLATED']) - strlen($_SERVER['SCRIPT_NAME'])  
-    390-            ), '\\');  
-    391-            if ($unsetPathInfo) {  
-    392:                unset($_SERVER['PATH_INFO']);  
-    393-            }  
-    394-            require_once W3TC_LIB_MINIFY_DIR . '/Minify/Logger.php';  
-    395:            Minify_Logger::log("setDocRoot() set DOCUMENT_ROOT to \"{$_SERVER['DOCUMENT_ROOT']}\"");  
-    396-        }  
-    397-    }  
-    398-
-
-./lib/Minify/FirePHP.php:795
-  
-    792-   * @return string|false  
-    793-   */  
-    794-  protected function getUserAgent() {  
-    795:    if(!isset($_SERVER['HTTP_USER_AGENT'])) return false;  
-    796:    return $_SERVER['HTTP_USER_AGENT'];  
-    797-  }  
-    798-  
-    799-  /**
-
-./lib/Minify/Minify/Build.php:97
-  
-    94-                $max = max($max, $source->lastModified);  
-    95-            } elseif (is_string($source)) {  
-    96-                if (0 === strpos($source, '//')) {  
-    97:                    $source = $_SERVER['DOCUMENT_ROOT'] . substr($source, 1);  
-    98-                }  
-    99-                if (is_file($source)) {  
-    100-                    $max = max($max, filemtime($source));
-
-./lib/Minify/Minify/Cache/Eaccelerator.php:43
-  
-    40-     * @return bool success  
-    41-     */  
-    42-    public function store($id, $data) {  
-    43:        return eaccelerator_put($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
-    44-    }  
-    45-  
-    46-    /**
-
-./lib/Minify/Minify/Cache/Wincache.php:43
-  
-    40-     * @return bool success  
-    41-     */  
-    42-    public function store($id, $data) {  
-    43:        return wincache_ucache_set($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
-    44-    }  
-    45-  
-    46-    /**
-
-./lib/Minify/Minify/Cache/Memcache.php:48
-  
-    45-     * @return bool success  
-    46-     */  
-    47-    public function store($id, $data) {  
-    48:        $data = "{$_SERVER['REQUEST_TIME']}|{$data}";  
-    49-  
-    50-        return $this->_mc->set($id, $data, 0, $this->_exp);  
-    51-    }
-
-./lib/Minify/Minify/Cache/XCache.php:43
-  
-    40-     * @return bool success  
-    41-     */  
-    42-    public function store($id, $data) {  
-    43:        return xcache_set($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
-    44-    }  
-    45-  
-    46-    /**
-
-./lib/Minify/Minify/Cache/APC.php:43
-  
-    40-     * @return bool success  
-    41-     */  
-    42-    public function store($id, $data) {  
-    43:        return apc_store($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
-    44-    }  
-    45-  
-    46-    /**
-
-./lib/Minify/Minify/CSS/Compressor.php:69
-  
-    66-     * @return string  
-    67-     */  
-    68-    protected function _process($css) {  
-    69:        $this->_replacementHash = 'MINIFYCSS' . md5($_SERVER['REQUEST_TIME']);  
-    70-        $this->_placeholders = array();  
-    71-  
-    72-        $css = preg_replace_callback('~(".*"|\'.*\')~U', array($this, '_removeQuotesCB'), $css);
-
-./lib/Minify/Minify/CSS/UriRewriter.php:42
-  
-    39-            $browsercache_extensions = (isset($options['browserCacheExtensions']) ? $options['browserCacheExtensions'] : array());  
-    40-  
-    41-            if (isset($options['currentDir'])) {  
-    42:                $document_root = (isset($options['docRoot']) ? $options['docRoot'] : $_SERVER['DOCUMENT_ROOT']);  
-    43-                $symlinks = (isset($options['symlinks']) ? $options['symlinks'] : array());  
-    44-                $prependAbsolutePath = (isset($options['prependAbsolutePath']) ? $options['prependAbsolutePath'] : '');  
-    45-                $prependAbsolutePathCallback = (isset($options['prependAbsolutePathCallback']) ? $options['prependAbsolutePathCallback'] : '');
-
-./lib/Minify/Minify/CSS/UriRewriter.php:82
-  
-    79-     * @param string $prependAbsolutePathCallback  
-    80-     *  
-    81-     * @param string $docRoot The document root of the web site in which  
-    82:     * the CSS file resides (default = $_SERVER['DOCUMENT_ROOT']).  
-    83-     *  
-    84-     * @param array $symlinks (default = array()) If the CSS file is stored in  
-    85-     * a symlink-ed directory, provide an array of link paths to
-
-./lib/Minify/Minify/CSS/UriRewriter.php:101
-  
-    98-     * @return string  
-    99-     */  
-    100-    private static function _rewrite($css, $currentDir, $prependAbsolutePath = null, $prependAbsolutePathCallback = null, $docRoot = null, $symlinks = array(), $browserCacheId = 0, $browserCacheExtensions = array()) {  
-    101:        self::$_docRoot = self::_realpath($docRoot ? $docRoot : $_SERVER['DOCUMENT_ROOT']);  
-    102-        self::$_currentDir = self::_realpath($currentDir);  
-    103-        self::$_prependAbsolutePath = $prependAbsolutePath;  
-    104-        self::$_prependAbsolutePathCallback = $prependAbsolutePathCallback;
-
-./lib/Minify/Minify/HTML.php:79
-  
-    76-            $this->_isXhtml = (false !== strpos($this->_html, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML'));  
-    77-        }  
-    78-  
-    79:        $this->_replacementHash = 'MINIFYHTML' . md5($_SERVER['REQUEST_TIME']);  
-    80-        $this->_placeholders = array();  
-    81-  
-    82-        // replace dynamic tags
-
-./lib/Minify/Minify/Controller/Files.php:27
-  
-    24- * </code>  
-    25- *  
-    26- * As a shortcut, the controller will replace "//" at the beginning  
-    27: * of a filename with $_SERVER['DOCUMENT_ROOT'] . '/'.  
-    28- *  
-    29- * @package Minify  
-    30- * @author Stephen Clay <steve@mrclay.org>
-
-./lib/Minify/Minify/Controller/Files.php:63
-  
-    60-                continue;  
-    61-            }  
-    62-            if (0 === strpos($file, '//')) {  
-    63:                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    64-            }  
-    65-            $realPath = realpath($file);  
-    66-            if (is_file($realPath)) {
-
-./lib/Minify/Minify/Controller/Groups.php:29
-  
-    26- * /serve.php/js and /serve.php/css  
-    27- *  
-    28- * As a shortcut, the controller will replace "//" at the beginning  
-    29: * of a filename with $_SERVER['DOCUMENT_ROOT'] . '/'.  
-    30- *  
-    31- * @package Minify  
-    32- * @author Stephen Clay <steve@mrclay.org>
-
-./lib/Minify/Minify/Controller/Groups.php:53
-  
-    50-        unset($options['groups']);  
-    51-  
-    52-        // mod_fcgid places PATH_INFO in ORIG_PATH_INFO  
-    53:        $pi = isset($_SERVER['ORIG_PATH_INFO'])  
-    54:            ? substr($_SERVER['ORIG_PATH_INFO'], 1)  
-    55:            : (isset($_SERVER['PATH_INFO'])  
-    56:                ? substr($_SERVER['PATH_INFO'], 1)  
-    57-                : false  
-    58-            );  
-    59-        if (false === $pi || ! isset($groups[$pi])) {
-
-./lib/Minify/Minify/Controller/Groups.php:79
-  
-    76-                continue;  
-    77-            }  
-    78-            if (0 === strpos($file, '//')) {  
-    79:                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    80-            }  
-    81-            $realPath = realpath($file);  
-    82-            if (is_file($realPath)) {
-
-./lib/Minify/Minify/Controller/Version1.php:65
-  
-    62-        }  
-    63-  
-    64-        // strings for prepending to relative/absolute paths  
-    65:        $prependRelPaths = dirname($_SERVER['SCRIPT_FILENAME'])  
-    66-            . DIRECTORY_SEPARATOR;  
-    67:        $prependAbsPaths = $_SERVER['DOCUMENT_ROOT'];  
-    68-  
-    69-        $sources = array();  
-    70-        $goodFiles = array();
-
-./lib/Minify/Minify/Controller/Version1.php:108
-  
-    105-    private static function _setupDefines()  
-    106-    {  
-    107-        $defaults = array(  
-    108:            'MINIFY_BASE_DIR' => realpath($_SERVER['DOCUMENT_ROOT'])  
-    109-            ,'MINIFY_ENCODING' => 'utf-8'  
-    110-            ,'MINIFY_MAX_FILES' => 16  
-    111-            ,'MINIFY_REWRITE_CSS_URLS' => true
-
-./lib/Minify/Minify/Controller/MinApp.php:60
-  
-    57-                    continue;  
-    58-                }  
-    59-                if (0 === strpos($file, '//')) {  
-    60:                    $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
-    61-                }  
-    62-                $realPath = realpath($file);  
-    63-                if (is_file($realPath)) {
-
-./lib/Minify/Minify/Controller/MinApp.php:110
-  
-    107-            }  
-    108-            $allowDirs = array();  
-    109-            foreach ((array)$cOptions['allowDirs'] as $allowDir) {  
-    110:                $allowDirs[] = realpath(str_replace('//', $_SERVER['DOCUMENT_ROOT'] . '/', $allowDir));  
-    111-            }  
-    112-            foreach ($files as $file) {  
-    113:                $path = $_SERVER['DOCUMENT_ROOT'] . $base . $file;  
-    114-                $file = realpath($path);  
-    115-                if (false === $file) {  
-    116-                    $this->log("Path \"{$path}\" failed realpath()");
-
-./lib/Minify/Minify/ImportProcessor.php:107
-  
-    104-        if ('/' === $url[0]) {  
-    105-            // protocol-relative or root path  
-    106-            $url = ltrim($url, '/');  
-    107:            $file = realpath($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR  
-    108-                . strtr($url, '/', DIRECTORY_SEPARATOR);  
-    109-        } else {  
-    110-            // relative to current path
-
-./lib/Minify/Minify/ImportProcessor.php:143
-  
-    140-                $path = $this->_currentDir  
-    141-                    . DIRECTORY_SEPARATOR . strtr($url, '/', DIRECTORY_SEPARATOR);  
-    142-                // strip doc root  
-    143:                $path = substr($path, strlen(realpath($_SERVER['DOCUMENT_ROOT'])));  
-    144-                // fix to absolute URL  
-    145-                $url = strtr($path, '/\\', '//');  
-    146-                // remove /./ and /../ where possible
-
-./lib/Minify/Minify/Source.php:52
-  
-    49-     * (unixtime of last update).  
-    50-     *  
-    51-     * As a shortcut, the controller will replace "//" at the beginning  
-    52:     * of a filepath with $_SERVER['DOCUMENT_ROOT'] . '/'.  
-    53-     *  
-    54-     * @param array $spec options  
-    55-     */
-
-./lib/Minify/Minify/Source.php:60
-  
-    57-    {  
-    58-        if (isset($spec['filepath'])) {  
-    59-            if (0 === strpos($spec['filepath'], '//')) {  
-    60:                $spec['filepath'] = $_SERVER['DOCUMENT_ROOT'] . substr($spec['filepath'], 1);  
-    61-            }  
-    62-            $segments = explode('.', $spec['filepath']);  
-    63-            $ext = strtolower(array_pop($segments));
-
-./inc/lightbox/self_test.php:43
-  
-    40-  
-    41-        <li>  
-    42-            Web Server:  
-    43:            <?php if (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') !== false): ?>  
-    44-            <code>Apache</code>  
-    45:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false): ?>  
-    46-            <code>Lite Speed</code>  
-    47:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false): ?>  
-    48-            <code>nginx</code>  
-    49:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'lighttpd') !== false): ?>  
-    50-            <code>lighttpd</code>  
-    51:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'iis') !== false): ?>  
-    52-            <code>Microsoft IIS</code>  
-    53-            <?php else: ?>  
-    54-            <code>Not detected</code>
-
-./inc/define.php:196
-  
-    193- */  
-    194-function w3_is_https() {  
-    195-    switch (true) {  
-    196:        case (isset($_SERVER['HTTPS']) && w3_to_boolean($_SERVER['HTTPS'])):  
-    197:        case (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] == 443):  
-    198-            return true;  
-    199-    }  
-    200-
-
-./inc/define.php:229
-  
-    226- * @return boolean  
-    227- */  
-    228-function w3_is_preview_mode() {  
-    229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));  
-    230-}  
-    231-  
-    232-/**
-
-./inc/define.php:238
-  
-    235- * @return boolean  
-    236- */  
-    237-function w3_is_apache() {  
-    238:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false);  
-    239-}  
-    240-  
-    241-/**
-
-./inc/define.php:247
-  
-    244- * @return bool  
-    245- */  
-    246-function w3_is_litespeed() {  
-    247:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false);  
-    248-}  
-    249-  
-    250-/**
-
-./inc/define.php:256
-  
-    253- * @return boolean  
-    254- */  
-    255-function w3_is_nginx() {  
-    256:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false);  
-    257-}  
-    258-  
-    259-/**
-
-./inc/define.php:378
-  
-    375-            if (w3_is_subdomain_install()) {  
-    376-                $blogname = $domain;  
-    377-            } else {  
-    378:                $uri = $_SERVER['REQUEST_URI'];  
-    379-                $base_path = w3_get_base_path();  
-    380-  
-    381-                if ($base_path != '' && strpos($uri, $base_path) === 0) {
-
-./inc/define.php:586
-  
-    583-    static $document_root = null;  
-    584-  
-    585-    if ($document_root === null) {  
-    586:        if (!empty($_SERVER['SCRIPT_FILENAME'])) {  
-    587:            $document_root = substr(w3_path($_SERVER['SCRIPT_FILENAME']), 0, -strlen(w3_path($_SERVER['PHP_SELF'])));  
-    588:        } elseif (!empty($_SERVER['PATH_TRANSLATED'])) {  
-    589:            $document_root = substr(w3_path($_SERVER['PATH_TRANSLATED']), 0, -strlen(w3_path($_SERVER['PHP_SELF'])));  
-    590:        } elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {  
-    591:            $document_root = w3_path($_SERVER['DOCUMENT_ROOT']);  
-    592-        } else {  
-    593-            $document_root = w3_get_site_root();  
-    594-        }
-
-./inc/define.php:764
-  
-    761-    static $host = null;  
-    762-  
-    763-    if ($host === null) {  
-    764:        $host = (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);  
-    765-    }  
-    766-  
-    767-    return $host;
-
-./inc/email/support_request.php:38
-  
-    35-        <hr />  
-    36-  
-    37-        <font size="-1" color="#ccc">  
-    38:            E-mail sent from IP: <?php echo htmlspecialchars($_SERVER['REMOTE_ADDR']); ?><br />  
-    39:            User Agent: <?php echo htmlspecialchars($_SERVER['HTTP_USER_AGENT']); ?>  
-    40-        </font>  
-    41-    </body>  
-    42-</html>
-
-./wp-content/w3tc/min/index.php:6
-  
-    3-/**  
-    4- * W3 Total Cache Minify module  
-    5- */  
-    6:if (isset($_SERVER['SCRIPT_FILENAME']) && strstr($_SERVER['SCRIPT_FILENAME'], 'w3-total-cache') !== false) {  
-    7-    die();  
-    8-}  
-    9-
-
-#### $_COOKIE ####
-./lib/W3/Db.php:635
-  
-    633-     */  
-    634-    function _check_cookies() {  
-    635:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    636-            if ($cookie_name == 'wordpress_test_cookie') {  
-    637-                continue;  
-    638-            }
-
-./lib/W3/Db.php:645
-  
-    642-        }  
-    643-  
-    644-        foreach ($this->_config->get_array('dbcache.reject.cookie') as $reject_cookie) {  
-    645:            foreach (array_keys($_COOKIE) as $cookie_name) {  
-    646-                if (strstr($cookie_name, $reject_cookie) !== false) {  
-    647-                    return false;  
-    648-                }
-
-./lib/W3/Db.php:661
-  
-    658-     * @return boolean  
-    659-     */  
-    660-    function _check_logged_in() {  
-    661:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    662-            if ($cookie_name == 'wordpress_test_cookie') {  
-    663-                continue;  
-    664-            }
-
-./lib/W3/PgCache.php:718
-  
-    715-     * @return boolean  
-    716-     */  
-    717-    function _check_cookies() {  
-    718:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    719-            if ($cookie_name == 'wordpress_test_cookie') {  
-    720-                continue;  
-    721-            }
-
-./lib/W3/PgCache.php:728
-  
-    725-        }  
-    726-  
-    727-        foreach ($this->_config->get_array('pgcache.reject.cookie') as $reject_cookie) {  
-    728:            foreach (array_keys($_COOKIE) as $cookie_name) {  
-    729-                if (strstr($cookie_name, $reject_cookie) !== false) {  
-    730-                    return false;  
-    731-                }
-
-./lib/W3/PgCache.php:744
-  
-    741-     * @return boolean  
-    742-     */  
-    743-    function _check_logged_in() {  
-    744:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    745-            if ($cookie_name == 'wordpress_test_cookie') {  
-    746-                continue;  
-    747-            }
-
-./lib/W3/Plugin/Minify.php:1010
-  
-    1007-     * @return boolean  
-    1008-     */  
-    1009-    function check_logged_in() {  
-    1010:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    1011-            if ($cookie_name == 'wordpress_test_cookie') {  
-    1012-                continue;  
-    1013-            }
-
-./lib/W3/Plugin/MinifyEnabled.php:1068
-  
-    1065-     * @return boolean  
-    1066-     */  
-    1067-    function check_logged_in() {  
-    1068:        foreach (array_keys($_COOKIE) as $cookie_name) {  
-    1069-            if ($cookie_name == 'wordpress_test_cookie') {  
-    1070-                continue;  
-    1071-            }
-
-./lib/W3/Referrer.php:42
-  
-    39-    function get_http_referrer() {  
-    40-        $http_referrer = '';  
-    41-  
-    42:        if (isset($_COOKIE[W3TC_REFERRER_COOKIE_NAME])) {  
-    43:            $http_referrer = $_COOKIE[W3TC_REFERRER_COOKIE_NAME];  
-    44-        } elseif (isset($_SERVER['HTTP_REFERER'])) {  
-    45-            $http_referrer = $_SERVER['HTTP_REFERER'];  
-    46-
-
-#### $_REQUEST ####
-./lib/W3/PgCacheFlush.php:352
-  
-    350-        } elseif (is_single() || is_page() && count($posts)) {  
-    351-            return $posts[0]->ID;  
-    352:        } elseif (isset($_REQUEST['p'])) {  
-    353:            return (integer) $_REQUEST['p'];  
-    354-        }  
-    355-  
-    356-        return 0;
-
-./lib/W3/Plugin/TotalCache.php:43
-  
-    40-            'admin_bar_menu'  
-    41-        ), 150);  
-    42-  
-    43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&  
-    44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {  
-    45-            add_filter('template', array(  
-    46-                &$this,
-
-./lib/W3/Plugin/TotalCacheAdmin.php:265
-  
-    262-         */  
-    263-        $action = false;  
-    264-  
-    265:        foreach ($_REQUEST as $key => $value) {  
-    266-            if (strpos($key, 'w3tc_') === 0) {  
-    267-                $action = 'action_' . substr($key, 5);  
-    268-                break;
-
-./inc/define.php:229
-  
-    226- * @return boolean  
-    227- */  
-    228-function w3_is_preview_mode() {  
-    229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));  
-    230-}  
-    231-  
-    232-/**
-
-
-### developer_notes ###
-#### @todo ####
-./lib/JSON.php:821
-  
-    819-  
-    820-	/**  
-    821:	* @todo Ultimately, this should just call PEAR::isError()  
-    822-	*/  
-    823-	function isError($data, $code = null)  
-    824-	{
-
-./lib/JSON.php:850
-  
-    847-} else {  
-    848-  
-    849-	/**  
-    850:	* @todo Ultimately, this class shall be descended from PEAR_Error  
-    851-	*/  
-    852-	class Services_JSON_Error  
-    853-	{
-
-./lib/CSSTidy/class.csstidy_optimise.php:647
-  
-    644-     * @return array  
-    645-     * @version 1.0  
-    646-     * @see merge_bg()  
-    647:     * @todo full CSS 3 compliance  
-    648-     */  
-    649-    function dissolve_short_bg($str_value)  
-    650-    {
-
-./lib/CSSTidy/class.csstidy_optimise.php:733
-  
-    730-     * @return array  
-    731-     * @version 1.0  
-    732-     * @see dissolve_short_bg()  
-    733:     * @todo full CSS 3 compliance  
-    734-     */  
-    735-    function merge_bg($input_css)  
-    736-    {
-
-./lib/CSSTidy/data.inc.php:71
-  
-    68- /**  
-    69- * Properties that need a value with unit  
-    70- *  
-    71: * @todo CSS3 properties  
-    72- * @see compress_numbers();  
-    73- * @global array $GLOBALS['csstidy']['unit_values']  
-    74- * @version 1.2
-
-./lib/CSSTidy/data.inc.php:85
-  
-    82-/**  
-    83- * Properties that allow <color> as value  
-    84- *  
-    85: * @todo CSS3 properties  
-    86- * @see compress_numbers();  
-    87- * @global array $GLOBALS['csstidy']['color_values']  
-    88- * @version 1.0
-
-./lib/CSSTidy/data.inc.php:104
-  
-    101-/**  
-    102- * Default values for the background properties  
-    103- *  
-    104: * @todo Possibly property names will change during CSS3 development  
-    105- * @global array $GLOBALS['csstidy']['background_prop_default']  
-    106- * @see dissolve_short_bg()  
-    107- * @see merge_bg()
-
-./lib/CSSTidy/data.inc.php:260
-  
-    257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues  
-    258- *  
-    259- * @global array $GLOBALS['csstidy']['shorthands']  
-    260: * @todo Are there new ones in CSS3?  
-    261- * @see dissolve_4value_shorthands()  
-    262- * @see merge_4value_shorthands()  
-    263- * @version 1.0
-
-./lib/CSSTidy/data.inc.php:277
-  
-    274- * All CSS Properties. Needed for csstidy::property_is_next()  
-    275- *  
-    276- * @global array $GLOBALS['csstidy']['all_properties']  
-    277: * @todo Add CSS3 properties  
-    278- * @version 1.0  
-    279- * @see csstidy::property_is_next()  
-    280- */
-
-./lib/Microsoft/Http/Cookie.php:97
-  
-    94-    /**  
-    95-     * Cookie object constructor  
-    96-     *  
-    97:     * @todo Add validation of each one of the parameters (legal domain, etc.)  
-    98-     *  
-    99-     * @param string $name  
-    100-     * @param string $value
-
-./lib/Microsoft/Http/Client.php:55
-  
-    52- * redirections, as well as more advanced features like proxy settings, HTTP  
-    53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)  
-    54- *  
-    55: * @todo Implement proxy settings  
-    56- * @category   Microsoft  
-    57- * @package    Microsoft_Http  
-    58- * @subpackage Client
-
-./lib/Microsoft/Http/Client.php:1387
-  
-    1384-  
-    1385-            //case self::AUTH_DIGEST:  
-    1386-                /**  
-    1387:                 * @todo Implement digest authentication  
-    1388-                 */  
-    1389-            //    break;  
-    1390-
-
-./lib/Microsoft/Http/CookieJar.php:357
-  
-    354-     * @param Microsoft_Http_Response $response HTTP Response object  
-    355-     * @param Microsoft_Uri_Http|string $uri The requested URI  
-    356-     * @return Microsoft_Http_CookieJar  
-    357:     * @todo Add the $uri functionality.  
-    358-     */  
-    359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)  
-    360-    {
-
-./lib/Minify/Minify/HTML.php:118
-  
-    115-            ,$this->_html);  
-    116-  
-    117-        // trim each line.  
-    118:        // @todo take into account attribute values that span multiple lines.  
-    119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);  
-    120-  
-    121-        // remove ws around block/undisplayed elements
-
-./lib/Minify/Minify/Packer.php:36
-  
-    33-class Minify_Packer {  
-    34-    public static function minify($code, $options = array())  
-    35-    {  
-    36:        // @todo: set encoding options based on $options :)  
-    37-        $packer = new JavascriptPacker($code, 'Normal', true, false);  
-    38-        return trim($packer->pack());  
-    39-    }
-
-./lib/Minify/Minify/Controller/Page.php:39
-  
-    36-     * 'minifyAll': should all CSS and Javascript blocks be individually  
-    37-     * minified? (default false)  
-    38-     *  
-    39:     * @todo Add 'file' option to read HTML file.  
-    40-     */  
-    41-    public function setupSources($options) {  
-    42-        if (isset($options['file'])) {
-
-
 ### custom_strings ###
-#### username ####
-./lib/W3/Db/mssql.php:535
-  
-    533-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
-    534-<h1>Error establishing a database connection</h1>  
-    535:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
-    536-<ul>  
-    537:        <li>Are you sure you have the correct username and password?</li>  
-    538-        <li>Are you sure that you have typed the correct hostname?</li>  
-    539-        <li>Are you sure that the database server is running?</li>  
-    540-</ul>
-
-./lib/W3/Db/mssql.php:760
-  
-    757-                        $this->ready = false;  
-    758-                        $this->bail( sprintf( /*WP_I18N_DB_SELECT_DB*/'  
-    759-<h1>Can&#8217;t select database</h1>  
-    760:<p>We were able to connect to the database server (which means your username and password is okay) but not able to select the <code>%1$s</code> database.</p>  
-    761-<ul>  
-    762-<li>Are you sure it exists?</li>  
-    763-<li>Does the user <code>%2$s</code> have permission to use the <code>%1$s</code> database?</li>  
-    764:<li>On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?</li>  
-    765-</ul>  
-    766-<p>If you don\'t know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="http://wordpress.org/support/">WordPress Support Forums</a>.</p>'/*/WP_I18N_DB_SELECT_DB*/, $db, $this->dbuser ), 'db_select_fail' );  
-    767-                        return;
-
-./lib/W3/Db/mssql.php:1063
-  
-    1060-                if (!$this->$dbhname ) {  
-    1061-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
-    1062-<h1>Error establishing a database connection</h1>  
-    1063:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
-    1064-<ul>  
-    1065:        <li>Are you sure you have the correct username and password?</li>  
-    1066-        <li>Are you sure that you have typed the correct hostname?</li>  
-    1067-        <li>Are you sure that the database server is running?</li>  
-    1068-</ul>
-
-./lib/W3/Config.php:226
-  
-    223-        'cdn.netdna.apikey' => 'string',  
-    224-        'cdn.netdna.domain' => 'array',  
-    225-        'cdn.netdna.ssl' => 'string',  
-    226:        'cdn.cotendo.username' => 'string',  
-    227-        'cdn.cotendo.password' => 'string',  
-    228-        'cdn.cotendo.zones' => 'array',  
-    229-        'cdn.cotendo.domain' => 'array',
-
-./lib/W3/Config.php:586
-  
-    583-        'cdn.netdna.apikey' => '',  
-    584-        'cdn.netdna.domain' => array(),  
-    585-        'cdn.netdna.ssl' => 'auto',  
-    586:        'cdn.cotendo.username' => '',  
-    587-        'cdn.cotendo.password' => '',  
-    588-        'cdn.cotendo.zones' => array(),  
-    589-        'cdn.cotendo.domain' => array(),
-
-./lib/W3/Cdn/Mirror/Cotendo.php:27
-  
-    24-     */  
-    25-    function __construct($config = array()) {  
-    26-        $config = array_merge(array(  
-    27:            'username' => '',  
-    28-            'password' => '',  
-    29-            'zones' => array(),  
-    30-        ), $config);
-
-./lib/W3/Cdn/Mirror/Cotendo.php:52
-  
-    49-     * @return boolean  
-    50-     */  
-    51-    function purge($files, &$results) {  
-    52:        if (empty($this->_config['username'])) {  
-    53:            $results = $this->_get_results($files, W3TC_CDN_RESULT_HALT, 'Empty username.');  
-    54-  
-    55-            return false;  
-    56-        }
-
-./lib/W3/Cdn/Mirror/Cotendo.php:86
-  
-    83-        }  
-    84-  
-    85-        $client->authtype = 'basic';  
-    86:        $client->username = $this->_config['username'];  
-    87-        $client->password = $this->_config['password'];  
-    88-        $client->forceEndpoint = W3TC_CDN_MIRROR_COTENDO_ENDPOINT;  
-    89-
-
-./lib/W3/Cdn/Rscf.php:72
-  
-    69-     */  
-    70-    function _init(&$error) {  
-    71-        if (empty($this->_config['user'])) {  
-    72:            $error = 'Empty username.';  
-    73-  
-    74-            return false;  
-    75-        }
-
-./lib/W3/Plugin/CdnEnabled.php:1714
-  
-    1711-  
-    1712-                case 'cotendo':  
-    1713-                    $engine_config = array(  
-    1714:                        'username' => $this->_config->get_string('cdn.cotendo.username'),  
-    1715-                        'password' => $this->_config->get_string('cdn.cotendo.password'),  
-    1716-                        'zones' => $this->_config->get_array('cdn.cotendo.zones'),  
-    1717-                        'domain' => $this->_config->get_array('cdn.cotendo.domain'),
-
-./lib/W3/Plugin/CdnCommon.php:367
-  
-    364-  
-    365-                case 'cotendo':  
-    366-                    $engine_config = array(  
-    367:                        'username' => $this->_config->get_string('cdn.cotendo.username'),  
-    368-                        'password' => $this->_config->get_string('cdn.cotendo.password'),  
-    369-                        'zones' => $this->_config->get_array('cdn.cotendo.zones'),  
-    370-                        'domain' => $this->_config->get_array('cdn.cotendo.domain'),
-
-./lib/CF/cloudfiles.php:14
-  
-    11- *   #       cURL's web site (http://curl.haxx.se).  To use the newer CA bundle,  
-    12- *   #       call the CF_Authentication instance's 'ssl_use_cabundle()' method.  
-    13- *   #  
-    14: *   $auth = new CF_Authentication($username, $api_key);  
-    15- *   # $auth->ssl_use_cabundle();  # bypass cURL's old CA bundle  
-    16- *   $auth->authenticate();  
-    17- *
-
-./lib/CF/cloudfiles.php:90
-  
-    87- * <code>  
-    88- * # Create the authentication instance  
-    89- * #  
-    90: * $auth = new CF_Authentication("username", "api_key");  
-    91- *  
-    92- * # NOTE: For UK Customers please specify your AuthURL Manually  
-    93- * # There is a Predfined constant to use EX:  
-    94- * #  
-    95: * # $auth = new CF_Authentication("username, "api_key", NULL, UK_AUTHURL);  
-    96- * # Using the UK_AUTHURL keyword will force the api to use the UK AuthUrl.  
-    97- * # rather then the US one. The NULL Is passed for legacy purposes and must  
-    98- * # be passed to function correctly.
-
-./lib/CF/cloudfiles.php:117
-  
-    114-class CF_Authentication  
-    115-{  
-    116-    public $dbug;  
-    117:    public $username;  
-    118-    public $api_key;  
-    119-    public $auth_host;  
-    120-    public $account;
-
-./lib/CF/cloudfiles.php:132
-  
-    129-    /**  
-    130-     * Class constructor (PHP 5 syntax)  
-    131-     *  
-    132:     * @param string $username Mosso username  
-    133-     * @param string $api_key Mosso API Access Key  
-    134-     * @param string $account  <i>Account name</i>  
-    135-     * @param string $auth_host  <i>Authentication service URI</i>  
-    136-     */  
-    137:    function __construct($username=NULL, $api_key=NULL, $account=NULL, $auth_host=US_AUTHURL)  
-    138-    {  
-    139-  
-    140-        $this->dbug = False;  
-    141:        $this->username = $username;  
-    142-        $this->api_key = $api_key;  
-    143-        $this->account_name = $account;  
-    144-        $this->auth_host = $auth_host;
-
-./lib/CF/cloudfiles.php:190
-  
-    187-     * <code>  
-    188-     * # Create the authentication instance  
-    189-     * #  
-    190:     * $auth = new CF_Authentication("username", "api_key");  
-    191-     *  
-    192-     * # Perform authentication request  
-    193-     * #
-
-./lib/CF/cloudfiles.php:205
-  
-    202-    function authenticate($version=DEFAULT_CF_API_VERSION)  
-    203-    {  
-    204-        list($status,$reason,$surl,$curl,$atoken) =  
-    205:                $this->cfs_http->authenticate($this->username, $this->api_key,  
-    206-                $this->account_name, $this->auth_host);  
-    207-  
-    208-        if ($status == 401) {  
-    209:            throw new AuthenticationException("Invalid username or access key.");  
-    210-        }  
-    211-        if ($status != 204) {  
-    212-            throw new InvalidResponseException(
-
-./lib/CF/cloudfiles.php:320
-  
-    317- * <code>  
-    318- * # Create the authentication instance  
-    319- * #  
-    320: * $auth = new CF_Authentication("username", "api_key");  
-    321- *  
-    322- * # Perform authentication request  
-    323- * #
-
-./lib/CF/cloudfiles.php:354
-  
-    351-     * <code>  
-    352-     * # Create the authentication instance  
-    353-     * #  
-    354:     * $auth = new CF_Authentication("username", "api_key");  
-    355-     *  
-    356-     * # Perform authentication request  
-    357-     * #
-
-./lib/CF/cloudfiles.php:893
-  
-    890-    #private function _re_auth()  
-    891-    #{  
-    892-    #    $new_auth = new CF_Authentication(  
-    893:    #        $this->cfs_auth->username,  
-    894-    #        $this->cfs_auth->api_key,  
-    895-    #        $this->cfs_auth->auth_host,  
-    896-    #        $this->cfs_auth->account);
-
-./lib/CF/cloudfiles.php:1573
-  
-    1570-    #private function _re_auth()  
-    1571-    #{  
-    1572-    #    $new_auth = new CF_Authentication(  
-    1573:    #        $this->cfs_auth->username,  
-    1574-    #        $this->cfs_auth->api_key,  
-    1575-    #        $this->cfs_auth->auth_host,  
-    1576-    #        $this->cfs_auth->account);
-
-./lib/CF/cloudfiles.php:2129
-  
-    2126-    #private function _re_auth()  
-    2127-    #{  
-    2128-    #    $new_auth = new CF_Authentication(  
-    2129:    #        $this->cfs_auth->username,  
-    2130-    #        $this->cfs_auth->api_key,  
-    2131-    #        $this->cfs_auth->auth_host,  
-    2132-    #        $this->cfs_auth->account);
-
-./lib/Nusoap/class.wsdl.php:47
-  
-    44-	// for getting wsdl  
-    45-	var $proxyhost = '';  
-    46-    var $proxyport = '';  
-    47:	var $proxyusername = '';  
-    48-	var $proxypassword = '';  
-    49-	var $timeout = 0;  
-    50-	var $response_timeout = 30;  
-    51-	var $curl_options = array();	// User-specified cURL options  
-    52-	var $use_curl = false;			// whether to always try to use cURL  
-    53-	// for HTTP authentication  
-    54:	var $username = '';				// Username for HTTP authentication  
-    55-	var $password = '';				// Password for HTTP authentication  
-    56-	var $authtype = '';				// Type of HTTP authentication  
-    57-	var $certRequest = array();		// Certificate for HTTP SSL authentication
-
-./lib/Nusoap/class.wsdl.php:65
-  
-    62-     * @param string $wsdl WSDL document URL  
-    63-	 * @param string $proxyhost  
-    64-	 * @param string $proxyport  
-    65:	 * @param string $proxyusername  
-    66-	 * @param string $proxypassword  
-    67-	 * @param integer $timeout set the connection timeout  
-    68-	 * @param integer $response_timeout set the response timeout
-
-./lib/Nusoap/class.wsdl.php:73
-  
-    70-	 * @param boolean $use_curl try to use cURL  
-    71-     * @access public  
-    72-     */  
-    73:    function wsdl($wsdl = '',$proxyhost=false,$proxyport=false,$proxyusername=false,$proxypassword=false,$timeout=0,$response_timeout=30,$curl_options=null,$use_curl=false){  
-    74-		parent::nusoap_base();  
-    75-		$this->debug("ctor wsdl=$wsdl timeout=$timeout response_timeout=$response_timeout");  
-    76-        $this->proxyhost = $proxyhost;  
-    77-        $this->proxyport = $proxyport;  
-    78:		$this->proxyusername = $proxyusername;  
-    79-		$this->proxypassword = $proxypassword;  
-    80-		$this->timeout = $timeout;  
-    81-		$this->response_timeout = $response_timeout;
-
-./lib/Nusoap/class.wsdl.php:215
-  
-    212-			$tr->request_method = 'GET';  
-    213-			$tr->useSOAPAction = false;  
-    214-			if($this->proxyhost && $this->proxyport){  
-    215:				$tr->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
-    216-			}  
-    217-			if ($this->authtype != '') {  
-    218:				$tr->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
-    219-			}  
-    220-			$tr->setEncoding('gzip, deflate');  
-    221-			$wsdl_string = $tr->send('', $this->timeout, $this->response_timeout);
-
-./lib/Nusoap/class.wsdl.php:557
-  
-    554-	/**  
-    555-	* if authenticating, set user credentials here  
-    556-	*  
-    557:	* @param    string $username  
-    558-	* @param    string $password  
-    559-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    560-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    561-	* @access   public  
-    562-	*/  
-    563:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
-    564:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
-    565-		$this->appendDebug($this->varDump($certRequest));  
-    566:		$this->username = $username;  
-    567-		$this->password = $password;  
-    568-		$this->authtype = $authtype;  
-    569-		$this->certRequest = $certRequest;
-
-./lib/Nusoap/class.soap_transport_http.php:40
-  
-    37-	var $ch_options = array();	// cURL custom options  
-    38-	var $use_curl = false;		// force cURL use  
-    39-	var $proxy = null;			// proxy information (associative array)  
-    40:	var $username = '';  
-    41-	var $password = '';  
-    42-	var $authtype = '';  
-    43-	var $digestRequest = array();
-
-./lib/Nusoap/class.soap_transport_http.php:360
-  
-    357-			}  
-    358-		}  
-    359-		if ($this->authtype && ($this->authtype != 'certificate')) {  
-    360:			if ($this->username) {  
-    361:				$this->debug('set cURL username/password');  
-    362:				$this->setCurlOption(CURLOPT_USERPWD, "$this->username:$this->password");  
-    363-			}  
-    364-			if ($this->authtype == 'basic') {  
-    365-				$this->debug('set cURL for Basic authentication');
-
-./lib/Nusoap/class.soap_transport_http.php:384
-  
-    381-			} else {  
-    382-				$this->setCurlOption(CURLOPT_PROXY, $this->proxy['host']);  
-    383-			}  
-    384:			if ($this->proxy['username'] || $this->proxy['password']) {  
-    385-				$this->debug('set cURL proxy authentication options');  
-    386:				$this->setCurlOption(CURLOPT_PROXYUSERPWD, $this->proxy['username'].':'.$this->proxy['password']);  
-    387-				if ($this->proxy['authtype'] == 'basic') {  
-    388-					$this->setCurlOption($CURLOPT_PROXYAUTH, $CURLAUTH_BASIC);  
-    389-				}
-
-./lib/Nusoap/class.soap_transport_http.php:462
-  
-    459-	/**  
-    460-	* if authenticating, set user credentials here  
-    461-	*  
-    462:	* @param    string $username  
-    463-	* @param    string $password  
-    464-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    465-	* @param	array $digestRequest (keys must be nonce, nc, realm, qop)  
-    466-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    467-	* @access   public  
-    468-	*/  
-    469:	function setCredentials($username, $password, $authtype = 'basic', $digestRequest = array(), $certRequest = array()) {  
-    470:		$this->debug("setCredentials username=$username authtype=$authtype digestRequest=");  
-    471-		$this->appendDebug($this->varDump($digestRequest));  
-    472-		$this->debug("certRequest=");  
-    473-		$this->appendDebug($this->varDump($certRequest));  
-    474-		// cf. RFC 2617  
-    475-		if ($authtype == 'basic') {  
-    476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
-    477-		} elseif ($authtype == 'digest') {  
-    478-			if (isset($digestRequest['nonce'])) {  
-    479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;  
-    480-  
-    481-				// calculate the Digest hashes (calculate code based on digest implementation found at: http://www.rassoc.com/gregr/weblog/stories/2002/07/09/webServicesSecurityHttpDigestAuthenticationWithoutActiveDirectory.html)  
-    482-  
-    483:				// A1 = unq(username-value) ":" unq(realm-value) ":" passwd  
-    484:				$A1 = $username. ':' . (isset($digestRequest['realm']) ? $digestRequest['realm'] : '') . ':' . $password;  
-    485-  
-    486-				// H(A1) = MD5(A1)  
-    487-				$HA1 = md5($A1);
-
-./lib/Nusoap/class.soap_transport_http.php:522
-  
-    519-					$opaque = ', opaque="' . $digestRequest['opaque'] . '"';  
-    520-				}  
-    521-  
-    522:				$this->setHeader('Authorization', 'Digest username="' . $username . '", realm="' . $digestRequest['realm'] . '", nonce="' . $nonce . '", uri="' . $this->digest_uri . $opaque . '", cnonce="' . $cnonce . '", nc=' . sprintf("%08x", $digestRequest['nc']) . ', qop="' . $digestRequest['qop'] . '", response="' . $hashedDigest . '"');  
-    523-			}  
-    524-		} elseif ($authtype == 'certificate') {  
-    525-			$this->certRequest = $certRequest;
-
-./lib/Nusoap/class.soap_transport_http.php:531
-  
-    528-			// do nothing  
-    529-			$this->debug('Authorization header not set for ntlm');  
-    530-		}  
-    531:		$this->username = $username;  
-    532-		$this->password = $password;  
-    533-		$this->authtype = $authtype;  
-    534-		$this->digestRequest = $digestRequest;
-
-./lib/Nusoap/class.soap_transport_http.php:572
-  
-    569-	*  
-    570-	* @param    string $proxyhost use an empty string to remove proxy  
-    571-	* @param    string $proxyport  
-    572:	* @param	string $proxyusername  
-    573-	* @param	string $proxypassword  
-    574-	* @param	string $proxyauthtype (basic|ntlm)  
-    575-	* @access   public  
-    576-	*/  
-    577:	function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 'basic') {  
-    578-		if ($proxyhost) {  
-    579-			$this->proxy = array(  
-    580-				'host' => $proxyhost,  
-    581-				'port' => $proxyport,  
-    582:				'username' => $proxyusername,  
-    583-				'password' => $proxypassword,  
-    584-				'authtype' => $proxyauthtype  
-    585-			);  
-    586:			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
-    587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
-    588-			}  
-    589-		} else {  
-    590-			$this->debug('remove proxy');
-
-./lib/Nusoap/class.soap_transport_http.php:1079
-  
-    1076-  
-    1077-				// should have (at least) qop, realm, nonce  
-    1078- 				if (isset($digestRequest['nonce'])) {  
-    1079: 					$this->setCredentials($this->username, $this->password, 'digest', $digestRequest);  
-    1080- 					$this->tryagain = true;  
-    1081- 					return false;  
-    1082- 				}
-
-./lib/Nusoap/class.soapclient.php:29
-  
-    26-*/  
-    27-class nusoap_client extends nusoap_base  {  
-    28-  
-    29:	var $username = '';				// Username for HTTP authentication  
-    30-	var $password = '';				// Password for HTTP authentication  
-    31-	var $authtype = '';				// Type of HTTP authentication  
-    32-	var $certRequest = array();		// Certificate for HTTP SSL authentication
-
-./lib/Nusoap/class.soapclient.php:41
-  
-    38-	var $forceEndpoint = '';		// overrides WSDL endpoint  
-    39-    var $proxyhost = '';  
-    40-    var $proxyport = '';  
-    41:	var $proxyusername = '';  
-    42-	var $proxypassword = '';  
-    43-	var $portName = '';				// port name to use in WSDL  
-    44-    var $xml_encoding = '';			// character set encoding of incoming (response) messages
-
-./lib/Nusoap/class.soapclient.php:92
-  
-    89-	* @param    mixed $wsdl optional, set to 'wsdl' or true if using WSDL  
-    90-	* @param    string $proxyhost optional  
-    91-	* @param    string $proxyport optional  
-    92:	* @param	string $proxyusername optional  
-    93-	* @param	string $proxypassword optional  
-    94-	* @param	integer $timeout set the connection timeout  
-    95-	* @param	integer $response_timeout set the response timeout  
-    96-	* @param	string $portName optional portName in WSDL document  
-    97-	* @access   public  
-    98-	*/  
-    99:	function nusoap_client($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30, $portName = ''){  
-    100-		parent::nusoap_base();  
-    101-		$this->endpoint = $endpoint;  
-    102-		$this->proxyhost = $proxyhost;  
-    103-		$this->proxyport = $proxyport;  
-    104:		$this->proxyusername = $proxyusername;  
-    105-		$this->proxypassword = $proxypassword;  
-    106-		$this->timeout = $timeout;  
-    107-		$this->response_timeout = $response_timeout;
-
-./lib/Nusoap/class.soapclient.php:376
-  
-    373-	 */  
-    374-	function loadWSDL() {  
-    375-		$this->debug('instantiating wsdl class with doc: '.$this->wsdlFile);  
-    376:		$this->wsdl = new wsdl('',$this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword,$this->timeout,$this->response_timeout,$this->curl_options,$this->use_curl);  
-    377:		$this->wsdl->setCredentials($this->username, $this->password, $this->authtype, $this->certRequest);  
-    378-		$this->wsdl->fetchWSDL($this->wsdlFile);  
-    379-		$this->checkWSDL();  
-    380-	}
-
-./lib/Nusoap/class.soapclient.php:433
-  
-    430-				$http->setContentType($this->getHTTPContentType(), $this->getHTTPContentTypeCharset());  
-    431-				$http->setSOAPAction($soapaction);  
-    432-				if($this->proxyhost && $this->proxyport){  
-    433:					$http->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
-    434-				}  
-    435-                if($this->authtype != '') {  
-    436:					$http->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
-    437-				}  
-    438-				if($this->http_encoding != ''){  
-    439-					$http->setEncoding($this->http_encoding);
-
-./lib/Nusoap/class.soapclient.php:604
-  
-    601-	*  
-    602-	* @param    string $proxyhost  
-    603-	* @param    string $proxyport  
-    604:	* @param	string $proxyusername  
-    605-	* @param	string $proxypassword  
-    606-	* @access   public  
-    607-	*/  
-    608:	function setHTTPProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '') {  
-    609-		$this->proxyhost = $proxyhost;  
-    610-		$this->proxyport = $proxyport;  
-    611:		$this->proxyusername = $proxyusername;  
-    612-		$this->proxypassword = $proxypassword;  
-    613-	}  
-    614-  
-    615-	/**  
-    616-	* if authenticating, set user credentials here  
-    617-	*  
-    618:	* @param    string $username  
-    619-	* @param    string $password  
-    620-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    621-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    622-	* @access   public  
-    623-	*/  
-    624:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
-    625:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
-    626-		$this->appendDebug($this->varDump($certRequest));  
-    627:		$this->username = $username;  
-    628-		$this->password = $password;  
-    629-		$this->authtype = $authtype;  
-    630-		$this->certRequest = $certRequest;
-
-./lib/Nusoap/class.soapclient.php:722
-  
-    719-		$proxy->defaultRpcParams = $this->defaultRpcParams;  
-    720-		// transfer other state  
-    721-		$proxy->soap_defencoding = $this->soap_defencoding;  
-    722:		$proxy->username = $this->username;  
-    723-		$proxy->password = $this->password;  
-    724-		$proxy->authtype = $this->authtype;  
-    725-		$proxy->certRequest = $this->certRequest;
-
-./lib/Nusoap/class.soapclient.php:731
-  
-    728-		$proxy->forceEndpoint = $this->forceEndpoint;  
-    729-		$proxy->proxyhost = $this->proxyhost;  
-    730-		$proxy->proxyport = $this->proxyport;  
-    731:		$proxy->proxyusername = $this->proxyusername;  
-    732-		$proxy->proxypassword = $this->proxypassword;  
-    733-		$proxy->http_encoding = $this->http_encoding;  
-    734-		$proxy->timeout = $this->timeout;
-
-./lib/Nusoap/nusoap.php:2193
-  
-    2190-	var $ch_options = array();	// cURL custom options  
-    2191-	var $use_curl = false;		// force cURL use  
-    2192-	var $proxy = null;			// proxy information (associative array)  
-    2193:	var $username = '';  
-    2194-	var $password = '';  
-    2195-	var $authtype = '';  
-    2196-	var $digestRequest = array();
-
-./lib/Nusoap/nusoap.php:2513
-  
-    2510-			}  
-    2511-		}  
-    2512-		if ($this->authtype && ($this->authtype != 'certificate')) {  
-    2513:			if ($this->username) {  
-    2514:				$this->debug('set cURL username/password');  
-    2515:				$this->setCurlOption(CURLOPT_USERPWD, "$this->username:$this->password");  
-    2516-			}  
-    2517-			if ($this->authtype == 'basic') {  
-    2518-				$this->debug('set cURL for Basic authentication');
-
-./lib/Nusoap/nusoap.php:2537
-  
-    2534-			} else {  
-    2535-				$this->setCurlOption(CURLOPT_PROXY, $this->proxy['host']);  
-    2536-			}  
-    2537:			if ($this->proxy['username'] || $this->proxy['password']) {  
-    2538-				$this->debug('set cURL proxy authentication options');  
-    2539:				$this->setCurlOption(CURLOPT_PROXYUSERPWD, $this->proxy['username'].':'.$this->proxy['password']);  
-    2540-				if ($this->proxy['authtype'] == 'basic') {  
-    2541-					$this->setCurlOption($CURLOPT_PROXYAUTH, $CURLAUTH_BASIC);  
-    2542-				}
-
-./lib/Nusoap/nusoap.php:2615
-  
-    2612-	/**  
-    2613-	* if authenticating, set user credentials here  
-    2614-	*  
-    2615:	* @param    string $username  
-    2616-	* @param    string $password  
-    2617-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    2618-	* @param	array $digestRequest (keys must be nonce, nc, realm, qop)  
-    2619-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    2620-	* @access   public  
-    2621-	*/  
-    2622:	function setCredentials($username, $password, $authtype = 'basic', $digestRequest = array(), $certRequest = array()) {  
-    2623:		$this->debug("setCredentials username=$username authtype=$authtype digestRequest=");  
-    2624-		$this->appendDebug($this->varDump($digestRequest));  
-    2625-		$this->debug("certRequest=");  
-    2626-		$this->appendDebug($this->varDump($certRequest));  
-    2627-		// cf. RFC 2617  
-    2628-		if ($authtype == 'basic') {  
-    2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
-    2630-		} elseif ($authtype == 'digest') {  
-    2631-			if (isset($digestRequest['nonce'])) {  
-    2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;  
-    2633-  
-    2634-				// calculate the Digest hashes (calculate code based on digest implementation found at: http://www.rassoc.com/gregr/weblog/stories/2002/07/09/webServicesSecurityHttpDigestAuthenticationWithoutActiveDirectory.html)  
-    2635-  
-    2636:				// A1 = unq(username-value) ":" unq(realm-value) ":" passwd  
-    2637:				$A1 = $username. ':' . (isset($digestRequest['realm']) ? $digestRequest['realm'] : '') . ':' . $password;  
-    2638-  
-    2639-				// H(A1) = MD5(A1)  
-    2640-				$HA1 = md5($A1);
-
-./lib/Nusoap/nusoap.php:2675
-  
-    2672-					$opaque = ', opaque="' . $digestRequest['opaque'] . '"';  
-    2673-				}  
-    2674-  
-    2675:				$this->setHeader('Authorization', 'Digest username="' . $username . '", realm="' . $digestRequest['realm'] . '", nonce="' . $nonce . '", uri="' . $this->digest_uri . $opaque . '", cnonce="' . $cnonce . '", nc=' . sprintf("%08x", $digestRequest['nc']) . ', qop="' . $digestRequest['qop'] . '", response="' . $hashedDigest . '"');  
-    2676-			}  
-    2677-		} elseif ($authtype == 'certificate') {  
-    2678-			$this->certRequest = $certRequest;
-
-./lib/Nusoap/nusoap.php:2684
-  
-    2681-			// do nothing  
-    2682-			$this->debug('Authorization header not set for ntlm');  
-    2683-		}  
-    2684:		$this->username = $username;  
-    2685-		$this->password = $password;  
-    2686-		$this->authtype = $authtype;  
-    2687-		$this->digestRequest = $digestRequest;
-
-./lib/Nusoap/nusoap.php:2725
-  
-    2722-	*  
-    2723-	* @param    string $proxyhost use an empty string to remove proxy  
-    2724-	* @param    string $proxyport  
-    2725:	* @param	string $proxyusername  
-    2726-	* @param	string $proxypassword  
-    2727-	* @param	string $proxyauthtype (basic|ntlm)  
-    2728-	* @access   public  
-    2729-	*/  
-    2730:	function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 'basic') {  
-    2731-		if ($proxyhost) {  
-    2732-			$this->proxy = array(  
-    2733-				'host' => $proxyhost,  
-    2734-				'port' => $proxyport,  
-    2735:				'username' => $proxyusername,  
-    2736-				'password' => $proxypassword,  
-    2737-				'authtype' => $proxyauthtype  
-    2738-			);  
-    2739:			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
-    2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
-    2741-			}  
-    2742-		} else {  
-    2743-			$this->debug('remove proxy');
-
-./lib/Nusoap/nusoap.php:3232
-  
-    3229-  
-    3230-				// should have (at least) qop, realm, nonce  
-    3231- 				if (isset($digestRequest['nonce'])) {  
-    3232: 					$this->setCredentials($this->username, $this->password, 'digest', $digestRequest);  
-    3233- 					$this->tryagain = true;  
-    3234- 					return false;  
-    3235- 				}
-
-./lib/Nusoap/nusoap.php:4628
-  
-    4625-	// for getting wsdl  
-    4626-	var $proxyhost = '';  
-    4627-    var $proxyport = '';  
-    4628:	var $proxyusername = '';  
-    4629-	var $proxypassword = '';  
-    4630-	var $timeout = 0;  
-    4631-	var $response_timeout = 30;  
-    4632-	var $curl_options = array();	// User-specified cURL options  
-    4633-	var $use_curl = false;			// whether to always try to use cURL  
-    4634-	// for HTTP authentication  
-    4635:	var $username = '';				// Username for HTTP authentication  
-    4636-	var $password = '';				// Password for HTTP authentication  
-    4637-	var $authtype = '';				// Type of HTTP authentication  
-    4638-	var $certRequest = array();		// Certificate for HTTP SSL authentication
-
-./lib/Nusoap/nusoap.php:4646
-  
-    4643-     * @param string $wsdl WSDL document URL  
-    4644-	 * @param string $proxyhost  
-    4645-	 * @param string $proxyport  
-    4646:	 * @param string $proxyusername  
-    4647-	 * @param string $proxypassword  
-    4648-	 * @param integer $timeout set the connection timeout  
-    4649-	 * @param integer $response_timeout set the response timeout
-
-./lib/Nusoap/nusoap.php:4654
-  
-    4651-	 * @param boolean $use_curl try to use cURL  
-    4652-     * @access public  
-    4653-     */  
-    4654:    function wsdl($wsdl = '',$proxyhost=false,$proxyport=false,$proxyusername=false,$proxypassword=false,$timeout=0,$response_timeout=30,$curl_options=null,$use_curl=false){  
-    4655-		parent::nusoap_base();  
-    4656-		$this->debug("ctor wsdl=$wsdl timeout=$timeout response_timeout=$response_timeout");  
-    4657-        $this->proxyhost = $proxyhost;  
-    4658-        $this->proxyport = $proxyport;  
-    4659:		$this->proxyusername = $proxyusername;  
-    4660-		$this->proxypassword = $proxypassword;  
-    4661-		$this->timeout = $timeout;  
-    4662-		$this->response_timeout = $response_timeout;
-
-./lib/Nusoap/nusoap.php:4796
-  
-    4793-			$tr->request_method = 'GET';  
-    4794-			$tr->useSOAPAction = false;  
-    4795-			if($this->proxyhost && $this->proxyport){  
-    4796:				$tr->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
-    4797-			}  
-    4798-			if ($this->authtype != '') {  
-    4799:				$tr->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
-    4800-			}  
-    4801-			$tr->setEncoding('gzip, deflate');  
-    4802-			$wsdl_string = $tr->send('', $this->timeout, $this->response_timeout);
-
-./lib/Nusoap/nusoap.php:5138
-  
-    5135-	/**  
-    5136-	* if authenticating, set user credentials here  
-    5137-	*  
-    5138:	* @param    string $username  
-    5139-	* @param    string $password  
-    5140-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    5141-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    5142-	* @access   public  
-    5143-	*/  
-    5144:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
-    5145:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
-    5146-		$this->appendDebug($this->varDump($certRequest));  
-    5147:		$this->username = $username;  
-    5148-		$this->password = $password;  
-    5149-		$this->authtype = $authtype;  
-    5150-		$this->certRequest = $certRequest;
-
-./lib/Nusoap/nusoap.php:7185
-  
-    7182-*/  
-    7183-class nusoap_client extends nusoap_base  {  
-    7184-  
-    7185:	var $username = '';				// Username for HTTP authentication  
-    7186-	var $password = '';				// Password for HTTP authentication  
-    7187-	var $authtype = '';				// Type of HTTP authentication  
-    7188-	var $certRequest = array();		// Certificate for HTTP SSL authentication
-
-./lib/Nusoap/nusoap.php:7197
-  
-    7194-	var $forceEndpoint = '';		// overrides WSDL endpoint  
-    7195-    var $proxyhost = '';  
-    7196-    var $proxyport = '';  
-    7197:	var $proxyusername = '';  
-    7198-	var $proxypassword = '';  
-    7199-	var $portName = '';				// port name to use in WSDL  
-    7200-    var $xml_encoding = '';			// character set encoding of incoming (response) messages
-
-./lib/Nusoap/nusoap.php:7248
-  
-    7245-	* @param    mixed $wsdl optional, set to 'wsdl' or true if using WSDL  
-    7246-	* @param    string $proxyhost optional  
-    7247-	* @param    string $proxyport optional  
-    7248:	* @param	string $proxyusername optional  
-    7249-	* @param	string $proxypassword optional  
-    7250-	* @param	integer $timeout set the connection timeout  
-    7251-	* @param	integer $response_timeout set the response timeout  
-    7252-	* @param	string $portName optional portName in WSDL document  
-    7253-	* @access   public  
-    7254-	*/  
-    7255:	function nusoap_client($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30, $portName = ''){  
-    7256-		parent::nusoap_base();  
-    7257-		$this->endpoint = $endpoint;  
-    7258-		$this->proxyhost = $proxyhost;  
-    7259-		$this->proxyport = $proxyport;  
-    7260:		$this->proxyusername = $proxyusername;  
-    7261-		$this->proxypassword = $proxypassword;  
-    7262-		$this->timeout = $timeout;  
-    7263-		$this->response_timeout = $response_timeout;
-
-./lib/Nusoap/nusoap.php:7532
-  
-    7529-	 */  
-    7530-	function loadWSDL() {  
-    7531-		$this->debug('instantiating wsdl class with doc: '.$this->wsdlFile);  
-    7532:		$this->wsdl = new wsdl('',$this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword,$this->timeout,$this->response_timeout,$this->curl_options,$this->use_curl);  
-    7533:		$this->wsdl->setCredentials($this->username, $this->password, $this->authtype, $this->certRequest);  
-    7534-		$this->wsdl->fetchWSDL($this->wsdlFile);  
-    7535-		$this->checkWSDL();  
-    7536-	}
-
-./lib/Nusoap/nusoap.php:7589
-  
-    7586-				$http->setContentType($this->getHTTPContentType(), $this->getHTTPContentTypeCharset());  
-    7587-				$http->setSOAPAction($soapaction);  
-    7588-				if($this->proxyhost && $this->proxyport){  
-    7589:					$http->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
-    7590-				}  
-    7591-                if($this->authtype != '') {  
-    7592:					$http->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
-    7593-				}  
-    7594-				if($this->http_encoding != ''){  
-    7595-					$http->setEncoding($this->http_encoding);
-
-./lib/Nusoap/nusoap.php:7760
-  
-    7757-	*  
-    7758-	* @param    string $proxyhost  
-    7759-	* @param    string $proxyport  
-    7760:	* @param	string $proxyusername  
-    7761-	* @param	string $proxypassword  
-    7762-	* @access   public  
-    7763-	*/  
-    7764:	function setHTTPProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '') {  
-    7765-		$this->proxyhost = $proxyhost;  
-    7766-		$this->proxyport = $proxyport;  
-    7767:		$this->proxyusername = $proxyusername;  
-    7768-		$this->proxypassword = $proxypassword;  
-    7769-	}  
-    7770-  
-    7771-	/**  
-    7772-	* if authenticating, set user credentials here  
-    7773-	*  
-    7774:	* @param    string $username  
-    7775-	* @param    string $password  
-    7776-	* @param	string $authtype (basic|digest|certificate|ntlm)  
-    7777-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
-    7778-	* @access   public  
-    7779-	*/  
-    7780:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
-    7781:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
-    7782-		$this->appendDebug($this->varDump($certRequest));  
-    7783:		$this->username = $username;  
-    7784-		$this->password = $password;  
-    7785-		$this->authtype = $authtype;  
-    7786-		$this->certRequest = $certRequest;
-
-./lib/Nusoap/nusoap.php:7878
-  
-    7875-		$proxy->defaultRpcParams = $this->defaultRpcParams;  
-    7876-		// transfer other state  
-    7877-		$proxy->soap_defencoding = $this->soap_defencoding;  
-    7878:		$proxy->username = $this->username;  
-    7879-		$proxy->password = $this->password;  
-    7880-		$proxy->authtype = $this->authtype;  
-    7881-		$proxy->certRequest = $this->certRequest;
-
-./lib/Nusoap/nusoap.php:7887
-  
-    7884-		$proxy->forceEndpoint = $this->forceEndpoint;  
-    7885-		$proxy->proxyhost = $this->proxyhost;  
-    7886-		$proxy->proxyport = $this->proxyport;  
-    7887:		$proxy->proxyusername = $this->proxyusername;  
-    7888-		$proxy->proxypassword = $this->proxypassword;  
-    7889-		$proxy->http_encoding = $this->http_encoding;  
-    7890-		$proxy->timeout = $this->timeout;
-
-./lib/Microsoft/Uri/Http.php:51
-  
-    48-    const CHAR_UNWISE   = '{}|\\\\^`';  
-    49-  
-    50-    /**  
-    51:     * HTTP username  
-    52-     *  
-    53-     * @var string  
-    54-     */  
-    55:    protected $_username = '';  
-    56-  
-    57-    /**  
-    58-     * HTTP password
-
-./lib/Microsoft/Uri/Http.php:216
-  
-    213-        $this->_query    = isset($matches[6]) === true ? $matches[6] : '';  
-    214-        $this->_fragment = isset($matches[8]) === true ? $matches[8] : '';  
-    215-  
-    216:        // Additional decomposition to get username, password, host, and port  
-    217-        $combo   = isset($matches[3]) === true ? $matches[3] : '';  
-    218-        $pattern = '~^(([^:@]*)(:([^@]*))?@)?([^:]+)(:(.*))?$~';  
-    219-        $status  = @preg_match($pattern, $combo, $matches);
-
-./lib/Microsoft/Uri/Http.php:231
-  
-    228-        }  
-    229-  
-    230-        // Save remaining URI components  
-    231:        $this->_username = isset($matches[2]) === true ? $matches[2] : '';  
-    232-        $this->_password = isset($matches[4]) === true ? $matches[4] : '';  
-    233-        $this->_host     = isset($matches[5]) === true ? $matches[5] : '';  
-    234-        $this->_port     = isset($matches[7]) === true ? $matches[7] : '';
-
-./lib/Microsoft/Uri/Http.php:253
-  
-    250-        }  
-    251-  
-    252-        $password = strlen($this->_password) > 0 ? ":$this->_password" : '';  
-    253:        $auth     = strlen($this->_username) > 0 ? "$this->_username$password@" : '';  
-    254-        $port     = strlen($this->_port) > 0 ? ":$this->_port" : '';  
-    255-        $query    = strlen($this->_query) > 0 ? "?$this->_query" : '';  
-    256-        $fragment = strlen($this->_fragment) > 0 ? "#$this->_fragment" : '';
-
-./lib/Microsoft/Uri/Http.php:287
-  
-    284-    }  
-    285-  
-    286-    /**  
-    287:     * Returns the username portion of the URL, or FALSE if none.  
-    288-     *  
-    289-     * @return string  
-    290-     */  
-    291-    public function getUsername()  
-    292-    {  
-    293:        return strlen($this->_username) > 0 ? $this->_username : false;  
-    294-    }  
-    295-  
-    296-    /**  
-    297:     * Returns true if and only if the username passes validation. If no username is passed,  
-    298:     * then the username contained in the instance variable is used.  
-    299-     *  
-    300:     * @param  string $username The HTTP username  
-    301:     * @throws Microsoft_Uri_Exception When username validation fails  
-    302-     * @return boolean  
-    303-     * @link   http://www.faqs.org/rfcs/rfc2396.html  
-    304-     */  
-    305:    public function validateUsername($username = null)  
-    306-    {  
-    307:        if ($username === null) {  
-    308:            $username = $this->_username;  
-    309-        }  
-    310-  
-    311:        // If the username is empty, then it is considered valid  
-    312:        if (strlen($username) === 0) {  
-    313-            return true;  
-    314-        }  
-    315-  
-    316:        // Check the username against the allowed values  
-    317-        $status = @preg_match('/^(?:' . $this->_regex['escaped'] . '|[' .  
-    318:            self::CHAR_ALNUM . self::CHAR_MARK . ';:&=+$,' . '])+$/', $username);  
-    319-  
-    320-        if ($status === false) {  
-    321-            require_once 'Microsoft/Uri/Exception.php';  
-    322:            throw new Microsoft_Uri_Exception('Internal error: username validation failed');  
-    323-        }  
-    324-  
-    325-        return $status === 1;  
-    326-    }  
-    327-  
-    328-    /**  
-    329:     * Sets the username for the current URI, and returns the old username  
-    330-     *  
-    331:     * @param  string $username The HTTP username  
-    332:     * @throws Microsoft_Uri_Exception When $username is not a valid HTTP username  
-    333-     * @return string  
-    334-     */  
-    335:    public function setUsername($username)  
-    336-    {  
-    337:        if ($this->validateUsername($username) === false) {  
-    338-            require_once 'Microsoft/Uri/Exception.php';  
-    339:            throw new Microsoft_Uri_Exception("Username \"$username\" is not a valid HTTP username");  
-    340-        }  
-    341-  
-    342:        $oldUsername     = $this->_username;  
-    343:        $this->_username = $username;  
-    344-  
-    345-        return $oldUsername;  
-    346-    }
-
-./lib/Microsoft/Uri/Http.php:378
-  
-    375-            return true;  
-    376-        }  
-    377-  
-    378:        // If the password is nonempty, but there is no username, then it is considered invalid  
-    379:        if (strlen($password) > 0 and strlen($this->_username) === 0) {  
-    380-            return false;  
-    381-        }  
-    382-
-
-./lib/Microsoft/Http/Client.php:180
-  
-    177-     * HTTP Authentication settings  
-    178-     *  
-    179-     * Expected to be an associative array with this structure:  
-    180:     * $this->auth = array('user' => 'username', 'password' => 'password', 'type' => 'basic')  
-    181-     * Where 'type' should be one of the supported authentication types (see the AUTH_*  
-    182-     * constants), for example 'basic' or 'digest'.  
-    183-     *
-
-./lib/Microsoft/Http/Client.php:274
-  
-    271-            throw new Microsoft_Http_Client_Exception('Passed parameter is not a valid HTTP URI.');  
-    272-        }  
-    273-  
-    274:        // Set auth if username and password has been specified in the uri  
-    275-        if ($uri->getUsername() && $uri->getPassword()) {  
-    276-            $this->setAuth($uri->getUsername(), $uri->getPassword());  
-    277-        }
-
-./lib/Minify/Minify/Controller/Files.php:21
-  
-    18- *     'files' => array(  
-    19- *         '//js/jquery.js'  
-    20- *         ,'//js/plugins.js'  
-    21: *         ,'/home/username/file.js'  
-    22- *     )  
-    23- * ));  
-    24- * </code>
-
-./inc/options/general.php:342
-  
-    339-  
-    340-        <?php echo $this->postbox_header('Network Performance &amp; Security powered by CloudFlare'); ?>  
-    341-        <p>  
-    342:            CloudFlare protects and accelerates websites. <a href="https://www.cloudflare.com/sign-up.html?affiliate=w3edge&amp;seed_domain=<?php echo w3_get_host(); ?>&amp;email=<?php echo htmlspecialchars($cloudflare_signup_email); ?>&amp;username=<?php echo htmlspecialchars($cloudflare_signup_user); ?>" target="_blank">Sign up now for free</a> to get started,  
-    343-            or if you have an account simply log in to obtain your <acronym title="Application Programming Interface">API</acronym> key from the <a href="https://www.cloudflare.com/my-account.html">account page</a> to enter it below.  
-    344-            Contact the CloudFlare <a href="http://www.cloudflare.com/help.html" target="_blank">support team</a> with any questions.  
-    345-        </p>
-
-./inc/options/cdn/ftp.php:17
-  
-    14-	</td>  
-    15-</tr>  
-    16-<tr>  
-    17:	<th><label for="cdn_ftp_user"><acronym title="File Transfer Protocol">FTP</acronym> username:</label></th>  
-    18-	<td>  
-    19-		<input id="cdn_ftp_user" class="w3tc-ignore-change" type="text" name="cdn.ftp.user" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.user')); ?>" size="30" />  
-    20-	</td>
-
-./inc/options/cdn/cotendo.php:3
-  
-    1-<?php if (!defined('W3TC')) die(); ?>  
-    2-<tr>  
-    3:    <th style="width: 300px;"><label for="cdn_cotendo_username">Username:</label></th>  
-    4-    <td>  
-    5:        <input id="cdn_cotendo_username" class="w3tc-ignore-change" type="text" name="cdn.cotendo.username" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.cotendo.username')); ?>" size="60" />  
-    6-    </td>  
-    7-</tr>  
-    8-<tr>
-
 #### host ####
 ./lib/W3/Minify.php:309
   
@@ -9996,614 +2881,6 @@ Prepared for _Enzo's Pizza_
     65-                	</tr>  
     66-                	<tr>
 
-#### database ####
-./lib/W3/Db/mssql.php:134
-  
-    132-         *  
-    133-         * You can set this to have multiple WordPress installations  
-    134:         * in a single database. The second reason is for possible  
-    135-         * security precautions.  
-    136-         *  
-    137-         * @since 0.71
-
-./lib/W3/Db/mssql.php:144
-  
-    141-        var $prefix = '';  
-    142-  
-    143-        /**  
-    144:         * Whether the database queries are ready to start executing.  
-    145-         *  
-    146-         * @since 2.5.0  
-    147-         * @access private
-
-./lib/W3/Db/mssql.php:458
-  
-    455-        var $db_type;  
-    456-  
-    457-        /**  
-    458:         * Connects to the database server and selects a database  
-    459-         *  
-    460-         * PHP4 compatibility layer for calling the PHP5 constructor.  
-    461-         *  
-    462-         * @uses wpdb::__construct() Passes parameters and returns result  
-    463-         * @since 0.71  
-    464-         *  
-    465:         * @param string $dbuser MySQL database user  
-    466:         * @param string $dbpassword MySQL database password  
-    467:         * @param string $dbname MySQL database name  
-    468:         * @param string $dbhost MySQL database host  
-    469-         */  
-    470-        function wpdb( $dbuser, $dbpassword, $dbname, $dbhost ) {  
-    471-                if( defined( 'WP_USE_MULTIPLE_DB' ) && WP_USE_MULTIPLE_DB )
-
-./lib/W3/Db/mssql.php:477
-  
-    474-        }  
-    475-  
-    476-        /**  
-    477:         * Connects to the database server and selects a database  
-    478-         *  
-    479-         * PHP5 style constructor for compatibility with PHP5. Does  
-    480-         * the actual setting up of the class properties and connection  
-    481:         * to the database.  
-    482-         *  
-    483-         * @link http://core.trac.wordpress.org/ticket/3354  
-    484-         * @since 2.0.8  
-    485-         *  
-    486:         * @param string $dbuser MySQL database user  
-    487:         * @param string $dbpassword MySQL database password  
-    488:         * @param string $dbname MySQL database name  
-    489:         * @param string $dbhost MySQL database host  
-    490-         */  
-    491-        function __construct( $dbuser, $dbpassword, $dbname, $dbhost ) {  
-    492-                register_shutdown_function( array( &$this, '__destruct' ) );
-
-./lib/W3/Db/mssql.php:534
-  
-    531-  
-    532-                if ( !$this->dbh ) {  
-    533-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
-    534:<h1>Error establishing a database connection</h1>  
-    535:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
-    536-<ul>  
-    537-        <li>Are you sure you have the correct username and password?</li>  
-    538-        <li>Are you sure that you have typed the correct hostname?</li>  
-    539:        <li>Are you sure that the database server is running?</li>  
-    540-</ul>  
-    541-<p>If you're unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href='http://wordpress.org/support/'>WordPress Support Forums</a>.</p>  
-    542-"/*/WP_I18N_DB_CONN_ERROR*/, $dbhost ), 'db_connect_fail' );
-
-./lib/W3/Db/mssql.php:570
-  
-    567-        }  
-    568-  
-    569-        /**  
-    570:         * PHP5 style destructor and will run when database object is destroyed.  
-    571-         *  
-    572-         * @see wpdb::__construct()  
-    573-         * @since 2.0.8
-
-./lib/W3/Db/mssql.php:591
-  
-    588-        function set_prefix( $prefix, $set_table_names = true ) {  
-    589-  
-    590-                if ( preg_match( '|[^a-z0-9_]|i', $prefix ) )  
-    591:                        return new WP_Error('invalid_db_prefix', /*WP_I18N_DB_BAD_PREFIX*/'Invalid database prefix'/*/WP_I18N_DB_BAD_PREFIX*/);  
-    592-  
-    593-                $old_prefix = is_multisite() ? '' : $prefix;  
-    594-
-
-./lib/W3/Db/mssql.php:745
-  
-    742-        }  
-    743-  
-    744-        /**  
-    745:         * Selects a database using the current database connection.  
-    746-         *  
-    747:         * The database name will be changed based on the current database  
-    748-         * connection. On failure, the execution will bail and display an DB error.  
-    749-         *  
-    750-         * @since 0.71  
-    751-         *  
-    752:         * @param string $db MySQL database name  
-    753-         * @return null Always null.  
-    754-         */  
-    755-        function select( $db, &$dbh ) {  
-    756-                if ( !@mssql_select_db($db, $dbh) ) {  
-    757-                        $this->ready = false;  
-    758-                        $this->bail( sprintf( /*WP_I18N_DB_SELECT_DB*/'  
-    759:<h1>Can&#8217;t select database</h1>  
-    760:<p>We were able to connect to the database server (which means your username and password is okay) but not able to select the <code>%1$s</code> database.</p>  
-    761-<ul>  
-    762-<li>Are you sure it exists?</li>  
-    763:<li>Does the user <code>%2$s</code> have permission to use the <code>%1$s</code> database?</li>  
-    764:<li>On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?</li>  
-    765-</ul>  
-    766:<p>If you don\'t know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="http://wordpress.org/support/">WordPress Support Forums</a>.</p>'/*/WP_I18N_DB_SELECT_DB*/, $db, $this->dbuser ), 'db_select_fail' );  
-    767-                        return;  
-    768-                }  
-    769-        }
-
-./lib/W3/Db/mssql.php:827
-  
-    824-        }  
-    825-  
-    826-        /**  
-    827:         * Escapes content for insertion into the database using addslashes(), for security.  
-    828-         *  
-    829-         * Works on arrays.  
-    830-         *
-
-./lib/W3/Db/mssql.php:851
-  
-    848-        }  
-    849-  
-    850-        /**  
-    851:         * Escapes content by reference for insertion into the database, for security  
-    852-         *  
-    853-         * @uses wpdb::_real_escape()  
-    854-         * @since 2.3.0
-
-./lib/W3/Db/mssql.php:941
-  
-    938-                        return false;  
-    939-  
-    940-                if ( $caller = $this->get_caller() )  
-    941:                        $error_str = sprintf( /*WP_I18N_DB_QUERY_ERROR_FULL*/'WordPress database error %1$s for query %2$s made by %3$s'/*/WP_I18N_DB_QUERY_ERROR_FULL*/, $str, $this->last_query, $caller );  
-    942-                else  
-    943:                        $error_str = sprintf( /*WP_I18N_DB_QUERY_ERROR*/'WordPress database error %1$s for query %2$s'/*/WP_I18N_DB_QUERY_ERROR*/, $str, $this->last_query );  
-    944-  
-    945-                if ( function_exists( 'error_log' )  
-    946-                        && ( $log_file = @ini_get( 'error_log' ) )
-
-./lib/W3/Db/mssql.php:957
-  
-    954-  
-    955-                // If there is an error then take note of it  
-    956-                if ( is_multisite() ) {  
-    957:                        $msg = "WordPress database error: [$str]\n{$this->last_query}\n";  
-    958-                        if ( defined( 'ERRORLOGFILE' ) )  
-    959-                                error_log( $msg, 3, ERRORLOGFILE );  
-    960-                        if ( defined( 'DIEONDBERROR' ) )
-
-./lib/W3/Db/mssql.php:967
-  
-    964-                        $query = htmlspecialchars( $this->last_query, ENT_QUOTES );  
-    965-  
-    966-                        print "<div id='error'>  
-    967:                        <p class='wpdberror'><strong>WordPress database error:</strong> [$str]<br />  
-    968-                        <code>$query</code></p>  
-    969-                        </div>";  
-    970-                }  
-    971-        }  
-    972-  
-    973-        /**  
-    974:         * Enables showing of database errors.  
-    975-         *  
-    976-         * This function should be used only to enable showing of errors.  
-    977-         * wpdb::hide_errors() should be used instead for hiding of errors. However,  
-    978:         * this function can be used to enable and disable showing of database  
-    979-         * errors.  
-    980-         *  
-    981-         * @since 0.71
-
-./lib/W3/Db/mssql.php:994
-  
-    991-        }  
-    992-  
-    993-        /**  
-    994:         * Disables showing of database errors.  
-    995-         *  
-    996:         * By default database errors are not shown.  
-    997-         *  
-    998-         * @since 0.71  
-    999-         * @see wpdb::show_errors()
-
-./lib/W3/Db/mssql.php:1010
-  
-    1007-        }  
-    1008-  
-    1009-        /**  
-    1010:         * Whether to suppress database errors.  
-    1011-         *  
-    1012:         * By default database errors are suppressed, with a simple  
-    1013-         * call to this function they can be enabled.  
-    1014-         *  
-    1015-         * @since 2.5
-
-./lib/W3/Db/mssql.php:1062
-  
-    1059-  
-    1060-                if (!$this->$dbhname ) {  
-    1061-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
-    1062:<h1>Error establishing a database connection</h1>  
-    1063:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
-    1064-<ul>  
-    1065-        <li>Are you sure you have the correct username and password?</li>  
-    1066-        <li>Are you sure that you have typed the correct hostname?</li>  
-    1067:        <li>Are you sure that the database server is running?</li>  
-    1068-</ul>  
-    1069-<p>If you're unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href='http://wordpress.org/support/'>WordPress Support Forums</a>.</p>  
-    1070-"/*/WP_I18N_DB_CONN_ERROR*/, $details['db_host'] ), 'db_connect_fail' );
-
-./lib/W3/Db/mssql.php:1081
-  
-    1078-        }  
-    1079-  
-    1080-        /**  
-    1081:         * Perform a MySQL database query, using current database connection.  
-    1082-         *  
-    1083-         * More information can be found on the codex page.  
-    1084-         *
-
-./lib/W3/Db/mssql.php:1420
-  
-    1417-        }  
-    1418-  
-    1419-        /**  
-    1420:         * Retrieve one variable from the database.  
-    1421-         *  
-    1422-         * Executes a SQL query and returns the value from the SQL result.  
-    1423-         * If the SQL result contains more than one column and/or more than one row, this function returns the value in the column and row specified.
-
-./lib/W3/Db/mssql.php:1448
-  
-    1445-        }  
-    1446-  
-    1447-        /**  
-    1448:         * Retrieve one row from the database.  
-    1449-         *  
-    1450-         * Executes a SQL query and returns the row from the SQL result.  
-    1451-         *
-
-./lib/W3/Db/mssql.php:1482
-  
-    1479-        }  
-    1480-  
-    1481-        /**  
-    1482:         * Retrieve one column from the database.  
-    1483-         *  
-    1484-         * Executes a SQL query and returns the column from the SQL result.  
-    1485-         * If the SQL result contains more than one column, this function returns the column specified.
-
-./lib/W3/Db/mssql.php:1507
-  
-    1504-        }  
-    1505-  
-    1506-        /**  
-    1507:         * Retrieve an entire SQL result set from the database (i.e., many rows)  
-    1508-         *  
-    1509-         * Executes a SQL query and returns the entire SQL result.  
-    1510-         *
-
-./lib/W3/Db/mssql.php:1633
-  
-    1630-        }  
-    1631-  
-    1632-        /**  
-    1633:         * Whether MySQL database is at least the required minimum version.  
-    1634-         *  
-    1635-         * @since 2.5.0  
-    1636-         * @uses $wp_version
-
-./lib/W3/Db/mssql.php:1641
-  
-    1638-         *  
-    1639-         * @return WP_Error  
-    1640-         */  
-    1641:        function check_database_version() {  
-    1642-                global $wp_version, $required_mysql_version;  
-    1643-                // Make sure the server has the required MySQL version  
-    1644-                //if ( version_compare($this->db_version(), $required_mysql_version, '<') )  
-    1645:                        //return new WP_Error('database_version', sprintf( __( '<strong>ERROR</strong>: WordPress %1$s requires MySQL %2$s or higher' ), $wp_version, $required_mysql_version ));  
-    1646-        }  
-    1647-  
-    1648-        /**  
-    1649:         * Whether the database supports collation.  
-    1650-         *  
-    1651-         * Called when WordPress is generating the table scheme.  
-    1652-         *
-
-./lib/W3/Db/mssql.php:1662
-  
-    1659-        }  
-    1660-  
-    1661-        /**  
-    1662:         * Determine if a database supports a particular feature  
-    1663-         *  
-    1664-         * @since 2.7  
-    1665-         * @see   wpdb::db_version()
-
-./lib/W3/Db/mssql.php:1707
-  
-    1704-        }  
-    1705-  
-    1706-        /**  
-    1707:         * The database version number.  
-    1708-         *  
-    1709-         * @return false|string false on failure, version number on success  
-    1710-         */
-
-./lib/W3/Db/mssql.php:2088
-  
-    2085-     * WordPress table prefix  
-    2086-     *  
-    2087-     * You can set this to have multiple WordPress installations  
-    2088:     * in a single database. The second reason is for possible  
-    2089-     * security precautions.  
-    2090-     *  
-    2091-     * @since 0.71
-
-./lib/W3/PgCache.php:543
-  
-    540-        }  
-    541-  
-    542-        /**  
-    543:         * Check for database error  
-    544-         */  
-    545:        if (w3_is_database_error($buffer)) {  
-    546-            $this->cache_reject_reason = 'Database error occurred';  
-    547-  
-    548-            return false;
-
-./lib/W3/Plugin/Minify.php:956
-  
-    953-     */  
-    954-    function can_minify2(&$buffer) {  
-    955-        /**  
-    956:         * Check for database error  
-    957-         */  
-    958:        if (w3_is_database_error($buffer)) {  
-    959-            $this->minify_reject_reason = 'Database Error occurred';  
-    960-  
-    961-            return false;
-
-./lib/W3/Plugin/CdnEnabled.php:385
-  
-    382-     * @param string $message  
-    383-     */  
-    384-    function update_feedback($message) {  
-    385:        if ($message == __('Upgrading database')) {  
-    386-            $this->_config->set('notes.wp_upgraded', true);  
-    387-            $this->_config->save();  
-    388-        }
-
-./lib/W3/Plugin/CdnEnabled.php:1829
-  
-    1826-     */  
-    1827-    function can_cdn2(&$buffer) {  
-    1828-        /**  
-    1829:         * Check for database error  
-    1830-         */  
-    1831:        if (w3_is_database_error($buffer)) {  
-    1832-            $this->cdn_reject_reason = 'Database Error occurred';  
-    1833-  
-    1834-            return false;
-
-./lib/W3/Plugin/MinifyEnabled.php:1023
-  
-    1020-     */  
-    1021-    function can_minify2(&$buffer) {  
-    1022-        /**  
-    1023:         * Check for database error  
-    1024-         */  
-    1025:        if (w3_is_database_error($buffer)) {  
-    1026-            $this->minify_reject_reason = 'Database Error occurred';  
-    1027-  
-    1028-            return false;
-
-./lib/W3/Plugin/TotalCache.php:364
-  
-    361-        global $wpdb;  
-    362-  
-    363-        if ($buffer != '' && w3_is_xml($buffer)) {  
-    364:            if (w3_is_database_error($buffer)) {  
-    365-                status_header(503);  
-    366-            } else {  
-    367-                /**
-
-./lib/W3/Plugin/Cdn.php:231
-  
-    228-     * @param string $message  
-    229-     */  
-    230-    function update_feedback($message) {  
-    231:        if ($message == __('Upgrading database')) {  
-    232-            $this->_config->set('notes.wp_upgraded', true);  
-    233-            $this->_config->save();  
-    234-        }
-
-./lib/W3/Plugin/Cdn.php:698
-  
-    695-     */  
-    696-    function can_cdn2(&$buffer) {  
-    697-        /**  
-    698:         * Check for database error  
-    699-         */  
-    700:        if (w3_is_database_error($buffer)) {  
-    701-            $this->cdn_reject_reason = 'Database Error occurred';  
-    702-  
-    703-            return false;
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1085
-  
-    1082-        }  
-    1083-  
-    1084-        /**  
-    1085:         * Check for database cache availability  
-    1086-         */  
-    1087-        if ($this->_config->get_boolean('dbcache.enabled')) {  
-    1088-            if (!$this->db_installed()) {
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1222
-  
-    1219-                }  
-    1220-  
-    1221-                if (!w3_is_multisite()) {  
-    1222:                    $this->_errors[] = sprintf('The uploads path found in the database (%s) is inconsistent with the actual path. Please manually adjust the upload path either in miscellaneous settings or if not using a custom path %s automatically to resolve the issue.', $upload_path, $this->button_link('update the path', wp_nonce_url(sprintf('admin.php?page=%s&w3tc_update_upload_path', $this->_page), 'w3tc')));  
-    1223-                }  
-    1224-            }  
-    1225-
-
-./lib/W3/Plugin/TotalCacheAdmin.php:1957
-  
-    1954-    }  
-    1955-  
-    1956-    /**  
-    1957:     * Flush database cache action  
-    1958-     *  
-    1959-     * @return void  
-    1960-     */
-
-./lib/Microsoft/Http/Client.php:229
-  
-    226-    protected $redirectCounter = 0;  
-    227-  
-    228-    /**  
-    229:     * Fileinfo magic database resource  
-    230-     *  
-    231-     * This varaiable is populated the first time _detectFileMimeType is called  
-    232-     * and is then reused on every call to this method
-
-./inc/mime/all.php:332
-  
-    329-    'oas' => 'application/vnd.fujitsu.oasys',  
-    330-    'obd' => 'application/x-msbinder',  
-    331-    'oda' => 'application/oda',  
-    332:    'odb' => 'application/vnd.oasis.opendocument.database',  
-    333-    'odc' => 'application/vnd.oasis.opendocument.chart',  
-    334-    'odf' => 'application/vnd.oasis.opendocument.formula',  
-    335-    'odft' => 'application/vnd.oasis.opendocument.formula-template',
-
-./inc/mime/other.php:27
-  
-    24-    'mpeg|mpg|mpe' => 'video/mpeg',  
-    25-    'mpp' => 'application/vnd.ms-project',  
-    26-    'otf' => 'application/x-font-otf',  
-    27:    'odb' => 'application/vnd.oasis.opendocument.database',  
-    28-    'odc' => 'application/vnd.oasis.opendocument.chart',  
-    29-    'odf' => 'application/vnd.oasis.opendocument.formula',  
-    30-    'odg' => 'application/vnd.oasis.opendocument.graphics',
-
-./inc/functions/plugin.php:60
-  
-    57-}  
-    58-  
-    59-/**  
-    60: * Shortcut for database cache flush  
-    61- *  
-    62- * @return boolean  
-    63- */
-
-./inc/define.php:205
-  
-    202-}  
-    203-  
-    204-/**  
-    205: * Check if there was database error  
-    206- *  
-    207- * @param string $content  
-    208- * @return boolean  
-    209- */  
-    210:function w3_is_database_error(&$content) {  
-    211-    return (stristr($content, '<title>Database Error</title>') !== false);  
-    212-}  
-    213-
-
-./inc/options/install.php:10
-  
-    7-        	Set the permissions of wp-content/ back to 755, e.g.:  
-    8-         	<pre class="console"># chmod 755 /var/www/vhosts/domain.com/httpdocs/wp-content/</pre>  
-    9-        </li>  
-    10:        <li>On the "<a href="admin.php?page=w3tc_general">General</a>" tab and select your caching methods for page, database and minify. In most cases, "disk enhanced" mode for page cache, "disk" mode for minify and "disk" mode for database caching are "good" settings.</li>  
-    11-        <li><em>Recommended:</em> On the "<a href="admin.php?page=w3tc_minify">Minify</a>" tab all of the recommended settings are preset. Use the help button to simplify discovery of your <acronym title="Cascading Style Sheet">CSS</acronym> and <acronym title="JavaScript">JS</acronym> files and groups. Pay close attention to the method and location of your <acronym title="JavaScript">JS</acronym> group embeddings. See the plugin's <a href="admin.php?page=w3tc_faq">FAQ</a> for more information on usage.</li>  
-    12-        <li><em>Recommended:</em> On the "<a href="admin.php?page=w3tc_browsercache">Browser Cache</a>" tab, <acronym title="Hypertext Transfer Protocol">HTTP</acronym> compression is enabled by default. Make sure to enable other options to suit your goals.</li>  
-    13-        <li><em>Recommended:</em> If you already have a content delivery network (<acronym title="Content Delivery Network">CDN</acronym>) provider, proceed to the "<a href="admin.php?page=w3tc_cdn">Content Delivery Network</a>" tab and populate the fields and set your preferences. If you do not use the Media Library, you will need to import your images etc into the default locations. Use the Media Library Import Tool on the "Content Delivery Network" tab to perform this task. If you do not have a <acronym title="Content Delivery Network">CDN</acronym> provider, you can still improve your site's performance using the "Self-hosted" method. On your own server, create a subdomain and matching <acronym title="Domain Name System">DNS</acronym> Zone record; e.g. static.domain.com and configure <acronym title="File Transfer Protocol">FTP</acronym> options on the "Content Delivery Network" tab accordingly. Be sure to <acronym title="File Transfer Protocol">FTP</acronym> upload the appropriate files, using the available upload buttons.</li>  
-    14-        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_dbcache">Database Cache</a>" tab the recommended settings are preset. If using a shared hosting account use the "disk" method with caution; in either of these cases the response time of the disk may not be fast enough, so this option is disabled by default.</li>  
-    15:        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_objectcache">Object Cache</a>" tab the recommended settings are preset. If using a shared hosting account use the "disk" method with caution, the response time of the disk may not be fast enough, so this option is disabled by default. Test this option with and without database cache to ensure that it provides a performance increase.</li>  
-    16-        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_mobile">User Agent Groups</a>" tab, specify any user agents, like mobile phones if a mobile theme is used.</li>  
-    17-    </ol>  
-    18-
-
-./inc/options/install.php:266
-  
-    263-						<li>Best compatibility with <a href="http://www.iis.net/" target="_blank">IIS</a> is realized via <a href="http://www.microsoft.com/web/webmatrix/" target="_blank">WebMatrix</a>, which also includes the supported <a href="http://www.iis.net/download/wincacheforphp" target="_blank">WinCache</a> opcode cache.</li>  
-    264-                        <li>In the case where Apache is not used, the .htaccess file located in the root directory of the WordPress installation, wp-content/w3tc/pgcache/.htaccess and wp-content/w3tc/min/.htaccess contain directives that must be manually created for your web server software.</li>  
-    265-                        <li>Restarting the web server will empty the opcode cache, which means it will have to be rebuilt over time and your site's performance will suffer during this period. Still, an opcode cache should be installed in any case to maximize WordPress performance.</li>  
-    266:                        <li>Consider using memcached for objects that must persist across web server restarts or that you wish to share amongst your pool of servers (or cluster), e.g.: database objects or page cache.</li>  
-    267-                        <li>Some yum or mirrors may not have the necessary packages, in such cases you may have to do a manual installation.</li>  
-    268-                    </ul>  
-    269-                </th>
-
-./inc/options/about.php:17
-  
-    14-		<li>Transparent content delivery network (<acronym title="Content Delivery Network">CDN</acronym>) integration with Media Library, theme files and WordPress core</li>  
-    15-		<li>Caching of pages / posts in memory or on disk or on CDN (mirror only)</li>  
-    16-		<li>Caching of (minified) <acronym title="Cascading Style Sheet">CSS</acronym> and JavaScript in memory, on disk or on <acronym title="Content Delivery Network">CDN</acronym></li>  
-    17:		<li>Caching of database objects in memory or on disk</li>  
-    18-		<li>Caching of objects in memory or on disk</li>  
-    19-		<li>Caching of feeds (site, categories, tags, comments, search results) in memory or on disk</li>  
-    20-		<li>Caching of search results pages (i.e. <acronym title="Uniform Resource Identifier">URI</acronym>s with query string variables) in memory or on disk</li>
-
-./inc/options/general.php:175
-  
-    172-        <?php echo $this->postbox_footer(); ?>  
-    173-  
-    174-        <?php echo $this->postbox_header('Database Cache'); ?>  
-    175:        <p>Enable database caching to reduce post, page and feed creation time.</p>  
-    176-  
-    177-         <table class="form-table">  
-    178-            <tr>
-
-./inc/options/general.php:183
-  
-    180-                <td>  
-    181-                    <input type="hidden" name="dbcache.enabled" value="0" />  
-    182-                    <label><input class="enabled" type="checkbox" name="dbcache.enabled" value="1"<?php checked($dbcache_enabled, true); ?> />&nbsp;<strong>Enable</strong></label>  
-    183:                    <br /><span class="description">Caching database objects decreases the response time of your site. Best used if object caching is not possible.</span>  
-    184-                </td>  
-    185-            </tr>  
-    186-            <tr>
-
-./inc/options/dbcache.php:11
-  
-    8-        is currently <span class="w3tc-<?php if ($dbcache_enabled): ?>enabled">enabled<?php else: ?>disabled">disabled<?php endif; ?></span>.  
-    9-    </p>  
-    10-    <p>  
-    11:		To rebuild the database cache use the  
-    12-        <?php echo $this->nonce_field('w3tc'); ?>  
-    13-        <input type="submit" name="w3tc_flush_dbcache" value="empty cache"<?php if (! $dbcache_enabled): ?> disabled="disabled"<?php endif; ?> class="button" />  
-    14-		operation.
-
-./inc/options/dbcache.php:73
-  
-    70-        		<th><label for="dbcache_reject_sql">Ignored query stems:</label></th>  
-    71-        		<td>  
-    72-        			<textarea id="dbcache_reject_sql" name="dbcache.reject.sql" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('dbcache.reject.sql'))); ?></textarea><br />  
-    73:        			<span class="description">Do not cache queries that contain these terms. Any entered prefix (set in wp-config.php) will be replaced with current database prefix (default: wp_). Query stems can be identified using debug mode.</span>  
-    74-        		</td>  
-    75-        	</tr>  
-    76-        </table>
-
-./wp-content/db.php:32
-  
-    29-            if (file_exists($db_driver_path)) {  
-    30-                require_once $db_driver_path;  
-    31-            } else {  
-    32:                die(sprintf('<strong>W3 Total Cache Error:</strong> database driver doesn\'t exist: %s.', $db_driver_path));  
-    33-            }  
-    34-        }  
-    35-
-
-./w3-total-cache.php:4
-  
-    1-<?php  
-    2-/*  
-    3-Plugin Name: W3 Total Cache  
-    4:Description: The highest rated and most complete WordPress performance plugin. Dramatically improve the speed and user experience of your site. Add browser, page, object and database caching as well as minify and content delivery network (CDN) to WordPress.  
-    5-Version: 0.9.2.5b  
-    6-Plugin URI: http://www.w3-edge.com/wordpress-plugins/w3-total-cache/  
-    7-Author: Frederick Townes
-
 #### password ####
 ./lib/W3/Db.php:88
   
@@ -11971,6 +4248,7729 @@ Prepared for _Enzo's Pizza_
     12-    </td>  
     13-</tr>  
     14-<tr>
+
+#### username ####
+./lib/W3/Db/mssql.php:535
+  
+    533-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
+    534-<h1>Error establishing a database connection</h1>  
+    535:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
+    536-<ul>  
+    537:        <li>Are you sure you have the correct username and password?</li>  
+    538-        <li>Are you sure that you have typed the correct hostname?</li>  
+    539-        <li>Are you sure that the database server is running?</li>  
+    540-</ul>
+
+./lib/W3/Db/mssql.php:760
+  
+    757-                        $this->ready = false;  
+    758-                        $this->bail( sprintf( /*WP_I18N_DB_SELECT_DB*/'  
+    759-<h1>Can&#8217;t select database</h1>  
+    760:<p>We were able to connect to the database server (which means your username and password is okay) but not able to select the <code>%1$s</code> database.</p>  
+    761-<ul>  
+    762-<li>Are you sure it exists?</li>  
+    763-<li>Does the user <code>%2$s</code> have permission to use the <code>%1$s</code> database?</li>  
+    764:<li>On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?</li>  
+    765-</ul>  
+    766-<p>If you don\'t know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="http://wordpress.org/support/">WordPress Support Forums</a>.</p>'/*/WP_I18N_DB_SELECT_DB*/, $db, $this->dbuser ), 'db_select_fail' );  
+    767-                        return;
+
+./lib/W3/Db/mssql.php:1063
+  
+    1060-                if (!$this->$dbhname ) {  
+    1061-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
+    1062-<h1>Error establishing a database connection</h1>  
+    1063:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
+    1064-<ul>  
+    1065:        <li>Are you sure you have the correct username and password?</li>  
+    1066-        <li>Are you sure that you have typed the correct hostname?</li>  
+    1067-        <li>Are you sure that the database server is running?</li>  
+    1068-</ul>
+
+./lib/W3/Config.php:226
+  
+    223-        'cdn.netdna.apikey' => 'string',  
+    224-        'cdn.netdna.domain' => 'array',  
+    225-        'cdn.netdna.ssl' => 'string',  
+    226:        'cdn.cotendo.username' => 'string',  
+    227-        'cdn.cotendo.password' => 'string',  
+    228-        'cdn.cotendo.zones' => 'array',  
+    229-        'cdn.cotendo.domain' => 'array',
+
+./lib/W3/Config.php:586
+  
+    583-        'cdn.netdna.apikey' => '',  
+    584-        'cdn.netdna.domain' => array(),  
+    585-        'cdn.netdna.ssl' => 'auto',  
+    586:        'cdn.cotendo.username' => '',  
+    587-        'cdn.cotendo.password' => '',  
+    588-        'cdn.cotendo.zones' => array(),  
+    589-        'cdn.cotendo.domain' => array(),
+
+./lib/W3/Cdn/Mirror/Cotendo.php:27
+  
+    24-     */  
+    25-    function __construct($config = array()) {  
+    26-        $config = array_merge(array(  
+    27:            'username' => '',  
+    28-            'password' => '',  
+    29-            'zones' => array(),  
+    30-        ), $config);
+
+./lib/W3/Cdn/Mirror/Cotendo.php:52
+  
+    49-     * @return boolean  
+    50-     */  
+    51-    function purge($files, &$results) {  
+    52:        if (empty($this->_config['username'])) {  
+    53:            $results = $this->_get_results($files, W3TC_CDN_RESULT_HALT, 'Empty username.');  
+    54-  
+    55-            return false;  
+    56-        }
+
+./lib/W3/Cdn/Mirror/Cotendo.php:86
+  
+    83-        }  
+    84-  
+    85-        $client->authtype = 'basic';  
+    86:        $client->username = $this->_config['username'];  
+    87-        $client->password = $this->_config['password'];  
+    88-        $client->forceEndpoint = W3TC_CDN_MIRROR_COTENDO_ENDPOINT;  
+    89-
+
+./lib/W3/Cdn/Rscf.php:72
+  
+    69-     */  
+    70-    function _init(&$error) {  
+    71-        if (empty($this->_config['user'])) {  
+    72:            $error = 'Empty username.';  
+    73-  
+    74-            return false;  
+    75-        }
+
+./lib/W3/Plugin/CdnEnabled.php:1714
+  
+    1711-  
+    1712-                case 'cotendo':  
+    1713-                    $engine_config = array(  
+    1714:                        'username' => $this->_config->get_string('cdn.cotendo.username'),  
+    1715-                        'password' => $this->_config->get_string('cdn.cotendo.password'),  
+    1716-                        'zones' => $this->_config->get_array('cdn.cotendo.zones'),  
+    1717-                        'domain' => $this->_config->get_array('cdn.cotendo.domain'),
+
+./lib/W3/Plugin/CdnCommon.php:367
+  
+    364-  
+    365-                case 'cotendo':  
+    366-                    $engine_config = array(  
+    367:                        'username' => $this->_config->get_string('cdn.cotendo.username'),  
+    368-                        'password' => $this->_config->get_string('cdn.cotendo.password'),  
+    369-                        'zones' => $this->_config->get_array('cdn.cotendo.zones'),  
+    370-                        'domain' => $this->_config->get_array('cdn.cotendo.domain'),
+
+./lib/CF/cloudfiles.php:14
+  
+    11- *   #       cURL's web site (http://curl.haxx.se).  To use the newer CA bundle,  
+    12- *   #       call the CF_Authentication instance's 'ssl_use_cabundle()' method.  
+    13- *   #  
+    14: *   $auth = new CF_Authentication($username, $api_key);  
+    15- *   # $auth->ssl_use_cabundle();  # bypass cURL's old CA bundle  
+    16- *   $auth->authenticate();  
+    17- *
+
+./lib/CF/cloudfiles.php:90
+  
+    87- * <code>  
+    88- * # Create the authentication instance  
+    89- * #  
+    90: * $auth = new CF_Authentication("username", "api_key");  
+    91- *  
+    92- * # NOTE: For UK Customers please specify your AuthURL Manually  
+    93- * # There is a Predfined constant to use EX:  
+    94- * #  
+    95: * # $auth = new CF_Authentication("username, "api_key", NULL, UK_AUTHURL);  
+    96- * # Using the UK_AUTHURL keyword will force the api to use the UK AuthUrl.  
+    97- * # rather then the US one. The NULL Is passed for legacy purposes and must  
+    98- * # be passed to function correctly.
+
+./lib/CF/cloudfiles.php:117
+  
+    114-class CF_Authentication  
+    115-{  
+    116-    public $dbug;  
+    117:    public $username;  
+    118-    public $api_key;  
+    119-    public $auth_host;  
+    120-    public $account;
+
+./lib/CF/cloudfiles.php:132
+  
+    129-    /**  
+    130-     * Class constructor (PHP 5 syntax)  
+    131-     *  
+    132:     * @param string $username Mosso username  
+    133-     * @param string $api_key Mosso API Access Key  
+    134-     * @param string $account  <i>Account name</i>  
+    135-     * @param string $auth_host  <i>Authentication service URI</i>  
+    136-     */  
+    137:    function __construct($username=NULL, $api_key=NULL, $account=NULL, $auth_host=US_AUTHURL)  
+    138-    {  
+    139-  
+    140-        $this->dbug = False;  
+    141:        $this->username = $username;  
+    142-        $this->api_key = $api_key;  
+    143-        $this->account_name = $account;  
+    144-        $this->auth_host = $auth_host;
+
+./lib/CF/cloudfiles.php:190
+  
+    187-     * <code>  
+    188-     * # Create the authentication instance  
+    189-     * #  
+    190:     * $auth = new CF_Authentication("username", "api_key");  
+    191-     *  
+    192-     * # Perform authentication request  
+    193-     * #
+
+./lib/CF/cloudfiles.php:205
+  
+    202-    function authenticate($version=DEFAULT_CF_API_VERSION)  
+    203-    {  
+    204-        list($status,$reason,$surl,$curl,$atoken) =  
+    205:                $this->cfs_http->authenticate($this->username, $this->api_key,  
+    206-                $this->account_name, $this->auth_host);  
+    207-  
+    208-        if ($status == 401) {  
+    209:            throw new AuthenticationException("Invalid username or access key.");  
+    210-        }  
+    211-        if ($status != 204) {  
+    212-            throw new InvalidResponseException(
+
+./lib/CF/cloudfiles.php:320
+  
+    317- * <code>  
+    318- * # Create the authentication instance  
+    319- * #  
+    320: * $auth = new CF_Authentication("username", "api_key");  
+    321- *  
+    322- * # Perform authentication request  
+    323- * #
+
+./lib/CF/cloudfiles.php:354
+  
+    351-     * <code>  
+    352-     * # Create the authentication instance  
+    353-     * #  
+    354:     * $auth = new CF_Authentication("username", "api_key");  
+    355-     *  
+    356-     * # Perform authentication request  
+    357-     * #
+
+./lib/CF/cloudfiles.php:893
+  
+    890-    #private function _re_auth()  
+    891-    #{  
+    892-    #    $new_auth = new CF_Authentication(  
+    893:    #        $this->cfs_auth->username,  
+    894-    #        $this->cfs_auth->api_key,  
+    895-    #        $this->cfs_auth->auth_host,  
+    896-    #        $this->cfs_auth->account);
+
+./lib/CF/cloudfiles.php:1573
+  
+    1570-    #private function _re_auth()  
+    1571-    #{  
+    1572-    #    $new_auth = new CF_Authentication(  
+    1573:    #        $this->cfs_auth->username,  
+    1574-    #        $this->cfs_auth->api_key,  
+    1575-    #        $this->cfs_auth->auth_host,  
+    1576-    #        $this->cfs_auth->account);
+
+./lib/CF/cloudfiles.php:2129
+  
+    2126-    #private function _re_auth()  
+    2127-    #{  
+    2128-    #    $new_auth = new CF_Authentication(  
+    2129:    #        $this->cfs_auth->username,  
+    2130-    #        $this->cfs_auth->api_key,  
+    2131-    #        $this->cfs_auth->auth_host,  
+    2132-    #        $this->cfs_auth->account);
+
+./lib/Nusoap/class.wsdl.php:47
+  
+    44-	// for getting wsdl  
+    45-	var $proxyhost = '';  
+    46-    var $proxyport = '';  
+    47:	var $proxyusername = '';  
+    48-	var $proxypassword = '';  
+    49-	var $timeout = 0;  
+    50-	var $response_timeout = 30;  
+    51-	var $curl_options = array();	// User-specified cURL options  
+    52-	var $use_curl = false;			// whether to always try to use cURL  
+    53-	// for HTTP authentication  
+    54:	var $username = '';				// Username for HTTP authentication  
+    55-	var $password = '';				// Password for HTTP authentication  
+    56-	var $authtype = '';				// Type of HTTP authentication  
+    57-	var $certRequest = array();		// Certificate for HTTP SSL authentication
+
+./lib/Nusoap/class.wsdl.php:65
+  
+    62-     * @param string $wsdl WSDL document URL  
+    63-	 * @param string $proxyhost  
+    64-	 * @param string $proxyport  
+    65:	 * @param string $proxyusername  
+    66-	 * @param string $proxypassword  
+    67-	 * @param integer $timeout set the connection timeout  
+    68-	 * @param integer $response_timeout set the response timeout
+
+./lib/Nusoap/class.wsdl.php:73
+  
+    70-	 * @param boolean $use_curl try to use cURL  
+    71-     * @access public  
+    72-     */  
+    73:    function wsdl($wsdl = '',$proxyhost=false,$proxyport=false,$proxyusername=false,$proxypassword=false,$timeout=0,$response_timeout=30,$curl_options=null,$use_curl=false){  
+    74-		parent::nusoap_base();  
+    75-		$this->debug("ctor wsdl=$wsdl timeout=$timeout response_timeout=$response_timeout");  
+    76-        $this->proxyhost = $proxyhost;  
+    77-        $this->proxyport = $proxyport;  
+    78:		$this->proxyusername = $proxyusername;  
+    79-		$this->proxypassword = $proxypassword;  
+    80-		$this->timeout = $timeout;  
+    81-		$this->response_timeout = $response_timeout;
+
+./lib/Nusoap/class.wsdl.php:215
+  
+    212-			$tr->request_method = 'GET';  
+    213-			$tr->useSOAPAction = false;  
+    214-			if($this->proxyhost && $this->proxyport){  
+    215:				$tr->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
+    216-			}  
+    217-			if ($this->authtype != '') {  
+    218:				$tr->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
+    219-			}  
+    220-			$tr->setEncoding('gzip, deflate');  
+    221-			$wsdl_string = $tr->send('', $this->timeout, $this->response_timeout);
+
+./lib/Nusoap/class.wsdl.php:557
+  
+    554-	/**  
+    555-	* if authenticating, set user credentials here  
+    556-	*  
+    557:	* @param    string $username  
+    558-	* @param    string $password  
+    559-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    560-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    561-	* @access   public  
+    562-	*/  
+    563:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
+    564:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
+    565-		$this->appendDebug($this->varDump($certRequest));  
+    566:		$this->username = $username;  
+    567-		$this->password = $password;  
+    568-		$this->authtype = $authtype;  
+    569-		$this->certRequest = $certRequest;
+
+./lib/Nusoap/class.soap_transport_http.php:40
+  
+    37-	var $ch_options = array();	// cURL custom options  
+    38-	var $use_curl = false;		// force cURL use  
+    39-	var $proxy = null;			// proxy information (associative array)  
+    40:	var $username = '';  
+    41-	var $password = '';  
+    42-	var $authtype = '';  
+    43-	var $digestRequest = array();
+
+./lib/Nusoap/class.soap_transport_http.php:360
+  
+    357-			}  
+    358-		}  
+    359-		if ($this->authtype && ($this->authtype != 'certificate')) {  
+    360:			if ($this->username) {  
+    361:				$this->debug('set cURL username/password');  
+    362:				$this->setCurlOption(CURLOPT_USERPWD, "$this->username:$this->password");  
+    363-			}  
+    364-			if ($this->authtype == 'basic') {  
+    365-				$this->debug('set cURL for Basic authentication');
+
+./lib/Nusoap/class.soap_transport_http.php:384
+  
+    381-			} else {  
+    382-				$this->setCurlOption(CURLOPT_PROXY, $this->proxy['host']);  
+    383-			}  
+    384:			if ($this->proxy['username'] || $this->proxy['password']) {  
+    385-				$this->debug('set cURL proxy authentication options');  
+    386:				$this->setCurlOption(CURLOPT_PROXYUSERPWD, $this->proxy['username'].':'.$this->proxy['password']);  
+    387-				if ($this->proxy['authtype'] == 'basic') {  
+    388-					$this->setCurlOption($CURLOPT_PROXYAUTH, $CURLAUTH_BASIC);  
+    389-				}
+
+./lib/Nusoap/class.soap_transport_http.php:462
+  
+    459-	/**  
+    460-	* if authenticating, set user credentials here  
+    461-	*  
+    462:	* @param    string $username  
+    463-	* @param    string $password  
+    464-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    465-	* @param	array $digestRequest (keys must be nonce, nc, realm, qop)  
+    466-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    467-	* @access   public  
+    468-	*/  
+    469:	function setCredentials($username, $password, $authtype = 'basic', $digestRequest = array(), $certRequest = array()) {  
+    470:		$this->debug("setCredentials username=$username authtype=$authtype digestRequest=");  
+    471-		$this->appendDebug($this->varDump($digestRequest));  
+    472-		$this->debug("certRequest=");  
+    473-		$this->appendDebug($this->varDump($certRequest));  
+    474-		// cf. RFC 2617  
+    475-		if ($authtype == 'basic') {  
+    476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
+    477-		} elseif ($authtype == 'digest') {  
+    478-			if (isset($digestRequest['nonce'])) {  
+    479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;  
+    480-  
+    481-				// calculate the Digest hashes (calculate code based on digest implementation found at: http://www.rassoc.com/gregr/weblog/stories/2002/07/09/webServicesSecurityHttpDigestAuthenticationWithoutActiveDirectory.html)  
+    482-  
+    483:				// A1 = unq(username-value) ":" unq(realm-value) ":" passwd  
+    484:				$A1 = $username. ':' . (isset($digestRequest['realm']) ? $digestRequest['realm'] : '') . ':' . $password;  
+    485-  
+    486-				// H(A1) = MD5(A1)  
+    487-				$HA1 = md5($A1);
+
+./lib/Nusoap/class.soap_transport_http.php:522
+  
+    519-					$opaque = ', opaque="' . $digestRequest['opaque'] . '"';  
+    520-				}  
+    521-  
+    522:				$this->setHeader('Authorization', 'Digest username="' . $username . '", realm="' . $digestRequest['realm'] . '", nonce="' . $nonce . '", uri="' . $this->digest_uri . $opaque . '", cnonce="' . $cnonce . '", nc=' . sprintf("%08x", $digestRequest['nc']) . ', qop="' . $digestRequest['qop'] . '", response="' . $hashedDigest . '"');  
+    523-			}  
+    524-		} elseif ($authtype == 'certificate') {  
+    525-			$this->certRequest = $certRequest;
+
+./lib/Nusoap/class.soap_transport_http.php:531
+  
+    528-			// do nothing  
+    529-			$this->debug('Authorization header not set for ntlm');  
+    530-		}  
+    531:		$this->username = $username;  
+    532-		$this->password = $password;  
+    533-		$this->authtype = $authtype;  
+    534-		$this->digestRequest = $digestRequest;
+
+./lib/Nusoap/class.soap_transport_http.php:572
+  
+    569-	*  
+    570-	* @param    string $proxyhost use an empty string to remove proxy  
+    571-	* @param    string $proxyport  
+    572:	* @param	string $proxyusername  
+    573-	* @param	string $proxypassword  
+    574-	* @param	string $proxyauthtype (basic|ntlm)  
+    575-	* @access   public  
+    576-	*/  
+    577:	function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 'basic') {  
+    578-		if ($proxyhost) {  
+    579-			$this->proxy = array(  
+    580-				'host' => $proxyhost,  
+    581-				'port' => $proxyport,  
+    582:				'username' => $proxyusername,  
+    583-				'password' => $proxypassword,  
+    584-				'authtype' => $proxyauthtype  
+    585-			);  
+    586:			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
+    587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
+    588-			}  
+    589-		} else {  
+    590-			$this->debug('remove proxy');
+
+./lib/Nusoap/class.soap_transport_http.php:1079
+  
+    1076-  
+    1077-				// should have (at least) qop, realm, nonce  
+    1078- 				if (isset($digestRequest['nonce'])) {  
+    1079: 					$this->setCredentials($this->username, $this->password, 'digest', $digestRequest);  
+    1080- 					$this->tryagain = true;  
+    1081- 					return false;  
+    1082- 				}
+
+./lib/Nusoap/class.soapclient.php:29
+  
+    26-*/  
+    27-class nusoap_client extends nusoap_base  {  
+    28-  
+    29:	var $username = '';				// Username for HTTP authentication  
+    30-	var $password = '';				// Password for HTTP authentication  
+    31-	var $authtype = '';				// Type of HTTP authentication  
+    32-	var $certRequest = array();		// Certificate for HTTP SSL authentication
+
+./lib/Nusoap/class.soapclient.php:41
+  
+    38-	var $forceEndpoint = '';		// overrides WSDL endpoint  
+    39-    var $proxyhost = '';  
+    40-    var $proxyport = '';  
+    41:	var $proxyusername = '';  
+    42-	var $proxypassword = '';  
+    43-	var $portName = '';				// port name to use in WSDL  
+    44-    var $xml_encoding = '';			// character set encoding of incoming (response) messages
+
+./lib/Nusoap/class.soapclient.php:92
+  
+    89-	* @param    mixed $wsdl optional, set to 'wsdl' or true if using WSDL  
+    90-	* @param    string $proxyhost optional  
+    91-	* @param    string $proxyport optional  
+    92:	* @param	string $proxyusername optional  
+    93-	* @param	string $proxypassword optional  
+    94-	* @param	integer $timeout set the connection timeout  
+    95-	* @param	integer $response_timeout set the response timeout  
+    96-	* @param	string $portName optional portName in WSDL document  
+    97-	* @access   public  
+    98-	*/  
+    99:	function nusoap_client($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30, $portName = ''){  
+    100-		parent::nusoap_base();  
+    101-		$this->endpoint = $endpoint;  
+    102-		$this->proxyhost = $proxyhost;  
+    103-		$this->proxyport = $proxyport;  
+    104:		$this->proxyusername = $proxyusername;  
+    105-		$this->proxypassword = $proxypassword;  
+    106-		$this->timeout = $timeout;  
+    107-		$this->response_timeout = $response_timeout;
+
+./lib/Nusoap/class.soapclient.php:376
+  
+    373-	 */  
+    374-	function loadWSDL() {  
+    375-		$this->debug('instantiating wsdl class with doc: '.$this->wsdlFile);  
+    376:		$this->wsdl = new wsdl('',$this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword,$this->timeout,$this->response_timeout,$this->curl_options,$this->use_curl);  
+    377:		$this->wsdl->setCredentials($this->username, $this->password, $this->authtype, $this->certRequest);  
+    378-		$this->wsdl->fetchWSDL($this->wsdlFile);  
+    379-		$this->checkWSDL();  
+    380-	}
+
+./lib/Nusoap/class.soapclient.php:433
+  
+    430-				$http->setContentType($this->getHTTPContentType(), $this->getHTTPContentTypeCharset());  
+    431-				$http->setSOAPAction($soapaction);  
+    432-				if($this->proxyhost && $this->proxyport){  
+    433:					$http->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
+    434-				}  
+    435-                if($this->authtype != '') {  
+    436:					$http->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
+    437-				}  
+    438-				if($this->http_encoding != ''){  
+    439-					$http->setEncoding($this->http_encoding);
+
+./lib/Nusoap/class.soapclient.php:604
+  
+    601-	*  
+    602-	* @param    string $proxyhost  
+    603-	* @param    string $proxyport  
+    604:	* @param	string $proxyusername  
+    605-	* @param	string $proxypassword  
+    606-	* @access   public  
+    607-	*/  
+    608:	function setHTTPProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '') {  
+    609-		$this->proxyhost = $proxyhost;  
+    610-		$this->proxyport = $proxyport;  
+    611:		$this->proxyusername = $proxyusername;  
+    612-		$this->proxypassword = $proxypassword;  
+    613-	}  
+    614-  
+    615-	/**  
+    616-	* if authenticating, set user credentials here  
+    617-	*  
+    618:	* @param    string $username  
+    619-	* @param    string $password  
+    620-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    621-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    622-	* @access   public  
+    623-	*/  
+    624:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
+    625:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
+    626-		$this->appendDebug($this->varDump($certRequest));  
+    627:		$this->username = $username;  
+    628-		$this->password = $password;  
+    629-		$this->authtype = $authtype;  
+    630-		$this->certRequest = $certRequest;
+
+./lib/Nusoap/class.soapclient.php:722
+  
+    719-		$proxy->defaultRpcParams = $this->defaultRpcParams;  
+    720-		// transfer other state  
+    721-		$proxy->soap_defencoding = $this->soap_defencoding;  
+    722:		$proxy->username = $this->username;  
+    723-		$proxy->password = $this->password;  
+    724-		$proxy->authtype = $this->authtype;  
+    725-		$proxy->certRequest = $this->certRequest;
+
+./lib/Nusoap/class.soapclient.php:731
+  
+    728-		$proxy->forceEndpoint = $this->forceEndpoint;  
+    729-		$proxy->proxyhost = $this->proxyhost;  
+    730-		$proxy->proxyport = $this->proxyport;  
+    731:		$proxy->proxyusername = $this->proxyusername;  
+    732-		$proxy->proxypassword = $this->proxypassword;  
+    733-		$proxy->http_encoding = $this->http_encoding;  
+    734-		$proxy->timeout = $this->timeout;
+
+./lib/Nusoap/nusoap.php:2193
+  
+    2190-	var $ch_options = array();	// cURL custom options  
+    2191-	var $use_curl = false;		// force cURL use  
+    2192-	var $proxy = null;			// proxy information (associative array)  
+    2193:	var $username = '';  
+    2194-	var $password = '';  
+    2195-	var $authtype = '';  
+    2196-	var $digestRequest = array();
+
+./lib/Nusoap/nusoap.php:2513
+  
+    2510-			}  
+    2511-		}  
+    2512-		if ($this->authtype && ($this->authtype != 'certificate')) {  
+    2513:			if ($this->username) {  
+    2514:				$this->debug('set cURL username/password');  
+    2515:				$this->setCurlOption(CURLOPT_USERPWD, "$this->username:$this->password");  
+    2516-			}  
+    2517-			if ($this->authtype == 'basic') {  
+    2518-				$this->debug('set cURL for Basic authentication');
+
+./lib/Nusoap/nusoap.php:2537
+  
+    2534-			} else {  
+    2535-				$this->setCurlOption(CURLOPT_PROXY, $this->proxy['host']);  
+    2536-			}  
+    2537:			if ($this->proxy['username'] || $this->proxy['password']) {  
+    2538-				$this->debug('set cURL proxy authentication options');  
+    2539:				$this->setCurlOption(CURLOPT_PROXYUSERPWD, $this->proxy['username'].':'.$this->proxy['password']);  
+    2540-				if ($this->proxy['authtype'] == 'basic') {  
+    2541-					$this->setCurlOption($CURLOPT_PROXYAUTH, $CURLAUTH_BASIC);  
+    2542-				}
+
+./lib/Nusoap/nusoap.php:2615
+  
+    2612-	/**  
+    2613-	* if authenticating, set user credentials here  
+    2614-	*  
+    2615:	* @param    string $username  
+    2616-	* @param    string $password  
+    2617-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    2618-	* @param	array $digestRequest (keys must be nonce, nc, realm, qop)  
+    2619-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    2620-	* @access   public  
+    2621-	*/  
+    2622:	function setCredentials($username, $password, $authtype = 'basic', $digestRequest = array(), $certRequest = array()) {  
+    2623:		$this->debug("setCredentials username=$username authtype=$authtype digestRequest=");  
+    2624-		$this->appendDebug($this->varDump($digestRequest));  
+    2625-		$this->debug("certRequest=");  
+    2626-		$this->appendDebug($this->varDump($certRequest));  
+    2627-		// cf. RFC 2617  
+    2628-		if ($authtype == 'basic') {  
+    2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
+    2630-		} elseif ($authtype == 'digest') {  
+    2631-			if (isset($digestRequest['nonce'])) {  
+    2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;  
+    2633-  
+    2634-				// calculate the Digest hashes (calculate code based on digest implementation found at: http://www.rassoc.com/gregr/weblog/stories/2002/07/09/webServicesSecurityHttpDigestAuthenticationWithoutActiveDirectory.html)  
+    2635-  
+    2636:				// A1 = unq(username-value) ":" unq(realm-value) ":" passwd  
+    2637:				$A1 = $username. ':' . (isset($digestRequest['realm']) ? $digestRequest['realm'] : '') . ':' . $password;  
+    2638-  
+    2639-				// H(A1) = MD5(A1)  
+    2640-				$HA1 = md5($A1);
+
+./lib/Nusoap/nusoap.php:2675
+  
+    2672-					$opaque = ', opaque="' . $digestRequest['opaque'] . '"';  
+    2673-				}  
+    2674-  
+    2675:				$this->setHeader('Authorization', 'Digest username="' . $username . '", realm="' . $digestRequest['realm'] . '", nonce="' . $nonce . '", uri="' . $this->digest_uri . $opaque . '", cnonce="' . $cnonce . '", nc=' . sprintf("%08x", $digestRequest['nc']) . ', qop="' . $digestRequest['qop'] . '", response="' . $hashedDigest . '"');  
+    2676-			}  
+    2677-		} elseif ($authtype == 'certificate') {  
+    2678-			$this->certRequest = $certRequest;
+
+./lib/Nusoap/nusoap.php:2684
+  
+    2681-			// do nothing  
+    2682-			$this->debug('Authorization header not set for ntlm');  
+    2683-		}  
+    2684:		$this->username = $username;  
+    2685-		$this->password = $password;  
+    2686-		$this->authtype = $authtype;  
+    2687-		$this->digestRequest = $digestRequest;
+
+./lib/Nusoap/nusoap.php:2725
+  
+    2722-	*  
+    2723-	* @param    string $proxyhost use an empty string to remove proxy  
+    2724-	* @param    string $proxyport  
+    2725:	* @param	string $proxyusername  
+    2726-	* @param	string $proxypassword  
+    2727-	* @param	string $proxyauthtype (basic|ntlm)  
+    2728-	* @access   public  
+    2729-	*/  
+    2730:	function setProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '', $proxyauthtype = 'basic') {  
+    2731-		if ($proxyhost) {  
+    2732-			$this->proxy = array(  
+    2733-				'host' => $proxyhost,  
+    2734-				'port' => $proxyport,  
+    2735:				'username' => $proxyusername,  
+    2736-				'password' => $proxypassword,  
+    2737-				'authtype' => $proxyauthtype  
+    2738-			);  
+    2739:			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
+    2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
+    2741-			}  
+    2742-		} else {  
+    2743-			$this->debug('remove proxy');
+
+./lib/Nusoap/nusoap.php:3232
+  
+    3229-  
+    3230-				// should have (at least) qop, realm, nonce  
+    3231- 				if (isset($digestRequest['nonce'])) {  
+    3232: 					$this->setCredentials($this->username, $this->password, 'digest', $digestRequest);  
+    3233- 					$this->tryagain = true;  
+    3234- 					return false;  
+    3235- 				}
+
+./lib/Nusoap/nusoap.php:4628
+  
+    4625-	// for getting wsdl  
+    4626-	var $proxyhost = '';  
+    4627-    var $proxyport = '';  
+    4628:	var $proxyusername = '';  
+    4629-	var $proxypassword = '';  
+    4630-	var $timeout = 0;  
+    4631-	var $response_timeout = 30;  
+    4632-	var $curl_options = array();	// User-specified cURL options  
+    4633-	var $use_curl = false;			// whether to always try to use cURL  
+    4634-	// for HTTP authentication  
+    4635:	var $username = '';				// Username for HTTP authentication  
+    4636-	var $password = '';				// Password for HTTP authentication  
+    4637-	var $authtype = '';				// Type of HTTP authentication  
+    4638-	var $certRequest = array();		// Certificate for HTTP SSL authentication
+
+./lib/Nusoap/nusoap.php:4646
+  
+    4643-     * @param string $wsdl WSDL document URL  
+    4644-	 * @param string $proxyhost  
+    4645-	 * @param string $proxyport  
+    4646:	 * @param string $proxyusername  
+    4647-	 * @param string $proxypassword  
+    4648-	 * @param integer $timeout set the connection timeout  
+    4649-	 * @param integer $response_timeout set the response timeout
+
+./lib/Nusoap/nusoap.php:4654
+  
+    4651-	 * @param boolean $use_curl try to use cURL  
+    4652-     * @access public  
+    4653-     */  
+    4654:    function wsdl($wsdl = '',$proxyhost=false,$proxyport=false,$proxyusername=false,$proxypassword=false,$timeout=0,$response_timeout=30,$curl_options=null,$use_curl=false){  
+    4655-		parent::nusoap_base();  
+    4656-		$this->debug("ctor wsdl=$wsdl timeout=$timeout response_timeout=$response_timeout");  
+    4657-        $this->proxyhost = $proxyhost;  
+    4658-        $this->proxyport = $proxyport;  
+    4659:		$this->proxyusername = $proxyusername;  
+    4660-		$this->proxypassword = $proxypassword;  
+    4661-		$this->timeout = $timeout;  
+    4662-		$this->response_timeout = $response_timeout;
+
+./lib/Nusoap/nusoap.php:4796
+  
+    4793-			$tr->request_method = 'GET';  
+    4794-			$tr->useSOAPAction = false;  
+    4795-			if($this->proxyhost && $this->proxyport){  
+    4796:				$tr->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
+    4797-			}  
+    4798-			if ($this->authtype != '') {  
+    4799:				$tr->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
+    4800-			}  
+    4801-			$tr->setEncoding('gzip, deflate');  
+    4802-			$wsdl_string = $tr->send('', $this->timeout, $this->response_timeout);
+
+./lib/Nusoap/nusoap.php:5138
+  
+    5135-	/**  
+    5136-	* if authenticating, set user credentials here  
+    5137-	*  
+    5138:	* @param    string $username  
+    5139-	* @param    string $password  
+    5140-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    5141-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, certpassword (optional), verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    5142-	* @access   public  
+    5143-	*/  
+    5144:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
+    5145:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
+    5146-		$this->appendDebug($this->varDump($certRequest));  
+    5147:		$this->username = $username;  
+    5148-		$this->password = $password;  
+    5149-		$this->authtype = $authtype;  
+    5150-		$this->certRequest = $certRequest;
+
+./lib/Nusoap/nusoap.php:7185
+  
+    7182-*/  
+    7183-class nusoap_client extends nusoap_base  {  
+    7184-  
+    7185:	var $username = '';				// Username for HTTP authentication  
+    7186-	var $password = '';				// Password for HTTP authentication  
+    7187-	var $authtype = '';				// Type of HTTP authentication  
+    7188-	var $certRequest = array();		// Certificate for HTTP SSL authentication
+
+./lib/Nusoap/nusoap.php:7197
+  
+    7194-	var $forceEndpoint = '';		// overrides WSDL endpoint  
+    7195-    var $proxyhost = '';  
+    7196-    var $proxyport = '';  
+    7197:	var $proxyusername = '';  
+    7198-	var $proxypassword = '';  
+    7199-	var $portName = '';				// port name to use in WSDL  
+    7200-    var $xml_encoding = '';			// character set encoding of incoming (response) messages
+
+./lib/Nusoap/nusoap.php:7248
+  
+    7245-	* @param    mixed $wsdl optional, set to 'wsdl' or true if using WSDL  
+    7246-	* @param    string $proxyhost optional  
+    7247-	* @param    string $proxyport optional  
+    7248:	* @param	string $proxyusername optional  
+    7249-	* @param	string $proxypassword optional  
+    7250-	* @param	integer $timeout set the connection timeout  
+    7251-	* @param	integer $response_timeout set the response timeout  
+    7252-	* @param	string $portName optional portName in WSDL document  
+    7253-	* @access   public  
+    7254-	*/  
+    7255:	function nusoap_client($endpoint,$wsdl = false,$proxyhost = false,$proxyport = false,$proxyusername = false, $proxypassword = false, $timeout = 0, $response_timeout = 30, $portName = ''){  
+    7256-		parent::nusoap_base();  
+    7257-		$this->endpoint = $endpoint;  
+    7258-		$this->proxyhost = $proxyhost;  
+    7259-		$this->proxyport = $proxyport;  
+    7260:		$this->proxyusername = $proxyusername;  
+    7261-		$this->proxypassword = $proxypassword;  
+    7262-		$this->timeout = $timeout;  
+    7263-		$this->response_timeout = $response_timeout;
+
+./lib/Nusoap/nusoap.php:7532
+  
+    7529-	 */  
+    7530-	function loadWSDL() {  
+    7531-		$this->debug('instantiating wsdl class with doc: '.$this->wsdlFile);  
+    7532:		$this->wsdl = new wsdl('',$this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword,$this->timeout,$this->response_timeout,$this->curl_options,$this->use_curl);  
+    7533:		$this->wsdl->setCredentials($this->username, $this->password, $this->authtype, $this->certRequest);  
+    7534-		$this->wsdl->fetchWSDL($this->wsdlFile);  
+    7535-		$this->checkWSDL();  
+    7536-	}
+
+./lib/Nusoap/nusoap.php:7589
+  
+    7586-				$http->setContentType($this->getHTTPContentType(), $this->getHTTPContentTypeCharset());  
+    7587-				$http->setSOAPAction($soapaction);  
+    7588-				if($this->proxyhost && $this->proxyport){  
+    7589:					$http->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);  
+    7590-				}  
+    7591-                if($this->authtype != '') {  
+    7592:					$http->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);  
+    7593-				}  
+    7594-				if($this->http_encoding != ''){  
+    7595-					$http->setEncoding($this->http_encoding);
+
+./lib/Nusoap/nusoap.php:7760
+  
+    7757-	*  
+    7758-	* @param    string $proxyhost  
+    7759-	* @param    string $proxyport  
+    7760:	* @param	string $proxyusername  
+    7761-	* @param	string $proxypassword  
+    7762-	* @access   public  
+    7763-	*/  
+    7764:	function setHTTPProxy($proxyhost, $proxyport, $proxyusername = '', $proxypassword = '') {  
+    7765-		$this->proxyhost = $proxyhost;  
+    7766-		$this->proxyport = $proxyport;  
+    7767:		$this->proxyusername = $proxyusername;  
+    7768-		$this->proxypassword = $proxypassword;  
+    7769-	}  
+    7770-  
+    7771-	/**  
+    7772-	* if authenticating, set user credentials here  
+    7773-	*  
+    7774:	* @param    string $username  
+    7775-	* @param    string $password  
+    7776-	* @param	string $authtype (basic|digest|certificate|ntlm)  
+    7777-	* @param	array $certRequest (keys must be cainfofile (optional), sslcertfile, sslkeyfile, passphrase, verifypeer (optional), verifyhost (optional): see corresponding options in cURL docs)  
+    7778-	* @access   public  
+    7779-	*/  
+    7780:	function setCredentials($username, $password, $authtype = 'basic', $certRequest = array()) {  
+    7781:		$this->debug("setCredentials username=$username authtype=$authtype certRequest=");  
+    7782-		$this->appendDebug($this->varDump($certRequest));  
+    7783:		$this->username = $username;  
+    7784-		$this->password = $password;  
+    7785-		$this->authtype = $authtype;  
+    7786-		$this->certRequest = $certRequest;
+
+./lib/Nusoap/nusoap.php:7878
+  
+    7875-		$proxy->defaultRpcParams = $this->defaultRpcParams;  
+    7876-		// transfer other state  
+    7877-		$proxy->soap_defencoding = $this->soap_defencoding;  
+    7878:		$proxy->username = $this->username;  
+    7879-		$proxy->password = $this->password;  
+    7880-		$proxy->authtype = $this->authtype;  
+    7881-		$proxy->certRequest = $this->certRequest;
+
+./lib/Nusoap/nusoap.php:7887
+  
+    7884-		$proxy->forceEndpoint = $this->forceEndpoint;  
+    7885-		$proxy->proxyhost = $this->proxyhost;  
+    7886-		$proxy->proxyport = $this->proxyport;  
+    7887:		$proxy->proxyusername = $this->proxyusername;  
+    7888-		$proxy->proxypassword = $this->proxypassword;  
+    7889-		$proxy->http_encoding = $this->http_encoding;  
+    7890-		$proxy->timeout = $this->timeout;
+
+./lib/Microsoft/Uri/Http.php:51
+  
+    48-    const CHAR_UNWISE   = '{}|\\\\^`';  
+    49-  
+    50-    /**  
+    51:     * HTTP username  
+    52-     *  
+    53-     * @var string  
+    54-     */  
+    55:    protected $_username = '';  
+    56-  
+    57-    /**  
+    58-     * HTTP password
+
+./lib/Microsoft/Uri/Http.php:216
+  
+    213-        $this->_query    = isset($matches[6]) === true ? $matches[6] : '';  
+    214-        $this->_fragment = isset($matches[8]) === true ? $matches[8] : '';  
+    215-  
+    216:        // Additional decomposition to get username, password, host, and port  
+    217-        $combo   = isset($matches[3]) === true ? $matches[3] : '';  
+    218-        $pattern = '~^(([^:@]*)(:([^@]*))?@)?([^:]+)(:(.*))?$~';  
+    219-        $status  = @preg_match($pattern, $combo, $matches);
+
+./lib/Microsoft/Uri/Http.php:231
+  
+    228-        }  
+    229-  
+    230-        // Save remaining URI components  
+    231:        $this->_username = isset($matches[2]) === true ? $matches[2] : '';  
+    232-        $this->_password = isset($matches[4]) === true ? $matches[4] : '';  
+    233-        $this->_host     = isset($matches[5]) === true ? $matches[5] : '';  
+    234-        $this->_port     = isset($matches[7]) === true ? $matches[7] : '';
+
+./lib/Microsoft/Uri/Http.php:253
+  
+    250-        }  
+    251-  
+    252-        $password = strlen($this->_password) > 0 ? ":$this->_password" : '';  
+    253:        $auth     = strlen($this->_username) > 0 ? "$this->_username$password@" : '';  
+    254-        $port     = strlen($this->_port) > 0 ? ":$this->_port" : '';  
+    255-        $query    = strlen($this->_query) > 0 ? "?$this->_query" : '';  
+    256-        $fragment = strlen($this->_fragment) > 0 ? "#$this->_fragment" : '';
+
+./lib/Microsoft/Uri/Http.php:287
+  
+    284-    }  
+    285-  
+    286-    /**  
+    287:     * Returns the username portion of the URL, or FALSE if none.  
+    288-     *  
+    289-     * @return string  
+    290-     */  
+    291-    public function getUsername()  
+    292-    {  
+    293:        return strlen($this->_username) > 0 ? $this->_username : false;  
+    294-    }  
+    295-  
+    296-    /**  
+    297:     * Returns true if and only if the username passes validation. If no username is passed,  
+    298:     * then the username contained in the instance variable is used.  
+    299-     *  
+    300:     * @param  string $username The HTTP username  
+    301:     * @throws Microsoft_Uri_Exception When username validation fails  
+    302-     * @return boolean  
+    303-     * @link   http://www.faqs.org/rfcs/rfc2396.html  
+    304-     */  
+    305:    public function validateUsername($username = null)  
+    306-    {  
+    307:        if ($username === null) {  
+    308:            $username = $this->_username;  
+    309-        }  
+    310-  
+    311:        // If the username is empty, then it is considered valid  
+    312:        if (strlen($username) === 0) {  
+    313-            return true;  
+    314-        }  
+    315-  
+    316:        // Check the username against the allowed values  
+    317-        $status = @preg_match('/^(?:' . $this->_regex['escaped'] . '|[' .  
+    318:            self::CHAR_ALNUM . self::CHAR_MARK . ';:&=+$,' . '])+$/', $username);  
+    319-  
+    320-        if ($status === false) {  
+    321-            require_once 'Microsoft/Uri/Exception.php';  
+    322:            throw new Microsoft_Uri_Exception('Internal error: username validation failed');  
+    323-        }  
+    324-  
+    325-        return $status === 1;  
+    326-    }  
+    327-  
+    328-    /**  
+    329:     * Sets the username for the current URI, and returns the old username  
+    330-     *  
+    331:     * @param  string $username The HTTP username  
+    332:     * @throws Microsoft_Uri_Exception When $username is not a valid HTTP username  
+    333-     * @return string  
+    334-     */  
+    335:    public function setUsername($username)  
+    336-    {  
+    337:        if ($this->validateUsername($username) === false) {  
+    338-            require_once 'Microsoft/Uri/Exception.php';  
+    339:            throw new Microsoft_Uri_Exception("Username \"$username\" is not a valid HTTP username");  
+    340-        }  
+    341-  
+    342:        $oldUsername     = $this->_username;  
+    343:        $this->_username = $username;  
+    344-  
+    345-        return $oldUsername;  
+    346-    }
+
+./lib/Microsoft/Uri/Http.php:378
+  
+    375-            return true;  
+    376-        }  
+    377-  
+    378:        // If the password is nonempty, but there is no username, then it is considered invalid  
+    379:        if (strlen($password) > 0 and strlen($this->_username) === 0) {  
+    380-            return false;  
+    381-        }  
+    382-
+
+./lib/Microsoft/Http/Client.php:180
+  
+    177-     * HTTP Authentication settings  
+    178-     *  
+    179-     * Expected to be an associative array with this structure:  
+    180:     * $this->auth = array('user' => 'username', 'password' => 'password', 'type' => 'basic')  
+    181-     * Where 'type' should be one of the supported authentication types (see the AUTH_*  
+    182-     * constants), for example 'basic' or 'digest'.  
+    183-     *
+
+./lib/Microsoft/Http/Client.php:274
+  
+    271-            throw new Microsoft_Http_Client_Exception('Passed parameter is not a valid HTTP URI.');  
+    272-        }  
+    273-  
+    274:        // Set auth if username and password has been specified in the uri  
+    275-        if ($uri->getUsername() && $uri->getPassword()) {  
+    276-            $this->setAuth($uri->getUsername(), $uri->getPassword());  
+    277-        }
+
+./lib/Minify/Minify/Controller/Files.php:21
+  
+    18- *     'files' => array(  
+    19- *         '//js/jquery.js'  
+    20- *         ,'//js/plugins.js'  
+    21: *         ,'/home/username/file.js'  
+    22- *     )  
+    23- * ));  
+    24- * </code>
+
+./inc/options/general.php:342
+  
+    339-  
+    340-        <?php echo $this->postbox_header('Network Performance &amp; Security powered by CloudFlare'); ?>  
+    341-        <p>  
+    342:            CloudFlare protects and accelerates websites. <a href="https://www.cloudflare.com/sign-up.html?affiliate=w3edge&amp;seed_domain=<?php echo w3_get_host(); ?>&amp;email=<?php echo htmlspecialchars($cloudflare_signup_email); ?>&amp;username=<?php echo htmlspecialchars($cloudflare_signup_user); ?>" target="_blank">Sign up now for free</a> to get started,  
+    343-            or if you have an account simply log in to obtain your <acronym title="Application Programming Interface">API</acronym> key from the <a href="https://www.cloudflare.com/my-account.html">account page</a> to enter it below.  
+    344-            Contact the CloudFlare <a href="http://www.cloudflare.com/help.html" target="_blank">support team</a> with any questions.  
+    345-        </p>
+
+./inc/options/cdn/ftp.php:17
+  
+    14-	</td>  
+    15-</tr>  
+    16-<tr>  
+    17:	<th><label for="cdn_ftp_user"><acronym title="File Transfer Protocol">FTP</acronym> username:</label></th>  
+    18-	<td>  
+    19-		<input id="cdn_ftp_user" class="w3tc-ignore-change" type="text" name="cdn.ftp.user" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.ftp.user')); ?>" size="30" />  
+    20-	</td>
+
+./inc/options/cdn/cotendo.php:3
+  
+    1-<?php if (!defined('W3TC')) die(); ?>  
+    2-<tr>  
+    3:    <th style="width: 300px;"><label for="cdn_cotendo_username">Username:</label></th>  
+    4-    <td>  
+    5:        <input id="cdn_cotendo_username" class="w3tc-ignore-change" type="text" name="cdn.cotendo.username" value="<?php echo htmlspecialchars($this->_config->get_string('cdn.cotendo.username')); ?>" size="60" />  
+    6-    </td>  
+    7-</tr>  
+    8-<tr>
+
+#### database ####
+./lib/W3/Db/mssql.php:134
+  
+    132-         *  
+    133-         * You can set this to have multiple WordPress installations  
+    134:         * in a single database. The second reason is for possible  
+    135-         * security precautions.  
+    136-         *  
+    137-         * @since 0.71
+
+./lib/W3/Db/mssql.php:144
+  
+    141-        var $prefix = '';  
+    142-  
+    143-        /**  
+    144:         * Whether the database queries are ready to start executing.  
+    145-         *  
+    146-         * @since 2.5.0  
+    147-         * @access private
+
+./lib/W3/Db/mssql.php:458
+  
+    455-        var $db_type;  
+    456-  
+    457-        /**  
+    458:         * Connects to the database server and selects a database  
+    459-         *  
+    460-         * PHP4 compatibility layer for calling the PHP5 constructor.  
+    461-         *  
+    462-         * @uses wpdb::__construct() Passes parameters and returns result  
+    463-         * @since 0.71  
+    464-         *  
+    465:         * @param string $dbuser MySQL database user  
+    466:         * @param string $dbpassword MySQL database password  
+    467:         * @param string $dbname MySQL database name  
+    468:         * @param string $dbhost MySQL database host  
+    469-         */  
+    470-        function wpdb( $dbuser, $dbpassword, $dbname, $dbhost ) {  
+    471-                if( defined( 'WP_USE_MULTIPLE_DB' ) && WP_USE_MULTIPLE_DB )
+
+./lib/W3/Db/mssql.php:477
+  
+    474-        }  
+    475-  
+    476-        /**  
+    477:         * Connects to the database server and selects a database  
+    478-         *  
+    479-         * PHP5 style constructor for compatibility with PHP5. Does  
+    480-         * the actual setting up of the class properties and connection  
+    481:         * to the database.  
+    482-         *  
+    483-         * @link http://core.trac.wordpress.org/ticket/3354  
+    484-         * @since 2.0.8  
+    485-         *  
+    486:         * @param string $dbuser MySQL database user  
+    487:         * @param string $dbpassword MySQL database password  
+    488:         * @param string $dbname MySQL database name  
+    489:         * @param string $dbhost MySQL database host  
+    490-         */  
+    491-        function __construct( $dbuser, $dbpassword, $dbname, $dbhost ) {  
+    492-                register_shutdown_function( array( &$this, '__destruct' ) );
+
+./lib/W3/Db/mssql.php:534
+  
+    531-  
+    532-                if ( !$this->dbh ) {  
+    533-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
+    534:<h1>Error establishing a database connection</h1>  
+    535:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
+    536-<ul>  
+    537-        <li>Are you sure you have the correct username and password?</li>  
+    538-        <li>Are you sure that you have typed the correct hostname?</li>  
+    539:        <li>Are you sure that the database server is running?</li>  
+    540-</ul>  
+    541-<p>If you're unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href='http://wordpress.org/support/'>WordPress Support Forums</a>.</p>  
+    542-"/*/WP_I18N_DB_CONN_ERROR*/, $dbhost ), 'db_connect_fail' );
+
+./lib/W3/Db/mssql.php:570
+  
+    567-        }  
+    568-  
+    569-        /**  
+    570:         * PHP5 style destructor and will run when database object is destroyed.  
+    571-         *  
+    572-         * @see wpdb::__construct()  
+    573-         * @since 2.0.8
+
+./lib/W3/Db/mssql.php:591
+  
+    588-        function set_prefix( $prefix, $set_table_names = true ) {  
+    589-  
+    590-                if ( preg_match( '|[^a-z0-9_]|i', $prefix ) )  
+    591:                        return new WP_Error('invalid_db_prefix', /*WP_I18N_DB_BAD_PREFIX*/'Invalid database prefix'/*/WP_I18N_DB_BAD_PREFIX*/);  
+    592-  
+    593-                $old_prefix = is_multisite() ? '' : $prefix;  
+    594-
+
+./lib/W3/Db/mssql.php:745
+  
+    742-        }  
+    743-  
+    744-        /**  
+    745:         * Selects a database using the current database connection.  
+    746-         *  
+    747:         * The database name will be changed based on the current database  
+    748-         * connection. On failure, the execution will bail and display an DB error.  
+    749-         *  
+    750-         * @since 0.71  
+    751-         *  
+    752:         * @param string $db MySQL database name  
+    753-         * @return null Always null.  
+    754-         */  
+    755-        function select( $db, &$dbh ) {  
+    756-                if ( !@mssql_select_db($db, $dbh) ) {  
+    757-                        $this->ready = false;  
+    758-                        $this->bail( sprintf( /*WP_I18N_DB_SELECT_DB*/'  
+    759:<h1>Can&#8217;t select database</h1>  
+    760:<p>We were able to connect to the database server (which means your username and password is okay) but not able to select the <code>%1$s</code> database.</p>  
+    761-<ul>  
+    762-<li>Are you sure it exists?</li>  
+    763:<li>Does the user <code>%2$s</code> have permission to use the <code>%1$s</code> database?</li>  
+    764:<li>On some systems the name of your database is prefixed with your username, so it would be like <code>username_%1$s</code>. Could that be the problem?</li>  
+    765-</ul>  
+    766:<p>If you don\'t know how to set up a database you should <strong>contact your host</strong>. If all else fails you may find help at the <a href="http://wordpress.org/support/">WordPress Support Forums</a>.</p>'/*/WP_I18N_DB_SELECT_DB*/, $db, $this->dbuser ), 'db_select_fail' );  
+    767-                        return;  
+    768-                }  
+    769-        }
+
+./lib/W3/Db/mssql.php:827
+  
+    824-        }  
+    825-  
+    826-        /**  
+    827:         * Escapes content for insertion into the database using addslashes(), for security.  
+    828-         *  
+    829-         * Works on arrays.  
+    830-         *
+
+./lib/W3/Db/mssql.php:851
+  
+    848-        }  
+    849-  
+    850-        /**  
+    851:         * Escapes content by reference for insertion into the database, for security  
+    852-         *  
+    853-         * @uses wpdb::_real_escape()  
+    854-         * @since 2.3.0
+
+./lib/W3/Db/mssql.php:941
+  
+    938-                        return false;  
+    939-  
+    940-                if ( $caller = $this->get_caller() )  
+    941:                        $error_str = sprintf( /*WP_I18N_DB_QUERY_ERROR_FULL*/'WordPress database error %1$s for query %2$s made by %3$s'/*/WP_I18N_DB_QUERY_ERROR_FULL*/, $str, $this->last_query, $caller );  
+    942-                else  
+    943:                        $error_str = sprintf( /*WP_I18N_DB_QUERY_ERROR*/'WordPress database error %1$s for query %2$s'/*/WP_I18N_DB_QUERY_ERROR*/, $str, $this->last_query );  
+    944-  
+    945-                if ( function_exists( 'error_log' )  
+    946-                        && ( $log_file = @ini_get( 'error_log' ) )
+
+./lib/W3/Db/mssql.php:957
+  
+    954-  
+    955-                // If there is an error then take note of it  
+    956-                if ( is_multisite() ) {  
+    957:                        $msg = "WordPress database error: [$str]\n{$this->last_query}\n";  
+    958-                        if ( defined( 'ERRORLOGFILE' ) )  
+    959-                                error_log( $msg, 3, ERRORLOGFILE );  
+    960-                        if ( defined( 'DIEONDBERROR' ) )
+
+./lib/W3/Db/mssql.php:967
+  
+    964-                        $query = htmlspecialchars( $this->last_query, ENT_QUOTES );  
+    965-  
+    966-                        print "<div id='error'>  
+    967:                        <p class='wpdberror'><strong>WordPress database error:</strong> [$str]<br />  
+    968-                        <code>$query</code></p>  
+    969-                        </div>";  
+    970-                }  
+    971-        }  
+    972-  
+    973-        /**  
+    974:         * Enables showing of database errors.  
+    975-         *  
+    976-         * This function should be used only to enable showing of errors.  
+    977-         * wpdb::hide_errors() should be used instead for hiding of errors. However,  
+    978:         * this function can be used to enable and disable showing of database  
+    979-         * errors.  
+    980-         *  
+    981-         * @since 0.71
+
+./lib/W3/Db/mssql.php:994
+  
+    991-        }  
+    992-  
+    993-        /**  
+    994:         * Disables showing of database errors.  
+    995-         *  
+    996:         * By default database errors are not shown.  
+    997-         *  
+    998-         * @since 0.71  
+    999-         * @see wpdb::show_errors()
+
+./lib/W3/Db/mssql.php:1010
+  
+    1007-        }  
+    1008-  
+    1009-        /**  
+    1010:         * Whether to suppress database errors.  
+    1011-         *  
+    1012:         * By default database errors are suppressed, with a simple  
+    1013-         * call to this function they can be enabled.  
+    1014-         *  
+    1015-         * @since 2.5
+
+./lib/W3/Db/mssql.php:1062
+  
+    1059-  
+    1060-                if (!$this->$dbhname ) {  
+    1061-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/"  
+    1062:<h1>Error establishing a database connection</h1>  
+    1063:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>  
+    1064-<ul>  
+    1065-        <li>Are you sure you have the correct username and password?</li>  
+    1066-        <li>Are you sure that you have typed the correct hostname?</li>  
+    1067:        <li>Are you sure that the database server is running?</li>  
+    1068-</ul>  
+    1069-<p>If you're unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href='http://wordpress.org/support/'>WordPress Support Forums</a>.</p>  
+    1070-"/*/WP_I18N_DB_CONN_ERROR*/, $details['db_host'] ), 'db_connect_fail' );
+
+./lib/W3/Db/mssql.php:1081
+  
+    1078-        }  
+    1079-  
+    1080-        /**  
+    1081:         * Perform a MySQL database query, using current database connection.  
+    1082-         *  
+    1083-         * More information can be found on the codex page.  
+    1084-         *
+
+./lib/W3/Db/mssql.php:1420
+  
+    1417-        }  
+    1418-  
+    1419-        /**  
+    1420:         * Retrieve one variable from the database.  
+    1421-         *  
+    1422-         * Executes a SQL query and returns the value from the SQL result.  
+    1423-         * If the SQL result contains more than one column and/or more than one row, this function returns the value in the column and row specified.
+
+./lib/W3/Db/mssql.php:1448
+  
+    1445-        }  
+    1446-  
+    1447-        /**  
+    1448:         * Retrieve one row from the database.  
+    1449-         *  
+    1450-         * Executes a SQL query and returns the row from the SQL result.  
+    1451-         *
+
+./lib/W3/Db/mssql.php:1482
+  
+    1479-        }  
+    1480-  
+    1481-        /**  
+    1482:         * Retrieve one column from the database.  
+    1483-         *  
+    1484-         * Executes a SQL query and returns the column from the SQL result.  
+    1485-         * If the SQL result contains more than one column, this function returns the column specified.
+
+./lib/W3/Db/mssql.php:1507
+  
+    1504-        }  
+    1505-  
+    1506-        /**  
+    1507:         * Retrieve an entire SQL result set from the database (i.e., many rows)  
+    1508-         *  
+    1509-         * Executes a SQL query and returns the entire SQL result.  
+    1510-         *
+
+./lib/W3/Db/mssql.php:1633
+  
+    1630-        }  
+    1631-  
+    1632-        /**  
+    1633:         * Whether MySQL database is at least the required minimum version.  
+    1634-         *  
+    1635-         * @since 2.5.0  
+    1636-         * @uses $wp_version
+
+./lib/W3/Db/mssql.php:1641
+  
+    1638-         *  
+    1639-         * @return WP_Error  
+    1640-         */  
+    1641:        function check_database_version() {  
+    1642-                global $wp_version, $required_mysql_version;  
+    1643-                // Make sure the server has the required MySQL version  
+    1644-                //if ( version_compare($this->db_version(), $required_mysql_version, '<') )  
+    1645:                        //return new WP_Error('database_version', sprintf( __( '<strong>ERROR</strong>: WordPress %1$s requires MySQL %2$s or higher' ), $wp_version, $required_mysql_version ));  
+    1646-        }  
+    1647-  
+    1648-        /**  
+    1649:         * Whether the database supports collation.  
+    1650-         *  
+    1651-         * Called when WordPress is generating the table scheme.  
+    1652-         *
+
+./lib/W3/Db/mssql.php:1662
+  
+    1659-        }  
+    1660-  
+    1661-        /**  
+    1662:         * Determine if a database supports a particular feature  
+    1663-         *  
+    1664-         * @since 2.7  
+    1665-         * @see   wpdb::db_version()
+
+./lib/W3/Db/mssql.php:1707
+  
+    1704-        }  
+    1705-  
+    1706-        /**  
+    1707:         * The database version number.  
+    1708-         *  
+    1709-         * @return false|string false on failure, version number on success  
+    1710-         */
+
+./lib/W3/Db/mssql.php:2088
+  
+    2085-     * WordPress table prefix  
+    2086-     *  
+    2087-     * You can set this to have multiple WordPress installations  
+    2088:     * in a single database. The second reason is for possible  
+    2089-     * security precautions.  
+    2090-     *  
+    2091-     * @since 0.71
+
+./lib/W3/PgCache.php:543
+  
+    540-        }  
+    541-  
+    542-        /**  
+    543:         * Check for database error  
+    544-         */  
+    545:        if (w3_is_database_error($buffer)) {  
+    546-            $this->cache_reject_reason = 'Database error occurred';  
+    547-  
+    548-            return false;
+
+./lib/W3/Plugin/Minify.php:956
+  
+    953-     */  
+    954-    function can_minify2(&$buffer) {  
+    955-        /**  
+    956:         * Check for database error  
+    957-         */  
+    958:        if (w3_is_database_error($buffer)) {  
+    959-            $this->minify_reject_reason = 'Database Error occurred';  
+    960-  
+    961-            return false;
+
+./lib/W3/Plugin/CdnEnabled.php:385
+  
+    382-     * @param string $message  
+    383-     */  
+    384-    function update_feedback($message) {  
+    385:        if ($message == __('Upgrading database')) {  
+    386-            $this->_config->set('notes.wp_upgraded', true);  
+    387-            $this->_config->save();  
+    388-        }
+
+./lib/W3/Plugin/CdnEnabled.php:1829
+  
+    1826-     */  
+    1827-    function can_cdn2(&$buffer) {  
+    1828-        /**  
+    1829:         * Check for database error  
+    1830-         */  
+    1831:        if (w3_is_database_error($buffer)) {  
+    1832-            $this->cdn_reject_reason = 'Database Error occurred';  
+    1833-  
+    1834-            return false;
+
+./lib/W3/Plugin/MinifyEnabled.php:1023
+  
+    1020-     */  
+    1021-    function can_minify2(&$buffer) {  
+    1022-        /**  
+    1023:         * Check for database error  
+    1024-         */  
+    1025:        if (w3_is_database_error($buffer)) {  
+    1026-            $this->minify_reject_reason = 'Database Error occurred';  
+    1027-  
+    1028-            return false;
+
+./lib/W3/Plugin/TotalCache.php:364
+  
+    361-        global $wpdb;  
+    362-  
+    363-        if ($buffer != '' && w3_is_xml($buffer)) {  
+    364:            if (w3_is_database_error($buffer)) {  
+    365-                status_header(503);  
+    366-            } else {  
+    367-                /**
+
+./lib/W3/Plugin/Cdn.php:231
+  
+    228-     * @param string $message  
+    229-     */  
+    230-    function update_feedback($message) {  
+    231:        if ($message == __('Upgrading database')) {  
+    232-            $this->_config->set('notes.wp_upgraded', true);  
+    233-            $this->_config->save();  
+    234-        }
+
+./lib/W3/Plugin/Cdn.php:698
+  
+    695-     */  
+    696-    function can_cdn2(&$buffer) {  
+    697-        /**  
+    698:         * Check for database error  
+    699-         */  
+    700:        if (w3_is_database_error($buffer)) {  
+    701-            $this->cdn_reject_reason = 'Database Error occurred';  
+    702-  
+    703-            return false;
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1085
+  
+    1082-        }  
+    1083-  
+    1084-        /**  
+    1085:         * Check for database cache availability  
+    1086-         */  
+    1087-        if ($this->_config->get_boolean('dbcache.enabled')) {  
+    1088-            if (!$this->db_installed()) {
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1222
+  
+    1219-                }  
+    1220-  
+    1221-                if (!w3_is_multisite()) {  
+    1222:                    $this->_errors[] = sprintf('The uploads path found in the database (%s) is inconsistent with the actual path. Please manually adjust the upload path either in miscellaneous settings or if not using a custom path %s automatically to resolve the issue.', $upload_path, $this->button_link('update the path', wp_nonce_url(sprintf('admin.php?page=%s&w3tc_update_upload_path', $this->_page), 'w3tc')));  
+    1223-                }  
+    1224-            }  
+    1225-
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1957
+  
+    1954-    }  
+    1955-  
+    1956-    /**  
+    1957:     * Flush database cache action  
+    1958-     *  
+    1959-     * @return void  
+    1960-     */
+
+./lib/Microsoft/Http/Client.php:229
+  
+    226-    protected $redirectCounter = 0;  
+    227-  
+    228-    /**  
+    229:     * Fileinfo magic database resource  
+    230-     *  
+    231-     * This varaiable is populated the first time _detectFileMimeType is called  
+    232-     * and is then reused on every call to this method
+
+./inc/mime/all.php:332
+  
+    329-    'oas' => 'application/vnd.fujitsu.oasys',  
+    330-    'obd' => 'application/x-msbinder',  
+    331-    'oda' => 'application/oda',  
+    332:    'odb' => 'application/vnd.oasis.opendocument.database',  
+    333-    'odc' => 'application/vnd.oasis.opendocument.chart',  
+    334-    'odf' => 'application/vnd.oasis.opendocument.formula',  
+    335-    'odft' => 'application/vnd.oasis.opendocument.formula-template',
+
+./inc/mime/other.php:27
+  
+    24-    'mpeg|mpg|mpe' => 'video/mpeg',  
+    25-    'mpp' => 'application/vnd.ms-project',  
+    26-    'otf' => 'application/x-font-otf',  
+    27:    'odb' => 'application/vnd.oasis.opendocument.database',  
+    28-    'odc' => 'application/vnd.oasis.opendocument.chart',  
+    29-    'odf' => 'application/vnd.oasis.opendocument.formula',  
+    30-    'odg' => 'application/vnd.oasis.opendocument.graphics',
+
+./inc/functions/plugin.php:60
+  
+    57-}  
+    58-  
+    59-/**  
+    60: * Shortcut for database cache flush  
+    61- *  
+    62- * @return boolean  
+    63- */
+
+./inc/define.php:205
+  
+    202-}  
+    203-  
+    204-/**  
+    205: * Check if there was database error  
+    206- *  
+    207- * @param string $content  
+    208- * @return boolean  
+    209- */  
+    210:function w3_is_database_error(&$content) {  
+    211-    return (stristr($content, '<title>Database Error</title>') !== false);  
+    212-}  
+    213-
+
+./inc/options/install.php:10
+  
+    7-        	Set the permissions of wp-content/ back to 755, e.g.:  
+    8-         	<pre class="console"># chmod 755 /var/www/vhosts/domain.com/httpdocs/wp-content/</pre>  
+    9-        </li>  
+    10:        <li>On the "<a href="admin.php?page=w3tc_general">General</a>" tab and select your caching methods for page, database and minify. In most cases, "disk enhanced" mode for page cache, "disk" mode for minify and "disk" mode for database caching are "good" settings.</li>  
+    11-        <li><em>Recommended:</em> On the "<a href="admin.php?page=w3tc_minify">Minify</a>" tab all of the recommended settings are preset. Use the help button to simplify discovery of your <acronym title="Cascading Style Sheet">CSS</acronym> and <acronym title="JavaScript">JS</acronym> files and groups. Pay close attention to the method and location of your <acronym title="JavaScript">JS</acronym> group embeddings. See the plugin's <a href="admin.php?page=w3tc_faq">FAQ</a> for more information on usage.</li>  
+    12-        <li><em>Recommended:</em> On the "<a href="admin.php?page=w3tc_browsercache">Browser Cache</a>" tab, <acronym title="Hypertext Transfer Protocol">HTTP</acronym> compression is enabled by default. Make sure to enable other options to suit your goals.</li>  
+    13-        <li><em>Recommended:</em> If you already have a content delivery network (<acronym title="Content Delivery Network">CDN</acronym>) provider, proceed to the "<a href="admin.php?page=w3tc_cdn">Content Delivery Network</a>" tab and populate the fields and set your preferences. If you do not use the Media Library, you will need to import your images etc into the default locations. Use the Media Library Import Tool on the "Content Delivery Network" tab to perform this task. If you do not have a <acronym title="Content Delivery Network">CDN</acronym> provider, you can still improve your site's performance using the "Self-hosted" method. On your own server, create a subdomain and matching <acronym title="Domain Name System">DNS</acronym> Zone record; e.g. static.domain.com and configure <acronym title="File Transfer Protocol">FTP</acronym> options on the "Content Delivery Network" tab accordingly. Be sure to <acronym title="File Transfer Protocol">FTP</acronym> upload the appropriate files, using the available upload buttons.</li>  
+    14-        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_dbcache">Database Cache</a>" tab the recommended settings are preset. If using a shared hosting account use the "disk" method with caution; in either of these cases the response time of the disk may not be fast enough, so this option is disabled by default.</li>  
+    15:        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_objectcache">Object Cache</a>" tab the recommended settings are preset. If using a shared hosting account use the "disk" method with caution, the response time of the disk may not be fast enough, so this option is disabled by default. Test this option with and without database cache to ensure that it provides a performance increase.</li>  
+    16-        <li><em>Optional:</em> On the "<a href="admin.php?page=w3tc_mobile">User Agent Groups</a>" tab, specify any user agents, like mobile phones if a mobile theme is used.</li>  
+    17-    </ol>  
+    18-
+
+./inc/options/install.php:266
+  
+    263-						<li>Best compatibility with <a href="http://www.iis.net/" target="_blank">IIS</a> is realized via <a href="http://www.microsoft.com/web/webmatrix/" target="_blank">WebMatrix</a>, which also includes the supported <a href="http://www.iis.net/download/wincacheforphp" target="_blank">WinCache</a> opcode cache.</li>  
+    264-                        <li>In the case where Apache is not used, the .htaccess file located in the root directory of the WordPress installation, wp-content/w3tc/pgcache/.htaccess and wp-content/w3tc/min/.htaccess contain directives that must be manually created for your web server software.</li>  
+    265-                        <li>Restarting the web server will empty the opcode cache, which means it will have to be rebuilt over time and your site's performance will suffer during this period. Still, an opcode cache should be installed in any case to maximize WordPress performance.</li>  
+    266:                        <li>Consider using memcached for objects that must persist across web server restarts or that you wish to share amongst your pool of servers (or cluster), e.g.: database objects or page cache.</li>  
+    267-                        <li>Some yum or mirrors may not have the necessary packages, in such cases you may have to do a manual installation.</li>  
+    268-                    </ul>  
+    269-                </th>
+
+./inc/options/about.php:17
+  
+    14-		<li>Transparent content delivery network (<acronym title="Content Delivery Network">CDN</acronym>) integration with Media Library, theme files and WordPress core</li>  
+    15-		<li>Caching of pages / posts in memory or on disk or on CDN (mirror only)</li>  
+    16-		<li>Caching of (minified) <acronym title="Cascading Style Sheet">CSS</acronym> and JavaScript in memory, on disk or on <acronym title="Content Delivery Network">CDN</acronym></li>  
+    17:		<li>Caching of database objects in memory or on disk</li>  
+    18-		<li>Caching of objects in memory or on disk</li>  
+    19-		<li>Caching of feeds (site, categories, tags, comments, search results) in memory or on disk</li>  
+    20-		<li>Caching of search results pages (i.e. <acronym title="Uniform Resource Identifier">URI</acronym>s with query string variables) in memory or on disk</li>
+
+./inc/options/general.php:175
+  
+    172-        <?php echo $this->postbox_footer(); ?>  
+    173-  
+    174-        <?php echo $this->postbox_header('Database Cache'); ?>  
+    175:        <p>Enable database caching to reduce post, page and feed creation time.</p>  
+    176-  
+    177-         <table class="form-table">  
+    178-            <tr>
+
+./inc/options/general.php:183
+  
+    180-                <td>  
+    181-                    <input type="hidden" name="dbcache.enabled" value="0" />  
+    182-                    <label><input class="enabled" type="checkbox" name="dbcache.enabled" value="1"<?php checked($dbcache_enabled, true); ?> />&nbsp;<strong>Enable</strong></label>  
+    183:                    <br /><span class="description">Caching database objects decreases the response time of your site. Best used if object caching is not possible.</span>  
+    184-                </td>  
+    185-            </tr>  
+    186-            <tr>
+
+./inc/options/dbcache.php:11
+  
+    8-        is currently <span class="w3tc-<?php if ($dbcache_enabled): ?>enabled">enabled<?php else: ?>disabled">disabled<?php endif; ?></span>.  
+    9-    </p>  
+    10-    <p>  
+    11:		To rebuild the database cache use the  
+    12-        <?php echo $this->nonce_field('w3tc'); ?>  
+    13-        <input type="submit" name="w3tc_flush_dbcache" value="empty cache"<?php if (! $dbcache_enabled): ?> disabled="disabled"<?php endif; ?> class="button" />  
+    14-		operation.
+
+./inc/options/dbcache.php:73
+  
+    70-        		<th><label for="dbcache_reject_sql">Ignored query stems:</label></th>  
+    71-        		<td>  
+    72-        			<textarea id="dbcache_reject_sql" name="dbcache.reject.sql" cols="40" rows="5"><?php echo htmlspecialchars(implode("\r\n", $this->_config->get_array('dbcache.reject.sql'))); ?></textarea><br />  
+    73:        			<span class="description">Do not cache queries that contain these terms. Any entered prefix (set in wp-config.php) will be replaced with current database prefix (default: wp_). Query stems can be identified using debug mode.</span>  
+    74-        		</td>  
+    75-        	</tr>  
+    76-        </table>
+
+./wp-content/db.php:32
+  
+    29-            if (file_exists($db_driver_path)) {  
+    30-                require_once $db_driver_path;  
+    31-            } else {  
+    32:                die(sprintf('<strong>W3 Total Cache Error:</strong> database driver doesn\'t exist: %s.', $db_driver_path));  
+    33-            }  
+    34-        }  
+    35-
+
+./w3-total-cache.php:4
+  
+    1-<?php  
+    2-/*  
+    3-Plugin Name: W3 Total Cache  
+    4:Description: The highest rated and most complete WordPress performance plugin. Dramatically improve the speed and user experience of your site. Add browser, page, object and database caching as well as minify and content delivery network (CDN) to WordPress.  
+    5-Version: 0.9.2.5b  
+    6-Plugin URI: http://www.w3-edge.com/wordpress-plugins/w3-total-cache/  
+    7-Author: Frederick Townes
+
+
+### dangerous_functions ###
+#### system( ####
+./lib/CF/cloudfiles.php:326
+  
+    324- * $auth->authenticate();  
+    325- *  
+    326: * # Create a connection to the storage/cdn system(s) and pass in the  
+    327- * # validated CF_Authentication instance.  
+    328- * #  
+    329- * $conn = new CF_Connection($auth);
+
+./lib/CF/cloudfiles.php:360
+  
+    357-     * #  
+    358-     * $auth->authenticate();  
+    359-     *  
+    360:     * # Create a connection to the storage/cdn system(s) and pass in the  
+    361-     * # validated CF_Authentication instance.  
+    362-     * #  
+    363-     * $conn = new CF_Connection($auth);
+
+#### fopen( ####
+./lib/W3/Cache/File.php:100
+  
+    98-  
+    99-        if ((@is_dir($dir) || w3_mkdir($sub_dir, 0777, $this->_cache_dir))) {  
+    100:            $fp = @fopen($path, 'wb');  
+    101-  
+    102-            if ($fp) {  
+    103-                if ($this->_locking) {
+
+./lib/W3/Cache/File.php:136
+  
+    133-            $ftime = @filemtime($path);  
+    134-  
+    135-            if ($ftime) {  
+    136:                $fp = @fopen($path, 'rb');  
+    137-  
+    138-                if ($fp) {  
+    139-                    if ($this->_locking) {
+
+./lib/W3/Cache/File/Generic.php:63
+  
+    60-        $dir = dirname($path);  
+    61-  
+    62-        if ((@is_dir($dir) || w3_mkdir($sub_dir, 0777, $this->_cache_dir))) {  
+    63:            $fp = @fopen($path, 'w');  
+    64-  
+    65-            if ($fp) {  
+    66-                if ($this->_locking) {
+
+./lib/W3/Cache/File/Generic.php:98
+  
+    95-            $ftime = @filemtime($path);  
+    96-  
+    97-            if ($ftime && $ftime > (time() - $this->_expire)) {  
+    98:                $fp = @fopen($path, 'r');  
+    99-  
+    100-                if ($fp) {  
+    101-                    if ($this->_locking) {
+
+./lib/W3/Cache/File/Cleaner.php:121
+  
+    118-            $ftime = @filemtime($file);  
+    119-  
+    120-            if ($ftime) {  
+    121:                $fp = @fopen($file, 'rb');  
+    122-  
+    123-                if ($fp) {  
+    124-                    $expires = @fread($fp, 4);
+
+./lib/W3/Config.php:1253
+  
+    1250-     * @return boolean  
+    1251-     */  
+    1252-    function write($file) {  
+    1253:        $fp = @fopen($file, 'w');  
+    1254-  
+    1255-        if ($fp) {  
+    1256-            @fputs($fp, "<?php\r\n\r\nreturn array(\r\n");
+
+./lib/CF/cloudfiles.php:1758
+  
+    1755-    /**  
+    1756-     * Streaming read of Object's data  
+    1757-     *  
+    1758:     * Given an open PHP resource (see PHP's fopen() method), fetch the Object's  
+    1759-     * data and write it to the open resource handle.  This is useful for  
+    1760-     * streaming an Object's content to the browser (videos, images) or for  
+    1761-     * fetching content to a local file.
+
+./lib/CF/cloudfiles.php:1783
+  
+    1780-     * // Hand it back to user's browser with appropriate content-type  
+    1781-     * //  
+    1782-     * header("Content-Type: " . $doc->content_type);  
+    1783:     * $output = fopen("php://output", "w");  
+    1784-     * $doc->stream($output); # stream object content to PHP's output buffer  
+    1785-     * fclose($output);  
+    1786-     * ?>
+
+./lib/CF/cloudfiles.php:1862
+  
+    1859-     * Upload Object's data to Cloud Files  
+    1860-     *  
+    1861-     * Write data to the remote Object.  The $data argument can either be a  
+    1862:     * PHP resource open for reading (see PHP's fopen() method) or an in-memory  
+    1863-     * variable.  If passing in a PHP resource, you must also include the $bytes  
+    1864-     * parameter.  
+    1865-     *
+
+./lib/CF/cloudfiles.php:1910
+  
+    1907-            # like a better option, but it seems to break on Windows so use  
+    1908-            # a temporary file instead.  
+    1909-            #  
+    1910:            $fp = fopen("php://temp", "wb+");  
+    1911:            #$fp = fopen("php://memory", "wb+");  
+    1912-            fwrite($fp, $data, strlen($data));  
+    1913-            rewind($fp);  
+    1914-            $close_fh = True;
+
+./lib/CF/cloudfiles.php:1986
+  
+    1983-     */  
+    1984-    function load_from_filename($filename, $verify=True)  
+    1985-    {  
+    1986:        $fp = @fopen($filename, "r");  
+    1987-        if (!$fp) {  
+    1988-            throw new IOException("Could not open file for reading: ".$filename);  
+    1989-        }
+
+./lib/CF/cloudfiles.php:2031
+  
+    2028-     */  
+    2029-    function save_to_filename($filename)  
+    2030-    {  
+    2031:        $fp = @fopen($filename, "wb");  
+    2032-        if (!$fp) {  
+    2033-            throw new IOException("Could not open file for writing: ".$filename);  
+    2034-        }
+
+./lib/Nusoap/class.wsdl.php:243
+  
+    240-        		$path = $wsdl;  
+    241-        	}  
+    242-            $this->debug('getting WSDL file ' . $path);  
+    243:            if ($fp = @fopen($path, 'r')) {  
+    244-                $wsdl_string = '';  
+    245-                while ($data = fread($fp, 32768)) {  
+    246-                    $wsdl_string .= $data;
+
+./lib/Nusoap/class.wsdlcache.php:102
+  
+    99-				$this->releaseMutex($filename);  
+    100-				return null;  
+    101-			}  
+    102:			$fp = @fopen($filename, "r");  
+    103-			if ($fp) {  
+    104-				$s = implode("", @file($filename));  
+    105-				fclose($fp);
+
+./lib/Nusoap/class.wsdlcache.php:132
+  
+    129-			$this->debug("Lock for $filename already exists");  
+    130-			return false;  
+    131-		}  
+    132:		$this->fplock[md5($filename)] = fopen($filename.".lock", "w");  
+    133-		if ($mode == "r") {  
+    134-			return flock($this->fplock[md5($filename)], LOCK_SH);  
+    135-		} else {
+
+./lib/Nusoap/class.wsdlcache.php:151
+  
+    148-		$filename = $this->createFilename($wsdl_instance->wsdl);  
+    149-		$s = serialize($wsdl_instance);  
+    150-		if ($this->obtainMutex($filename, "w")) {  
+    151:			$fp = fopen($filename, "w");  
+    152-			if (! $fp) {  
+    153-				$this->debug("Cannot write $wsdl_instance->wsdl ($filename) in cache");  
+    154-				$this->releaseMutex($filename);
+
+./lib/Nusoap/nusoap.php:3739
+  
+    3736-				} else {  
+    3737-					$filename = substr($this->externalWSDLURL, $pos + 7);  
+    3738-				}  
+    3739:                $fp = fopen($this->externalWSDLURL, 'r');  
+    3740-                fpassthru($fp);  
+    3741-              }  
+    3742-			} elseif ($this->wsdl) {
+
+./lib/Nusoap/nusoap.php:4824
+  
+    4821-        		$path = $wsdl;  
+    4822-        	}  
+    4823-            $this->debug('getting WSDL file ' . $path);  
+    4824:            if ($fp = @fopen($path, 'r')) {  
+    4825-                $wsdl_string = '';  
+    4826-                while ($data = fread($fp, 32768)) {  
+    4827-                    $wsdl_string .= $data;
+
+./lib/S3.php:336
+  
+    333-		if (isset($input['fp']))  
+    334-			$rest->fp =& $input['fp'];  
+    335-		elseif (isset($input['file']))  
+    336:			$rest->fp = @fopen($input['file'], 'rb');  
+    337-		elseif (isset($input['data']))  
+    338-			$rest->data = $input['data'];  
+    339-
+
+./lib/S3.php:436
+  
+    433-			if (is_resource($saveTo))  
+    434-				$rest->fp =& $saveTo;  
+    435-			else  
+    436:				if (($rest->fp = @fopen($saveTo, 'wb')) !== false)  
+    437-					$rest->file = realpath($saveTo);  
+    438-				else  
+    439-					$rest->response->error = array('code' => 0, 'message' => 'Unable to open save file for writing: '.$saveTo);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:762
+  
+    759-		}  
+    760-  
+    761-		// Open file  
+    762:		$fp = fopen($localFileName, 'r');  
+    763-		if ($fp === false) {  
+    764-			throw new Microsoft_WindowsAzure_Exception('Could not open local file.');  
+    765-		}
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:175
+  
+    172-        $this->_temporaryFileName = tempnam(sys_get_temp_dir(), 'azure');  
+    173-  
+    174-        // Check the file can be opened  
+    175:        $fh = @fopen($this->_temporaryFileName, $mode);  
+    176-        if ($fh === false) {  
+    177-            return false;  
+    178-        }
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:198
+  
+    195-        }  
+    196-  
+    197-        // Open temporary file handle  
+    198:        $this->_temporaryFileHandle = fopen($this->_temporaryFileName, $mode);  
+    199-  
+    200-        // Ok!  
+    201-        return true;
+
+./lib/Microsoft/Http/Client.php:900
+  
+    897-                 'Microsoft_Http_Client');  
+    898-        }  
+    899-  
+    900:        $fp = fopen($this->_stream_name, "w+b");  
+    901-        if(!$fp) {  
+    902-                $this->close();  
+    903-                require_once 'Microsoft/Http/Client/Exception.php';
+
+./lib/Minify/Minify/Cache/File.php:98
+  
+    95-        $path = $this->_path . '/' . $id;  
+    96-  
+    97-        if ($this->_locking) {  
+    98:            $fp = @fopen($path, 'rb');  
+    99-  
+    100-            if ($fp) {  
+    101-                @flock($fp, LOCK_SH);
+
+./lib/Minify/Minify/Cache/File.php:127
+  
+    124-  
+    125-        if (is_readable($path)) {  
+    126-            if ($this->_locking) {  
+    127:                $fp = @fopen($path, 'rb');  
+    128-  
+    129-                if ($fp) {  
+    130-                    @flock($fp, LOCK_SH);
+
+./inc/file.php:93
+  
+    90-function w3_is_writable($file) {  
+    91-    $exists = file_exists($file);  
+    92-  
+    93:    $fp = @fopen($file, 'a');  
+    94-  
+    95-    if ($fp) {  
+    96-        fclose($fp);
+
+./inc/functions/file.php:93
+  
+    90-function w3_is_writable($file) {  
+    91-    $exists = file_exists($file);  
+    92-  
+    93:    $fp = @fopen($file, 'a');  
+    94-  
+    95-    if ($fp) {  
+    96-        fclose($fp);
+
+./inc/functions/compat.php:9
+  
+    6-    }  
+    7-  
+    8-    function file_put_contents($filename, $data, $flags = 0) {  
+    9:        $fp = fopen($filename, ($flags & FILE_APPEND ? 'a' : 'w'));  
+    10-  
+    11-        if ($fp) {  
+    12-            fputs($fp, $data);
+
+#### passthru( ####
+./lib/Nusoap/nusoap.php:3740
+  
+    3738-				}  
+    3739-                $fp = fopen($this->externalWSDLURL, 'r');  
+    3740:                fpassthru($fp);  
+    3741-              }  
+    3742-			} elseif ($this->wsdl) {  
+    3743-				$this->debug("In service, serialize WSDL");
+
+./lib/Minify/Minify/Cache/File.php:102
+  
+    99-  
+    100-            if ($fp) {  
+    101-                @flock($fp, LOCK_SH);  
+    102:                @fpassthru($fp);  
+    103-                @flock($fp, LOCK_UN);  
+    104-                @fclose($fp);  
+    105-
+
+#### eval( ####
+./lib/JSON.php:22
+  
+    20- * be encoded into JSON notation for use in a client-side javascript, or  
+    21- * decoded from incoming Javascript requests. JSON format is native to  
+    22: * Javascript, and can be directly eval()'ed with no further parsing  
+    23- * overhead  
+    24- *  
+    25- * All strings should be in ASCII or UTF-8 format!
+
+./lib/W3/PgCache.php:1284
+  
+    1281-            $code = trim($code, ';') . ';';  
+    1282-  
+    1283-            ob_start();  
+    1284:            $result = eval($code);  
+    1285-            $output = ob_get_contents();  
+    1286-            ob_end_clean();  
+    1287-
+
+./lib/Nusoap/class.soapclient.php:711
+  
+    708-			return null;  
+    709-		}  
+    710-		// eval the class  
+    711:		eval($evalStr);  
+    712-		// instantiate proxy object  
+    713:		eval("\$proxy = new nusoap_proxy_$r('');");  
+    714-		// transfer current wsdl data to the proxy thereby avoiding parsing the wsdl twice  
+    715-		$proxy->endpointType = 'wsdl';  
+    716-		$proxy->wsdlFile = $this->wsdlFile;
+
+./lib/Nusoap/nusoap.php:4047
+  
+    4044-		$this->debug("in invoke_method, calling '$this->methodname'");  
+    4045-		if (!function_exists('call_user_func_array')) {  
+    4046-			if ($class == '') {  
+    4047:				$this->debug('in invoke_method, calling function using eval()');  
+    4048-				$funcCall = "\$this->methodreturn = $this->methodname(";  
+    4049-			} else {  
+    4050-				if ($delim == '..') {  
+    4051:					$this->debug('in invoke_method, calling class method using eval()');  
+    4052-					$funcCall = "\$this->methodreturn = ".$class."::".$method."(";  
+    4053-				} else {  
+    4054:					$this->debug('in invoke_method, calling instance method using eval()');  
+    4055-					// generate unique instance name  
+    4056-					$instname = "\$inst_".time();  
+    4057-					$funcCall = $instname." = new ".$class."(); ";
+
+./lib/Nusoap/nusoap.php:4073
+  
+    4070-			}  
+    4071-			$funcCall .= ');';  
+    4072-			$this->debug('in invoke_method, function call: '.$funcCall);  
+    4073:			@eval($funcCall);  
+    4074-		} else {  
+    4075-			if ($class == '') {  
+    4076-				$this->debug('in invoke_method, calling function using call_user_func_array()');
+
+./lib/Nusoap/nusoap.php:7867
+  
+    7864-			return null;  
+    7865-		}  
+    7866-		// eval the class  
+    7867:		eval($evalStr);  
+    7868-		// instantiate proxy object  
+    7869:		eval("\$proxy = new nusoap_proxy_$r('');");  
+    7870-		// transfer current wsdl data to the proxy thereby avoiding parsing the wsdl twice  
+    7871-		$proxy->endpointType = 'wsdl';  
+    7872-		$proxy->wsdlFile = $this->wsdlFile;
+
+./lib/Minify/FirePHP.php:1035
+  
+    1032-   * use of HTTPRequest to perform server communication functions - data can  
+    1033-   * be encoded into JSON notation for use in a client-side javascript, or  
+    1034-   * decoded from incoming Javascript requests. JSON format is native to  
+    1035:   * Javascript, and can be directly eval()'ed with no further parsing  
+    1036-   * overhead  
+    1037-   *  
+    1038-   * All strings should be in ASCII or UTF-8 format!
+
+#### unserialize( ####
+./lib/W3/Minify.php:827
+  
+    825-  
+    826-        if ($data) {  
+    827:            $value = @unserialize($data);  
+    828-  
+    829-            return $value;  
+    830-        }
+
+./lib/W3/Cache/File.php:156
+  
+    153-                                $data .= @fread($fp, 4096);  
+    154-                            }  
+    155-  
+    156:                            $var = @unserialize($data);  
+    157-                        }  
+    158-                    }  
+    159-
+
+./lib/W3/Cache/Eaccelerator.php:51
+  
+    48-     * @return mixed  
+    49-     */  
+    50-    function get($key) {  
+    51:        return @unserialize(eaccelerator_get($key));  
+    52-    }  
+    53-  
+    54-    /**
+
+./lib/W3/Cache/Wincache.php:47
+  
+    44-     * @return mixed  
+    45-     */  
+    46-    function get($key) {  
+    47:        return @unserialize(wincache_ucache_get($key));  
+    48-    }  
+    49-  
+    50-    /**
+
+./lib/W3/Cache/Xcache.php:51
+  
+    48-     * @return mixed  
+    49-     */  
+    50-    function get($key) {  
+    51:        return @unserialize(xcache_get($key));  
+    52-    }  
+    53-  
+    54-    /**
+
+./lib/W3/Cache/Apc.php:51
+  
+    48-     * @return mixed  
+    49-     */  
+    50-    function get($key) {  
+    51:        return @unserialize(apc_fetch($key));  
+    52-    }  
+    53-  
+    54-    /**
+
+./lib/W3/PageSpeed.php:240
+  
+    237-            $data = @file_get_contents($file);  
+    238-  
+    239-            if ($data) {  
+    240:                return @unserialize($data);  
+    241-            }  
+    242-        }  
+    243-
+
+./lib/W3/Plugin/CdnEnabled.php:875
+  
+    872-                    }  
+    873-  
+    874-                    if ($post->metadata) {  
+    875:                        $metadata = @unserialize($post->metadata);  
+    876-  
+    877-                        $post_files = array_merge($post_files, $this->get_metadata_files($metadata));  
+    878-                    }
+
+./lib/W3/Plugin/CdnAdmin.php:344
+  
+    341-                    }  
+    342-  
+    343-                    if ($post->metadata) {  
+    344:                        $metadata = @unserialize($post->metadata);  
+    345-  
+    346-                        $post_files = array_merge($post_files, $this->_get_common()->get_metadata_files($metadata));  
+    347-                    }
+
+./lib/Nusoap/class.wsdlcache.php:112
+  
+    109-				$this->debug("$wsdl ($filename) not in cache (2)");  
+    110-			}  
+    111-			$this->releaseMutex($filename);  
+    112:			return (!is_null($s)) ? unserialize($s) : null;  
+    113-		} else {  
+    114-			$this->debug("Unable to obtain mutex for $filename in get");  
+    115-		}
+
+#### fread( ####
+./lib/W3/Cache/File.php:143
+  
+    141-                    }  
+    142-  
+    143:                    $expires = @fread($fp, 4);  
+    144-  
+    145-                    if ($expires !== false) {  
+    146-                        list(, $expire) = @unpack('L', $expires);
+
+./lib/W3/Cache/File.php:153
+  
+    150-                            $data = '';  
+    151-  
+    152-                            while (!@feof($fp)) {  
+    153:                                $data .= @fread($fp, 4096);  
+    154-                            }  
+    155-  
+    156-                            $var = @unserialize($data);
+
+./lib/W3/Cache/File/Generic.php:108
+  
+    105-                    $var = '';  
+    106-  
+    107-                    while (!@feof($fp)) {  
+    108:                        $var .= @fread($fp, 4096);  
+    109-                    }  
+    110-  
+    111-                    @fclose($fp);
+
+./lib/W3/Cache/File/Cleaner.php:124
+  
+    121-                $fp = @fopen($file, 'rb');  
+    122-  
+    123-                if ($fp) {  
+    124:                    $expires = @fread($fp, 4);  
+    125-  
+    126-                    if ($expires !== false) {  
+    127-                        list(, $expire) = @unpack('L', $expires);
+
+./lib/CF/cloudfiles_http.php:1078
+  
+    1075-  
+    1076-    private function _read_cb($ch, $fd, $length)  
+    1077-    {  
+    1078:        $data = fread($fd, $length);  
+    1079-        $len = strlen($data);  
+    1080-        if (isset($this->_user_write_progress_callback_func)) {  
+    1081-            call_user_func($this->_user_write_progress_callback_func, $len);
+
+./lib/CF/cloudfiles.php:1923
+  
+    1920-        } else {  
+    1921-            $this->content_length = $bytes;  
+    1922-            $fp = $data;  
+    1923:            $ct_data = fread($data, 64);  
+    1924-            rewind($data);  
+    1925-        }  
+    1926-
+
+./lib/Nusoap/class.wsdl.php:245
+  
+    242-            $this->debug('getting WSDL file ' . $path);  
+    243-            if ($fp = @fopen($path, 'r')) {  
+    244-                $wsdl_string = '';  
+    245:                while ($data = fread($fp, 32768)) {  
+    246-                    $wsdl_string .= $data;  
+    247-                }  
+    248-                fclose($fp);
+
+./lib/Nusoap/class.soap_transport_http.php:902
+  
+    899-			$strlen = 0;  
+    900-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
+    901-		    	$readlen = min(8192, $content_length - $strlen);  
+    902:				$tmp = fread($this->fp, $readlen);  
+    903-				$tmplen = strlen($tmp);  
+    904-				$this->debug("read buffer of $tmplen bytes");  
+    905-				if (($tmplen == 0) && (!feof($this->fp))) {
+
+./lib/Nusoap/nusoap.php:3055
+  
+    3052-			$strlen = 0;  
+    3053-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
+    3054-		    	$readlen = min(8192, $content_length - $strlen);  
+    3055:				$tmp = fread($this->fp, $readlen);  
+    3056-				$tmplen = strlen($tmp);  
+    3057-				$this->debug("read buffer of $tmplen bytes");  
+    3058-				if (($tmplen == 0) && (!feof($this->fp))) {
+
+./lib/Nusoap/nusoap.php:4826
+  
+    4823-            $this->debug('getting WSDL file ' . $path);  
+    4824-            if ($fp = @fopen($path, 'r')) {  
+    4825-                $wsdl_string = '';  
+    4826:                while ($data = fread($fp, 32768)) {  
+    4827-                    $wsdl_string .= $data;  
+    4828-                }  
+    4829-                fclose($fp);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:773
+  
+    770-			fseek($fp, $i * self::MAX_BLOB_TRANSFER_SIZE);  
+    771-  
+    772-			// Read contents  
+    773:			$fileContents = fread($fp, self::MAX_BLOB_TRANSFER_SIZE);  
+    774-  
+    775-			// Put block  
+    776-			$this->putBlock($containerName, $blobName, $blockIdentifiers[$i], $fileContents, $leaseId);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:256
+  
+    253-            return false;  
+    254-        }  
+    255-  
+    256:        return fread($this->_temporaryFileHandle, $count);  
+    257-    }  
+    258-  
+    259-    /**
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:389
+  
+    386-                              break;  
+    387-                             }  
+    388-                        } else {  
+    389:                            $line = @fread($this->socket, $read_to - $current_pos);  
+    390-                            if ($line === false || strlen($line) === 0) {  
+    391-                                $this->_checkSocketReadTimeout();  
+    392-                                break;
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:432
+  
+    429-                          break;  
+    430-                     }  
+    431-                 } else {  
+    432:                    $chunk = @fread($this->socket, $read_to - $current_pos);  
+    433-                    if ($chunk === false || strlen($chunk) === 0) {  
+    434-                        $this->_checkSocketReadTimeout();  
+    435-                        break;
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:455
+  
+    452-                          break;  
+    453-                     }  
+    454-                }  else {  
+    455:                    $buff = @fread($this->socket, 8192);  
+    456-                    if ($buff === false || strlen($buff) === 0) {  
+    457-                        $this->_checkSocketReadTimeout();  
+    458-                        break;
+
+./lib/W3/Cache/File.php:143
+  
+    141-                    }  
+    142-  
+    143:                    $expires = @fread($fp, 4);  
+    144-  
+    145-                    if ($expires !== false) {  
+    146-                        list(, $expire) = @unpack('L', $expires);
+
+./lib/W3/Cache/File.php:153
+  
+    150-                            $data = '';  
+    151-  
+    152-                            while (!@feof($fp)) {  
+    153:                                $data .= @fread($fp, 4096);  
+    154-                            }  
+    155-  
+    156-                            $var = @unserialize($data);
+
+./lib/W3/Cache/File/Generic.php:108
+  
+    105-                    $var = '';  
+    106-  
+    107-                    while (!@feof($fp)) {  
+    108:                        $var .= @fread($fp, 4096);  
+    109-                    }  
+    110-  
+    111-                    @fclose($fp);
+
+./lib/W3/Cache/File/Cleaner.php:124
+  
+    121-                $fp = @fopen($file, 'rb');  
+    122-  
+    123-                if ($fp) {  
+    124:                    $expires = @fread($fp, 4);  
+    125-  
+    126-                    if ($expires !== false) {  
+    127-                        list(, $expire) = @unpack('L', $expires);
+
+./lib/CF/cloudfiles_http.php:1078
+  
+    1075-  
+    1076-    private function _read_cb($ch, $fd, $length)  
+    1077-    {  
+    1078:        $data = fread($fd, $length);  
+    1079-        $len = strlen($data);  
+    1080-        if (isset($this->_user_write_progress_callback_func)) {  
+    1081-            call_user_func($this->_user_write_progress_callback_func, $len);
+
+./lib/CF/cloudfiles.php:1923
+  
+    1920-        } else {  
+    1921-            $this->content_length = $bytes;  
+    1922-            $fp = $data;  
+    1923:            $ct_data = fread($data, 64);  
+    1924-            rewind($data);  
+    1925-        }  
+    1926-
+
+./lib/Nusoap/class.wsdl.php:245
+  
+    242-            $this->debug('getting WSDL file ' . $path);  
+    243-            if ($fp = @fopen($path, 'r')) {  
+    244-                $wsdl_string = '';  
+    245:                while ($data = fread($fp, 32768)) {  
+    246-                    $wsdl_string .= $data;  
+    247-                }  
+    248-                fclose($fp);
+
+./lib/Nusoap/class.soap_transport_http.php:902
+  
+    899-			$strlen = 0;  
+    900-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
+    901-		    	$readlen = min(8192, $content_length - $strlen);  
+    902:				$tmp = fread($this->fp, $readlen);  
+    903-				$tmplen = strlen($tmp);  
+    904-				$this->debug("read buffer of $tmplen bytes");  
+    905-				if (($tmplen == 0) && (!feof($this->fp))) {
+
+./lib/Nusoap/nusoap.php:3055
+  
+    3052-			$strlen = 0;  
+    3053-		    while (($strlen < $content_length) && (!feof($this->fp))) {  
+    3054-		    	$readlen = min(8192, $content_length - $strlen);  
+    3055:				$tmp = fread($this->fp, $readlen);  
+    3056-				$tmplen = strlen($tmp);  
+    3057-				$this->debug("read buffer of $tmplen bytes");  
+    3058-				if (($tmplen == 0) && (!feof($this->fp))) {
+
+./lib/Nusoap/nusoap.php:4826
+  
+    4823-            $this->debug('getting WSDL file ' . $path);  
+    4824-            if ($fp = @fopen($path, 'r')) {  
+    4825-                $wsdl_string = '';  
+    4826:                while ($data = fread($fp, 32768)) {  
+    4827-                    $wsdl_string .= $data;  
+    4828-                }  
+    4829-                fclose($fp);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:773
+  
+    770-			fseek($fp, $i * self::MAX_BLOB_TRANSFER_SIZE);  
+    771-  
+    772-			// Read contents  
+    773:			$fileContents = fread($fp, self::MAX_BLOB_TRANSFER_SIZE);  
+    774-  
+    775-			// Put block  
+    776-			$this->putBlock($containerName, $blobName, $blockIdentifiers[$i], $fileContents, $leaseId);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:256
+  
+    253-            return false;  
+    254-        }  
+    255-  
+    256:        return fread($this->_temporaryFileHandle, $count);  
+    257-    }  
+    258-  
+    259-    /**
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:389
+  
+    386-                              break;  
+    387-                             }  
+    388-                        } else {  
+    389:                            $line = @fread($this->socket, $read_to - $current_pos);  
+    390-                            if ($line === false || strlen($line) === 0) {  
+    391-                                $this->_checkSocketReadTimeout();  
+    392-                                break;
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:432
+  
+    429-                          break;  
+    430-                     }  
+    431-                 } else {  
+    432:                    $chunk = @fread($this->socket, $read_to - $current_pos);  
+    433-                    if ($chunk === false || strlen($chunk) === 0) {  
+    434-                        $this->_checkSocketReadTimeout();  
+    435-                        break;
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:455
+  
+    452-                          break;  
+    453-                     }  
+    454-                }  else {  
+    455:                    $buff = @fread($this->socket, 8192);  
+    456-                    if ($buff === false || strlen($buff) === 0) {  
+    457-                        $this->_checkSocketReadTimeout();  
+    458-                        break;
+
+#### proc_open( ####
+./lib/Minify/Minify/YUICompressor.php:121
+  
+    119-  
+    120-        $pipes = null;  
+    121:        $process = proc_open($cmd, $descriptors, $pipes);  
+    122-  
+    123-        if (!$process) {  
+    124-            throw new Exception(sprintf('Unable to open process (%s).', $cmd));
+
+./lib/Minify/Minify/ClosureCompiler.php:78
+  
+    75-        );  
+    76-  
+    77-        $pipes = null;  
+    78:        $process = proc_open($cmd, $descriptors, $pipes);  
+    79-  
+    80-        if (!$process) {  
+    81-            throw new Exception(sprintf('Unable to open process (%s).', $cmd));
+
+#### exec( ####
+./lib/CF/cloudfiles_http.php:219
+  
+    217-        curl_setopt($curl_ch, CURLOPT_CONNECTTIMEOUT, 10);  
+    218-        curl_setopt($curl_ch, CURLOPT_URL, $url);  
+    219:        curl_exec($curl_ch);  
+    220-        curl_close($curl_ch);  
+    221-  
+    222-        return array($this->response_status, $this->response_reason,
+
+./lib/CF/cloudfiles_http.php:1312
+  
+    1309-        curl_setopt($this->connections[$conn_type],  
+    1310-            CURLOPT_URL, $url_path);  
+    1311-  
+    1312:        if (!curl_exec($this->connections[$conn_type]) && curl_errno($this->connections[$conn_type]) !== 0) {  
+    1313-            $this->error_str = "(curl error: "  
+    1314-                . curl_errno($this->connections[$conn_type]) . ") ";  
+    1315-            $this->error_str .= curl_error($this->connections[$conn_type]);
+
+./lib/Nusoap/class.soap_transport_http.php:964
+  
+    961-	  } else if ($this->io_method() == 'curl') {  
+    962-		// send and receive  
+    963-		$this->debug('send and receive with cURL');  
+    964:		$this->incoming_payload = curl_exec($this->ch);  
+    965-		$data = $this->incoming_payload;  
+    966-  
+    967-        $cErr = curl_error($this->ch);
+
+./lib/Nusoap/nusoap.php:3117
+  
+    3114-	  } else if ($this->io_method() == 'curl') {  
+    3115-		// send and receive  
+    3116-		$this->debug('send and receive with cURL');  
+    3117:		$this->incoming_payload = curl_exec($this->ch);  
+    3118-		$data = $this->incoming_payload;  
+    3119-  
+    3120-        $cErr = curl_error($this->ch);
+
+./lib/S3.php:1499
+  
+    1496-		}  
+    1497-  
+    1498-		// Execute, grab errors  
+    1499:		if (curl_exec($curl))  
+    1500-			$this->response->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
+    1501-		else  
+    1502-			$this->response->error = array(
+
+./lib/Microsoft/Http/Client/Adapter/Curl.php:405
+  
+    402-        }  
+    403-  
+    404-        // send the request  
+    405:        $response = curl_exec($this->_curl);  
+    406-  
+    407-        // if we used streaming, headers are already there  
+    408-        if(!is_resource($this->out_stream)) {
+
+#### fsockopen( ####
+./lib/Nusoap/class.soap_transport_http.php:219
+  
+    217-		// open socket  
+    218-		if($connection_timeout > 0){  
+    219:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str, $connection_timeout);  
+    220-		} else {  
+    221:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str);  
+    222-		}  
+    223-  
+    224-		// test pointer
+
+./lib/Nusoap/nusoap.php:2372
+  
+    2369-  
+    2370-		// open socket  
+    2371-		if($connection_timeout > 0){  
+    2372:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str, $connection_timeout);  
+    2373-		} else {  
+    2374:			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str);  
+    2375-		}  
+    2376-  
+    2377-		// test pointer
+
+#### ` ####
+./lib/JSON.php:36
+  
+    34- * distribution.  
+    35- *  
+    36: * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED  
+    37- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF  
+    38- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN  
+    39- * NO EVENT SHALL CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+
+./lib/W3/Db/mssql.php:882
+  
+    879-         * Both %d and %s should be left unquoted in the query string.  
+    880-         *  
+    881-         * <code>  
+    882:         * wpdb::prepare( "SELECT * FROM `table` WHERE `column` = %s AND `field` = %d", 'foo', 1337 )  
+    883:         * wpdb::prepare( "SELECT DATE_FORMAT(`field`, '%%c') FROM `table` WHERE `column` = %s", 'foo' );  
+    884-         * </code>  
+    885-         *  
+    886-         * @link http://php.net/sprintf Description of syntax.
+
+./lib/W3/Db/mssql.php:1363
+  
+    1360-                                $form = '%s';  
+    1361-                        $formatted_fields[] = $form;  
+    1362-                }  
+    1363:                $sql = "{$type} INTO `$table` (`" . implode( '`,`', $fields ) . "`) VALUES ('" . implode( "','", $formatted_fields ) . "')";  
+    1364-                return $this->query( $this->prepare( $sql, $data ) );  
+    1365-        }  
+    1366-
+
+./lib/W3/Db/mssql.php:1401
+  
+    1398-                                $form = $this->field_types[$field];  
+    1399-                        else  
+    1400-                                $form = '%s';  
+    1401:                        $bits[] = "`$field` = {$form}";  
+    1402-                }  
+    1403-  
+    1404-                $where_formats = $where_format = (array) $where_format;
+
+./lib/W3/Db/mssql.php:1412
+  
+    1409-                                $form = $this->field_types[$field];  
+    1410-                        else  
+    1411-                                $form = '%s';  
+    1412:                        $wheres[] = "`$field` = {$form}";  
+    1413-                }  
+    1414-  
+    1415:                $sql = "UPDATE `$table` SET " . implode( ', ', $bits ) . ' WHERE ' . implode( ' AND ', $wheres );  
+    1416-                return $this->query( $this->prepare( $sql, array_merge( array_values( $data ), array_values( $where ) ) ) );  
+    1417-        }  
+    1418-
+
+./lib/W3/Db/mssql.php:2346
+  
+    2343-        $query = str_replace('LENGTH (', 'LEN (', $query);  
+    2344-  
+    2345-        // TICKS  
+    2346:        $query = str_replace('`', '', $query);  
+    2347-  
+    2348-        // avoiding some nested as Computed issues  
+    2349-        if (stristr($query, 'SELECT COUNT(DISTINCT(' . $this->prefix . 'users.ID))') !== FALSE) {
+
+./lib/W3/Plugin/CdnEnabled.php:182
+  
+    179-        global $wpdb;  
+    180-  
+    181-        if ($drop) {  
+    182:            $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    183-  
+    184-            $wpdb->query($sql);  
+    185-        }  
+    186-  
+    187:        $sql = sprintf("CREATE TABLE IF NOT EXISTS `%s%s` (  
+    188:            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,  
+    189:            `local_path` varchar(150) NOT NULL DEFAULT '',  
+    190:            `remote_path` varchar(150) NOT NULL DEFAULT '',  
+    191:            `command` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1 - Upload, 2 - Delete, 3 - Purge',  
+    192:            `last_error` varchar(150) NOT NULL DEFAULT '',  
+    193:            `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  
+    194:            PRIMARY KEY (`id`),  
+    195:            UNIQUE KEY `path` (`local_path`, `remote_path`),  
+    196:            KEY `date` (`date`)  
+    197-        ) /*!40100 CHARACTER SET latin1 */", $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    198-  
+    199-        $wpdb->query($sql);
+
+./lib/W3/Plugin/CdnEnabled.php:212
+  
+    209-    function table_delete() {  
+    210-        global $wpdb;  
+    211-  
+    212:        $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    213-  
+    214-        return $wpdb->query($sql);  
+    215-    }
+
+./lib/W3/Plugin/CdnAdmin.php:116
+  
+    113-        global $wpdb;  
+    114-  
+    115-        if ($drop) {  
+    116:            $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    117-  
+    118-            $wpdb->query($sql);  
+    119-        }  
+    120-  
+    121:        $sql = sprintf("CREATE TABLE IF NOT EXISTS `%s%s` (  
+    122:            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,  
+    123:            `local_path` varchar(150) NOT NULL DEFAULT '',  
+    124:            `remote_path` varchar(150) NOT NULL DEFAULT '',  
+    125:            `command` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1 - Upload, 2 - Delete, 3 - Purge',  
+    126:            `last_error` varchar(150) NOT NULL DEFAULT '',  
+    127:            `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  
+    128:            PRIMARY KEY (`id`),  
+    129:            UNIQUE KEY `path` (`local_path`, `remote_path`),  
+    130:            KEY `date` (`date`)  
+    131-        ) /*!40100 CHARACTER SET latin1 */", $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    132-  
+    133-        $wpdb->query($sql);
+
+./lib/W3/Plugin/CdnAdmin.php:146
+  
+    143-    function table_delete() {  
+    144-        global $wpdb;  
+    145-  
+    146:        $sql = sprintf('DROP TABLE IF EXISTS `%s%s`', $wpdb->prefix, W3TC_CDN_TABLE_QUEUE);  
+    147-  
+    148-        return $wpdb->query($sql);  
+    149-    }
+
+./lib/CSSTidy/data.inc.php:49
+  
+    46- * @global string $GLOBALS['csstidy']['tokens']  
+    47- * @version 1.0  
+    48- */  
+    49:$GLOBALS['csstidy']['tokens'] = '/@}{;:=\'"(,\\!$%&)*+.<>?[]^`|~';  
+    50-  
+    51-/**  
+    52- * All CSS units (CSS 3 units included)
+
+./lib/Microsoft/Uri/Http.php:48
+  
+    45-    const CHAR_MARK     = '-_.!~*\'()\[\]';  
+    46-    const CHAR_RESERVED = ';\/?:@&=+$,';  
+    47-    const CHAR_SEGMENT  = ':@&=+$,;';  
+    48:    const CHAR_UNWISE   = '{}|\\\\^`';  
+    49-  
+    50-    /**  
+    51-     * HTTP username
+
+./lib/Minify/FirePHP.php:1049
+  
+    1046-   * in the documentation and/or other materials provided with the  
+    1047-   * distribution.  
+    1048-   *  
+    1049:   * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED  
+    1050-   * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF  
+    1051-   * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN  
+    1052-   * NO EVENT SHALL CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+
+#### readfile( ####
+./lib/W3/Plugin/TotalCacheAdmin.php:2060
+  
+    2058-    function action_config_export() {  
+    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
+    2060:        @readfile(W3TC_CONFIG_PATH);  
+    2061-        die();  
+    2062-    }  
+    2063-
+
+./lib/Minify/Minify/Cache/File.php:109
+  
+    106-                return true;  
+    107-            }  
+    108-        } else {  
+    109:            return @readfile($path);  
+    110-        }  
+    111-  
+    112-        return false;
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2060
+  
+    2058-    function action_config_export() {  
+    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
+    2060:        @readfile(W3TC_CONFIG_PATH);  
+    2061-        die();  
+    2062-    }  
+    2063-
+
+./lib/Minify/Minify/Cache/File.php:109
+  
+    106-                return true;  
+    107-            }  
+    108-        } else {  
+    109:            return @readfile($path);  
+    110-        }  
+    111-  
+    112-        return false;
+
+#### fclose( ####
+./lib/W3/Cache/File.php:109
+  
+    107-                @fputs($fp, pack('L', $expire));  
+    108-                @fputs($fp, @serialize($var));  
+    109:                @fclose($fp);  
+    110-  
+    111-                if ($this->_locking) {  
+    112-                    @flock($fp, LOCK_UN);
+
+./lib/W3/Cache/File.php:164
+  
+    161-                        @flock($fp, LOCK_UN);  
+    162-                    }  
+    163-  
+    164:                    @fclose($fp);  
+    165-                }  
+    166-            }  
+    167-        }
+
+./lib/W3/Cache/File/Generic.php:71
+  
+    68-                }  
+    69-  
+    70-                @fputs($fp, $var);  
+    71:                @fclose($fp);  
+    72-  
+    73-                if ($this->_locking) {  
+    74-                    @flock($fp, LOCK_UN);
+
+./lib/W3/Cache/File/Generic.php:111
+  
+    108-                        $var .= @fread($fp, 4096);  
+    109-                    }  
+    110-  
+    111:                    @fclose($fp);  
+    112-  
+    113-                    if ($this->_locking) {  
+    114-                        @flock($fp, LOCK_UN);
+
+./lib/W3/Cache/File/Cleaner.php:136
+  
+    133-                        }  
+    134-                    }  
+    135-  
+    136:                    @fclose($fp);  
+    137-                }  
+    138-            }  
+    139-        }
+
+./lib/W3/Config.php:1265
+  
+    1262-            }  
+    1263-  
+    1264-            @fputs($fp, ");");  
+    1265:            @fclose($fp);  
+    1266-  
+    1267-            return true;  
+    1268-        }
+
+./lib/CF/cloudfiles.php:1785
+  
+    1782-     * header("Content-Type: " . $doc->content_type);  
+    1783-     * $output = fopen("php://output", "w");  
+    1784-     * $doc->stream($output); # stream object content to PHP's output buffer  
+    1785:     * fclose($output);  
+    1786-     * ?>  
+    1787-     *  
+    1788-     * # See read() above for a more simple example.
+
+./lib/CF/cloudfiles.php:1935
+  
+    1932-        #    return $this->write($data, $bytes, $verify);  
+    1933-        #}  
+    1934-        if ($status == 412) {  
+    1935:            if ($close_fh) { fclose($fp); }  
+    1936-            throw new SyntaxException("Missing Content-Type header");  
+    1937-        }  
+    1938-        if ($status == 422) {  
+    1939:            if ($close_fh) { fclose($fp); }  
+    1940-            throw new MisMatchedChecksumException(  
+    1941-                "Supplied and computed checksums do not match.");  
+    1942-        }  
+    1943-        if ($status != 201) {  
+    1944:            if ($close_fh) { fclose($fp); }  
+    1945-            throw new InvalidResponseException("Invalid response (".$status."): "  
+    1946-                . $this->container->cfs_http->get_error());  
+    1947-        }  
+    1948-        if (!$verify) {  
+    1949-            $this->etag = $etag;  
+    1950-        }  
+    1951:        if ($close_fh) { fclose($fp); }  
+    1952-        return True;  
+    1953-    }  
+    1954-
+
+./lib/CF/cloudfiles.php:2001
+  
+    1998-        $this->_guess_content_type($filename);  
+    1999-  
+    2000-        $this->write($fp, $size, $verify);  
+    2001:        fclose($fp);  
+    2002-        return True;  
+    2003-    }  
+    2004-
+
+./lib/CF/cloudfiles.php:2036
+  
+    2033-            throw new IOException("Could not open file for writing: ".$filename);  
+    2034-        }  
+    2035-        $result = $this->stream($fp);  
+    2036:        fclose($fp);  
+    2037-        return $result;  
+    2038-    }  
+    2039-
+
+./lib/Nusoap/class.wsdl.php:248
+  
+    245-                while ($data = fread($fp, 32768)) {  
+    246-                    $wsdl_string .= $data;  
+    247-                }  
+    248:                fclose($fp);  
+    249-            } else {  
+    250-            	$errstr = "Bad path to WSDL file $path";  
+    251-            	$this->debug($errstr);
+
+./lib/Nusoap/class.soap_transport_http.php:207
+  
+    204-				$this->debug('Re-use persistent connection');  
+    205-				return true;  
+    206-			}  
+    207:			fclose($this->fp);  
+    208-			$this->debug('Closed persistent connection at EOF');  
+    209-		}  
+    210-
+
+./lib/Nusoap/class.soap_transport_http.php:939
+  
+    936-		if(  
+    937-			(isset($this->incoming_headers['connection']) && strtolower($this->incoming_headers['connection']) == 'close') ||  
+    938-			(! $this->persistentConnection) || feof($this->fp)){  
+    939:			fclose($this->fp);  
+    940-			$this->fp = false;  
+    941-			$this->debug('closed socket');  
+    942-		}
+
+./lib/Nusoap/class.wsdlcache.php:105
+  
+    102-			$fp = @fopen($filename, "r");  
+    103-			if ($fp) {  
+    104-				$s = implode("", @file($filename));  
+    105:				fclose($fp);  
+    106-				$this->debug("Got $wsdl ($filename) from cache");  
+    107-			} else {  
+    108-				$s = null;
+
+./lib/Nusoap/class.wsdlcache.php:158
+  
+    155-				return false;  
+    156-			}  
+    157-			fputs($fp, $s);  
+    158:			fclose($fp);  
+    159-			$this->debug("Put $wsdl_instance->wsdl ($filename) in cache");  
+    160-			$this->releaseMutex($filename);  
+    161-			return true;
+
+./lib/Nusoap/class.wsdlcache.php:177
+  
+    174-	*/  
+    175-	function releaseMutex($filename) {  
+    176-		$ret = flock($this->fplock[md5($filename)], LOCK_UN);  
+    177:		fclose($this->fplock[md5($filename)]);  
+    178-		unset($this->fplock[md5($filename)]);  
+    179-		if (! $ret) {  
+    180-			$this->debug("Not able to release lock for $filename");
+
+./lib/Nusoap/nusoap.php:2360
+  
+    2357-				$this->debug('Re-use persistent connection');  
+    2358-				return true;  
+    2359-			}  
+    2360:			fclose($this->fp);  
+    2361-			$this->debug('Closed persistent connection at EOF');  
+    2362-		}  
+    2363-
+
+./lib/Nusoap/nusoap.php:3092
+  
+    3089-		if(  
+    3090-			(isset($this->incoming_headers['connection']) && strtolower($this->incoming_headers['connection']) == 'close') ||  
+    3091-			(! $this->persistentConnection) || feof($this->fp)){  
+    3092:			fclose($this->fp);  
+    3093-			$this->fp = false;  
+    3094-			$this->debug('closed socket');  
+    3095-		}
+
+./lib/Nusoap/nusoap.php:4829
+  
+    4826-                while ($data = fread($fp, 32768)) {  
+    4827-                    $wsdl_string .= $data;  
+    4828-                }  
+    4829:                fclose($fp);  
+    4830-            } else {  
+    4831-            	$errstr = "Bad path to WSDL file $path";  
+    4832-            	$this->debug($errstr);
+
+./lib/S3.php:1529
+  
+    1526-		}  
+    1527-  
+    1528-		// Clean up file resources  
+    1529:		if ($this->fp !== false && is_resource($this->fp)) fclose($this->fp);  
+    1530-  
+    1531-		return $this->response;  
+    1532-	}
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:784
+  
+    781-		}  
+    782-  
+    783-		// Close file  
+    784:		fclose($fp);  
+    785-  
+    786-		// Put block list  
+    787-		$this->putBlockList($containerName, $blobName, $blockIdentifiers, $metadata, $leaseId, $additionalHeaders);
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:179
+  
+    176-        if ($fh === false) {  
+    177-            return false;  
+    178-        }  
+    179:        fclose($fh);  
+    180-  
+    181-        // Write mode?  
+    182-        if (strpbrk($mode, 'wax+')) {
+
+./lib/Microsoft/WindowsAzure/Storage/Blob/Stream.php:211
+  
+    208-     */  
+    209-    public function stream_close()  
+    210-    {  
+    211:        @fclose($this->_temporaryFileHandle);  
+    212-  
+    213-        // Upload the file?  
+    214-        if ($this->_writeMode) {
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:483
+  
+    480-     */  
+    481-    public function close()  
+    482-    {  
+    483:        if (is_resource($this->socket)) @fclose($this->socket);  
+    484-        $this->socket = null;  
+    485-        $this->connected_to = array(null, null);  
+    486-    }
+
+./lib/Microsoft/Http/Response/Stream.php:223
+  
+    220-        } else {  
+    221-            $this->body = stream_get_contents($this->stream);  
+    222-        }  
+    223:        fclose($this->stream);  
+    224-        $this->stream = null;  
+    225-    }  
+    226-  
+    227-    public function __destruct()  
+    228-    {  
+    229-        if(is_resource($this->stream)) {  
+    230:            fclose($this->stream);  
+    231-            $this->stream = null;  
+    232-        }  
+    233-        if($this->_cleanup) {
+
+./lib/Minify/Minify/YUICompressor.php:128
+  
+    125-        }  
+    126-  
+    127-        fwrite($pipes[0], $input);  
+    128:        fclose($pipes[0]);  
+    129-  
+    130-        $output = stream_get_contents($pipes[1]);  
+    131:        fclose($pipes[1]);  
+    132-  
+    133-        $error = stream_get_contents($pipes[2]);  
+    134:        fclose($pipes[2]);  
+    135-  
+    136-        $return = proc_close($process);  
+    137-
+
+./lib/Minify/Minify/Cache/File.php:104
+  
+    101-                @flock($fp, LOCK_SH);  
+    102-                @fpassthru($fp);  
+    103-                @flock($fp, LOCK_UN);  
+    104:                @fclose($fp);  
+    105-  
+    106-                return true;  
+    107-            }
+
+./lib/Minify/Minify/Cache/File.php:135
+  
+    132-                    $ret = @stream_get_contents($fp);  
+    133-  
+    134-                    @flock($fp, LOCK_UN);  
+    135:                    @fclose($fp);  
+    136-  
+    137-                    return $ret;  
+    138-                }
+
+./lib/Minify/Minify/ClosureCompiler.php:85
+  
+    82-        }  
+    83-  
+    84-        fwrite($pipes[0], $input);  
+    85:        fclose($pipes[0]);  
+    86-  
+    87-        $output = stream_get_contents($pipes[1]);  
+    88:        fclose($pipes[1]);  
+    89-  
+    90-        $error = stream_get_contents($pipes[2]);  
+    91:        fclose($pipes[2]);  
+    92-  
+    93-        $return = proc_close($process);  
+    94-
+
+./inc/file.php:96
+  
+    93-    $fp = @fopen($file, 'a');  
+    94-  
+    95-    if ($fp) {  
+    96:        fclose($fp);  
+    97-  
+    98-        if (!$exists) {  
+    99-            @unlink($file);
+
+./inc/functions/file.php:96
+  
+    93-    $fp = @fopen($file, 'a');  
+    94-  
+    95-    if ($fp) {  
+    96:        fclose($fp);  
+    97-  
+    98-        if (!$exists) {  
+    99-            @unlink($file);
+
+./inc/functions/compat.php:13
+  
+    10-  
+    11-        if ($fp) {  
+    12-            fputs($fp, $data);  
+    13:            fclose($fp);  
+    14-  
+    15-            return true;  
+    16-        }
+
+#### include( ####
+./lib/W3/Minify.php:71
+  
+    69-        if (preg_match('~^([a-f0-9]+)\\.[a-f0-9]+\\.(css|js)$~', $file, $matches)) {  
+    70-            list(, $hash, $type) = $matches;  
+    71:        } elseif (preg_match('~^([a-f0-9]+)\\/(.+)\\.(include(\\-(footer|body))?(-nb)?)\\.[a-f0-9]+\\.(css|js)$~', $file, $matches)) {  
+    72-            list(, $theme, $template, $location, , , , $type) = $matches;  
+    73-        } else {  
+    74-            $this->error(sprintf('Bad file param format: "%s"', $file), false);
+
+./lib/W3/Cdn/Base.php:492
+  
+    489-     * @return boolean  
+    490-     */  
+    491-    function _is_js($path) {  
+    492:        return preg_match('~[a-z0-9\-_]+\.include(-nb)?\.[0-9]+\.js$~', $path);  
+    493-    }  
+    494-  
+    495-    /**
+
+./lib/W3/Plugin/CdnEnabled.php:540
+  
+    537-                    if ($this->_config->get_boolean('minify.auto')) {  
+    538-                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+\.[a-f0-9]+\.(css|js)))~U';  
+    539-                    } else {  
+    540:                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+/.+\.include(-(footer|body))?(-nb)?\.[a-f0-9]+\.(css|js)))~U';  
+    541-                    }  
+    542-                }  
+    543-
+
+./lib/W3/Plugin/Cdn.php:285
+  
+    282-                    if ($this->_config->get_boolean('minify.auto')) {  
+    283-                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+\.[a-f0-9]+\.(css|js)))~U';  
+    284-                    } else {  
+    285:                        $regexps[] = '~(["\'])((' . $domain_url_regexp . ')?(' . w3_preg_quote($site_path . W3TC_CONTENT_MINIFY_DIR_NAME) . '/[a-f0-9]+/.+\.include(-(footer|body))?(-nb)?\.[a-f0-9]+\.(css|js)))~U';  
+    286-                    }  
+    287-                }  
+    288-
+
+#### require( ####
+./lib/W3/Db/mssql.php:1916
+  
+    1914-        if (empty($this->fields_map)) {  
+    1915-            if (file_exists($this->filepath)) {  
+    1916:                $this->fields_map = require($this->filepath);  
+    1917-            } else {  
+    1918-                $this->fields_map = array();  
+    1919-            }
+
+./lib/CF/cloudfiles.php:75
+  
+    72-/**  
+    73- */  
+    74-require_once("cloudfiles_exceptions.php");  
+    75:require("cloudfiles_http.php");  
+    76-define("DEFAULT_CF_API_VERSION", 1);  
+    77-define("MAX_CONTAINER_NAME_LEN", 256);  
+    78-define("MAX_OBJECT_NAME_LEN", 1024);
+
+./lib/CSSTidy/class.csstidy.php:33
+  
+    30- *  
+    31- * @version 1.3  
+    32- */  
+    33:require('data.inc.php');  
+    34-  
+    35-/**  
+    36- * Contains a class for printing CSS code  
+    37- *  
+    38- * @version 1.0  
+    39- */  
+    40:require('class.csstidy_print.php');  
+    41-  
+    42-/**  
+    43- * Contains a class for optimising CSS code  
+    44- *  
+    45- * @version 1.0  
+    46- */  
+    47:require('class.csstidy_optimise.php');  
+    48-  
+    49-/**  
+    50- * CSS Parser class
+
+#### file( ####
+./lib/W3/Minify.php:276
+  
+    274-  
+    275-                    if (w3_is_url($file)) {  
+    276:                        $precached_file = $this->_precache_file($file, $type);  
+    277-  
+    278-                        if ($precached_file) {  
+    279-                            $result[$location][$file] = $precached_file;
+
+./lib/W3/Minify.php:561
+  
+    558-     * @param string $type  
+    559-     * @return string  
+    560-     */  
+    561:    function _precache_file($url, $type) {  
+    562-        $lifetime = $this->_config->get_integer('minify.lifetime');  
+    563-        $cache_path = sprintf('%s/minify_%s.%s', W3TC_CACHE_FILE_MINIFY_DIR, md5($url), $type);  
+    564-
+
+./lib/W3/PageSpeed.php:234
+  
+    231-     * @return mixed|null  
+    232-     */  
+    233-    function _load($url) {  
+    234:        $file = $this->_get_cache_file($url);  
+    235-  
+    236-        if (is_readable($file)) {  
+    237-            $data = @file_get_contents($file);
+
+./lib/W3/PageSpeed.php:255
+  
+    252-     * @return bool|int  
+    253-     */  
+    254-    function _store($url, $results) {  
+    255:        $file = $this->_get_cache_file($url);  
+    256-        $data = serialize($results);  
+    257-  
+    258-        return @file_put_contents($file, $data);
+
+./lib/W3/PageSpeed.php:267
+  
+    264-     * @param string $url  
+    265-     * @return string  
+    266-     */  
+    267:    function _get_cache_file($url) {  
+    268-        return W3TC_TMP_DIR . '/pagespeed_' . md5($url);  
+    269-    }  
+    270-
+
+./lib/W3/Cdn/Base.php:356
+  
+    353-  
+    354-        if (isset($this->cache_config[$mime_type])) {  
+    355-            if ($this->cache_config[$mime_type]['etag']) {  
+    356:                $headers['Etag'] = @md5_file($file);  
+    357-            }  
+    358-  
+    359-            if ($this->cache_config[$mime_type]['w3tc']) {
+
+./lib/W3/Cdn/Azure.php:131
+  
+    128-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
+    129-        }  
+    130-  
+    131:        $md5 = @md5_file($local_path);  
+    132-        $content_md5 = $this->_get_content_md5($md5);  
+    133-  
+    134-        if (!$force_rewrite) {
+
+./lib/W3/Cdn/Rscf.php:182
+  
+    179-                }  
+    180-  
+    181-                if ($status >= 200 && $status < 300) {  
+    182:                    $hash = @md5_file($local_path);  
+    183-  
+    184-                    if ($hash === $etag) {  
+    185-                        $results[] = $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_OK, 'Object up-to-date.');
+
+./lib/W3/Cdn/S3.php:131
+  
+    128-            $this->_restore_error_handler();  
+    129-  
+    130-            if ($info) {  
+    131:                $hash = @md5_file($local_path);  
+    132-                $s3_hash = (isset($info['hash']) ? $info['hash'] : '');  
+    133-  
+    134-                if ($hash === $s3_hash) {
+
+./lib/W3/Plugin/CdnEnabled.php:269
+  
+    266-     * @param string $attached_file  
+    267-     * @return string  
+    268-     */  
+    269:    function update_attached_file($attached_file) {  
+    270-        $files = $this->get_files_for_upload($attached_file);  
+    271-        $files = apply_filters('w3tc_cdn_update_attachment', $files);  
+    272-
+
+./lib/W3/Plugin/CdnEnabled.php:402
+  
+    399-        $upload_info = w3_upload_info();  
+    400-  
+    401-        if ($upload_info) {  
+    402:            $file = $this->normalize_attachment_file($file);  
+    403-  
+    404-            $local_file = $upload_info['basedir'] . '/' . $file;  
+    405-            $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
+
+./lib/W3/Plugin/CdnEnabled.php:553
+  
+    550-  
+    551-                        foreach ($masks as $mask) {  
+    552-                            if ($mask != '') {  
+    553:                                $mask = w3_normalize_file($mask);  
+    554-                                $mask_regexps[] = $this->get_regexp_by_mask($mask);  
+    555-                            }  
+    556-                        }
+
+./lib/W3/Plugin/CdnEnabled.php:866
+  
+    863-                    $post_files = array();  
+    864-  
+    865-                    if ($post->file) {  
+    866:                        $file = $this->normalize_attachment_file($post->file);  
+    867-  
+    868-                        $local_file = $upload_info['basedir'] . '/' . $file;  
+    869-                        $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
+
+./lib/W3/Plugin/CdnEnabled.php:1389
+  
+    1386-            } else {  
+    1387-                foreach ($urls as $url) {  
+    1388-                    $file = w3_normalize_file_minify($url);  
+    1389:                    $file = w3_translate_file($file);  
+    1390-  
+    1391-                    if (!w3_is_url($file)) {  
+    1392-                        $file = $document_root . '/' . $file;
+
+./lib/W3/Plugin/CdnEnabled.php:1425
+  
+    1422-  
+    1423-        foreach ($custom_files as $custom_file) {  
+    1424-            if ($custom_file != '') {  
+    1425:                $custom_file = w3_normalize_file($custom_file);  
+    1426-                $dir = trim(dirname($custom_file), '/\\');  
+    1427-  
+    1428-                if ($dir == '.') {
+
+./lib/W3/Plugin/CdnEnabled.php:1470
+  
+    1467-  
+    1468-        foreach ($reject_files as $reject_file) {  
+    1469-            if ($reject_file != '') {  
+    1470:                $reject_file = w3_normalize_file($reject_file);  
+    1471-                $reject_file_regexp = '~^(' . $this->get_regexp_by_mask($reject_file) . ')~i';  
+    1472-  
+    1473-                if (preg_match($reject_file_regexp, $path)) {
+
+./lib/W3/Plugin/CdnEnabled.php:1596
+  
+    1593-     * @param string $file  
+    1594-     * @return string  
+    1595-     */  
+    1596:    function normalize_attachment_file($file) {  
+    1597-        $upload_info = w3_upload_info();  
+    1598-        if ($upload_info) {  
+    1599-            $file = ltrim(str_replace($upload_info['basedir'], '', $file), '/\\');
+
+./lib/W3/Plugin/TotalCacheActivation.php:50
+  
+    47-        }  
+    48-  
+    49-        if (count($nonexistent_files)) {  
+    50:            $error = sprintf('Unfortunately core file(s): (<strong>%s</strong>) are missing, so activation will fail. Please re-start the installation process from the beginning.', implode(', ', $nonexistent_files));  
+    51-  
+    52-            w3_activate_error($error);  
+    53-        }
+
+./lib/W3/Plugin/CdnAdmin.php:335
+  
+    332-                    $post_files = array();  
+    333-  
+    334-                    if ($post->file) {  
+    335:                        $file = $this->_get_common()->normalize_attachment_file($post->file);  
+    336-  
+    337-                        $local_file = $upload_info['basedir'] . '/' . $file;  
+    338-                        $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
+
+./lib/W3/Plugin/Cdn.php:149
+  
+    146-     * @param string $attached_file  
+    147-     * @return string  
+    148-     */  
+    149:    function update_attached_file($attached_file) {  
+    150-        $files = $this->_get_common()->get_files_for_upload($attached_file);  
+    151-        $files = apply_filters('w3tc_cdn_update_attachment', $files);  
+    152-
+
+./lib/W3/Plugin/Cdn.php:298
+  
+    295-  
+    296-                        foreach ($masks as $mask) {  
+    297-                            if ($mask != '') {  
+    298:                                $mask = w3_normalize_file($mask);  
+    299-                                $mask_regexps[] = $this->get_regexp_by_mask($mask);  
+    300-                            }  
+    301-                        }
+
+./lib/W3/Plugin/Cdn.php:419
+  
+    416-            } else {  
+    417-                foreach ($urls as $url) {  
+    418-                    $file = w3_normalize_file_minify($url);  
+    419:                    $file = w3_translate_file($file);  
+    420-  
+    421-                    if (!w3_is_url($file)) {  
+    422-                        $file = $document_root . '/' . $file;
+
+./lib/W3/Plugin/Cdn.php:455
+  
+    452-  
+    453-        foreach ($custom_files as $custom_file) {  
+    454-            if ($custom_file != '') {  
+    455:                $custom_file = w3_normalize_file($custom_file);  
+    456-                $dir = trim(dirname($custom_file), '/\\');  
+    457-  
+    458-                if ($dir == '.') {
+
+./lib/W3/Plugin/Cdn.php:500
+  
+    497-  
+    498-        foreach ($reject_files as $reject_file) {  
+    499-            if ($reject_file != '') {  
+    500:                $reject_file = w3_normalize_file($reject_file);  
+    501-                $reject_file_regexp = '~^(' . $this->get_regexp_by_mask($reject_file) . ')~i';  
+    502-  
+    503-                if (preg_match($reject_file_regexp, $path)) {
+
+./lib/W3/Plugin/CdnCommon.php:56
+  
+    53-        $upload_info = w3_upload_info();  
+    54-  
+    55-        if ($upload_info) {  
+    56:            $file = $this->normalize_attachment_file($file);  
+    57-  
+    58-            $local_file = $upload_info['basedir'] . '/' . $file;  
+    59-            $remote_file = ltrim($upload_info['baseurlpath'] . $file, '/');
+
+./lib/W3/Plugin/CdnCommon.php:247
+  
+    244-     * @param string $file  
+    245-     * @return string  
+    246-     */  
+    247:    function normalize_attachment_file($file) {  
+    248-        require_once W3TC_INC_DIR . '/functions/http.php';  
+    249-  
+    250-        $upload_info = w3_upload_info();
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1926
+  
+    1923-     *  
+    1924-     * @return void  
+    1925-     */  
+    1926:    function action_flush_file() {  
+    1927:        $this->flush_file();  
+    1928-  
+    1929-        $this->redirect(array(  
+    1930-            'w3tc_note' => 'flush_file'
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2060
+  
+    2057-     */  
+    2058-    function action_config_export() {  
+    2059-        @header(sprintf('Content-Disposition: attachment; filename=%s', basename(W3TC_CONFIG_PATH)));  
+    2060:        @readfile(W3TC_CONFIG_PATH);  
+    2061-        die();  
+    2062-    }  
+    2063-
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2458
+  
+    2455-            for ($i = 0, $l = count($files); $i < $l; $i++) {  
+    2456-                if (isset($files['tmp_name'][$i]) && isset($files['name'][$i]) && isset($files['error'][$i]) && $files['error'][$i] == UPLOAD_ERR_OK) {  
+    2457-                    $path = W3TC_TMP_DIR . '/' . $files['name'][$i];  
+    2458:                    if (@move_uploaded_file($files['tmp_name'][$i], $path)) {  
+    2459-                        $attachments[] = $path;  
+    2460-                    }  
+    2461-                }
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2788
+  
+    2785-        $results = array();  
+    2786-  
+    2787-        foreach ($files as $remote_file) {  
+    2788:            $local_file = $document_root . '/' . w3_translate_file($remote_file);  
+    2789-            $upload[$local_file] = $remote_file;  
+    2790-        }  
+    2791-
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2830
+  
+    2827-        $purge = array();  
+    2828-  
+    2829-        foreach ($files as $remote_file) {  
+    2830:            $local_file = $document_root . '/' . w3_translate_file($remote_file);  
+    2831-            $purge[$local_file] = $remote_file;  
+    2832-        }  
+    2833-
+
+./lib/W3/Plugin/TotalCacheAdmin.php:4474
+  
+    4471-     *  
+    4472-     * @return void  
+    4473-     */  
+    4474:    function flush_file() {  
+    4475-        $this->flush('file');  
+    4476-        $this->flush('file_generic');  
+    4477-    }
+
+./lib/W3/Plugin/TotalCacheAdmin.php:4487
+  
+    4484-    function flush_all() {  
+    4485-        $this->flush_memcached();  
+    4486-        $this->flush_opcode();  
+    4487:        $this->flush_file();  
+    4488-    }  
+    4489-  
+    4490-    /**
+
+./lib/CF/cloudfiles.php:2092
+  
+    2089-            }  
+    2090-            $md5 = hash_final($ctx, false);  
+    2091-            rewind($data);  
+    2092:        } elseif ((string)is_file($data)) {  
+    2093:            $md5 = md5_file($data);  
+    2094-        } else {  
+    2095-            $md5 = md5($data);  
+    2096-        }
+
+./lib/Nusoap/class.xmlschema.php:91
+  
+    88-	function parseFile($xml,$type){  
+    89-		// parse xml file  
+    90-		if($xml != ""){  
+    91:			$xmlStr = @join("",@file($xml));  
+    92-			if($xmlStr == ""){  
+    93-				$msg = 'Error reading XML from '.$xml;  
+    94-				$this->setError($msg);
+
+./lib/Nusoap/class.wsdlcache.php:104
+  
+    101-			}  
+    102-			$fp = @fopen($filename, "r");  
+    103-			if ($fp) {  
+    104:				$s = implode("", @file($filename));  
+    105-				fclose($fp);  
+    106-				$this->debug("Got $wsdl ($filename) from cache");  
+    107-			} else {
+
+./lib/Nusoap/nusoap.php:1170
+  
+    1167-	function parseFile($xml,$type){  
+    1168-		// parse xml file  
+    1169-		if($xml != ""){  
+    1170:			$xmlStr = @join("",@file($xml));  
+    1171-			if($xmlStr == ""){  
+    1172-				$msg = 'Error reading XML from '.$xml;  
+    1173-				$this->setError($msg);
+
+./lib/S3.php:283
+  
+    280-	* @return array | false  
+    281-	*/  
+    282-	public static function inputFile($file, $md5sum = true) {  
+    283:		if (!file_exists($file) || !is_file($file) || !is_readable($file)) {  
+    284-			trigger_error('S3::inputFile(): Unable to open input file: '.$file, E_USER_WARNING);  
+    285-			return false;  
+    286-		}  
+    287-		return array('file' => $file, 'size' => filesize($file),  
+    288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :  
+    289:		base64_encode(md5_file($file, true))) : '');  
+    290-	}  
+    291-  
+    292-
+
+./lib/Microsoft/Http/Client.php:1314
+  
+    1311-            }  
+    1312-  
+    1313-            if (self::$_fileInfoDb) {  
+    1314:                $type = finfo_file(self::$_fileInfoDb, $file);  
+    1315-            }  
+    1316-  
+    1317-        } elseif (function_exists('mime_content_type')) {
+
+./lib/Minify/Minify.php:427
+  
+    424-            $source->minifier = array('Minify_Lines', 'minify');  
+    425-            $id = $source->getId();  
+    426-            $source->minifyOptions = array_merge((array) $source->minifyOptions, array(  
+    427:            	'id' => (is_file($id) ? basename($id) : $id))  
+    428-            );  
+    429-        }  
+    430-    }
+
+./lib/Minify/Minify/YUICompressor.php:70
+  
+    67-    }  
+    68-  
+    69-    protected static function _getCmd($type, $options) {  
+    70:        if (!is_file(self::$_pathJava)) {  
+    71-            throw new Exception(sprintf('JAVA executable (%s) is not a valid file.', self::$_pathJava));  
+    72-        }  
+    73-  
+    74:        if (!is_file(self::$_pathJar)) {  
+    75-            throw new Exception(sprintf('JAR file (%s) is not a valid file.', self::$_pathJar));  
+    76-        }  
+    77-
+
+./lib/Minify/Minify/Build.php:99
+  
+    96-                if (0 === strpos($source, '//')) {  
+    97-                    $source = $_SERVER['DOCUMENT_ROOT'] . substr($source, 1);  
+    98-                }  
+    99:                if (is_file($source)) {  
+    100-                    $max = max($max, filemtime($source));  
+    101-                }  
+    102-            }
+
+./lib/Minify/Minify/Cache/File.php:37
+  
+    34-        $path = $this->_path . '/' . $id;  
+    35-        $flag = $this->_locking ? LOCK_EX : null;  
+    36-  
+    37:        if (is_file($path)) {  
+    38-            @unlink($path);  
+    39-        }  
+    40-
+
+./lib/Minify/Minify/Cache/File.php:79
+  
+    76-     *  
+    77-     * @param string $id cache id (e.g. a filename)  
+    78-     *  
+    79:     * @param int $srcMtime mtime of the original source file(s)  
+    80-     *  
+    81-     * @return bool exists  
+    82-     */  
+    83-    public function isValid($id, $srcMtime) {  
+    84-        $path = $this->_path . '/' . $id;  
+    85-  
+    86:        return (is_file($path) && (filemtime($path) >= $srcMtime));  
+    87-    }  
+    88-  
+    89-    /**
+
+./lib/Minify/Minify/Cache/File.php:109
+  
+    106-                return true;  
+    107-            }  
+    108-        } else {  
+    109:            return @readfile($path);  
+    110-        }  
+    111-  
+    112-        return false;
+
+./lib/Minify/Minify/Cache/Eaccelerator.php:64
+  
+    61-     *  
+    62-     * @param string $id cache id  
+    63-     *  
+    64:     * @param int $srcMtime mtime of the original source file(s)  
+    65-     *  
+    66-     * @return bool exists  
+    67-     */
+
+./lib/Minify/Minify/Cache/Wincache.php:64
+  
+    61-     *  
+    62-     * @param string $id cache id  
+    63-     *  
+    64:     * @param int $srcMtime mtime of the original source file(s)  
+    65-     *  
+    66-     * @return bool exists  
+    67-     */
+
+./lib/Minify/Minify/Cache/Memcache.php:72
+  
+    69-     *  
+    70-     * @param string $id cache id  
+    71-     *  
+    72:     * @param int $srcMtime mtime of the original source file(s)  
+    73-     *  
+    74-     * @return bool exists  
+    75-     */
+
+./lib/Minify/Minify/Cache/XCache.php:64
+  
+    61-     *  
+    62-     * @param string $id cache id  
+    63-     *  
+    64:     * @param int $srcMtime mtime of the original source file(s)  
+    65-     *  
+    66-     * @return bool exists  
+    67-     */
+
+./lib/Minify/Minify/Cache/APC.php:64
+  
+    61-     *  
+    62-     * @param string $id cache id  
+    63-     *  
+    64:     * @param int $srcMtime mtime of the original source file(s)  
+    65-     *  
+    66-     * @return bool exists  
+    67-     */
+
+./lib/Minify/Minify/Controller/Base.php:132
+  
+    129-            }  
+    130-        }  
+    131-        $base = basename($file);  
+    132:        if (! $pathOk || ! is_file($file) || $base[0] === '.') {  
+    133-            return false;  
+    134-        }  
+    135-        list($revExt) = explode('.', strrev($base));
+
+./lib/Minify/Minify/Controller/Files.php:66
+  
+    63-                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    64-            }  
+    65-            $realPath = realpath($file);  
+    66:            if (is_file($realPath)) {  
+    67-                $sources[] = new Minify_Source(array(  
+    68-                    'filepath' => $realPath  
+    69-                ));
+
+./lib/Minify/Minify/Controller/Groups.php:82
+  
+    79-                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    80-            }  
+    81-            $realPath = realpath($file);  
+    82:            if (is_file($realPath)) {  
+    83-                $sources[] = new Minify_Source(array(  
+    84-                    'filepath' => $realPath  
+    85-                ));
+
+./lib/Minify/Minify/Controller/MinApp.php:63
+  
+    60-                    $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    61-                }  
+    62-                $realPath = realpath($file);  
+    63:                if (is_file($realPath)) {  
+    64-                    $sources[] = new Minify_Source(array(  
+    65-                        'filepath' => $realPath  
+    66-                    ));
+
+./lib/Minify/Minify/ClosureCompiler.php:44
+  
+    41-    }  
+    42-  
+    43-    protected static function _getCmd($options) {  
+    44:        if (!is_file(self::$_pathJava)) {  
+    45-            throw new Exception(sprintf('JAVA executable (%s) is not a valid file.', self::$_pathJava));  
+    46-        }  
+    47-  
+    48:        if (!is_file(self::$_pathJar)) {  
+    49-            throw new Exception(sprintf('JAR file (%s) is not a valid file.', self::$_pathJar));  
+    50-        }  
+    51-
+
+./inc/functions/mime.php:38
+  
+    35-            }  
+    36-  
+    37-            if ($finfo) {  
+    38:                $mime_type = @finfo_file($finfo, $file);  
+    39-  
+    40-                if ($mime_type) {  
+    41-                    $extra_mime_type_info = strpos($mime_type, "; ");
+
+./inc/define.php:888
+  
+    885- * @param string $file  
+    886- * @return string  
+    887- */  
+    888:function w3_normalize_file($file) {  
+    889-    if (w3_is_url($file)) {  
+    890-        if (strstr($file, '?') === false) {  
+    891-            $home_url_regexp = '~' . w3_get_home_url_regexp() . '~i';
+
+./inc/define.php:941
+  
+    938-function w3_normalize_file_minify2($file) {  
+    939-    $file = w3_remove_query($file);  
+    940-    $file = w3_normalize_file_minify($file);  
+    941:    $file = w3_translate_file($file);  
+    942-  
+    943-    return $file;  
+    944-}
+
+./inc/define.php:952
+  
+    949- * @param string $file  
+    950- * @return string  
+    951- */  
+    952:function w3_translate_file($file) {  
+    953-    if (!w3_is_url($file)) {  
+    954-        $file = '/' . ltrim($file, '/');  
+    955-        $regexp = '~^' . w3_preg_quote(w3_get_site_path()) . '~';
+
+#### mail( ####
+./lib/W3/Minify.php:701
+  
+    699-        @set_time_limit($this->_config->get_integer('timelimit.email_send'));  
+    700-  
+    701:        $result = @wp_mail($to_email, 'W3 Total Cache Error Notification', $body, implode("\n", $headers));  
+    702-  
+    703-        return $result;  
+    704-    }
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2521
+  
+    2518-  
+    2519-        @set_time_limit($this->_config->get_integer('timelimit.email_send'));  
+    2520-  
+    2521:        $result = @wp_mail(W3TC_EMAIL, $subject, $body, implode("\n", $headers), $attachments);  
+    2522-  
+    2523-        /**  
+    2524-         * Remove temporary files
+
+#### curl_exec( ####
+./lib/CF/cloudfiles_http.php:219
+  
+    217-        curl_setopt($curl_ch, CURLOPT_CONNECTTIMEOUT, 10);  
+    218-        curl_setopt($curl_ch, CURLOPT_URL, $url);  
+    219:        curl_exec($curl_ch);  
+    220-        curl_close($curl_ch);  
+    221-  
+    222-        return array($this->response_status, $this->response_reason,
+
+./lib/CF/cloudfiles_http.php:1312
+  
+    1309-        curl_setopt($this->connections[$conn_type],  
+    1310-            CURLOPT_URL, $url_path);  
+    1311-  
+    1312:        if (!curl_exec($this->connections[$conn_type]) && curl_errno($this->connections[$conn_type]) !== 0) {  
+    1313-            $this->error_str = "(curl error: "  
+    1314-                . curl_errno($this->connections[$conn_type]) . ") ";  
+    1315-            $this->error_str .= curl_error($this->connections[$conn_type]);
+
+./lib/Nusoap/class.soap_transport_http.php:964
+  
+    961-	  } else if ($this->io_method() == 'curl') {  
+    962-		// send and receive  
+    963-		$this->debug('send and receive with cURL');  
+    964:		$this->incoming_payload = curl_exec($this->ch);  
+    965-		$data = $this->incoming_payload;  
+    966-  
+    967-        $cErr = curl_error($this->ch);
+
+./lib/Nusoap/nusoap.php:3117
+  
+    3114-	  } else if ($this->io_method() == 'curl') {  
+    3115-		// send and receive  
+    3116-		$this->debug('send and receive with cURL');  
+    3117:		$this->incoming_payload = curl_exec($this->ch);  
+    3118-		$data = $this->incoming_payload;  
+    3119-  
+    3120-        $cErr = curl_error($this->ch);
+
+./lib/S3.php:1499
+  
+    1496-		}  
+    1497-  
+    1498-		// Execute, grab errors  
+    1499:		if (curl_exec($curl))  
+    1500-			$this->response->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  
+    1501-		else  
+    1502-			$this->response->error = array(
+
+./lib/Microsoft/Http/Client/Adapter/Curl.php:405
+  
+    402-        }  
+    403-  
+    404-        // send the request  
+    405:        $response = curl_exec($this->_curl);  
+    406-  
+    407-        // if we used streaming, headers are already there  
+    408-        if(!is_resource($this->out_stream)) {
+
+#### require_once( ####
+./lib/W3/Plugin/PgCacheAdmin.php:51
+  
+    49-                $reactivate_url = wp_nonce_url('plugins.php?action=activate&plugin=' . W3TC_FILE, 'activate-plugin_' . W3TC_FILE);  
+    50-                $reactivate_button = sprintf('<input type="button" value="re-activate plugin" onclick="top.location.href = \'%s\'" />', addslashes($reactivate_url));  
+    51:                $error = sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'WP_CACHE\', true);</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong><br />then %s.', ABSPATH, $reactivate_button);  
+    52-  
+    53-                w3_activate_error($error);  
+    54-            }
+
+./lib/W3/Plugin/TotalCacheAdmin.php:677
+  
+    674-            'cdn_purge_attachment' => 'Unable to purge attachment.',  
+    675-            'pgcache_purge_post' => 'Unable to purge post.',  
+    676-            'pgcache_purge_page' => 'Unable to purge page.',  
+    677:            'enable_cookie_domain' => sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'COOKIE_DOMAIN\', \'%s\');</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong>.', ABSPATH, addslashes($cookie_domain)),  
+    678:            'disable_cookie_domain' => sprintf('<strong>%swp-config.php</strong> could not be written, please edit config and add:<br /><strong style="color:#f00;">define(\'COOKIE_DOMAIN\', false);</strong> before <strong style="color:#f00;">require_once(ABSPATH . \'wp-settings.php\');</strong>.', ABSPATH),  
+    679-            'cloudflare_api_request' => 'Unable to make CloudFlare API request.'  
+    680-        );  
+    681-
+
+./lib/CF/cloudfiles_http.php:30
+  
+    27-  
+    28-/**  
+    29- */  
+    30:require_once("cloudfiles_exceptions.php");  
+    31-  
+    32-define("PHP_CF_VERSION", "1.7.6");  
+    33-define("USER_AGENT", sprintf("PHP-CloudFiles/%s", PHP_CF_VERSION));
+
+./lib/CF/cloudfiles.php:74
+  
+    71-  
+    72-/**  
+    73- */  
+    74:require_once("cloudfiles_exceptions.php");  
+    75-require("cloudfiles_http.php");  
+    76-define("DEFAULT_CF_API_VERSION", 1);  
+    77-define("MAX_CONTAINER_NAME_LEN", 256);
+
+./lib/Nusoap/class.nusoap_base.php:57
+  
+    54-/* load classes  
+    55-  
+    56-// necessary classes  
+    57:require_once('class.soapclient.php');  
+    58:require_once('class.soap_val.php');  
+    59:require_once('class.soap_parser.php');  
+    60:require_once('class.soap_fault.php');  
+    61-  
+    62-// transport classes  
+    63:require_once('class.soap_transport_http.php');  
+    64-  
+    65-// optional add-on classes  
+    66:require_once('class.xmlschema.php');  
+    67:require_once('class.wsdl.php');  
+    68-  
+    69-// server class  
+    70:require_once('class.soap_server.php');*/  
+    71-  
+    72-// class variable emulation  
+    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html
+
+./lib/Nusoap/nusoap.php:57
+  
+    54-/* load classes  
+    55-  
+    56-// necessary classes  
+    57:require_once('class.soapclient.php');  
+    58:require_once('class.soap_val.php');  
+    59:require_once('class.soap_parser.php');  
+    60:require_once('class.soap_fault.php');  
+    61-  
+    62-// transport classes  
+    63:require_once('class.soap_transport_http.php');  
+    64-  
+    65-// optional add-on classes  
+    66:require_once('class.xmlschema.php');  
+    67:require_once('class.wsdl.php');  
+    68-  
+    69-// server class  
+    70:require_once('class.soap_server.php');*/  
+    71-  
+    72-// class variable emulation  
+    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html
+
+./lib/Microsoft/Http/Client.php:837
+  
+    834-    {  
+    835-        if (is_string($adapter)) {  
+    836-            if (!class_exists($adapter)) {  
+    837:            	@require_once( str_replace('_', '/', $adapter) . '.php' );  
+    838-            }  
+    839-  
+    840-            $adapter = new $adapter;
+
+#### file_get_contents( ####
+./lib/JSON.php:111
+  
+    109- *  
+    110- * // accept incoming POST data, assumed to be in JSON notation  
+    111: * $input = file_get_contents('php://input', 1000000);  
+    112- * $value = $json->decode($input);  
+    113- * </code>  
+    114- */
+
+./lib/W3/Minify.php:691
+  
+    688-        $from_email = 'wordpress@' . w3_get_domain($_SERVER['SERVER_NAME']);  
+    689-        $from_name = get_option('blogname');  
+    690-        $to_name = $to_email = get_option('admin_email');  
+    691:        $body = @file_get_contents(W3TC_INC_DIR . '/email/minify_error_notification.php');  
+    692-  
+    693-        $headers = array(  
+    694-            sprintf('From: "%s" <%s>', addslashes($from_name), $from_email),
+
+./lib/W3/Minify.php:718
+  
+    715-  
+    716-        foreach ($sources as $source) {  
+    717-            if (file_exists($source)) {  
+    718:                $data = @file_get_contents($source);  
+    719-  
+    720-                if ($data !== false) {  
+    721-                    $values[] = md5($data);
+
+./lib/W3/PageSpeed.php:237
+  
+    234-        $file = $this->_get_cache_file($url);  
+    235-  
+    236-        if (is_readable($file)) {  
+    237:            $data = @file_get_contents($file);  
+    238-  
+    239-            if ($data) {  
+    240-                return @unserialize($data);
+
+./lib/W3/Cdn/Azure.php:177
+  
+    174-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
+    175-        }  
+    176-  
+    177:        $contents = @file_get_contents($local_path);  
+    178-  
+    179-        if ($contents === false) {  
+    180-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Unable to read file.');
+
+./lib/W3/Cdn/S3.php:170
+  
+    167-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Source file not found.');  
+    168-        }  
+    169-  
+    170:        $contents = @file_get_contents($local_path);  
+    171-  
+    172-        if ($contents === false) {  
+    173-            return $this->_get_result($local_path, $remote_path, W3TC_CDN_RESULT_ERROR, 'Unable to read file.');
+
+./lib/W3/Plugin/MinifyEnabled.php:1439
+  
+    1436-        $path = w3_get_minify_rules_core_path();  
+    1437-  
+    1438-        if (file_exists($path)) {  
+    1439:            $data = @file_get_contents($path);  
+    1440-  
+    1441-            if ($data !== false) {  
+    1442-                $data = $this->erase_rules_legacy($data);
+
+./lib/W3/Plugin/MinifyEnabled.php:1498
+  
+    1495-        $path = w3_get_minify_rules_cache_path();  
+    1496-  
+    1497-        if (file_exists($path)) {  
+    1498:            $data = @file_get_contents($path);  
+    1499-  
+    1500-            if ($data !== false) {  
+    1501-                $data = $this->erase_rules_legacy($data);
+
+./lib/W3/Plugin/MinifyEnabled.php:1593
+  
+    1590-        $path = w3_get_minify_rules_core_path();  
+    1591-  
+    1592-        if (file_exists($path)) {  
+    1593:            if (($data = @file_get_contents($path)) !== false) {  
+    1594-                $data = $this->erase_rules_core($data);  
+    1595-  
+    1596-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyEnabled.php:1614
+  
+    1611-        $path = w3_get_minify_rules_cache_path();  
+    1612-  
+    1613-        if (file_exists($path)) {  
+    1614:            if (($data = @file_get_contents($path)) !== false) {  
+    1615-                $data = $this->erase_rules_cache($data);  
+    1616-  
+    1617-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyEnabled.php:1635
+  
+    1632-        $path = w3_get_minify_rules_cache_path();  
+    1633-  
+    1634-        if (file_exists($path)) {  
+    1635:            if (($data = @file_get_contents($path)) !== false) {  
+    1636-                $data = $this->erase_rules_legacy($data);  
+    1637-  
+    1638-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyEnabled.php:1656
+  
+    1653-        $path = w3_get_minify_rules_core_path();  
+    1654-        $search = $this->generate_rules_core();  
+    1655-  
+    1656:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    1657-    }  
+    1658-  
+    1659-    /**
+
+./lib/W3/Plugin/MinifyEnabled.php:1668
+  
+    1665-        $path = w3_get_minify_rules_cache_path();  
+    1666-        $search = $this->generate_rules_cache();  
+    1667-  
+    1668:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    1669-    }  
+    1670-  
+    1671-
+
+./lib/W3/Plugin/MinifyEnabled.php:1680
+  
+    1677-    function check_rules_legacy() {  
+    1678-        $path = w3_get_minify_rules_core_path();  
+    1679-  
+    1680:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_LEGACY, W3TC_MARKER_END_MINIFY_LEGACY));  
+    1681-    }  
+    1682-}
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:549
+  
+    546-        $path = w3_get_browsercache_rules_cache_path();  
+    547-  
+    548-        if (file_exists($path)) {  
+    549:            $data = @file_get_contents($path);  
+    550-  
+    551-            if ($data === false) {  
+    552-                return false;
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:606
+  
+    603-        $path = w3_get_browsercache_rules_no404wp_path();  
+    604-  
+    605-        if (file_exists($path)) {  
+    606:            $data = @file_get_contents($path);  
+    607-  
+    608-            if ($data === false) {  
+    609-                return false;
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:687
+  
+    684-        $path = w3_get_browsercache_rules_cache_path();  
+    685-  
+    686-        if (file_exists($path)) {  
+    687:            if (($data = @file_get_contents($path)) !== false) {  
+    688-                $data = $this->erase_rules_cache($data);  
+    689-  
+    690-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:708
+  
+    705-        $path = w3_get_browsercache_rules_no404wp_path();  
+    706-  
+    707-        if (file_exists($path)) {  
+    708:            if (($data = @file_get_contents($path)) !== false) {  
+    709-                $data = $this->erase_rules_no404wp($data);  
+    710-  
+    711-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:729
+  
+    726-        $path = w3_get_browsercache_rules_cache_path();  
+    727-        $search = $this->generate_rules_cache();  
+    728-  
+    729:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    730-    }  
+    731-  
+    732-    /**
+
+./lib/W3/Plugin/BrowserCacheAdmin.php:741
+  
+    738-        $path = w3_get_browsercache_rules_no404wp_path();  
+    739-        $search = $this->generate_rules_no404wp();  
+    740-  
+    741:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    742-    }  
+    743-}
+
+./lib/W3/Plugin/MinifyAdmin.php:484
+  
+    481-        $path = w3_get_minify_rules_core_path();  
+    482-  
+    483-        if (file_exists($path)) {  
+    484:            $data = @file_get_contents($path);  
+    485-  
+    486-            if ($data !== false) {  
+    487-                $data = $this->erase_rules_legacy($data);
+
+./lib/W3/Plugin/MinifyAdmin.php:543
+  
+    540-        $path = w3_get_minify_rules_cache_path();  
+    541-  
+    542-        if (file_exists($path)) {  
+    543:            $data = @file_get_contents($path);  
+    544-  
+    545-            if ($data !== false) {  
+    546-                $data = $this->erase_rules_legacy($data);
+
+./lib/W3/Plugin/MinifyAdmin.php:638
+  
+    635-        $path = w3_get_minify_rules_core_path();  
+    636-  
+    637-        if (file_exists($path)) {  
+    638:            if (($data = @file_get_contents($path)) !== false) {  
+    639-                $data = $this->erase_rules_core($data);  
+    640-  
+    641-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyAdmin.php:659
+  
+    656-        $path = w3_get_minify_rules_cache_path();  
+    657-  
+    658-        if (file_exists($path)) {  
+    659:            if (($data = @file_get_contents($path)) !== false) {  
+    660-                $data = $this->erase_rules_cache($data);  
+    661-  
+    662-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyAdmin.php:680
+  
+    677-        $path = w3_get_minify_rules_cache_path();  
+    678-  
+    679-        if (file_exists($path)) {  
+    680:            if (($data = @file_get_contents($path)) !== false) {  
+    681-                $data = $this->erase_rules_legacy($data);  
+    682-  
+    683-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/MinifyAdmin.php:700
+  
+    697-    function check_rules_has_core() {  
+    698-        $path = w3_get_minify_rules_core_path();  
+    699-  
+    700:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_CORE, W3TC_MARKER_END_MINIFY_CORE));  
+    701-    }  
+    702-  
+    703-    /**
+
+./lib/W3/Plugin/MinifyAdmin.php:711
+  
+    708-    function check_rules_has_legacy() {  
+    709-        $path = w3_get_minify_rules_core_path();  
+    710-  
+    711:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_MINIFY_LEGACY, W3TC_MARKER_END_MINIFY_LEGACY));  
+    712-    }  
+    713-  
+    714-    /**
+
+./lib/W3/Plugin/MinifyAdmin.php:723
+  
+    720-        $path = w3_get_minify_rules_core_path();  
+    721-        $search = $this->generate_rules_core();  
+    722-  
+    723:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    724-    }  
+    725-  
+    726-    /**
+
+./lib/W3/Plugin/MinifyAdmin.php:735
+  
+    732-        $path = w3_get_minify_rules_cache_path();  
+    733-        $search = $this->generate_rules_cache();  
+    734-  
+    735:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    736-    }  
+    737-}
+
+./lib/W3/Plugin/PgCacheAdmin.php:343
+  
+    340-     */  
+    341-    function enable_wp_cache() {  
+    342-        $config_path = w3_get_wp_config_path();  
+    343:        $config_data = @file_get_contents($config_path);  
+    344-  
+    345-        if ($config_data === false) {  
+    346-            return false;
+
+./lib/W3/Plugin/PgCacheAdmin.php:368
+  
+    365-     */  
+    366-    function disable_wp_cache() {  
+    367-        $config_path = w3_get_wp_config_path();  
+    368:        $config_data = @file_get_contents($config_path);  
+    369-  
+    370-        if ($config_data === false) {  
+    371-            return false;
+
+./lib/W3/Plugin/PgCacheAdmin.php:1213
+  
+    1210-        $path = w3_get_pgcache_rules_core_path();  
+    1211-  
+    1212-        if (file_exists($path)) {  
+    1213:            $data = @file_get_contents($path);  
+    1214-  
+    1215-            if ($data !== false) {  
+    1216-                $data = $this->erase_rules_legacy($data);
+
+./lib/W3/Plugin/PgCacheAdmin.php:1273
+  
+    1270-        $path = w3_get_pgcache_rules_cache_path();  
+    1271-  
+    1272-        if (file_exists($path)) {  
+    1273:            $data = @file_get_contents($path);  
+    1274-  
+    1275-            if ($data === false) {  
+    1276-                return false;
+
+./lib/W3/Plugin/PgCacheAdmin.php:1378
+  
+    1375-        $path = w3_get_pgcache_rules_core_path();  
+    1376-  
+    1377-        if (file_exists($path)) {  
+    1378:            if (($data = @file_get_contents($path)) !== false) {  
+    1379-                $data = $this->erase_rules_core($data);  
+    1380-  
+    1381-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/PgCacheAdmin.php:1399
+  
+    1396-        $path = w3_get_pgcache_rules_cache_path();  
+    1397-  
+    1398-        if (file_exists($path)) {  
+    1399:            if (($data = @file_get_contents($path)) !== false) {  
+    1400-                $data = $this->erase_rules_cache($data);  
+    1401-  
+    1402-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/PgCacheAdmin.php:1420
+  
+    1417-        $path = w3_get_pgcache_rules_core_path();  
+    1418-  
+    1419-        if (file_exists($path)) {  
+    1420:            if (($data = @file_get_contents($path)) !== false) {  
+    1421-                $data = $this->erase_rules_legacy($data);  
+    1422-  
+    1423-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/PgCacheAdmin.php:1441
+  
+    1438-        $path = w3_get_pgcache_rules_core_path();  
+    1439-  
+    1440-        if (file_exists($path)) {  
+    1441:            if (($data = @file_get_contents($path)) !== false) {  
+    1442-                $data = $this->erase_rules_wpsc($data);  
+    1443-  
+    1444-                return @file_put_contents($path, $data);
+
+./lib/W3/Plugin/PgCacheAdmin.php:1461
+  
+    1458-    function check_rules_has_legacy() {  
+    1459-        $path = w3_get_pgcache_rules_core_path();  
+    1460-  
+    1461:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_LEGACY, W3TC_MARKER_END_PGCACHE_LEGACY));  
+    1462-    }  
+    1463-  
+    1464-    /**
+
+./lib/W3/Plugin/PgCacheAdmin.php:1472
+  
+    1469-    function check_rules_has_core() {  
+    1470-        $path = w3_get_pgcache_rules_core_path();  
+    1471-  
+    1472:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_CORE, W3TC_MARKER_END_PGCACHE_CORE));  
+    1473-    }  
+    1474-  
+    1475-    /**
+
+./lib/W3/Plugin/PgCacheAdmin.php:1484
+  
+    1481-        $path = w3_get_pgcache_rules_core_path();  
+    1482-        $search = $this->generate_rules_core();  
+    1483-  
+    1484:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    1485-    }  
+    1486-  
+    1487-    /**
+
+./lib/W3/Plugin/PgCacheAdmin.php:1496
+  
+    1493-        $path = w3_get_pgcache_rules_cache_path();  
+    1494-        $search = $this->generate_rules_cache();  
+    1495-  
+    1496:        return (($data = @file_get_contents($path)) && strstr(w3_clean_rules($data), w3_clean_rules($search)) !== false);  
+    1497-    }  
+    1498-  
+    1499-    /**
+
+./lib/W3/Plugin/PgCacheAdmin.php:1507
+  
+    1504-    function check_rules_wpsc() {  
+    1505-        $path = w3_get_pgcache_rules_core_path();  
+    1506-  
+    1507:        return (($data = @file_get_contents($path)) && w3_has_rules(w3_clean_rules($data), W3TC_MARKER_BEGIN_PGCACHE_WPSC, W3TC_MARKER_END_PGCACHE_WPSC));  
+    1508-    }  
+    1509-}
+
+./lib/W3/Plugin/TotalCacheAdmin.php:4585
+  
+    4582-                /**  
+    4583-                 * Check get_header function call  
+    4584-                 */  
+    4585:                $template_content = @file_get_contents($template_file);  
+    4586-  
+    4587-                if ($template_content && preg_match('~\s*get_header[0-9_]*\s*\(~', $template_content)) {  
+    4588-                    $templates[] = $template_file;
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5270
+  
+    5267-     * @return boolean  
+    5268-     */  
+    5269-    function advanced_cache_check() {  
+    5270:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_ADVANCED_CACHE)) && strstr($script_data, 'W3_PgCache') !== false);  
+    5271-    }  
+    5272-  
+    5273-    /**
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5288
+  
+    5285-     * @return boolean  
+    5286-     */  
+    5287-    function db_check() {  
+    5288:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_DB)) && strstr($script_data, 'W3_Db') !== false);  
+    5289-    }  
+    5290-  
+    5291-    /**
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5306
+  
+    5303-     * @return boolean  
+    5304-     */  
+    5305-    function objectcache_check() {  
+    5306:        return (($script_data = @file_get_contents(W3TC_ADDIN_FILE_OBJECT_CACHE)) && strstr($script_data, 'W3_ObjectCache') !== false);  
+    5307-    }  
+    5308-  
+    5309-    /**
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5427
+  
+    5424-     */  
+    5425-    function enable_cookie_domain() {  
+    5426-        $config_path = w3_get_wp_config_path();  
+    5427:        $config_data = @file_get_contents($config_path);  
+    5428-  
+    5429-        if ($config_data === false) {  
+    5430-            return false;
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5457
+  
+    5454-     */  
+    5455-    function disable_cookie_domain() {  
+    5456-        $config_path = w3_get_wp_config_path();  
+    5457:        $config_data = @file_get_contents($config_path);  
+    5458-  
+    5459-        if ($config_data === false) {  
+    5460-            return false;
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5750
+  
+    5747-        $faq = array();  
+    5748-        $file = W3TC_INC_DIR . '/options/faq.xml';  
+    5749-  
+    5750:        $xml = @file_get_contents($file);  
+    5751-  
+    5752-        if ($xml) {  
+    5753-            if (function_exists('xml_parser_create')) {
+
+./lib/CSSTidy/class.csstidy.php:416
+  
+    413-  
+    414-	if($from_file)  
+    415-	{  
+    416:		$content = strip_tags(file_get_contents($content),'<span>');  
+    417-	}  
+    418-	$content = str_replace("\r\n","\n",$content); // Unify newlines (because the output also only uses \n)  
+    419-	$template = explode('|',$content);
+
+./lib/CSSTidy/class.csstidy.php:435
+  
+    432- */  
+    433-function parse_from_url($url)  
+    434-{  
+    435:	return $this->parse(@file_get_contents($url));  
+    436-}  
+    437-  
+    438-/**
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:643
+  
+    640-		}  
+    641-  
+    642-		// Put the data to Windows Azure Storage  
+    643:		return $this->putBlobData($containerName, $blobName, file_get_contents($localFileName), $metadata, $leaseId, $additionalHeaders);  
+    644-	}  
+    645-  
+    646-	/**
+
+./lib/Microsoft/Http/Client.php:698
+  
+    695-    public function setFileUpload($filename, $formname, $data = null, $ctype = null)  
+    696-    {  
+    697-        if ($data === null) {  
+    698:            if (($data = @file_get_contents($filename)) === false) {  
+    699-                /** @see Microsoft_Http_Client_Exception */  
+    700-                require_once 'Microsoft/Http/Client/Exception.php';  
+    701-                throw new Microsoft_Http_Client_Exception("Unable to read file '{$filename}' for upload");
+
+./lib/Minify/HTTP/Encoder.php:17
+  
+    14- * <code>  
+    15- * // Send a CSS file, compressed if possible  
+    16- * $he = new HTTP_Encoder(array(  
+    17: *     'content' => file_get_contents($cssFile)  
+    18- *     ,'type' => 'text/css'  
+    19- * ));  
+    20- * $he->encode();
+
+./lib/Minify/Minify/Cache/File.php:140
+  
+    137-                    return $ret;  
+    138-                }  
+    139-            } else {  
+    140:                return @file_get_contents($path);  
+    141-            }  
+    142-        }  
+    143-
+
+./lib/Minify/Minify/ImportProcessor.php:50
+  
+    47-        $file = realpath($file);  
+    48-        if (! $file  
+    49-            || in_array($file, self::$filesIncluded)  
+    50:            || false === ($content = @file_get_contents($file))  
+    51-        ) {  
+    52-            // file missing, already included, or failed read  
+    53-            return '';
+
+./lib/Minify/Minify/Source.php:114
+  
+    111-            $content = Minify_ImportProcessor::process($this->filepath);  
+    112-        } else {  
+    113-            $content = (null !== $this->filepath)  
+    114:                ? file_get_contents($this->filepath)  
+    115-                : ((null !== $this->_content)  
+    116-                    ? $this->_content  
+    117-                    : call_user_func($this->_getContentFunc, $this->_id)
+
+./inc/functions/rule.php:12
+  
+    9-    if ((w3_is_apache() || w3_is_litespeed()) && !w3_is_network()) {  
+    10-        $path = w3_get_home_root() . '/.htaccess';  
+    11-  
+    12:        return (($data = @file_get_contents($path)) && strstr($data, W3TC_MARKER_BEGIN_WORDPRESS) !== false);  
+    13-    }  
+    14-  
+    15-    return true;
+
+#### ob_get_contents( ####
+./lib/W3/PgCache.php:1285
+  
+    1283-            ob_start();  
+    1284-            $result = eval($code);  
+    1285:            $output = ob_get_contents();  
+    1286-            ob_end_clean();  
+    1287-  
+    1288-            if ($result === false) {
+
+./lib/W3/PgCache.php:1315
+  
+    1312-            if (file_exists($file) && is_readable($file)) {  
+    1313-                ob_start();  
+    1314-                include $file;  
+    1315:                $output = ob_get_contents();  
+    1316-                ob_end_clean();  
+    1317-            } else {  
+    1318-                $output = sprintf('Unable to open file: %s', htmlspecialchars($file));
+
+./lib/W3/Plugin/TotalCacheAdmin.php:449
+  
+    446-  
+    447-            ob_start();  
+    448-            include W3TC_INC_DIR . '/options/common/help.php';  
+    449:            $help = ob_get_contents();  
+    450-            ob_end_clean();  
+    451-  
+    452-            $hook = get_plugin_page_hookname($this->_page, 'w3tc_general');
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2418
+  
+    2415-         */  
+    2416-        ob_start();  
+    2417-        phpinfo();  
+    2418:        $php_info = ob_get_contents();  
+    2419-        ob_end_clean();  
+    2420-  
+    2421-        $php_info_path = W3TC_TMP_DIR . '/php_info.html';
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2432
+  
+    2429-         */  
+    2430-        ob_start();  
+    2431-        $this->action_self_test();  
+    2432:        $self_test = ob_get_contents();  
+    2433-        ob_end_clean();  
+    2434-  
+    2435-        $self_test_path = W3TC_TMP_DIR . '/self_test.html';
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2498
+  
+    2495-         */  
+    2496-        ob_start();  
+    2497-        include W3TC_INC_DIR . '/email/support_request.php';  
+    2498:        $body = ob_get_contents();  
+    2499-        ob_end_clean();  
+    2500-  
+    2501-        /**
+
+./lib/Nusoap/class.nusoap_base.php:876
+  
+    873-    function varDump($data) {  
+    874-		ob_start();  
+    875-		var_dump($data);  
+    876:		$ret_val = ob_get_contents();  
+    877-		ob_end_clean();  
+    878-		return $ret_val;  
+    879-	}
+
+./lib/Nusoap/nusoap.php:876
+  
+    873-    function varDump($data) {  
+    874-		ob_start();  
+    875-		var_dump($data);  
+    876:		$ret_val = ob_get_contents();  
+    877-		ob_end_clean();  
+    878-		return $ret_val;  
+    879-	}
+
+#### curl_init( ####
+./lib/CF/cloudfiles_http.php:204
+  
+    202-        $url = implode("/", $path);  
+    203-  
+    204:        $curl_ch = curl_init();  
+    205-        if (!is_null($this->cabundle_path)) {  
+    206-            curl_setopt($curl_ch, CURLOPT_SSL_VERIFYPEER, True);  
+    207-            curl_setopt($curl_ch, CURLOPT_CAINFO, $this->cabundle_path);
+
+./lib/CF/cloudfiles_http.php:1174
+  
+    1171-        }  
+    1172-  
+    1173-        if (is_null($this->connections[$conn_type]) || $force_new) {  
+    1174:            $ch = curl_init();  
+    1175-        } else {  
+    1176-            return;  
+    1177-        }
+
+./lib/Nusoap/class.soap_transport_http.php:277
+  
+    274-  
+    275-		$this->debug('connect using cURL');  
+    276-		// init CURL  
+    277:		$this->ch = curl_init();  
+    278-		// set url  
+    279-		$hostURL = ($this->port != '') ? "$this->scheme://$this->host:$this->port" : "$this->scheme://$this->host";  
+    280-		// add path
+
+./lib/Nusoap/nusoap.php:2430
+  
+    2427-  
+    2428-		$this->debug('connect using cURL');  
+    2429-		// init CURL  
+    2430:		$this->ch = curl_init();  
+    2431-		// set url  
+    2432-		$hostURL = ($this->port != '') ? "$this->scheme://$this->host:$this->port" : "$this->scheme://$this->host";  
+    2433-		// add path
+
+./lib/S3.php:1429
+  
+    1426-		//var_dump($this->bucket, $this->uri, $this->resource, $url);  
+    1427-  
+    1428-		// Basic setup  
+    1429:		$curl = curl_init();  
+    1430-		curl_setopt($curl, CURLOPT_USERAGENT, 'S3/php');  
+    1431-  
+    1432-		if (S3::$useSSL) {
+
+./lib/Microsoft/Http/Client/Adapter/Curl.php:218
+  
+    215-        }  
+    216-  
+    217-        // Do the actual connection  
+    218:        $this->_curl = curl_init();  
+    219-        if ($port != 80) {  
+    220-            curl_setopt($this->_curl, CURLOPT_PORT, intval($port));  
+    221-        }
+
+
+### hashes ###
+#### SHA1 ####
+./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:106
+  
+    104-		$rawData = null  
+    105-	) {  
+    106:		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py  
+    107-  
+    108-		// Table storage?  
+    109-		if ($forTableStorage) {
+
+#### MD5 ####
+./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:106
+  
+    104-		$rawData = null  
+    105-	) {  
+    106:		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py  
+    107-  
+    108-		// Table storage?  
+    109-		if ($forTableStorage) {
+
+
+### payload_obfuscators ###
+#### gzdeflate( ####
+./lib/W3/PgCache.php:770
+  
+    768-  
+    769-            case 'deflate':  
+    770:                $data = gzdeflate($data);  
+    771-                break;  
+    772-        }  
+    773-    }
+
+./lib/Nusoap/nusoap.php:4260
+  
+    4257-						$payload .= "<!-- Content being deflated -->";  
+    4258-					}  
+    4259-					$this->outgoing_headers[] = "Content-Encoding: deflate";  
+    4260:					$payload = gzdeflate($payload);  
+    4261-				} else {  
+    4262-					if (isset($this->debug_flag) && $this->debug_flag) {  
+    4263-						$payload .= "<!-- Content will not be deflated: no gzcompress -->";
+
+./lib/Minify/HTTP/Encoder.php:238
+  
+    235-            return false;  
+    236-        }  
+    237-        if ($this->_encodeMethod[0] === 'deflate') {  
+    238:            $encoded = gzdeflate($this->_content, $compressionLevel);  
+    239-        } elseif ($this->_encodeMethod[0] === 'gzip') {  
+    240-            $encoded = gzencode($this->_content, $compressionLevel);  
+    241-        } else {
+
+./lib/Minify/Minify.php:302
+  
+    299-                    break;  
+    300-  
+    301-                case 'deflate':  
+    302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);  
+    303-                    break;  
+    304-            }  
+    305-            // still need to encode
+
+#### gzuncompress( ####
+./lib/Nusoap/nusoap.php:3914
+  
+    3912-		    	// if decoding works, use it. else assume data wasn't gzencoded  
+    3913-				if (function_exists('gzuncompress')) {  
+    3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {  
+    3915-						$data = $degzdata;  
+    3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {  
+    3917-						$data = $degzdata;
+
+./lib/Microsoft/Http/Response.php:642
+  
+    639-         */  
+    640-        $zlibHeader = unpack('n', substr($body, 0, 2));  
+    641-        if ($zlibHeader[1] % 31 == 0) {  
+    642:            return gzuncompress($body);  
+    643-        } else {  
+    644-            return gzinflate($body);  
+    645-        }
+
+#### base64_decode( ####
+./lib/Nusoap/class.soap_parser.php:504
+  
+    502-		if ($type == 'base64' || $type == 'base64Binary') {  
+    503-			$this->debug('Decode base64 value');  
+    504:			return base64_decode($value);  
+    505-		}  
+    506-		// obscure numeric types  
+    507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'
+
+./lib/Nusoap/nusoap.php:7020
+  
+    7017-		}  
+    7018-		if ($type == 'base64' || $type == 'base64Binary') {  
+    7019-			$this->debug('Decode base64 value');  
+    7020:			return base64_decode($value);  
+    7021-		}  
+    7022-		// obscure numeric types  
+    7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'
+
+./lib/Microsoft/WindowsAzure/SessionHandler.php:150
+  
+    147-                $this->_sessionTablePartition,  
+    148-                $id  
+    149-            );  
+    150:            return base64_decode($sessionRecord->serializedData);  
+    151-        }  
+    152-        catch (Microsoft_WindowsAzure_Exception $ex)  
+    153-        {
+
+./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:111
+  
+    108-		$usePathStyleUri = false  
+    109-	) {  
+    110-		$this->_accountName = $accountName;  
+    111:		$this->_accountKey = base64_decode($accountKey);  
+    112-		$this->_usePathStyleUri = $usePathStyleUri;  
+    113-	}  
+    114-
+
+./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:135
+  
+    132-	 */  
+    133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)  
+    134-	{  
+    135:		$this->_accountKey = base64_decode($value);  
+    136-		return $this;  
+    137-	}  
+    138-
+
+./lib/Microsoft/WindowsAzure/Storage/Queue.php:467
+  
+    464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),  
+    465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),  
+    466-					(string)$xmlMessages[$i]->DequeueCount,  
+    467:					base64_decode((string)$xmlMessages[$i]->MessageText)  
+    468-			    );  
+    469-			}  
+    470-
+
+#### $$ ####
+./lib/JSON.php:54
+  
+    52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>  
+    53- * @copyright	2005 Michal Migurski  
+    54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $  
+    55- * @license		http://www.opensource.org/licenses/bsd-license.php  
+    56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198  
+    57- */
+
+./lib/S3.php:3
+  
+    1-<?php  
+    2-/**  
+    3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $  
+    4-*  
+    5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.  
+    6-*
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:32
+  
+    29- * @package    Microsoft_WindowsAzure  
+    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
+    31- * @license    http://phpazure.codeplex.com/license  
+    32: * @version    $Id$  
+    33- */  
+    34-if (!defined('W3TC')) {  
+    35-    die();
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php:32
+  
+    29- * @package    Microsoft_WindowsAzure  
+    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
+    31- * @license    http://phpazure.codeplex.com/license  
+    32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $  
+    33- */  
+    34-if (!defined('W3TC')) {  
+    35-    die();
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php:32
+  
+    29- * @package    Microsoft_WindowsAzure  
+    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
+    31- * @license    http://phpazure.codeplex.com/license  
+    32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $  
+    33- */  
+    34-if (!defined('W3TC')) {  
+    35-    die();
+
+./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php:32
+  
+    29- * @package    Microsoft_WindowsAzure  
+    30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)  
+    31- * @license    http://phpazure.codeplex.com/license  
+    32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $  
+    33- */  
+    34-if (!defined('W3TC')) {  
+    35-    die();
+
+./lib/Microsoft/Uri/Http.php:19
+  
+    16- * @package   Microsoft_Uri  
+    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
+    19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $  
+    20- */  
+    21-if (!defined('W3TC')) {  
+    22-    die();
+
+./lib/Microsoft/Uri/Exception.php:19
+  
+    16- * @package   Microsoft_Uri  
+    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
+    19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $  
+    20- */  
+    21-if (!defined('W3TC')) {  
+    22-    die();
+
+./lib/Microsoft/Uri.php:19
+  
+    16- * @package   Microsoft_Uri  
+    17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    18- * @license   http://framework.zend.com/license/new-bsd     New BSD License  
+    19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $  
+    20- */  
+    21-  
+    22-/**
+
+./lib/Microsoft/Http/Client/Adapter/Proxy.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client_Adapter  
+    19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Client/Adapter/Stream.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client_Adapter  
+    19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Client/Adapter/Curl.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client_Adapter  
+    19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Client/Adapter/Interface.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client_Adapter  
+    19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Client/Adapter/Socket.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client_Adapter  
+    19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Client/Adapter/Exception.php:18
+  
+    15- * @category   Microsoft  
+    16- * @package    Microsoft_Http  
+    17- * @subpackage Client_Adapter_Exception  
+    18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $  
+    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    21- */
+
+./lib/Microsoft/Http/Client/Exception.php:18
+  
+    15- * @category   Microsoft  
+    16- * @package    Microsoft_Http  
+    17- * @subpackage Client_Exception  
+    18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $  
+    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    21- */
+
+./lib/Microsoft/Http/Cookie.php:20
+  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Cookie  
+    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */  
+    23-if (!defined('W3TC')) {
+
+./lib/Microsoft/Http/Client.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Client  
+    19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Response.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Response  
+    19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/Response/Stream.php:19
+  
+    16- * @category   Microsoft  
+    17- * @package    Microsoft_Http  
+    18- * @subpackage Response  
+    19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $  
+    20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    21- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    22- */
+
+./lib/Microsoft/Http/CookieJar.php:18
+  
+    15- * @category   Microsoft  
+    16- * @package    Microsoft_Http  
+    17- * @subpackage CookieJar  
+    18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $  
+    19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)  
+    20- * @license    http://framework.zend.com/license/new-bsd     New BSD License  
+    21- */
+
+./lib/Minify/FirePHP.php:1068
+  
+    1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>  
+    1066-   * @author      Christoph Dorn <christoph@christophdorn.com>  
+    1067-   * @copyright   2005 Michal Migurski  
+    1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $  
+    1069-   * @license     http://www.opensource.org/licenses/bsd-license.php  
+    1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198  
+    1071-   */
+
+./lib/Minify/Solar/Dir.php:14
+  
+    11- *  
+    12- * @license http://opensource.org/licenses/bsd-license.php BSD  
+    13- *  
+    14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $  
+    15- *  
+    16- */  
+    17-class Solar_Dir {
+
+#### base64_encode( ####
+./lib/W3/Cdn/Azure.php:404
+  
+    402-     */  
+    403-    function _get_content_md5($md5) {  
+    404:        return base64_encode(pack('H*', $md5));  
+    405-    }  
+    406-  
+    407-    /**
+
+./lib/Nusoap/class.soap_transport_http.php:476
+  
+    473-		$this->appendDebug($this->varDump($certRequest));  
+    474-		// cf. RFC 2617  
+    475-		if ($authtype == 'basic') {  
+    476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
+    477-		} elseif ($authtype == 'digest') {  
+    478-			if (isset($digestRequest['nonce'])) {  
+    479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;
+
+./lib/Nusoap/class.soap_transport_http.php:587
+  
+    584-				'authtype' => $proxyauthtype  
+    585-			);  
+    586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
+    587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
+    588-			}  
+    589-		} else {  
+    590-			$this->debug('remove proxy');
+
+./lib/Nusoap/nusoap.php:2629
+  
+    2626-		$this->appendDebug($this->varDump($certRequest));  
+    2627-		// cf. RFC 2617  
+    2628-		if ($authtype == 'basic') {  
+    2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));  
+    2630-		} elseif ($authtype == 'digest') {  
+    2631-			if (isset($digestRequest['nonce'])) {  
+    2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;
+
+./lib/Nusoap/nusoap.php:2740
+  
+    2737-				'authtype' => $proxyauthtype  
+    2738-			);  
+    2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {  
+    2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));  
+    2741-			}  
+    2742-		} else {  
+    2743-			$this->debug('remove proxy');
+
+./lib/S3.php:289
+  
+    286-		}  
+    287-		return array('file' => $file, 'size' => filesize($file),  
+    288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :  
+    289:		base64_encode(md5_file($file, true))) : '');  
+    290-	}  
+    291-  
+    292-
+
+./lib/S3.php:329
+  
+    326-  
+    327-		if (is_string($input)) $input = array(  
+    328-			'data' => $input, 'size' => strlen($input),  
+    329:			'md5sum' => base64_encode(md5($input, true))  
+    330-		);  
+    331-  
+    332-		// Data
+
+./lib/S3.php:860
+  
+    857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);  
+    858-		}  
+    859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));  
+    860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));  
+    861-  
+    862-		// Create parameters  
+    863-		$params = new stdClass;
+
+./lib/S3.php:1310
+  
+    1307-	* @return string  
+    1308-	*/  
+    1309-	private static function __getHash($string) {  
+    1310:		return base64_encode(extension_loaded('hash') ?  
+    1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(  
+    1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .  
+    1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^
+
+./lib/Microsoft/WindowsAzure/SessionHandler.php:168
+  
+    165-    {  
+    166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);  
+    167-        $sessionRecord->sessionExpires = time();  
+    168:        $sessionRecord->serializedData = base64_encode($serializedData);  
+    169-  
+    170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');  
+    171-
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php:194
+  
+    191-  
+    192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource  
+    193-    	$stringToSign   = implode("\n", $stringToSign);  
+    194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
+    195-  
+    196-    	// Sign request  
+    197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php:163
+  
+    160-    	$stringToSign[] = $identifier;  
+    161-  
+    162-    	$stringToSign = implode("\n", $stringToSign);  
+    163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
+    164-  
+    165-    	return $signature;  
+    166-    }
+
+./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php:142
+  
+    139-    	$stringToSign[] = $requestDate; // Date  
+    140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource  
+    141-    	$stringToSign   = implode("\n", $stringToSign);  
+    142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));  
+    143-  
+    144-    	// Sign request  
+    145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:831
+  
+    828-		$resourceName = self::createResourceName($containerName , $blobName);  
+    829-  
+    830-		// Upload  
+    831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);  
+    832-		if (!$response->isSuccessful()) {  
+    833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));  
+    834-		}
+
+./lib/Microsoft/WindowsAzure/Storage/Blob.php:869
+  
+    866-		// Generate block list  
+    867-		$blocks = '';  
+    868-		foreach ($blockList as $block) {  
+    869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . "\n";  
+    870-		}  
+    871-  
+    872-		// Generate block list request
+
+./lib/Microsoft/WindowsAzure/Storage/Queue.php:393
+  
+    390-	    // Build body  
+    391-	    $rawData = '';  
+    392-	    $rawData .= '<QueueMessage>';  
+    393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';  
+    394-	    $rawData .= '</QueueMessage>';  
+    395-  
+    396-		// Perform request
+
+./lib/Microsoft/Http/Client.php:1382
+  
+    1379-                    throw new Microsoft_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");  
+    1380-                }  
+    1381-  
+    1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);  
+    1383-                break;  
+    1384-  
+    1385-            //case self::AUTH_DIGEST:
+
+
+### form_data ###
+#### $_GET ####
+./lib/W3/Request.php:106
+  
+    104-     */  
+    105-    function get_request() {  
+    106:        if (!isset($_GET)) {  
+    107:            $_GET = array();  
+    108-        }  
+    109-  
+    110-        if (!isset($_POST)) {  
+    111-            $_POST = array();  
+    112-        }  
+    113-  
+    114:        return array_merge($_GET, $_POST);  
+    115-    }  
+    116-}
+
+./lib/W3/Minify.php:130
+  
+    127-         * Set sources  
+    128-         */  
+    129-        if ($hash) {  
+    130:            $_GET['f'] = $this->get_files($hash, $type);  
+    131-        } else {  
+    132:            $_GET['g'] = $location;  
+    133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);  
+    134-        }  
+    135-
+
+./lib/W3/Plugin/TotalCacheActivation.php:28
+  
+    25-        /**  
+    26-         * Disable buggy sitewide activation in WPMU and WP 3.0  
+    27-         */  
+    28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {  
+    29-            w3_network_activate_error();  
+    30-        }  
+    31-
+
+./lib/Minify/Minify/Controller/Version1.php:44
+  
+    41-  
+    42-        // The following restrictions are to limit the URLs that minify will  
+    43-        // respond to. Ideally there should be only one way to reference a file.  
+    44:        if (! isset($_GET['files'])  
+    45-            // verify at least one file, files are single comma separated,  
+    46-            // and are all same extension  
+    47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)  
+    48-            // no "//" (makes URL rewriting easier)  
+    49:            || strpos($_GET['files'], '//') !== false  
+    50-            // no "\"  
+    51:            || strpos($_GET['files'], '\\') !== false  
+    52-            // no "./"  
+    53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])  
+    54-        ) {  
+    55-            return $options;  
+    56-        }  
+    57-        $extension = $m[1];  
+    58-  
+    59:        $files = explode(',', $_GET['files']);  
+    60-        if (count($files) > MINIFY_MAX_FILES) {  
+    61-            return $options;  
+    62-        }
+
+./lib/Minify/Minify/Controller/MinApp.php:40
+  
+    37-        );  
+    38-        unset($options['minApp']);  
+    39-        $sources = array();  
+    40:        if (isset($_GET['g'])) {  
+    41-            // try groups  
+    42:            if (! isset($cOptions['groups'][$_GET['g']])) {  
+    43:                $this->log("A group configuration for \"{$_GET['g']}\" was not set");  
+    44-                return $options;  
+    45-            }  
+    46-  
+    47:            $files = $cOptions['groups'][$_GET['g']];  
+    48-            // if $files is a single object, casting will break it  
+    49-            if (is_object($files)) {  
+    50-                $files = array($files);
+
+./lib/Minify/Minify/Controller/MinApp.php:72
+  
+    69-                    continue;  
+    70-                }  
+    71-            }  
+    72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {  
+    73-            // try user files  
+    74-            // The following restrictions are to limit the URLs that minify will  
+    75-            // respond to. Ideally there should be only one way to reference a file.  
+    76-            if (// verify at least one file, files are single comma separated,  
+    77-                // and are all same extension  
+    78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])  
+    79-                // no "//"  
+    80:                || strpos($_GET['f'], '//') !== false  
+    81-                // no "\"  
+    82:                || strpos($_GET['f'], '\\') !== false  
+    83-                // no "./"  
+    84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])  
+    85-            ) {  
+    86:                $this->log("GET['f'] param invalid: \"{$_GET['f']}\"");  
+    87-                return $options;  
+    88-            }  
+    89:            $files = explode(',', $_GET['f']);  
+    90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {  
+    91-                $this->log("Too many or duplicate files specified: \"" . implode(', ', $files) . "\"");  
+    92-                return $options;  
+    93-            }  
+    94:            if (!empty($_GET['b'])) {  
+    95-                // check for validity  
+    96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])  
+    97:                    && false === strpos($_GET['b'], '..')  
+    98:                    && $_GET['b'] !== '.') {  
+    99-                    // valid base  
+    100:                    $base = "/{$_GET['b']}/";  
+    101-                } else {  
+    102:                    $this->log("GET['b'] param invalid: \"{$_GET['b']}\"");  
+    103-                    return $options;  
+    104-                }  
+    105-            } else {
+
+#### $_POST ####
+./lib/W3/Request.php:110
+  
+    108-        }  
+    109-  
+    110:        if (!isset($_POST)) {  
+    111:            $_POST = array();  
+    112-        }  
+    113-  
+    114:        return array_merge($_GET, $_POST);  
+    115-    }  
+    116-}
+
+
+### globals ###
+#### $_REQUEST ####
+./lib/W3/PgCacheFlush.php:352
+  
+    350-        } elseif (is_single() || is_page() && count($posts)) {  
+    351-            return $posts[0]->ID;  
+    352:        } elseif (isset($_REQUEST['p'])) {  
+    353:            return (integer) $_REQUEST['p'];  
+    354-        }  
+    355-  
+    356-        return 0;
+
+./lib/W3/Plugin/TotalCache.php:43
+  
+    40-            'admin_bar_menu'  
+    41-        ), 150);  
+    42-  
+    43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&  
+    44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {  
+    45-            add_filter('template', array(  
+    46-                &$this,
+
+./lib/W3/Plugin/TotalCacheAdmin.php:265
+  
+    262-         */  
+    263-        $action = false;  
+    264-  
+    265:        foreach ($_REQUEST as $key => $value) {  
+    266-            if (strpos($key, 'w3tc_') === 0) {  
+    267-                $action = 'action_' . substr($key, 5);  
+    268-                break;
+
+./inc/define.php:229
+  
+    226- * @return boolean  
+    227- */  
+    228-function w3_is_preview_mode() {  
+    229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));  
+    230-}  
+    231-  
+    232-/**
+
+#### $_FILES ####
+./lib/W3/Plugin/TotalCacheAdmin.php:2021
+  
+    2019-        @$config = & new W3_Config();  
+    2020-  
+    2021:        if (!isset($_FILES['config_file']['error']) || $_FILES['config_file']['error'] == UPLOAD_ERR_NO_FILE) {  
+    2022-            $error = 'config_import_no_file';  
+    2023:        } elseif ($_FILES['config_file']['error'] != UPLOAD_ERR_OK) {  
+    2024-            $error = 'config_import_upload';  
+    2025-        } else {  
+    2026-            ob_start();  
+    2027:            $imported = $config->read($_FILES['config_file']['tmp_name']);  
+    2028-            ob_end_clean();  
+    2029-  
+    2030-            if (!$imported) {
+
+./lib/W3/Plugin/TotalCacheAdmin.php:2453
+  
+    2450-        /**  
+    2451-         * Attach other files  
+    2452-         */  
+    2453:        if (!empty($_FILES['files'])) {  
+    2454:            $files = (array) $_FILES['files'];  
+    2455-            for ($i = 0, $l = count($files); $i < $l; $i++) {  
+    2456-                if (isset($files['tmp_name'][$i]) && isset($files['name'][$i]) && isset($files['error'][$i]) && $files['error'][$i] == UPLOAD_ERR_OK) {  
+    2457-                    $path = W3TC_TMP_DIR . '/' . $files['name'][$i];
+
+#### $GLOBALS ####
+./lib/W3/PgCacheFlush.php:386
+  
+    384-     */  
+    385-    function _get_comments_pagenum_link($post_id, $pagenum = 1, $max_page = 0) {  
+    386:        if (isset($GLOBALS['post']) && is_object($GLOBALS['post'])) {  
+    387:            $old_post = &$GLOBALS['post'];  
+    388-        } else {  
+    389:            @$GLOBALS['post'] = & new stdClass();  
+    390-            $old_post = null;  
+    391-        }  
+    392-  
+    393:        $GLOBALS['post']->ID = $post_id;  
+    394-  
+    395-        $link = get_comments_pagenum_link($pagenum, $max_page);  
+    396-  
+    397-        if ($old_post) {  
+    398:            $GLOBALS['post'] = &$old_post;  
+    399-        }  
+    400-  
+    401-        return $link;
+
+./lib/W3/Plugin/CdnEnabled.php:1076
+  
+    1073-                                            $guid = ltrim($upload_info['baseurlpath'] . $title, ',');  
+    1074-                                            $mime_type = w3_get_mime_type($dst);  
+    1075-  
+    1076:                                            $GLOBALS['wp_rewrite'] = & new WP_Rewrite();  
+    1077-  
+    1078-                                            /**  
+    1079-                                             * Insert attachment
+
+./lib/W3/Plugin/CdnAdmin.php:543
+  
+    540-                                            $guid = ltrim($upload_info['baseurlpath'] . $title, ',');  
+    541-                                            $mime_type = w3_get_mime_type($dst);  
+    542-  
+    543:                                            @$GLOBALS['wp_rewrite'] = & new WP_Rewrite();  
+    544-  
+    545-                                            /**  
+    546-                                             * Insert attachment
+
+./lib/W3/Plugin/TotalCacheAdmin.php:4764
+  
+    4761-                     */  
+    4762-                    case ($template == 'taxonomy'):  
+    4763-                        $taxonomy = '';  
+    4764:                        if (isset($GLOBALS['wp_taxonomies']) && is_array($GLOBALS['wp_taxonomies'])) {  
+    4765:                            foreach ($GLOBALS['wp_taxonomies'] as $wp_taxonomy) {  
+    4766-                                if (!in_array($wp_taxonomy->name, array(  
+    4767-                                    'category',  
+    4768-                                    'post_tag',
+
+./lib/CSSTidy/class.csstidy_optimise.php:105
+  
+    102-     */  
+    103-    function value()  
+    104-    {  
+    105:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
+    106-  
+    107-        // optimise shorthand properties  
+    108-        if(isset($shorthands[$this->property]))
+
+./lib/CSSTidy/class.csstidy_optimise.php:132
+  
+    129-     */  
+    130-    function shorthands()  
+    131-    {  
+    132:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
+    133-  
+    134-        if(!$this->parser->get_cfg('optimise_shorthands') || $this->parser->get_cfg('preserve_css')) {  
+    135-            return;
+
+./lib/CSSTidy/class.csstidy_optimise.php:160
+  
+    157-     */  
+    158-    function subvalue()  
+    159-    {  
+    160:        $replace_colors =& $GLOBALS['csstidy']['replace_colors'];  
+    161-  
+    162-        $this->sub_value = trim($this->sub_value);  
+    163-        if($this->sub_value == '') // caution : '0'
+
+./lib/CSSTidy/class.csstidy_optimise.php:297
+  
+    294-     */  
+    295-    function cut_color($color)  
+    296-    {  
+    297:        $replace_colors =& $GLOBALS['csstidy']['replace_colors'];  
+    298-  
+    299-        // rgb(0,0,0) -> #000000 (or #000 in this case later)  
+    300-        if(strtolower(substr($color,0,4)) == 'rgb(')
+
+./lib/CSSTidy/class.csstidy_optimise.php:372
+  
+    369-     */  
+    370-    function compress_numbers($subvalue)  
+    371-    {  
+    372:        $units =& $GLOBALS['csstidy']['units'];  
+    373:        $unit_values =& $GLOBALS['csstidy']['unit_values'];  
+    374:        $color_values =& $GLOBALS['csstidy']['color_values'];  
+    375-  
+    376-        // for font:1em/1em sans-serif...;  
+    377-        if($this->property == 'font')
+
+./lib/CSSTidy/class.csstidy_optimise.php:497
+  
+    494-     */  
+    495-    function dissolve_4value_shorthands($property,$value)  
+    496-    {  
+    497:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
+    498-        if(!is_array($shorthands[$property]))  
+    499-        {  
+    500-            $return[$property] = $value;
+
+./lib/CSSTidy/class.csstidy_optimise.php:611
+  
+    608-    function merge_4value_shorthands($array)  
+    609-    {  
+    610-        $return = $array;  
+    611:        $shorthands =& $GLOBALS['csstidy']['shorthands'];  
+    612-  
+    613-        foreach($shorthands as $key => $value)  
+    614-        {
+
+./lib/CSSTidy/class.csstidy_optimise.php:651
+  
+    648-     */  
+    649-    function dissolve_short_bg($str_value)  
+    650-    {  
+    651:        $background_prop_default =& $GLOBALS['csstidy']['background_prop_default'];  
+    652-        $repeat = array('repeat','repeat-x','repeat-y','no-repeat','space');  
+    653-        $attachment = array('scroll','fixed','local');  
+    654-        $clip = array('border','padding');
+
+./lib/CSSTidy/class.csstidy_optimise.php:737
+  
+    734-     */  
+    735-    function merge_bg($input_css)  
+    736-    {  
+    737:        $background_prop_default =& $GLOBALS['csstidy']['background_prop_default'];  
+    738-        // Max number of background images. CSS3 not yet fully implemented  
+    739-        $number_of_values = @max(count(csstidy_optimise::explode_ws(',',$input_css['background-image'])),count(csstidy_optimise::explode_ws(',',$input_css['background-color'])),1);  
+    740-        // Array with background images to check if BG image exists
+
+./lib/CSSTidy/data.inc.php:38
+  
+    35-/**  
+    36- * All whitespace allowed in CSS  
+    37- *  
+    38: * @global array $GLOBALS['csstidy']['whitespace']  
+    39- * @version 1.0  
+    40- */  
+    41:$GLOBALS['csstidy']['whitespace'] = array(' ',"\n","\t","\r","\x0B");  
+    42-  
+    43-/**  
+    44- * All CSS tokens used by csstidy  
+    45- *  
+    46: * @global string $GLOBALS['csstidy']['tokens']  
+    47- * @version 1.0  
+    48- */  
+    49:$GLOBALS['csstidy']['tokens'] = '/@}{;:=\'"(,\\!$%&)*+.<>?[]^`|~';  
+    50-  
+    51-/**  
+    52- * All CSS units (CSS 3 units included)  
+    53- *  
+    54- * @see compress_numbers()  
+    55: * @global array $GLOBALS['csstidy']['units']  
+    56- * @version 1.0  
+    57- */  
+    58:$GLOBALS['csstidy']['units'] = array('in','cm','mm','pt','pc','px','rem','em','%','ex','gd','vw','vh','vm','deg','grad','rad','ms','s','khz','hz');  
+    59-  
+    60-/**  
+    61- * Available at-rules  
+    62- *  
+    63: * @global array $GLOBALS['csstidy']['at_rules']  
+    64- * @version 1.0  
+    65- */  
+    66:$GLOBALS['csstidy']['at_rules'] = array('page' => 'is','font-face' => 'is','charset' => 'iv', 'import' => 'iv','namespace' => 'iv','media' => 'at');  
+    67-  
+    68- /**  
+    69- * Properties that need a value with unit  
+    70- *  
+    71- * @todo CSS3 properties  
+    72- * @see compress_numbers();  
+    73: * @global array $GLOBALS['csstidy']['unit_values']  
+    74- * @version 1.2  
+    75- */  
+    76:$GLOBALS['csstidy']['unit_values'] = array ('background', 'background-position', 'border', 'border-top', 'border-right', 'border-bottom', 'border-left', 'border-width',  
+    77-                                            'border-top-width', 'border-right-width', 'border-left-width', 'border-bottom-width', 'bottom', 'border-spacing', 'font-size',  
+    78-                                            'height', 'left', 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'max-height', 'max-width',  
+    79-                                            'min-height', 'min-width', 'outline-width', 'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+
+./lib/CSSTidy/data.inc.php:87
+  
+    84- *  
+    85- * @todo CSS3 properties  
+    86- * @see compress_numbers();  
+    87: * @global array $GLOBALS['csstidy']['color_values']  
+    88- * @version 1.0  
+    89- */  
+    90:$GLOBALS['csstidy']['color_values'] = array();  
+    91:$GLOBALS['csstidy']['color_values'][] = 'background-color';  
+    92:$GLOBALS['csstidy']['color_values'][] = 'border-color';  
+    93:$GLOBALS['csstidy']['color_values'][] = 'border-top-color';  
+    94:$GLOBALS['csstidy']['color_values'][] = 'border-right-color';  
+    95:$GLOBALS['csstidy']['color_values'][] = 'border-bottom-color';  
+    96:$GLOBALS['csstidy']['color_values'][] = 'border-left-color';  
+    97:$GLOBALS['csstidy']['color_values'][] = 'color';  
+    98:$GLOBALS['csstidy']['color_values'][] = 'outline-color';  
+    99-  
+    100-  
+    101-/**  
+    102- * Default values for the background properties  
+    103- *  
+    104- * @todo Possibly property names will change during CSS3 development  
+    105: * @global array $GLOBALS['csstidy']['background_prop_default']  
+    106- * @see dissolve_short_bg()  
+    107- * @see merge_bg()  
+    108- * @version 1.0  
+    109- */  
+    110:$GLOBALS['csstidy']['background_prop_default'] = array();  
+    111:$GLOBALS['csstidy']['background_prop_default']['background-image'] = 'none';  
+    112:$GLOBALS['csstidy']['background_prop_default']['background-size'] = 'auto';  
+    113:$GLOBALS['csstidy']['background_prop_default']['background-repeat'] = 'repeat';  
+    114:$GLOBALS['csstidy']['background_prop_default']['background-position'] = '0 0';  
+    115:$GLOBALS['csstidy']['background_prop_default']['background-attachment'] = 'scroll';  
+    116:$GLOBALS['csstidy']['background_prop_default']['background-clip'] = 'border';  
+    117:$GLOBALS['csstidy']['background_prop_default']['background-origin'] = 'padding';  
+    118:$GLOBALS['csstidy']['background_prop_default']['background-color'] = 'transparent';  
+    119-  
+    120-/**  
+    121- * A list of non-W3C color names which get replaced by their hex-codes  
+    122- *  
+    123: * @global array $GLOBALS['csstidy']['replace_colors']  
+    124- * @see cut_color()  
+    125- * @version 1.0  
+    126- */  
+    127:$GLOBALS['csstidy']['replace_colors'] = array();  
+    128:$GLOBALS['csstidy']['replace_colors']['aliceblue'] = '#F0F8FF';  
+    129:$GLOBALS['csstidy']['replace_colors']['antiquewhite'] = '#FAEBD7';  
+    130:$GLOBALS['csstidy']['replace_colors']['aquamarine'] = '#7FFFD4';  
+    131:$GLOBALS['csstidy']['replace_colors']['azure'] = '#F0FFFF';  
+    132:$GLOBALS['csstidy']['replace_colors']['beige'] = '#F5F5DC';  
+    133:$GLOBALS['csstidy']['replace_colors']['bisque'] = '#FFE4C4';  
+    134:$GLOBALS['csstidy']['replace_colors']['blanchedalmond'] = '#FFEBCD';  
+    135:$GLOBALS['csstidy']['replace_colors']['blueviolet'] = '#8A2BE2';  
+    136:$GLOBALS['csstidy']['replace_colors']['brown'] = '#A52A2A';  
+    137:$GLOBALS['csstidy']['replace_colors']['burlywood'] = '#DEB887';  
+    138:$GLOBALS['csstidy']['replace_colors']['cadetblue'] = '#5F9EA0';  
+    139:$GLOBALS['csstidy']['replace_colors']['chartreuse'] = '#7FFF00';  
+    140:$GLOBALS['csstidy']['replace_colors']['chocolate'] = '#D2691E';  
+    141:$GLOBALS['csstidy']['replace_colors']['coral'] = '#FF7F50';  
+    142:$GLOBALS['csstidy']['replace_colors']['cornflowerblue'] = '#6495ED';  
+    143:$GLOBALS['csstidy']['replace_colors']['cornsilk'] = '#FFF8DC';  
+    144:$GLOBALS['csstidy']['replace_colors']['crimson'] = '#DC143C';  
+    145:$GLOBALS['csstidy']['replace_colors']['cyan'] = '#00FFFF';  
+    146:$GLOBALS['csstidy']['replace_colors']['darkblue'] = '#00008B';  
+    147:$GLOBALS['csstidy']['replace_colors']['darkcyan'] = '#008B8B';  
+    148:$GLOBALS['csstidy']['replace_colors']['darkgoldenrod'] = '#B8860B';  
+    149:$GLOBALS['csstidy']['replace_colors']['darkgray'] = '#A9A9A9';  
+    150:$GLOBALS['csstidy']['replace_colors']['darkgreen'] = '#006400';  
+    151:$GLOBALS['csstidy']['replace_colors']['darkkhaki'] = '#BDB76B';  
+    152:$GLOBALS['csstidy']['replace_colors']['darkmagenta'] = '#8B008B';  
+    153:$GLOBALS['csstidy']['replace_colors']['darkolivegreen'] = '#556B2F';  
+    154:$GLOBALS['csstidy']['replace_colors']['darkorange'] = '#FF8C00';  
+    155:$GLOBALS['csstidy']['replace_colors']['darkorchid'] = '#9932CC';  
+    156:$GLOBALS['csstidy']['replace_colors']['darkred'] = '#8B0000';  
+    157:$GLOBALS['csstidy']['replace_colors']['darksalmon'] = '#E9967A';  
+    158:$GLOBALS['csstidy']['replace_colors']['darkseagreen'] = '#8FBC8F';  
+    159:$GLOBALS['csstidy']['replace_colors']['darkslateblue'] = '#483D8B';  
+    160:$GLOBALS['csstidy']['replace_colors']['darkslategray'] = '#2F4F4F';  
+    161:$GLOBALS['csstidy']['replace_colors']['darkturquoise'] = '#00CED1';  
+    162:$GLOBALS['csstidy']['replace_colors']['darkviolet'] = '#9400D3';  
+    163:$GLOBALS['csstidy']['replace_colors']['deeppink'] = '#FF1493';  
+    164:$GLOBALS['csstidy']['replace_colors']['deepskyblue'] = '#00BFFF';  
+    165:$GLOBALS['csstidy']['replace_colors']['dimgray'] = '#696969';  
+    166:$GLOBALS['csstidy']['replace_colors']['dodgerblue'] = '#1E90FF';  
+    167:$GLOBALS['csstidy']['replace_colors']['feldspar'] = '#D19275';  
+    168:$GLOBALS['csstidy']['replace_colors']['firebrick'] = '#B22222';  
+    169:$GLOBALS['csstidy']['replace_colors']['floralwhite'] = '#FFFAF0';  
+    170:$GLOBALS['csstidy']['replace_colors']['forestgreen'] = '#228B22';  
+    171:$GLOBALS['csstidy']['replace_colors']['gainsboro'] = '#DCDCDC';  
+    172:$GLOBALS['csstidy']['replace_colors']['ghostwhite'] = '#F8F8FF';  
+    173:$GLOBALS['csstidy']['replace_colors']['gold'] = '#FFD700';  
+    174:$GLOBALS['csstidy']['replace_colors']['goldenrod'] = '#DAA520';  
+    175:$GLOBALS['csstidy']['replace_colors']['greenyellow'] = '#ADFF2F';  
+    176:$GLOBALS['csstidy']['replace_colors']['honeydew'] = '#F0FFF0';  
+    177:$GLOBALS['csstidy']['replace_colors']['hotpink'] = '#FF69B4';  
+    178:$GLOBALS['csstidy']['replace_colors']['indianred'] = '#CD5C5C';  
+    179:$GLOBALS['csstidy']['replace_colors']['indigo'] = '#4B0082';  
+    180:$GLOBALS['csstidy']['replace_colors']['ivory'] = '#FFFFF0';  
+    181:$GLOBALS['csstidy']['replace_colors']['khaki'] = '#F0E68C';  
+    182:$GLOBALS['csstidy']['replace_colors']['lavender'] = '#E6E6FA';  
+    183:$GLOBALS['csstidy']['replace_colors']['lavenderblush'] = '#FFF0F5';  
+    184:$GLOBALS['csstidy']['replace_colors']['lawngreen'] = '#7CFC00';  
+    185:$GLOBALS['csstidy']['replace_colors']['lemonchiffon'] = '#FFFACD';  
+    186:$GLOBALS['csstidy']['replace_colors']['lightblue'] = '#ADD8E6';  
+    187:$GLOBALS['csstidy']['replace_colors']['lightcoral'] = '#F08080';  
+    188:$GLOBALS['csstidy']['replace_colors']['lightcyan'] = '#E0FFFF';  
+    189:$GLOBALS['csstidy']['replace_colors']['lightgoldenrodyellow'] = '#FAFAD2';  
+    190:$GLOBALS['csstidy']['replace_colors']['lightgrey'] = '#D3D3D3';  
+    191:$GLOBALS['csstidy']['replace_colors']['lightgreen'] = '#90EE90';  
+    192:$GLOBALS['csstidy']['replace_colors']['lightpink'] = '#FFB6C1';  
+    193:$GLOBALS['csstidy']['replace_colors']['lightsalmon'] = '#FFA07A';  
+    194:$GLOBALS['csstidy']['replace_colors']['lightseagreen'] = '#20B2AA';  
+    195:$GLOBALS['csstidy']['replace_colors']['lightskyblue'] = '#87CEFA';  
+    196:$GLOBALS['csstidy']['replace_colors']['lightslateblue'] = '#8470FF';  
+    197:$GLOBALS['csstidy']['replace_colors']['lightslategray'] = '#778899';  
+    198:$GLOBALS['csstidy']['replace_colors']['lightsteelblue'] = '#B0C4DE';  
+    199:$GLOBALS['csstidy']['replace_colors']['lightyellow'] = '#FFFFE0';  
+    200:$GLOBALS['csstidy']['replace_colors']['limegreen'] = '#32CD32';  
+    201:$GLOBALS['csstidy']['replace_colors']['linen'] = '#FAF0E6';  
+    202:$GLOBALS['csstidy']['replace_colors']['magenta'] = '#FF00FF';  
+    203:$GLOBALS['csstidy']['replace_colors']['mediumaquamarine'] = '#66CDAA';  
+    204:$GLOBALS['csstidy']['replace_colors']['mediumblue'] = '#0000CD';  
+    205:$GLOBALS['csstidy']['replace_colors']['mediumorchid'] = '#BA55D3';  
+    206:$GLOBALS['csstidy']['replace_colors']['mediumpurple'] = '#9370D8';  
+    207:$GLOBALS['csstidy']['replace_colors']['mediumseagreen'] = '#3CB371';  
+    208:$GLOBALS['csstidy']['replace_colors']['mediumslateblue'] = '#7B68EE';  
+    209:$GLOBALS['csstidy']['replace_colors']['mediumspringgreen'] = '#00FA9A';  
+    210:$GLOBALS['csstidy']['replace_colors']['mediumturquoise'] = '#48D1CC';  
+    211:$GLOBALS['csstidy']['replace_colors']['mediumvioletred'] = '#C71585';  
+    212:$GLOBALS['csstidy']['replace_colors']['midnightblue'] = '#191970';  
+    213:$GLOBALS['csstidy']['replace_colors']['mintcream'] = '#F5FFFA';  
+    214:$GLOBALS['csstidy']['replace_colors']['mistyrose'] = '#FFE4E1';  
+    215:$GLOBALS['csstidy']['replace_colors']['moccasin'] = '#FFE4B5';  
+    216:$GLOBALS['csstidy']['replace_colors']['navajowhite'] = '#FFDEAD';  
+    217:$GLOBALS['csstidy']['replace_colors']['oldlace'] = '#FDF5E6';  
+    218:$GLOBALS['csstidy']['replace_colors']['olivedrab'] = '#6B8E23';  
+    219:$GLOBALS['csstidy']['replace_colors']['orangered'] = '#FF4500';  
+    220:$GLOBALS['csstidy']['replace_colors']['orchid'] = '#DA70D6';  
+    221:$GLOBALS['csstidy']['replace_colors']['palegoldenrod'] = '#EEE8AA';  
+    222:$GLOBALS['csstidy']['replace_colors']['palegreen'] = '#98FB98';  
+    223:$GLOBALS['csstidy']['replace_colors']['paleturquoise'] = '#AFEEEE';  
+    224:$GLOBALS['csstidy']['replace_colors']['palevioletred'] = '#D87093';  
+    225:$GLOBALS['csstidy']['replace_colors']['papayawhip'] = '#FFEFD5';  
+    226:$GLOBALS['csstidy']['replace_colors']['peachpuff'] = '#FFDAB9';  
+    227:$GLOBALS['csstidy']['replace_colors']['peru'] = '#CD853F';  
+    228:$GLOBALS['csstidy']['replace_colors']['pink'] = '#FFC0CB';  
+    229:$GLOBALS['csstidy']['replace_colors']['plum'] = '#DDA0DD';  
+    230:$GLOBALS['csstidy']['replace_colors']['powderblue'] = '#B0E0E6';  
+    231:$GLOBALS['csstidy']['replace_colors']['rosybrown'] = '#BC8F8F';  
+    232:$GLOBALS['csstidy']['replace_colors']['royalblue'] = '#4169E1';  
+    233:$GLOBALS['csstidy']['replace_colors']['saddlebrown'] = '#8B4513';  
+    234:$GLOBALS['csstidy']['replace_colors']['salmon'] = '#FA8072';  
+    235:$GLOBALS['csstidy']['replace_colors']['sandybrown'] = '#F4A460';  
+    236:$GLOBALS['csstidy']['replace_colors']['seagreen'] = '#2E8B57';  
+    237:$GLOBALS['csstidy']['replace_colors']['seashell'] = '#FFF5EE';  
+    238:$GLOBALS['csstidy']['replace_colors']['sienna'] = '#A0522D';  
+    239:$GLOBALS['csstidy']['replace_colors']['skyblue'] = '#87CEEB';  
+    240:$GLOBALS['csstidy']['replace_colors']['slateblue'] = '#6A5ACD';  
+    241:$GLOBALS['csstidy']['replace_colors']['slategray'] = '#708090';  
+    242:$GLOBALS['csstidy']['replace_colors']['snow'] = '#FFFAFA';  
+    243:$GLOBALS['csstidy']['replace_colors']['springgreen'] = '#00FF7F';  
+    244:$GLOBALS['csstidy']['replace_colors']['steelblue'] = '#4682B4';  
+    245:$GLOBALS['csstidy']['replace_colors']['tan'] = '#D2B48C';  
+    246:$GLOBALS['csstidy']['replace_colors']['thistle'] = '#D8BFD8';  
+    247:$GLOBALS['csstidy']['replace_colors']['tomato'] = '#FF6347';  
+    248:$GLOBALS['csstidy']['replace_colors']['turquoise'] = '#40E0D0';  
+    249:$GLOBALS['csstidy']['replace_colors']['violet'] = '#EE82EE';  
+    250:$GLOBALS['csstidy']['replace_colors']['violetred'] = '#D02090';  
+    251:$GLOBALS['csstidy']['replace_colors']['wheat'] = '#F5DEB3';  
+    252:$GLOBALS['csstidy']['replace_colors']['whitesmoke'] = '#F5F5F5';  
+    253:$GLOBALS['csstidy']['replace_colors']['yellowgreen'] = '#9ACD32';  
+    254-  
+    255-  
+    256-/**  
+    257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues  
+    258- *  
+    259: * @global array $GLOBALS['csstidy']['shorthands']  
+    260- * @todo Are there new ones in CSS3?  
+    261- * @see dissolve_4value_shorthands()  
+    262- * @see merge_4value_shorthands()  
+    263- * @version 1.0  
+    264- */  
+    265:$GLOBALS['csstidy']['shorthands'] = array();  
+    266:$GLOBALS['csstidy']['shorthands']['border-color'] = array('border-top-color','border-right-color','border-bottom-color','border-left-color');  
+    267:$GLOBALS['csstidy']['shorthands']['border-style'] = array('border-top-style','border-right-style','border-bottom-style','border-left-style');  
+    268:$GLOBALS['csstidy']['shorthands']['border-width'] = array('border-top-width','border-right-width','border-bottom-width','border-left-width');  
+    269:$GLOBALS['csstidy']['shorthands']['margin'] = array('margin-top','margin-right','margin-bottom','margin-left');  
+    270:$GLOBALS['csstidy']['shorthands']['padding'] = array('padding-top','padding-right','padding-bottom','padding-left');  
+    271:$GLOBALS['csstidy']['shorthands']['-moz-border-radius'] = 0;  
+    272-  
+    273-/**  
+    274- * All CSS Properties. Needed for csstidy::property_is_next()  
+    275- *  
+    276: * @global array $GLOBALS['csstidy']['all_properties']  
+    277- * @todo Add CSS3 properties  
+    278- * @version 1.0  
+    279- * @see csstidy::property_is_next()  
+    280- */  
+    281:$GLOBALS['csstidy']['all_properties'] = array();  
+    282:$GLOBALS['csstidy']['all_properties']['background'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    283:$GLOBALS['csstidy']['all_properties']['background-color'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    284:$GLOBALS['csstidy']['all_properties']['background-image'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    285:$GLOBALS['csstidy']['all_properties']['background-repeat'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    286:$GLOBALS['csstidy']['all_properties']['background-attachment'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    287:$GLOBALS['csstidy']['all_properties']['background-position'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    288:$GLOBALS['csstidy']['all_properties']['border'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    289:$GLOBALS['csstidy']['all_properties']['border-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    290:$GLOBALS['csstidy']['all_properties']['border-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    291:$GLOBALS['csstidy']['all_properties']['border-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    292:$GLOBALS['csstidy']['all_properties']['border-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    293:$GLOBALS['csstidy']['all_properties']['border-color'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    294:$GLOBALS['csstidy']['all_properties']['border-top-color'] = 'CSS2.0,CSS2.1';  
+    295:$GLOBALS['csstidy']['all_properties']['border-bottom-color'] = 'CSS2.0,CSS2.1';  
+    296:$GLOBALS['csstidy']['all_properties']['border-left-color'] = 'CSS2.0,CSS2.1';  
+    297:$GLOBALS['csstidy']['all_properties']['border-right-color'] = 'CSS2.0,CSS2.1';  
+    298:$GLOBALS['csstidy']['all_properties']['border-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    299:$GLOBALS['csstidy']['all_properties']['border-top-style'] = 'CSS2.0,CSS2.1';  
+    300:$GLOBALS['csstidy']['all_properties']['border-right-style'] = 'CSS2.0,CSS2.1';  
+    301:$GLOBALS['csstidy']['all_properties']['border-left-style'] = 'CSS2.0,CSS2.1';  
+    302:$GLOBALS['csstidy']['all_properties']['border-bottom-style'] = 'CSS2.0,CSS2.1';  
+    303:$GLOBALS['csstidy']['all_properties']['border-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    304:$GLOBALS['csstidy']['all_properties']['border-top-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    305:$GLOBALS['csstidy']['all_properties']['border-right-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    306:$GLOBALS['csstidy']['all_properties']['border-left-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    307:$GLOBALS['csstidy']['all_properties']['border-bottom-width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    308:$GLOBALS['csstidy']['all_properties']['border-collapse'] = 'CSS2.0,CSS2.1';  
+    309:$GLOBALS['csstidy']['all_properties']['border-spacing'] = 'CSS2.0,CSS2.1';  
+    310:$GLOBALS['csstidy']['all_properties']['bottom'] = 'CSS2.0,CSS2.1';  
+    311:$GLOBALS['csstidy']['all_properties']['caption-side'] = 'CSS2.0,CSS2.1';  
+    312:$GLOBALS['csstidy']['all_properties']['content'] = 'CSS2.0,CSS2.1';  
+    313:$GLOBALS['csstidy']['all_properties']['clear'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    314:$GLOBALS['csstidy']['all_properties']['clip'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    315:$GLOBALS['csstidy']['all_properties']['color'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    316:$GLOBALS['csstidy']['all_properties']['counter-reset'] = 'CSS2.0,CSS2.1';  
+    317:$GLOBALS['csstidy']['all_properties']['counter-increment'] = 'CSS2.0,CSS2.1';  
+    318:$GLOBALS['csstidy']['all_properties']['cursor'] = 'CSS2.0,CSS2.1';  
+    319:$GLOBALS['csstidy']['all_properties']['empty-cells'] = 'CSS2.0,CSS2.1';  
+    320:$GLOBALS['csstidy']['all_properties']['display'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    321:$GLOBALS['csstidy']['all_properties']['direction'] = 'CSS2.0,CSS2.1';  
+    322:$GLOBALS['csstidy']['all_properties']['float'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    323:$GLOBALS['csstidy']['all_properties']['font'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    324:$GLOBALS['csstidy']['all_properties']['font-family'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    325:$GLOBALS['csstidy']['all_properties']['font-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    326:$GLOBALS['csstidy']['all_properties']['font-variant'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    327:$GLOBALS['csstidy']['all_properties']['font-weight'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    328:$GLOBALS['csstidy']['all_properties']['font-stretch'] = 'CSS2.0';  
+    329:$GLOBALS['csstidy']['all_properties']['font-size-adjust'] = 'CSS2.0';  
+    330:$GLOBALS['csstidy']['all_properties']['font-size'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    331:$GLOBALS['csstidy']['all_properties']['height'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    332:$GLOBALS['csstidy']['all_properties']['left'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    333:$GLOBALS['csstidy']['all_properties']['line-height'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    334:$GLOBALS['csstidy']['all_properties']['list-style'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    335:$GLOBALS['csstidy']['all_properties']['list-style-type'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    336:$GLOBALS['csstidy']['all_properties']['list-style-image'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    337:$GLOBALS['csstidy']['all_properties']['list-style-position'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    338:$GLOBALS['csstidy']['all_properties']['margin'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    339:$GLOBALS['csstidy']['all_properties']['margin-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    340:$GLOBALS['csstidy']['all_properties']['margin-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    341:$GLOBALS['csstidy']['all_properties']['margin-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    342:$GLOBALS['csstidy']['all_properties']['margin-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    343:$GLOBALS['csstidy']['all_properties']['marks'] = 'CSS1.0,CSS2.0';  
+    344:$GLOBALS['csstidy']['all_properties']['marker-offset'] = 'CSS2.0';  
+    345:$GLOBALS['csstidy']['all_properties']['max-height'] = 'CSS2.0,CSS2.1';  
+    346:$GLOBALS['csstidy']['all_properties']['max-width'] = 'CSS2.0,CSS2.1';  
+    347:$GLOBALS['csstidy']['all_properties']['min-height'] = 'CSS2.0,CSS2.1';  
+    348:$GLOBALS['csstidy']['all_properties']['min-width'] = 'CSS2.0,CSS2.1';  
+    349:$GLOBALS['csstidy']['all_properties']['overflow'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    350:$GLOBALS['csstidy']['all_properties']['orphans'] = 'CSS2.0,CSS2.1';  
+    351:$GLOBALS['csstidy']['all_properties']['outline'] = 'CSS2.0,CSS2.1';  
+    352:$GLOBALS['csstidy']['all_properties']['outline-width'] = 'CSS2.0,CSS2.1';  
+    353:$GLOBALS['csstidy']['all_properties']['outline-style'] = 'CSS2.0,CSS2.1';  
+    354:$GLOBALS['csstidy']['all_properties']['outline-color'] = 'CSS2.0,CSS2.1';  
+    355:$GLOBALS['csstidy']['all_properties']['padding'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    356:$GLOBALS['csstidy']['all_properties']['padding-top'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    357:$GLOBALS['csstidy']['all_properties']['padding-right'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    358:$GLOBALS['csstidy']['all_properties']['padding-bottom'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    359:$GLOBALS['csstidy']['all_properties']['padding-left'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    360:$GLOBALS['csstidy']['all_properties']['page-break-before'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    361:$GLOBALS['csstidy']['all_properties']['page-break-after'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    362:$GLOBALS['csstidy']['all_properties']['page-break-inside'] = 'CSS2.0,CSS2.1';  
+    363:$GLOBALS['csstidy']['all_properties']['page'] = 'CSS2.0';  
+    364:$GLOBALS['csstidy']['all_properties']['position'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    365:$GLOBALS['csstidy']['all_properties']['quotes'] = 'CSS2.0,CSS2.1';  
+    366:$GLOBALS['csstidy']['all_properties']['right'] = 'CSS2.0,CSS2.1';  
+    367:$GLOBALS['csstidy']['all_properties']['size'] = 'CSS1.0,CSS2.0';  
+    368:$GLOBALS['csstidy']['all_properties']['speak-header'] = 'CSS2.0,CSS2.1';  
+    369:$GLOBALS['csstidy']['all_properties']['table-layout'] = 'CSS2.0,CSS2.1';  
+    370:$GLOBALS['csstidy']['all_properties']['top'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    371:$GLOBALS['csstidy']['all_properties']['text-indent'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    372:$GLOBALS['csstidy']['all_properties']['text-align'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    373:$GLOBALS['csstidy']['all_properties']['text-decoration'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    374:$GLOBALS['csstidy']['all_properties']['text-shadow'] = 'CSS2.0';  
+    375:$GLOBALS['csstidy']['all_properties']['letter-spacing'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    376:$GLOBALS['csstidy']['all_properties']['word-spacing'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    377:$GLOBALS['csstidy']['all_properties']['text-transform'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    378:$GLOBALS['csstidy']['all_properties']['white-space'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    379:$GLOBALS['csstidy']['all_properties']['unicode-bidi'] = 'CSS2.0,CSS2.1';  
+    380:$GLOBALS['csstidy']['all_properties']['vertical-align'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    381:$GLOBALS['csstidy']['all_properties']['visibility'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    382:$GLOBALS['csstidy']['all_properties']['width'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    383:$GLOBALS['csstidy']['all_properties']['widows'] = 'CSS2.0,CSS2.1';  
+    384:$GLOBALS['csstidy']['all_properties']['z-index'] = 'CSS1.0,CSS2.0,CSS2.1';  
+    385-/* Speech */  
+    386:$GLOBALS['csstidy']['all_properties']['volume'] = 'CSS2.0,CSS2.1';  
+    387:$GLOBALS['csstidy']['all_properties']['speak'] = 'CSS2.0,CSS2.1';  
+    388:$GLOBALS['csstidy']['all_properties']['pause'] = 'CSS2.0,CSS2.1';  
+    389:$GLOBALS['csstidy']['all_properties']['pause-before'] = 'CSS2.0,CSS2.1';  
+    390:$GLOBALS['csstidy']['all_properties']['pause-after'] = 'CSS2.0,CSS2.1';  
+    391:$GLOBALS['csstidy']['all_properties']['cue'] = 'CSS2.0,CSS2.1';  
+    392:$GLOBALS['csstidy']['all_properties']['cue-before'] = 'CSS2.0,CSS2.1';  
+    393:$GLOBALS['csstidy']['all_properties']['cue-after'] = 'CSS2.0,CSS2.1';  
+    394:$GLOBALS['csstidy']['all_properties']['play-during'] = 'CSS2.0,CSS2.1';  
+    395:$GLOBALS['csstidy']['all_properties']['azimuth'] = 'CSS2.0,CSS2.1';  
+    396:$GLOBALS['csstidy']['all_properties']['elevation'] = 'CSS2.0,CSS2.1';  
+    397:$GLOBALS['csstidy']['all_properties']['speech-rate'] = 'CSS2.0,CSS2.1';  
+    398:$GLOBALS['csstidy']['all_properties']['voice-family'] = 'CSS2.0,CSS2.1';  
+    399:$GLOBALS['csstidy']['all_properties']['pitch'] = 'CSS2.0,CSS2.1';  
+    400:$GLOBALS['csstidy']['all_properties']['pitch-range'] = 'CSS2.0,CSS2.1';  
+    401:$GLOBALS['csstidy']['all_properties']['stress'] = 'CSS2.0,CSS2.1';  
+    402:$GLOBALS['csstidy']['all_properties']['richness'] = 'CSS2.0,CSS2.1';  
+    403:$GLOBALS['csstidy']['all_properties']['speak-punctuation'] = 'CSS2.0,CSS2.1';  
+    404:$GLOBALS['csstidy']['all_properties']['speak-numeral'] = 'CSS2.0,CSS2.1';  
+    405-  
+    406-/**  
+    407- * An array containing all predefined templates.  
+    408- *  
+    409: * @global array $GLOBALS['csstidy']['predefined_templates']  
+    410- * @version 1.0  
+    411- * @see csstidy::load_template()  
+    412- */  
+    413:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="at">'; //string before @rule  
+    414:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>'."\n"; //bracket after @-rule  
+    415:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="selector">'; //string before selector  
+    416:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span> <span class="format">{</span>'."\n"; //bracket after selector  
+    417:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="property">'; //string before property  
+    418:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span><span class="value">'; //string after property+before value  
+    419:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span><span class="format">;</span>'."\n"; //string after value  
+    420:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="format">}</span>'; //closing bracket - selector  
+    421:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n\n"; //space between blocks {...}  
+    422:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n".'<span class="format">}</span>'. "\n\n"; //closing bracket @-rule  
+    423:$GLOBALS['csstidy']['predefined_templates']['default'][] = ''; //indent in @-rule  
+    424:$GLOBALS['csstidy']['predefined_templates']['default'][] = '<span class="comment">'; // before comment  
+    425:$GLOBALS['csstidy']['predefined_templates']['default'][] = '</span>'."\n"; // after comment  
+    426:$GLOBALS['csstidy']['predefined_templates']['default'][] = "\n"; // after last line @-rule  
+    427-  
+    428:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="at">';  
+    429:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span> <span class="format">{</span>'."\n";  
+    430:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="selector">';  
+    431:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">{</span>';  
+    432:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="property">';  
+    433:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="value">';  
+    434:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span><span class="format">;</span>';  
+    435:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="format">}</span>';  
+    436:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n";  
+    437:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n". '<span class="format">}'."\n".'</span>';  
+    438:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '';  
+    439:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '<span class="comment">'; // before comment  
+    440:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = '</span>'; // after comment  
+    441:$GLOBALS['csstidy']['predefined_templates']['high_compression'][] = "\n";  
+    442-  
+    443:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="at">';  
+    444:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';  
+    445:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="selector">';  
+    446:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">{</span>';  
+    447:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="property">';  
+    448:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="value">';  
+    449:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span><span class="format">;</span>';  
+    450:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';  
+    451:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
+    452:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="format">}</span>';  
+    453:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
+    454:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '<span class="comment">'; // before comment  
+    455:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '</span>'; // after comment  
+    456:$GLOBALS['csstidy']['predefined_templates']['highest_compression'][] = '';  
+    457-  
+    458:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="at">';  
+    459:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span> <span class="format">{</span>'."\n";  
+    460:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="selector">';  
+    461:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span>'."\n".'<span class="format">{</span>'."\n";  
+    462:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '	<span class="property">';  
+    463:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="value">';  
+    464:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span><span class="format">;</span>'."\n";  
+    465:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="format">}</span>';  
+    466:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n\n";  
+    467:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n".'<span class="format">}</span>'."\n\n";  
+    468:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '	';  
+    469:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '<span class="comment">'; // before comment  
+    470:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = '</span>'."\n"; // after comment  
+    471:$GLOBALS['csstidy']['predefined_templates']['low_compression'][] = "\n";  
+    472-  
+    473-?>
+
+./lib/CSSTidy/class.csstidy.php:359
+  
+    356-{  
+    357-	++$i;  
+    358-	$add = '';  
+    359:	$tokens =& $GLOBALS['csstidy']['tokens'];  
+    360-	$replaced = false;  
+    361-  
+    362-	while($i < strlen($string) && (ctype_xdigit($string{$i}) || ctype_space($string{$i})) && strlen($add) < 6)
+
+./lib/CSSTidy/class.csstidy.php:407
+  
+    404- */  
+    405-function load_template($content, $from_file=true)  
+    406-{  
+    407:	$predefined_templates =& $GLOBALS['csstidy']['predefined_templates'];  
+    408-	if($content == 'high_compression' || $content == 'default' || $content == 'highest_compression' || $content == 'low_compression')  
+    409-	{  
+    410-		$this->template = $predefined_templates[$content];
+
+./lib/CSSTidy/class.csstidy.php:447
+  
+    444- */  
+    445-function is_token(&$string, $i)  
+    446-{  
+    447:	$tokens =& $GLOBALS['csstidy']['tokens'];  
+    448-	return (strpos($tokens, $string{$i}) !== false && !csstidy::escaped($string,$i));  
+    449-}  
+    450-
+
+./lib/CSSTidy/class.csstidy.php:464
+  
+    461-    $this->print = new csstidy_print($this);  
+    462-    $this->optimise = new csstidy_optimise($this);  
+    463-  
+    464:    $all_properties =& $GLOBALS['csstidy']['all_properties'];  
+    465:    $at_rules =& $GLOBALS['csstidy']['at_rules'];  
+    466-  
+    467-    $this->css = array();  
+    468-    $this->print->input_css = $string;
+
+./lib/CSSTidy/class.csstidy.php:785
+  
+    782-                $temp_add = "\\A ";  
+    783-                $this->log('Fixed incorrect newline in string','Warning');  
+    784-            }  
+    785:            if (!($this->str_char == ')' && in_array($string{$i}, $GLOBALS['csstidy']['whitespace']) && !$this->str_in_str)) {  
+    786-                $this->cur_string .= $temp_add;  
+    787-            }  
+    788-            if($string{$i} == $this->str_char && !csstidy::escaped($string,$i) && !$this->str_in_str)  
+    789-            {  
+    790-                $this->status = $this->from;  
+    791:                if (!preg_match('|[' . implode('', $GLOBALS['csstidy']['whitespace']) . ']|uis', $this->cur_string) && $this->property != 'content') {  
+    792-                    if ($this->str_char == '"' || $this->str_char == '\'') {  
+    793-						$this->cur_string = substr($this->cur_string, 1, -1);  
+    794-					} else if (strlen($this->cur_string) > 3 && ($this->cur_string[1] == '"' || $this->cur_string[1] == '\'')) /* () */ {
+
+./lib/CSSTidy/class.csstidy.php:936
+  
+    933- */  
+    934-function is_important(&$value)  
+    935-{  
+    936:	return (!strcasecmp(substr(str_replace($GLOBALS['csstidy']['whitespace'],'',$value),-10,10),'!important'));  
+    937-}  
+    938-  
+    939-/**
+
+./lib/CSSTidy/class.csstidy.php:970
+  
+    967- */  
+    968-function property_is_next($istring, $pos)  
+    969-{  
+    970:	$all_properties =& $GLOBALS['csstidy']['all_properties'];  
+    971-	$istring = substr($istring,$pos,strlen($istring)-$pos);  
+    972-	$pos = strpos($istring,':');  
+    973-	if($pos === false)
+
+./lib/CSSTidy/class.csstidy.php:994
+  
+    991- * @version 1.0  
+    992- */  
+    993-function property_is_valid($property) {  
+    994:    $all_properties =& $GLOBALS['csstidy']['all_properties'];  
+    995-    return (isset($all_properties[$property]) && strpos($all_properties[$property],strtoupper($this->get_cfg('css_level'))) !== false );  
+    996-}  
+    997-
+
+./lib/Nusoap/class.nusoap_base.php:74
+  
+    71-  
+    72-// class variable emulation  
+    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html  
+    74:$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = 9;  
+    75-  
+    76-/**  
+    77-*
+
+./lib/Nusoap/class.nusoap_base.php:226
+  
+    223-	* @access	public  
+    224-	*/  
+    225-	function nusoap_base() {  
+    226:		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
+    227-	}  
+    228-  
+    229-	/**
+
+./lib/Nusoap/class.nusoap_base.php:236
+  
+    233-	* @access	public  
+    234-	*/  
+    235-	function getGlobalDebugLevel() {  
+    236:		return $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
+    237-	}  
+    238-  
+    239-	/**
+
+./lib/Nusoap/class.nusoap_base.php:246
+  
+    243-	* @access	public  
+    244-	*/  
+    245-	function setGlobalDebugLevel($level) {  
+    246:		$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = $level;  
+    247-	}  
+    248-  
+    249-	/**
+
+./lib/Nusoap/nusoap.php:74
+  
+    71-  
+    72-// class variable emulation  
+    73-// cf. http://www.webkreator.com/php/techniques/php-static-class-variables.html  
+    74:$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = 9;  
+    75-  
+    76-/**  
+    77-*
+
+./lib/Nusoap/nusoap.php:226
+  
+    223-	* @access	public  
+    224-	*/  
+    225-	function nusoap_base() {  
+    226:		$this->debugLevel = $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
+    227-	}  
+    228-  
+    229-	/**
+
+./lib/Nusoap/nusoap.php:236
+  
+    233-	* @access	public  
+    234-	*/  
+    235-	function getGlobalDebugLevel() {  
+    236:		return $GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'];  
+    237-	}  
+    238-  
+    239-	/**
+
+./lib/Nusoap/nusoap.php:246
+  
+    243-	* @access	public  
+    244-	*/  
+    245-	function setGlobalDebugLevel($level) {  
+    246:		$GLOBALS['_transient']['static']['nusoap_base']['globalDebugLevel'] = $level;  
+    247-	}  
+    248-  
+    249-	/**
+
+./lib/Minify/FirePHP.php:963
+  
+    960-  
+    961-        foreach ($Object as $key => $val) {  
+    962-  
+    963:          // Encoding the $GLOBALS PHP array causes an infinite loop  
+    964-          // if the recursion is not reset here as it contains  
+    965-          // a reference to itself. This is the only way I have come up  
+    966-          // with to stop infinite recursion in this case.
+
+./lib/Minify/FirePHP.php:1352
+  
+    1349-  */  
+    1350-  private function json_name_value($name, $value)  
+    1351-  {  
+    1352:      // Encoding the $GLOBALS PHP array causes an infinite loop  
+    1353-      // if the recursion is not reset here as it contains  
+    1354-      // a reference to itself. This is the only way I have come up  
+    1355-      // with to stop infinite recursion in this case.
+
+./inc/functions/plugin.php:15
+  
+    12- * @return void  
+    13- */  
+    14-function w3tc_add_action($action, $callback) {  
+    15:    $GLOBALS['_w3tc_actions'][$action][] = $callback;  
+    16-}  
+    17-  
+    18-/**
+
+./inc/functions/plugin.php:26
+  
+    23- * @return mixed  
+    24- */  
+    25-function w3tc_do_action($action, $value = null) {  
+    26:    if (isset($GLOBALS['_w3tc_actions'][$action])) {  
+    27:        foreach ((array) $GLOBALS['_w3tc_actions'][$action] as $callback) {  
+    28-            if (is_callable($callback)) {  
+    29-                $value = call_user_func($callback, $value);  
+    30-            }
+
+./inc/define.php:416
+  
+    413-        if (file_exists(W3TC_BLOGNAMES_PATH)) {  
+    414-            // Get blognames from cache  
+    415-            $blognames = w3_load_blognames();  
+    416:        } elseif (isset($GLOBALS['wpdb'])) {  
+    417-            // Get blognames from DB  
+    418-            $blognames = w3_get_blognames();  
+    419-        } else {
+
+./inc/define.php:437
+  
+    434- * @return integer  
+    435- */  
+    436-function w3_get_blog_id() {  
+    437:    return (isset($GLOBALS['blog_id']) ? (int) $GLOBALS['blog_id'] : 0);  
+    438-}  
+    439-  
+    440-/**
+
+./inc/define.php:869
+  
+    866-        '%DOMAIN%',  
+    867-        '%BASE_PATH%'  
+    868-    ), array(  
+    869:        (isset($GLOBALS['blog_id']) ? (int) $GLOBALS['blog_id'] : 0),  
+    870:        (isset($GLOBALS['post_id']) ? (int) $GLOBALS['post_id'] : 0),  
+    871-        w3_get_blogname(),  
+    872-        w3_get_host(),  
+    873-        w3_get_domain(w3_get_host()),
+
+./wp-content/object-cache.php:30
+  
+    27-     * @return void  
+    28-     */  
+    29-    function wp_cache_init() {  
+    30:        $GLOBALS['wp_object_cache'] = & w3_instance('W3_ObjectCache');  
+    31-    }  
+    32-  
+    33-    /**
+
+./wp-content/db.php:38
+  
+    35-  
+    36-        require_once W3TC_LIB_W3_DIR . '/Db.php';  
+    37-  
+    38:        @$GLOBALS['wpdb'] = & W3_Db::instance();  
+    39-    }  
+    40-}
+
+#### $_SERVER ####
+./lib/W3/Minify.php:84
+  
+    82-         * Fix DOCUMENT_ROOT  
+    83-         */  
+    84:        $_SERVER['DOCUMENT_ROOT'] = w3_get_document_root();  
+    85-  
+    86-        /**  
+    87-         * Set cache engine
+
+./lib/W3/Minify.php:217
+  
+    214-     * @return bool  
+    215-     */  
+    216-    function log($msg) {  
+    217:        $data = sprintf("[%s] [%s] [%s] %s\n", date('r'), $_SERVER['REQUEST_URI'], (!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'), $msg);  
+    218-  
+    219-        return @file_put_contents(W3TC_MINIFY_LOG_FILE, $data, FILE_APPEND);  
+    220-    }
+
+./lib/W3/Minify.php:688
+  
+    685-     * @return boolean  
+    686-     */  
+    687-    function _send_notification() {  
+    688:        $from_email = 'wordpress@' . w3_get_domain($_SERVER['SERVER_NAME']);  
+    689-        $from_name = get_option('blogname');  
+    690-        $to_name = $to_email = get_option('admin_email');  
+    691-        $body = @file_get_contents(W3TC_INC_DIR . '/email/minify_error_notification.php');
+
+./lib/W3/PgCacheFlush.php:367
+  
+    364-     * @return string  
+    365-     */  
+    366-    function _get_pagenum_link($url, $pagenum = 1) {  
+    367:        $request_uri = $_SERVER['REQUEST_URI'];  
+    368:        $_SERVER['REQUEST_URI'] = $url;  
+    369-  
+    370-        $link = get_pagenum_link($pagenum);  
+    371-  
+    372:        $_SERVER['REQUEST_URI'] = $request_uri;  
+    373-  
+    374-        return $link;  
+    375-    }
+
+./lib/W3/Mobile.php:45
+  
+    42-            foreach ($this->groups as $group => $config) {  
+    43-                if (isset($config['enabled']) && $config['enabled'] && isset($config['agents'])) {  
+    44-                    foreach ((array) $config['agents'] as $agent) {  
+    45:                        if ($agent && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('~' . $agent . '~i', $_SERVER['HTTP_USER_AGENT'])) {  
+    46-                            $mobile_group = $group;  
+    47-  
+    48-                            return $mobile_group;
+
+./lib/W3/Db.php:553
+  
+    550-        /**  
+    551-         * Check User Agent  
+    552-         */  
+    553:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
+    554-            return false;  
+    555-        }  
+    556-
+
+./lib/W3/Db.php:611
+  
+    608-        );  
+    609-  
+    610-        foreach ($auto_reject_uri as $uri) {  
+    611:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
+    612-                return false;  
+    613-            }  
+    614-        }
+
+./lib/W3/Db.php:621
+  
+    618-  
+    619-        foreach ($reject_uri as $expr) {  
+    620-            $expr = trim($expr);  
+    621:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
+    622-                return false;  
+    623-            }  
+    624-        }
+
+./lib/W3/ObjectCache.php:578
+  
+    575-        /**  
+    576-         * Check User Agent  
+    577-         */  
+    578:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
+    579-            return false;  
+    580-        }  
+    581-
+
+./lib/W3/CloudFlare.php:116
+  
+    113-     * @return void  
+    114-     */  
+    115-    function fix_remote_addr() {  
+    116:        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {  
+    117-            foreach ($this->_ip_ranges as $range) {  
+    118:                if ($this->_ip_in_range($_SERVER['REMOTE_ADDR'], $range)) {  
+    119:                    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_CF_CONNECTING_IP'];  
+    120-                    break;  
+    121-                }  
+    122-            }
+
+./lib/W3/Minifier.php:200
+  
+    197-                $symlinks = $this->_config->get_array('minify.symlinks');  
+    198-  
+    199-                foreach ($symlinks as $link => $target) {  
+    200:                    $link = str_replace('//', realpath($_SERVER['DOCUMENT_ROOT']), $link);  
+    201-                    $link = strtr($link, '/', DIRECTORY_SEPARATOR);  
+    202-                    $options['symlinks'][$link] = realpath($target);  
+    203-                }
+
+./lib/W3/PgCache.php:113
+  
+    110-    function __construct() {  
+    111-        $this->_config = & w3_instance('W3_Config');  
+    112-        $this->_debug = $this->_config->get_boolean('pgcache.debug');  
+    113:        $this->_request_uri = $_SERVER['REQUEST_URI'];  
+    114-        $this->_lifetime = $this->_config->get_integer('browsercache.html.lifetime');  
+    115-        $this->_enhanced_mode = ($this->_config->get_string('pgcache.engine') == 'file_generic');  
+    116-
+
+./lib/W3/PgCache.php:474
+  
+    471-        /**  
+    472-         * Skip if posting  
+    473-         */  
+    474:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
+    475-            $this->cache_reject_reason = 'Requested method is POST';  
+    476-  
+    477-            return false;
+
+./lib/W3/PgCache.php:492
+  
+    489-        /**  
+    490-         * Check request URI  
+    491-         */  
+    492:        if (!in_array($_SERVER['PHP_SELF'], $this->_config->get_array('pgcache.accept.files')) && !$this->_check_request_uri()) {  
+    493-            $this->cache_reject_reason = 'Requested URI is rejected';  
+    494-  
+    495-            return false;
+
+./lib/W3/PgCache.php:704
+  
+    701-        }  
+    702-  
+    703-        foreach ($uas as $ua) {  
+    704:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
+    705-                return false;  
+    706-            }  
+    707-        }
+
+./lib/W3/PgCache.php:824
+  
+    821-            $compressions = $this->_get_compressions();  
+    822-  
+    823-            foreach ($compressions as $compression) {  
+    824:                if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && stristr($_SERVER['HTTP_ACCEPT_ENCODING'], $compression) !== false) {  
+    825-                    return $compression;  
+    826-                }  
+    827-            }
+
+./lib/W3/PgCache.php:877
+  
+    874-     * @return boolean  
+    875-     */  
+    876-    function _is_buggy_ie() {  
+    877:        if (isset($_SERVER['HTTP_USER_AGENT'])) {  
+    878:            $ua = $_SERVER['HTTP_USER_AGENT'];  
+    879-  
+    880-            if (strpos($ua, 'Mozilla/4.0 (compatible; MSIE ') === 0 && strpos($ua, 'Opera') === false) {  
+    881-                $version = (float) substr($ua, 30);
+
+./lib/W3/PgCache.php:1200
+  
+    1197-     * @return boolean  
+    1198-     */  
+    1199-    function _check_modified_since($time) {  
+    1200:        if (!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {  
+    1201:            $if_modified_since = $_SERVER['HTTP_IF_MODIFIED_SINCE'];  
+    1202-  
+    1203-            // IE has tacked on extra data to this header, strip it  
+    1204-            if (($semicolon = strrpos($if_modified_since, ';')) !== false) {
+
+./lib/W3/PgCache.php:1220
+  
+    1217-     * @return boolean  
+    1218-     */  
+    1219-    function _check_match($etag) {  
+    1220:        if (!empty($_SERVER['HTTP_IF_NONE_MATCH'])) {  
+    1221:            $if_none_match = (get_magic_quotes_gpc() ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : $_SERVER['HTTP_IF_NONE_MATCH']);  
+    1222-            $client_etags = explode(',', $if_none_match);  
+    1223-  
+    1224-            foreach ($client_etags as $client_etag) {
+
+./lib/W3/Cdn/Base.php:231
+  
+    228-    function format_url($path) {  
+    229-        $url = $this->_format_url($path);  
+    230-  
+    231:        if ($url && $this->_config['compression'] && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && stristr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && $this->_may_gzip($path)) {  
+    232-            if (($qpos = strpos($url, '?')) !== false) {  
+    233-                $url = substr_replace($url, $this->_gzip_extension, $qpos, 0);  
+    234-            } else {
+
+./lib/W3/Plugin/Minify.php:996
+  
+    993-        ));  
+    994-  
+    995-        foreach ($uas as $ua) {  
+    996:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
+    997-                return false;  
+    998-            }  
+    999-        }
+
+./lib/W3/Plugin/Minify.php:1034
+  
+    1031-        );  
+    1032-  
+    1033-        foreach ($auto_reject_uri as $uri) {  
+    1034:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
+    1035-                return false;  
+    1036-            }  
+    1037-        }
+
+./lib/W3/Plugin/Minify.php:1044
+  
+    1041-  
+    1042-        foreach ($reject_uri as $expr) {  
+    1043-            $expr = trim($expr);  
+    1044:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
+    1045-                return false;  
+    1046-            }  
+    1047-        }
+
+./lib/W3/Plugin/CdnEnabled.php:1869
+  
+    1866-        ));  
+    1867-  
+    1868-        foreach ($uas as $ua) {  
+    1869:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
+    1870-                return false;  
+    1871-            }  
+    1872-        }
+
+./lib/W3/Plugin/CdnEnabled.php:1889
+  
+    1886-        );  
+    1887-  
+    1888-        foreach ($auto_reject_uri as $uri) {  
+    1889:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
+    1890-                return false;  
+    1891-            }  
+    1892-        }
+
+./lib/W3/Plugin/CdnEnabled.php:1899
+  
+    1896-  
+    1897-        foreach ($reject_uri as $expr) {  
+    1898-            $expr = trim($expr);  
+    1899:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
+    1900-                return false;  
+    1901-            }  
+    1902-        }
+
+./lib/W3/Plugin/MinifyEnabled.php:1054
+  
+    1051-        ));  
+    1052-  
+    1053-        foreach ($uas as $ua) {  
+    1054:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
+    1055-                return false;  
+    1056-            }  
+    1057-        }
+
+./lib/W3/Plugin/MinifyEnabled.php:1092
+  
+    1089-        );  
+    1090-  
+    1091-        foreach ($auto_reject_uri as $uri) {  
+    1092:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
+    1093-                return false;  
+    1094-            }  
+    1095-        }
+
+./lib/W3/Plugin/MinifyEnabled.php:1102
+  
+    1099-  
+    1100-        foreach ($reject_uri as $expr) {  
+    1101-            $expr = trim($expr);  
+    1102:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
+    1103-                return false;  
+    1104-            }  
+    1105-        }
+
+./lib/W3/Plugin/BrowserCache.php:116
+  
+    113-        /**  
+    114-         * Check User Agent  
+    115-         */  
+    116:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
+    117-            return false;  
+    118-        }  
+    119-
+
+./lib/W3/Plugin/TotalCache.php:43
+  
+    40-            'admin_bar_menu'  
+    41-        ), 150);  
+    42-  
+    43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&  
+    44:                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {  
+    45-            add_filter('template', array(  
+    46-                &$this,  
+    47-                'template_preview'
+
+./lib/W3/Plugin/TotalCache.php:148
+  
+    145-        /**  
+    146-         * Check request and handle w3tc_request_data requests  
+    147-         */  
+    148:        $pos = strpos($_SERVER['REQUEST_URI'], '/w3tc_request_data/');  
+    149-  
+    150-        if ($pos !== false) {  
+    151:            $hash = substr($_SERVER['REQUEST_URI'], $pos + 19, 32);  
+    152-  
+    153-            if (strlen($hash) == 32) {  
+    154-                $request_data = (array) get_option('w3tc_request_data');
+
+./lib/W3/Plugin/TotalCache.php:370
+  
+    367-                /**  
+    368-                 * Replace links for preview mode  
+    369-                 */  
+    370:                if (w3_is_preview_mode() && isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] != W3TC_POWERED_BY) {  
+    371-                    $domain_url_regexp = w3_get_domain_url_regexp();  
+    372-  
+    373-                    $buffer = preg_replace_callback('~(href|src|action)=([\'"])(' . $domain_url_regexp . ')?(/[^\'"]*)~', array(
+
+./lib/W3/Plugin/TotalCache.php:383
+  
+    380-                 * Add footer comment  
+    381-                 */  
+    382-                $date = date_i18n('Y-m-d H:i:s');  
+    383:                $host = (!empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost');  
+    384-  
+    385-                if ($this->_config->get_string('common.support') != '' || $this->_config->get_boolean('common.tweeted')) {  
+    386-                    $buffer .= sprintf("\r\n<!-- Served from: %s @ %s by W3 Total Cache -->", w3_escape_comment($host), $date);
+
+./lib/W3/Plugin/TotalCache.php:523
+  
+    520-        /**  
+    521-         * Check User Agent  
+    522-         */  
+    523:        if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], W3TC_POWERED_BY) !== false) {  
+    524-            return false;  
+    525-        }  
+    526-
+
+./lib/W3/Plugin/Cdn.php:738
+  
+    735-        ));  
+    736-  
+    737-        foreach ($uas as $ua) {  
+    738:            if (isset($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $ua) !== false) {  
+    739-                return false;  
+    740-            }  
+    741-        }
+
+./lib/W3/Plugin/Cdn.php:758
+  
+    755-        );  
+    756-  
+    757-        foreach ($auto_reject_uri as $uri) {  
+    758:            if (strstr($_SERVER['REQUEST_URI'], $uri) !== false) {  
+    759-                return false;  
+    760-            }  
+    761-        }
+
+./lib/W3/Plugin/Cdn.php:768
+  
+    765-  
+    766-        foreach ($reject_uri as $expr) {  
+    767-            $expr = trim($expr);  
+    768:            if ($expr != '' && preg_match('~' . $expr . '~i', $_SERVER['REQUEST_URI'])) {  
+    769-                return false;  
+    770-            }  
+    771-        }
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1833
+  
+    1830-     * @return void  
+    1831-     */  
+    1832-    function widget_latest_control($widget_id, $form_inputs = array()) {  
+    1833:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
+    1834-            require_once W3TC_LIB_W3_DIR . '/Request.php';  
+    1835-  
+    1836-            $this->_config->set('widget.latest.items', W3_Request::get_integer('w3tc_widget_latest_items', 3));
+
+./lib/W3/Plugin/TotalCacheAdmin.php:1872
+  
+    1869-     * @return void  
+    1870-     */  
+    1871-    function widget_pagespeed_control($widget_id, $form_inputs = array()) {  
+    1872:        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
+    1873-            require_once W3TC_LIB_W3_DIR . '/Request.php';  
+    1874-  
+    1875-            $this->_config->set('widget.pagespeed.key', W3_Request::get_string('w3tc_widget_pagespeed_key'));
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5396
+  
+    5393-            return $parse_url['host'];  
+    5394-        }  
+    5395-  
+    5396:        return $_SERVER['HTTP_HOST'];  
+    5397-    }  
+    5398-  
+    5399-    /**
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5648
+  
+    5645-        $server_info = array(  
+    5646-            'w3tc' => array(  
+    5647-                'version' => W3TC_VERSION,  
+    5648:                'server' => (!empty($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown'),  
+    5649-                'dir' => W3TC_DIR,  
+    5650-                'content_dir' => W3TC_CONTENT_DIR,  
+    5651-                'blogname' => W3TC_BLOGNAME,
+
+./lib/W3/Plugin/TotalCacheAdmin.php:5728
+  
+    5725-        $url = W3_Request::get_string('redirect');  
+    5726-  
+    5727-        if ($url == '') {  
+    5728:            if ($check_referrer && !empty($_SERVER['HTTP_REFERER'])) {  
+    5729:                $url = $_SERVER['HTTP_REFERER'];  
+    5730-            } else {  
+    5731-                $url = 'admin.php';  
+    5732-                $params = array_merge(array(
+
+./lib/W3/Referrer.php:44
+  
+    41-  
+    42-        if (isset($_COOKIE[W3TC_REFERRER_COOKIE_NAME])) {  
+    43-            $http_referrer = $_COOKIE[W3TC_REFERRER_COOKIE_NAME];  
+    44:        } elseif (isset($_SERVER['HTTP_REFERER'])) {  
+    45:            $http_referrer = $_SERVER['HTTP_REFERER'];  
+    46-  
+    47-            setcookie(W3TC_REFERRER_COOKIE_NAME, $http_referrer, 0, w3_get_base_path());  
+    48-        }
+
+./lib/Nusoap/class.wsdl.php:760
+  
+    757-    function webDescription(){  
+    758-    	global $HTTP_SERVER_VARS;  
+    759-  
+    760:		if (isset($_SERVER)) {  
+    761:			$PHP_SELF = $_SERVER['PHP_SELF'];  
+    762-		} elseif (isset($HTTP_SERVER_VARS)) {  
+    763-			$PHP_SELF = $HTTP_SERVER_VARS['PHP_SELF'];  
+    764-		} else {
+
+./lib/Nusoap/nusoap.php:3637
+  
+    3634-		global $debug;  
+    3635-		global $HTTP_SERVER_VARS;  
+    3636-  
+    3637:		if (isset($_SERVER)) {  
+    3638-			$this->debug("_SERVER is defined:");  
+    3639:			$this->appendDebug($this->varDump($_SERVER));  
+    3640-		} elseif (isset($HTTP_SERVER_VARS)) {  
+    3641-			$this->debug("HTTP_SERVER_VARS is defined:");  
+    3642-			$this->appendDebug($this->varDump($HTTP_SERVER_VARS));
+
+./lib/Nusoap/nusoap.php:3650
+  
+    3647-		if (isset($debug)) {  
+    3648-			$this->debug("In nusoap_server, set debug_flag=$debug based on global flag");  
+    3649-			$this->debug_flag = $debug;  
+    3650:		} elseif (isset($_SERVER['QUERY_STRING'])) {  
+    3651:			$qs = explode('&', $_SERVER['QUERY_STRING']);  
+    3652-			foreach ($qs as $v) {  
+    3653-				if (substr($v, 0, 6) == 'debug=') {  
+    3654-					$this->debug("In nusoap_server, set debug_flag=" . substr($v, 6) . " based on query string #1");
+
+./lib/Nusoap/nusoap.php:3697
+  
+    3694-	function service($data){  
+    3695-		global $HTTP_SERVER_VARS;  
+    3696-  
+    3697:		if (isset($_SERVER['REQUEST_METHOD'])) {  
+    3698:			$rm = $_SERVER['REQUEST_METHOD'];  
+    3699-		} elseif (isset($HTTP_SERVER_VARS['REQUEST_METHOD'])) {  
+    3700-			$rm = $HTTP_SERVER_VARS['REQUEST_METHOD'];  
+    3701-		} else {  
+    3702-			$rm = '';  
+    3703-		}  
+    3704-  
+    3705:		if (isset($_SERVER['QUERY_STRING'])) {  
+    3706:			$qs = $_SERVER['QUERY_STRING'];  
+    3707-		} elseif (isset($HTTP_SERVER_VARS['QUERY_STRING'])) {  
+    3708-			$qs = $HTTP_SERVER_VARS['QUERY_STRING'];  
+    3709-		} else {
+
+./lib/Nusoap/nusoap.php:3808
+  
+    3805-				// should be US-ASCII for HTTP 1.0 or ISO-8859-1 for HTTP 1.1  
+    3806-				$this->xml_encoding = 'ISO-8859-1';  
+    3807-			}  
+    3808:		} elseif(isset($_SERVER) && is_array($_SERVER)){  
+    3809-			$this->debug("In parse_http_headers, use _SERVER");  
+    3810:			foreach ($_SERVER as $k => $v) {  
+    3811-				if (substr($k, 0, 5) == 'HTTP_') {  
+    3812-					$k = str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($k, 5))));  
+    3813-				} else {
+
+./lib/Nusoap/nusoap.php:4436
+  
+    4433-		if(false == $namespace) {  
+    4434-		}  
+    4435-		if(false == $soapaction) {  
+    4436:			if (isset($_SERVER)) {  
+    4437:				$SERVER_NAME = $_SERVER['SERVER_NAME'];  
+    4438:				$SCRIPT_NAME = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];  
+    4439:				$HTTPS = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : (isset($HTTP_SERVER_VARS['HTTPS']) ? $HTTP_SERVER_VARS['HTTPS'] : 'off');  
+    4440-			} elseif (isset($HTTP_SERVER_VARS)) {  
+    4441-				$SERVER_NAME = $HTTP_SERVER_VARS['SERVER_NAME'];  
+    4442-				$SCRIPT_NAME = isset($HTTP_SERVER_VARS['PHP_SELF']) ? $HTTP_SERVER_VARS['PHP_SELF'] : $HTTP_SERVER_VARS['SCRIPT_NAME'];
+
+./lib/Nusoap/nusoap.php:4510
+  
+    4507-    {  
+    4508-    	global $HTTP_SERVER_VARS;  
+    4509-  
+    4510:		if (isset($_SERVER)) {  
+    4511:			$SERVER_NAME = $_SERVER['SERVER_NAME'];  
+    4512:			$SERVER_PORT = $_SERVER['SERVER_PORT'];  
+    4513:			$SCRIPT_NAME = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];  
+    4514:			$HTTPS = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : (isset($HTTP_SERVER_VARS['HTTPS']) ? $HTTP_SERVER_VARS['HTTPS'] : 'off');  
+    4515-		} elseif (isset($HTTP_SERVER_VARS)) {  
+    4516-			$SERVER_NAME = $HTTP_SERVER_VARS['SERVER_NAME'];  
+    4517-			$SERVER_PORT = $HTTP_SERVER_VARS['SERVER_PORT'];
+
+./lib/Nusoap/nusoap.php:5341
+  
+    5338-    function webDescription(){  
+    5339-    	global $HTTP_SERVER_VARS;  
+    5340-  
+    5341:		if (isset($_SERVER)) {  
+    5342:			$PHP_SELF = $_SERVER['PHP_SELF'];  
+    5343-		} elseif (isset($HTTP_SERVER_VARS)) {  
+    5344-			$PHP_SELF = $HTTP_SERVER_VARS['PHP_SELF'];  
+    5345-		} else {
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:114
+  
+    111-	/**  
+    112-	 * Checks if a configuration for a specific role instance exists.  
+    113-	 *  
+    114:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
+    115-	 * @return boolean  
+    116-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
+    117-	 */  
+    118-	public function configurationForRoleInstanceExists($roleInstance = null)  
+    119-	{  
+    120-		if (is_null($roleInstance)) {  
+    121:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
+    122-		}  
+    123-  
+    124-		return $this->_blobStorageClient->blobExists($this->_controlContainer, $roleInstance);
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:135
+  
+    132-	 */  
+    133-	public function configurationForCurrentRoleInstanceExists()  
+    134-	{  
+    135:		if (!isset($_SERVER['RdRoleId'])) {  
+    136-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
+    137-		}  
+    138-
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:150
+  
+    147-	 */  
+    148-	public function getConfigurationForCurrentRoleInstance()  
+    149-	{  
+    150:		if (!isset($_SERVER['RdRoleId'])) {  
+    151-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
+    152-		}  
+    153-		return $this->getConfigurationForRoleInstance($this->_getCurrentRoleInstanceId());
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:164
+  
+    161-	 */  
+    162-	protected function _getCurrentRoleInstanceId()  
+    163-	{  
+    164:		if (!isset($_SERVER['RdRoleId'])) {  
+    165-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
+    166-		}  
+    167-  
+    168:		if (strpos($_SERVER['RdRoleId'], 'deployment(') === false) {  
+    169:			return $_SERVER['RdRoleId'];  
+    170-		} else {  
+    171:			$roleIdParts = explode('.', $_SERVER['RdRoleId']);  
+    172:			return $roleIdParts[0] . '/' . $roleIdParts[2] . '/' . $_SERVER['RdRoleId'];  
+    173-		}  
+    174-	}  
+    175-
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:184
+  
+    181-	 */  
+    182-	public function setConfigurationForCurrentRoleInstance(Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration)  
+    183-	{  
+    184:		if (!isset($_SERVER['RdRoleId'])) {  
+    185-			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Server variable \'RdRoleId\' is unknown. Please verify the application is running in Development Fabric or Windows Azure Fabric.');  
+    186-		}  
+    187-
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:194
+  
+    191-	/**  
+    192-	 * Get configuration for a specific role instance  
+    193-	 *  
+    194:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
+    195-	 * @return Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance  
+    196-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
+    197-	 */  
+    198-	public function getConfigurationForRoleInstance($roleInstance = null)  
+    199-	{  
+    200-		if (is_null($roleInstance)) {  
+    201:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
+    202-		}  
+    203-  
+    204-		if ($this->_blobStorageClient->blobExists($this->_controlContainer, $roleInstance)) {
+
+./lib/Microsoft/WindowsAzure/Diagnostics/Manager.php:216
+  
+    213-	/**  
+    214-	 * Set configuration for a specific role instance  
+    215-	 *  
+    216:	 * @param string $roleInstance Role instance name, can be found in $_SERVER['RdRoleId'] when hosted on Windows Azure.  
+    217-	 * @param Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration Configuration to apply  
+    218-	 * @throws Microsoft_WindowsAzure_Diagnostics_Exception  
+    219-	 */  
+    220-	public function setConfigurationForRoleInstance($roleInstance = null, Microsoft_WindowsAzure_Diagnostics_ConfigurationInstance $configuration)  
+    221-	{  
+    222-		if (is_null($roleInstance)) {  
+    223:			throw new Microsoft_WindowsAzure_Diagnostics_Exception('Role instance should be specified. Try reading $_SERVER[\'RdRoleId\'] for this information if the application is hosted on Windows Azure Fabric or Development Fabric.');  
+    224-		}  
+    225-  
+    226-		$this->_blobStorageClient->putBlobData($this->_controlContainer, $roleInstance, $configuration->toXml(), array(), null, array('Content-Type' => 'text/xml'));
+
+./lib/Minify/HTTP/ConditionalGet.php:126
+  
+    123-  
+    124-        // backwards compatibility (can be removed later)  
+    125-        if (isset($spec['setExpires']) && is_numeric($spec['setExpires']) && !isset($spec['maxAge'])) {  
+    126:            $spec['maxAge'] = $spec['setExpires'] - $_SERVER['REQUEST_TIME'];  
+    127-        }  
+    128-  
+    129-        if (isset($spec['maxAge'])) {  
+    130-            $maxAge = $spec['maxAge'];  
+    131-  
+    132-            if ($this->_cacheHeaders['expires_enabled'] && $maxAge) {  
+    133:                $this->_headers['Expires'] = self::gmtDate($_SERVER['REQUEST_TIME'] + $maxAge);  
+    134-            }  
+    135-        }  
+    136-
+
+./lib/Minify/HTTP/ConditionalGet.php:352
+  
+    349-  
+    350-    protected function resourceMatchedEtag()  
+    351-    {  
+    352:        if (!isset($_SERVER['HTTP_IF_NONE_MATCH'])) {  
+    353-            return false;  
+    354-        }  
+    355:        $clientEtagList = get_magic_quotes_gpc() ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : $_SERVER['HTTP_IF_NONE_MATCH'];  
+    356-        $clientEtags = explode(',', $clientEtagList);  
+    357-  
+    358-        $compareTo = $this->normalizeEtag($this->_etag);
+
+./lib/Minify/HTTP/ConditionalGet.php:380
+  
+    377-  
+    378-    protected function resourceNotModified()  
+    379-    {  
+    380:        if (!isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {  
+    381-            return false;  
+    382-        }  
+    383:        $ifModifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'];  
+    384-        if (false !== ($semicolon = strrpos($ifModifiedSince, ';'))) {  
+    385-            // IE has tacked on extra data to this header, strip it  
+    386-            $ifModifiedSince = substr($ifModifiedSince, 0, $semicolon);
+
+./lib/Minify/HTTP/Encoder.php:193
+  
+    190-    {  
+    191-        // @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html  
+    192-  
+    193:        if (! isset($_SERVER['HTTP_ACCEPT_ENCODING'])  
+    194-            || w3_zlib_output_compression()  
+    195-            || headers_sent()  
+    196-            || self::_isBuggyIe())
+
+./lib/Minify/HTTP/Encoder.php:201
+  
+    198-            return array('', '');  
+    199-        }  
+    200-  
+    201:        if (stristr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') && function_exists('gzencode')) {  
+    202-            return array('gzip', 'gzip');  
+    203-        }  
+    204-
+
+./lib/Minify/HTTP/Encoder.php:285
+  
+    282-     */  
+    283-    protected static function _isBuggyIe()  
+    284-    {  
+    285:        $ua = $_SERVER['HTTP_USER_AGENT'];  
+    286-        // quick escape for non-IEs  
+    287-        if (0 !== strpos($ua, 'Mozilla/4.0 (compatible; MSIE ')  
+    288-            || false !== strpos($ua, 'Opera')) {
+
+./lib/Minify/Minify.php:372
+  
+    369-    }  
+    370-  
+    371-    /**  
+    372:     * On IIS, create $_SERVER['DOCUMENT_ROOT']  
+    373-     *  
+    374:     * @param bool $unsetPathInfo (default false) if true, $_SERVER['PATH_INFO']  
+    375-     * will be unset (it is inconsistent with Apache's setting)  
+    376-     *  
+    377-     * @return null  
+    378-     */  
+    379-    public static function setDocRoot($unsetPathInfo = false)  
+    380-    {  
+    381:        if (isset($_SERVER['SERVER_SOFTWARE'])  
+    382:            && 0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/')  
+    383-        ) {  
+    384:            $_SERVER['PATH_TRANSLATED']= preg_replace('~[/\\\]+~', '/', $_SERVER['PATH_TRANSLATED']);  
+    385-  
+    386:            $_SERVER['DOCUMENT_ROOT'] = rtrim(substr(  
+    387:                $_SERVER['PATH_TRANSLATED']  
+    388-                ,0  
+    389:                ,strlen($_SERVER['PATH_TRANSLATED']) - strlen($_SERVER['SCRIPT_NAME'])  
+    390-            ), '\\');  
+    391-            if ($unsetPathInfo) {  
+    392:                unset($_SERVER['PATH_INFO']);  
+    393-            }  
+    394-            require_once W3TC_LIB_MINIFY_DIR . '/Minify/Logger.php';  
+    395:            Minify_Logger::log("setDocRoot() set DOCUMENT_ROOT to \"{$_SERVER['DOCUMENT_ROOT']}\"");  
+    396-        }  
+    397-    }  
+    398-
+
+./lib/Minify/FirePHP.php:795
+  
+    792-   * @return string|false  
+    793-   */  
+    794-  protected function getUserAgent() {  
+    795:    if(!isset($_SERVER['HTTP_USER_AGENT'])) return false;  
+    796:    return $_SERVER['HTTP_USER_AGENT'];  
+    797-  }  
+    798-  
+    799-  /**
+
+./lib/Minify/Minify/Build.php:97
+  
+    94-                $max = max($max, $source->lastModified);  
+    95-            } elseif (is_string($source)) {  
+    96-                if (0 === strpos($source, '//')) {  
+    97:                    $source = $_SERVER['DOCUMENT_ROOT'] . substr($source, 1);  
+    98-                }  
+    99-                if (is_file($source)) {  
+    100-                    $max = max($max, filemtime($source));
+
+./lib/Minify/Minify/Cache/Eaccelerator.php:43
+  
+    40-     * @return bool success  
+    41-     */  
+    42-    public function store($id, $data) {  
+    43:        return eaccelerator_put($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
+    44-    }  
+    45-  
+    46-    /**
+
+./lib/Minify/Minify/Cache/Wincache.php:43
+  
+    40-     * @return bool success  
+    41-     */  
+    42-    public function store($id, $data) {  
+    43:        return wincache_ucache_set($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
+    44-    }  
+    45-  
+    46-    /**
+
+./lib/Minify/Minify/Cache/Memcache.php:48
+  
+    45-     * @return bool success  
+    46-     */  
+    47-    public function store($id, $data) {  
+    48:        $data = "{$_SERVER['REQUEST_TIME']}|{$data}";  
+    49-  
+    50-        return $this->_mc->set($id, $data, 0, $this->_exp);  
+    51-    }
+
+./lib/Minify/Minify/Cache/XCache.php:43
+  
+    40-     * @return bool success  
+    41-     */  
+    42-    public function store($id, $data) {  
+    43:        return xcache_set($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
+    44-    }  
+    45-  
+    46-    /**
+
+./lib/Minify/Minify/Cache/APC.php:43
+  
+    40-     * @return bool success  
+    41-     */  
+    42-    public function store($id, $data) {  
+    43:        return apc_store($id, "{$_SERVER['REQUEST_TIME']}|{$data}", $this->_exp);  
+    44-    }  
+    45-  
+    46-    /**
+
+./lib/Minify/Minify/CSS/Compressor.php:69
+  
+    66-     * @return string  
+    67-     */  
+    68-    protected function _process($css) {  
+    69:        $this->_replacementHash = 'MINIFYCSS' . md5($_SERVER['REQUEST_TIME']);  
+    70-        $this->_placeholders = array();  
+    71-  
+    72-        $css = preg_replace_callback('~(".*"|\'.*\')~U', array($this, '_removeQuotesCB'), $css);
+
+./lib/Minify/Minify/CSS/UriRewriter.php:42
+  
+    39-            $browsercache_extensions = (isset($options['browserCacheExtensions']) ? $options['browserCacheExtensions'] : array());  
+    40-  
+    41-            if (isset($options['currentDir'])) {  
+    42:                $document_root = (isset($options['docRoot']) ? $options['docRoot'] : $_SERVER['DOCUMENT_ROOT']);  
+    43-                $symlinks = (isset($options['symlinks']) ? $options['symlinks'] : array());  
+    44-                $prependAbsolutePath = (isset($options['prependAbsolutePath']) ? $options['prependAbsolutePath'] : '');  
+    45-                $prependAbsolutePathCallback = (isset($options['prependAbsolutePathCallback']) ? $options['prependAbsolutePathCallback'] : '');
+
+./lib/Minify/Minify/CSS/UriRewriter.php:82
+  
+    79-     * @param string $prependAbsolutePathCallback  
+    80-     *  
+    81-     * @param string $docRoot The document root of the web site in which  
+    82:     * the CSS file resides (default = $_SERVER['DOCUMENT_ROOT']).  
+    83-     *  
+    84-     * @param array $symlinks (default = array()) If the CSS file is stored in  
+    85-     * a symlink-ed directory, provide an array of link paths to
+
+./lib/Minify/Minify/CSS/UriRewriter.php:101
+  
+    98-     * @return string  
+    99-     */  
+    100-    private static function _rewrite($css, $currentDir, $prependAbsolutePath = null, $prependAbsolutePathCallback = null, $docRoot = null, $symlinks = array(), $browserCacheId = 0, $browserCacheExtensions = array()) {  
+    101:        self::$_docRoot = self::_realpath($docRoot ? $docRoot : $_SERVER['DOCUMENT_ROOT']);  
+    102-        self::$_currentDir = self::_realpath($currentDir);  
+    103-        self::$_prependAbsolutePath = $prependAbsolutePath;  
+    104-        self::$_prependAbsolutePathCallback = $prependAbsolutePathCallback;
+
+./lib/Minify/Minify/HTML.php:79
+  
+    76-            $this->_isXhtml = (false !== strpos($this->_html, '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML'));  
+    77-        }  
+    78-  
+    79:        $this->_replacementHash = 'MINIFYHTML' . md5($_SERVER['REQUEST_TIME']);  
+    80-        $this->_placeholders = array();  
+    81-  
+    82-        // replace dynamic tags
+
+./lib/Minify/Minify/Controller/Files.php:27
+  
+    24- * </code>  
+    25- *  
+    26- * As a shortcut, the controller will replace "//" at the beginning  
+    27: * of a filename with $_SERVER['DOCUMENT_ROOT'] . '/'.  
+    28- *  
+    29- * @package Minify  
+    30- * @author Stephen Clay <steve@mrclay.org>
+
+./lib/Minify/Minify/Controller/Files.php:63
+  
+    60-                continue;  
+    61-            }  
+    62-            if (0 === strpos($file, '//')) {  
+    63:                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    64-            }  
+    65-            $realPath = realpath($file);  
+    66-            if (is_file($realPath)) {
+
+./lib/Minify/Minify/Controller/Groups.php:29
+  
+    26- * /serve.php/js and /serve.php/css  
+    27- *  
+    28- * As a shortcut, the controller will replace "//" at the beginning  
+    29: * of a filename with $_SERVER['DOCUMENT_ROOT'] . '/'.  
+    30- *  
+    31- * @package Minify  
+    32- * @author Stephen Clay <steve@mrclay.org>
+
+./lib/Minify/Minify/Controller/Groups.php:53
+  
+    50-        unset($options['groups']);  
+    51-  
+    52-        // mod_fcgid places PATH_INFO in ORIG_PATH_INFO  
+    53:        $pi = isset($_SERVER['ORIG_PATH_INFO'])  
+    54:            ? substr($_SERVER['ORIG_PATH_INFO'], 1)  
+    55:            : (isset($_SERVER['PATH_INFO'])  
+    56:                ? substr($_SERVER['PATH_INFO'], 1)  
+    57-                : false  
+    58-            );  
+    59-        if (false === $pi || ! isset($groups[$pi])) {
+
+./lib/Minify/Minify/Controller/Groups.php:79
+  
+    76-                continue;  
+    77-            }  
+    78-            if (0 === strpos($file, '//')) {  
+    79:                $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    80-            }  
+    81-            $realPath = realpath($file);  
+    82-            if (is_file($realPath)) {
+
+./lib/Minify/Minify/Controller/Version1.php:65
+  
+    62-        }  
+    63-  
+    64-        // strings for prepending to relative/absolute paths  
+    65:        $prependRelPaths = dirname($_SERVER['SCRIPT_FILENAME'])  
+    66-            . DIRECTORY_SEPARATOR;  
+    67:        $prependAbsPaths = $_SERVER['DOCUMENT_ROOT'];  
+    68-  
+    69-        $sources = array();  
+    70-        $goodFiles = array();
+
+./lib/Minify/Minify/Controller/Version1.php:108
+  
+    105-    private static function _setupDefines()  
+    106-    {  
+    107-        $defaults = array(  
+    108:            'MINIFY_BASE_DIR' => realpath($_SERVER['DOCUMENT_ROOT'])  
+    109-            ,'MINIFY_ENCODING' => 'utf-8'  
+    110-            ,'MINIFY_MAX_FILES' => 16  
+    111-            ,'MINIFY_REWRITE_CSS_URLS' => true
+
+./lib/Minify/Minify/Controller/MinApp.php:60
+  
+    57-                    continue;  
+    58-                }  
+    59-                if (0 === strpos($file, '//')) {  
+    60:                    $file = $_SERVER['DOCUMENT_ROOT'] . substr($file, 1);  
+    61-                }  
+    62-                $realPath = realpath($file);  
+    63-                if (is_file($realPath)) {
+
+./lib/Minify/Minify/Controller/MinApp.php:110
+  
+    107-            }  
+    108-            $allowDirs = array();  
+    109-            foreach ((array)$cOptions['allowDirs'] as $allowDir) {  
+    110:                $allowDirs[] = realpath(str_replace('//', $_SERVER['DOCUMENT_ROOT'] . '/', $allowDir));  
+    111-            }  
+    112-            foreach ($files as $file) {  
+    113:                $path = $_SERVER['DOCUMENT_ROOT'] . $base . $file;  
+    114-                $file = realpath($path);  
+    115-                if (false === $file) {  
+    116-                    $this->log("Path \"{$path}\" failed realpath()");
+
+./lib/Minify/Minify/ImportProcessor.php:107
+  
+    104-        if ('/' === $url[0]) {  
+    105-            // protocol-relative or root path  
+    106-            $url = ltrim($url, '/');  
+    107:            $file = realpath($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR  
+    108-                . strtr($url, '/', DIRECTORY_SEPARATOR);  
+    109-        } else {  
+    110-            // relative to current path
+
+./lib/Minify/Minify/ImportProcessor.php:143
+  
+    140-                $path = $this->_currentDir  
+    141-                    . DIRECTORY_SEPARATOR . strtr($url, '/', DIRECTORY_SEPARATOR);  
+    142-                // strip doc root  
+    143:                $path = substr($path, strlen(realpath($_SERVER['DOCUMENT_ROOT'])));  
+    144-                // fix to absolute URL  
+    145-                $url = strtr($path, '/\\', '//');  
+    146-                // remove /./ and /../ where possible
+
+./lib/Minify/Minify/Source.php:52
+  
+    49-     * (unixtime of last update).  
+    50-     *  
+    51-     * As a shortcut, the controller will replace "//" at the beginning  
+    52:     * of a filepath with $_SERVER['DOCUMENT_ROOT'] . '/'.  
+    53-     *  
+    54-     * @param array $spec options  
+    55-     */
+
+./lib/Minify/Minify/Source.php:60
+  
+    57-    {  
+    58-        if (isset($spec['filepath'])) {  
+    59-            if (0 === strpos($spec['filepath'], '//')) {  
+    60:                $spec['filepath'] = $_SERVER['DOCUMENT_ROOT'] . substr($spec['filepath'], 1);  
+    61-            }  
+    62-            $segments = explode('.', $spec['filepath']);  
+    63-            $ext = strtolower(array_pop($segments));
+
+./inc/lightbox/self_test.php:43
+  
+    40-  
+    41-        <li>  
+    42-            Web Server:  
+    43:            <?php if (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') !== false): ?>  
+    44-            <code>Apache</code>  
+    45:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false): ?>  
+    46-            <code>Lite Speed</code>  
+    47:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false): ?>  
+    48-            <code>nginx</code>  
+    49:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'lighttpd') !== false): ?>  
+    50-            <code>lighttpd</code>  
+    51:            <?php elseif (stristr($_SERVER['SERVER_SOFTWARE'], 'iis') !== false): ?>  
+    52-            <code>Microsoft IIS</code>  
+    53-            <?php else: ?>  
+    54-            <code>Not detected</code>
+
+./inc/define.php:196
+  
+    193- */  
+    194-function w3_is_https() {  
+    195-    switch (true) {  
+    196:        case (isset($_SERVER['HTTPS']) && w3_to_boolean($_SERVER['HTTPS'])):  
+    197:        case (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] == 443):  
+    198-            return true;  
+    199-    }  
+    200-
+
+./inc/define.php:229
+  
+    226- * @return boolean  
+    227- */  
+    228-function w3_is_preview_mode() {  
+    229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));  
+    230-}  
+    231-  
+    232-/**
+
+./inc/define.php:238
+  
+    235- * @return boolean  
+    236- */  
+    237-function w3_is_apache() {  
+    238:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'Apache') !== false);  
+    239-}  
+    240-  
+    241-/**
+
+./inc/define.php:247
+  
+    244- * @return bool  
+    245- */  
+    246-function w3_is_litespeed() {  
+    247:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'LiteSpeed') !== false);  
+    248-}  
+    249-  
+    250-/**
+
+./inc/define.php:256
+  
+    253- * @return boolean  
+    254- */  
+    255-function w3_is_nginx() {  
+    256:    return (isset($_SERVER['SERVER_SOFTWARE']) && stristr($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false);  
+    257-}  
+    258-  
+    259-/**
+
+./inc/define.php:378
+  
+    375-            if (w3_is_subdomain_install()) {  
+    376-                $blogname = $domain;  
+    377-            } else {  
+    378:                $uri = $_SERVER['REQUEST_URI'];  
+    379-                $base_path = w3_get_base_path();  
+    380-  
+    381-                if ($base_path != '' && strpos($uri, $base_path) === 0) {
+
+./inc/define.php:586
+  
+    583-    static $document_root = null;  
+    584-  
+    585-    if ($document_root === null) {  
+    586:        if (!empty($_SERVER['SCRIPT_FILENAME'])) {  
+    587:            $document_root = substr(w3_path($_SERVER['SCRIPT_FILENAME']), 0, -strlen(w3_path($_SERVER['PHP_SELF'])));  
+    588:        } elseif (!empty($_SERVER['PATH_TRANSLATED'])) {  
+    589:            $document_root = substr(w3_path($_SERVER['PATH_TRANSLATED']), 0, -strlen(w3_path($_SERVER['PHP_SELF'])));  
+    590:        } elseif (!empty($_SERVER['DOCUMENT_ROOT'])) {  
+    591:            $document_root = w3_path($_SERVER['DOCUMENT_ROOT']);  
+    592-        } else {  
+    593-            $document_root = w3_get_site_root();  
+    594-        }
+
+./inc/define.php:764
+  
+    761-    static $host = null;  
+    762-  
+    763-    if ($host === null) {  
+    764:        $host = (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);  
+    765-    }  
+    766-  
+    767-    return $host;
+
+./inc/email/support_request.php:38
+  
+    35-        <hr />  
+    36-  
+    37-        <font size="-1" color="#ccc">  
+    38:            E-mail sent from IP: <?php echo htmlspecialchars($_SERVER['REMOTE_ADDR']); ?><br />  
+    39:            User Agent: <?php echo htmlspecialchars($_SERVER['HTTP_USER_AGENT']); ?>  
+    40-        </font>  
+    41-    </body>  
+    42-</html>
+
+./wp-content/w3tc/min/index.php:6
+  
+    3-/**  
+    4- * W3 Total Cache Minify module  
+    5- */  
+    6:if (isset($_SERVER['SCRIPT_FILENAME']) && strstr($_SERVER['SCRIPT_FILENAME'], 'w3-total-cache') !== false) {  
+    7-    die();  
+    8-}  
+    9-
+
+#### $_COOKIE ####
+./lib/W3/Db.php:635
+  
+    633-     */  
+    634-    function _check_cookies() {  
+    635:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    636-            if ($cookie_name == 'wordpress_test_cookie') {  
+    637-                continue;  
+    638-            }
+
+./lib/W3/Db.php:645
+  
+    642-        }  
+    643-  
+    644-        foreach ($this->_config->get_array('dbcache.reject.cookie') as $reject_cookie) {  
+    645:            foreach (array_keys($_COOKIE) as $cookie_name) {  
+    646-                if (strstr($cookie_name, $reject_cookie) !== false) {  
+    647-                    return false;  
+    648-                }
+
+./lib/W3/Db.php:661
+  
+    658-     * @return boolean  
+    659-     */  
+    660-    function _check_logged_in() {  
+    661:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    662-            if ($cookie_name == 'wordpress_test_cookie') {  
+    663-                continue;  
+    664-            }
+
+./lib/W3/PgCache.php:718
+  
+    715-     * @return boolean  
+    716-     */  
+    717-    function _check_cookies() {  
+    718:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    719-            if ($cookie_name == 'wordpress_test_cookie') {  
+    720-                continue;  
+    721-            }
+
+./lib/W3/PgCache.php:728
+  
+    725-        }  
+    726-  
+    727-        foreach ($this->_config->get_array('pgcache.reject.cookie') as $reject_cookie) {  
+    728:            foreach (array_keys($_COOKIE) as $cookie_name) {  
+    729-                if (strstr($cookie_name, $reject_cookie) !== false) {  
+    730-                    return false;  
+    731-                }
+
+./lib/W3/PgCache.php:744
+  
+    741-     * @return boolean  
+    742-     */  
+    743-    function _check_logged_in() {  
+    744:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    745-            if ($cookie_name == 'wordpress_test_cookie') {  
+    746-                continue;  
+    747-            }
+
+./lib/W3/Plugin/Minify.php:1010
+  
+    1007-     * @return boolean  
+    1008-     */  
+    1009-    function check_logged_in() {  
+    1010:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    1011-            if ($cookie_name == 'wordpress_test_cookie') {  
+    1012-                continue;  
+    1013-            }
+
+./lib/W3/Plugin/MinifyEnabled.php:1068
+  
+    1065-     * @return boolean  
+    1066-     */  
+    1067-    function check_logged_in() {  
+    1068:        foreach (array_keys($_COOKIE) as $cookie_name) {  
+    1069-            if ($cookie_name == 'wordpress_test_cookie') {  
+    1070-                continue;  
+    1071-            }
+
+./lib/W3/Referrer.php:42
+  
+    39-    function get_http_referrer() {  
+    40-        $http_referrer = '';  
+    41-  
+    42:        if (isset($_COOKIE[W3TC_REFERRER_COOKIE_NAME])) {  
+    43:            $http_referrer = $_COOKIE[W3TC_REFERRER_COOKIE_NAME];  
+    44-        } elseif (isset($_SERVER['HTTP_REFERER'])) {  
+    45-            $http_referrer = $_SERVER['HTTP_REFERER'];  
+    46-
+
+
+### developer_notes ###
+#### @todo ####
+./lib/JSON.php:821
+  
+    819-  
+    820-	/**  
+    821:	* @todo Ultimately, this should just call PEAR::isError()  
+    822-	*/  
+    823-	function isError($data, $code = null)  
+    824-	{
+
+./lib/JSON.php:850
+  
+    847-} else {  
+    848-  
+    849-	/**  
+    850:	* @todo Ultimately, this class shall be descended from PEAR_Error  
+    851-	*/  
+    852-	class Services_JSON_Error  
+    853-	{
+
+./lib/CSSTidy/class.csstidy_optimise.php:647
+  
+    644-     * @return array  
+    645-     * @version 1.0  
+    646-     * @see merge_bg()  
+    647:     * @todo full CSS 3 compliance  
+    648-     */  
+    649-    function dissolve_short_bg($str_value)  
+    650-    {
+
+./lib/CSSTidy/class.csstidy_optimise.php:733
+  
+    730-     * @return array  
+    731-     * @version 1.0  
+    732-     * @see dissolve_short_bg()  
+    733:     * @todo full CSS 3 compliance  
+    734-     */  
+    735-    function merge_bg($input_css)  
+    736-    {
+
+./lib/CSSTidy/data.inc.php:71
+  
+    68- /**  
+    69- * Properties that need a value with unit  
+    70- *  
+    71: * @todo CSS3 properties  
+    72- * @see compress_numbers();  
+    73- * @global array $GLOBALS['csstidy']['unit_values']  
+    74- * @version 1.2
+
+./lib/CSSTidy/data.inc.php:85
+  
+    82-/**  
+    83- * Properties that allow <color> as value  
+    84- *  
+    85: * @todo CSS3 properties  
+    86- * @see compress_numbers();  
+    87- * @global array $GLOBALS['csstidy']['color_values']  
+    88- * @version 1.0
+
+./lib/CSSTidy/data.inc.php:104
+  
+    101-/**  
+    102- * Default values for the background properties  
+    103- *  
+    104: * @todo Possibly property names will change during CSS3 development  
+    105- * @global array $GLOBALS['csstidy']['background_prop_default']  
+    106- * @see dissolve_short_bg()  
+    107- * @see merge_bg()
+
+./lib/CSSTidy/data.inc.php:260
+  
+    257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues  
+    258- *  
+    259- * @global array $GLOBALS['csstidy']['shorthands']  
+    260: * @todo Are there new ones in CSS3?  
+    261- * @see dissolve_4value_shorthands()  
+    262- * @see merge_4value_shorthands()  
+    263- * @version 1.0
+
+./lib/CSSTidy/data.inc.php:277
+  
+    274- * All CSS Properties. Needed for csstidy::property_is_next()  
+    275- *  
+    276- * @global array $GLOBALS['csstidy']['all_properties']  
+    277: * @todo Add CSS3 properties  
+    278- * @version 1.0  
+    279- * @see csstidy::property_is_next()  
+    280- */
+
+./lib/Microsoft/Http/Cookie.php:97
+  
+    94-    /**  
+    95-     * Cookie object constructor  
+    96-     *  
+    97:     * @todo Add validation of each one of the parameters (legal domain, etc.)  
+    98-     *  
+    99-     * @param string $name  
+    100-     * @param string $value
+
+./lib/Microsoft/Http/Client.php:55
+  
+    52- * redirections, as well as more advanced features like proxy settings, HTTP  
+    53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)  
+    54- *  
+    55: * @todo Implement proxy settings  
+    56- * @category   Microsoft  
+    57- * @package    Microsoft_Http  
+    58- * @subpackage Client
+
+./lib/Microsoft/Http/Client.php:1387
+  
+    1384-  
+    1385-            //case self::AUTH_DIGEST:  
+    1386-                /**  
+    1387:                 * @todo Implement digest authentication  
+    1388-                 */  
+    1389-            //    break;  
+    1390-
+
+./lib/Microsoft/Http/CookieJar.php:357
+  
+    354-     * @param Microsoft_Http_Response $response HTTP Response object  
+    355-     * @param Microsoft_Uri_Http|string $uri The requested URI  
+    356-     * @return Microsoft_Http_CookieJar  
+    357:     * @todo Add the $uri functionality.  
+    358-     */  
+    359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)  
+    360-    {
+
+./lib/Minify/Minify/HTML.php:118
+  
+    115-            ,$this->_html);  
+    116-  
+    117-        // trim each line.  
+    118:        // @todo take into account attribute values that span multiple lines.  
+    119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);  
+    120-  
+    121-        // remove ws around block/undisplayed elements
+
+./lib/Minify/Minify/Packer.php:36
+  
+    33-class Minify_Packer {  
+    34-    public static function minify($code, $options = array())  
+    35-    {  
+    36:        // @todo: set encoding options based on $options :)  
+    37-        $packer = new JavascriptPacker($code, 'Normal', true, false);  
+    38-        return trim($packer->pack());  
+    39-    }
+
+./lib/Minify/Minify/Controller/Page.php:39
+  
+    36-     * 'minifyAll': should all CSS and Javascript blocks be individually  
+    37-     * minified? (default false)  
+    38-     *  
+    39:     * @todo Add 'file' option to read HTML file.  
+    40-     */  
+    41-    public function setupSources($options) {  
+    42-        if (isset($options['file'])) {
 
 ## js ##
 
