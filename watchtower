@@ -13,6 +13,7 @@ require 'digest'
 require 'fileutils'
 require 'open-uri'
 require 'trollop'
+require 'uri'
 require 'lib/models/poi'
 require 'lib/models/signature'
 require 'lib/models/vulnscanner'
@@ -105,15 +106,20 @@ unless File.directory? opts[:scan]
         warn "Downloading the page source for #{opts[:scan]}. This may take some time."
         
         # don't accidentally nuke any existing files
-        if File.exists? "/tmp/#{opts[:scan]}"
-            warn "The directory '#{opts[:scan]}' already exists. Please " +
-                 "rename that directory to avoid a naming collision."
-            exit
-        end
-        `cd /tmp/; wget -mq '#{opts[:scan]}'`
+        #if File.exists? "/tmp/#{opts[:scan]}"
+        #    warn "The directory '#{opts[:scan]}' already exists. Please " +
+        #         "rename that directory to avoid a naming collision."
+        #    exit
+        #end
+        #`cd /tmp/; wget -mq '#{opts[:scan]}'`
+        
+        # parse the domain out of the URL, because that's the name wget
+        # is going to choose for its output directory
+        domain = URI::split(opts[:scan])[2]
+        
         # when the download is complete, specify the downloaded 
         # directory for scanning
-        opts[:scan] = "/tmp/#{opts[:scan]}"
+        opts[:scan] = "/tmp/#{domain}"
     rescue
         warn 'The path or URL specified for scanning appears to be invalid.'
         exit
