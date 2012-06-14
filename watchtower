@@ -11,6 +11,7 @@
 require 'rubygems'
 require 'digest'
 require 'fileutils'
+require 'open-uri'
 require 'trollop'
 require 'lib/models/poi'
 require 'lib/models/signature'
@@ -25,7 +26,7 @@ opts = Trollop::options do
 	
 	version 'Version: 1.3.2'
 
-	opt :scan_dir,		'The directory to scan',
+	opt :scan,		    'The target to scan (may be a path on the local filesystem or a URL on the web)',
 			:type 		=> :string,
 			:required	=> true,
 			:short 		=> 's'
@@ -77,12 +78,6 @@ unless File.exists? opts[:config_file]
 end
 require opts[:config_file]
 
-# Verify that the directory to scan actually exists
-unless File.exists? opts[:scan_dir]
-	warn 'The specified directory to scan does not exist.'
-	exit
-end
-
 # Verify that -A and -B are >= 1
 if (opts[:before_context] < 1) or (opts[:after_context] < 1)
     warn 'Options --before-context and --after-context may not be less than 1.'
@@ -97,11 +92,41 @@ end
 
 
 #######################################################################
+# Remote URL scanning
+#######################################################################
+# determine whether a filesystem or URL scan target was specified
+unless File.directory? opts[:scan]
+    begin    
+        # simply verify that the specified URL is valid so we can fail
+        # gracefully if not
+        res = open(opts[:scan]).read
+        # kludge: I don't know if it's bad form to output a notice to 
+        # stderr when there isn't actually a problem
+        warn "Downloading the page source for #{opts[:scan]}. This may take some time."
+        
+        # don't accidentally nuke any existing files
+        if File.exists? "/tmp/#{opts[:scan]}"
+            warn "The directory '#{opts[:scan]}' already exists. Please " +
+                 "rename that directory to avoid a naming collision."
+            exit
+        end
+        `cd /tmp/; wget -mq '#{opts[:scan]}'`
+        # when the download is complete, specify the downloaded 
+        # directory for scanning
+        opts[:scan] = "/tmp/#{opts[:scan]}"
+    rescue
+        warn 'The path or URL specified for scanning appears to be invalid.'
+        exit
+    end
+end
+
+
+#######################################################################
 # Scan
 #######################################################################
 vulnscanner = VulnScanner.new({
 	:signatures		=> $signatures,
-	:scan_dir		=> opts[:scan_dir],
+	:scan_dir		=> opts[:scan],
 	:before_context	=> opts[:before_context],
 	:after_context	=> opts[:after_context],
 	:context    	=> (opts[:context_given]) ? opts[:context] : false,
