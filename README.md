@@ -1,4 +1,4 @@
-Watchtower (1.3.2)
+Watchtower (1.4.0)
 ===================
 Chris Lane  
 chris@chris-allen-lane.com  
@@ -14,6 +14,10 @@ reviews. It offers a robust alternative to `grep` for finding
 matches on literal and regex-based string signatures within a 
 project. It can thus be used to locate (for example) dangerous functions 
 calls that are made within an application.
+
+`Watchtower` works best when it is targeted against a project on the local
+filesystem, but may additionally be directed to scan a website at a 
+remote URL.
 
 `Watchtower` is platform- and language-agnostic.
 
@@ -73,9 +77,32 @@ open on the other.
 To generate the HTML report, run:
 	
 ```bash
-./watchtower -s /app/path/to/scan -o html > /path/to/report/file.html -p 'The Project Name'
+./watchtower -s /app/path/to/scan -p 'The Project Name' -o html > /path/to/report/file.html
 ```
-    
+
+### Scanning a Remove Website ###
+`Watchtower` can be instructed to scan a remote web site rather than a
+local filesystem. To do so, simply pass the `-s` (`--scan`) parameter
+a URL rather than a filesystem path:
+
+```bash
+./watchtower -s http://www.example.com -p 'example.com' -o html > /path/to/report/file.html
+```
+
+When scanning a remote website, `Watchtower` will first mirror the 
+website locally using `wget`, and then will perform a standard scan 
+on the page source. However:
+
+- Be prepared to be patient, because it can take a long time to mirror
+  a large website
+- `Watchtower` will not be able to see nearly as "deeply" into an
+  application scanned remotely, because it will not be able to read the
+  application's underlying source (PHP, ASP, etc.)
+
+Thus, scanning locally is strongly preferred to scanningly remotely, if
+possible.  
+
+
 Configuration
 -------------
 `Watchtower` has an extensive configuration file. (A large number of
@@ -155,26 +182,37 @@ $signatures[:php][:hashes] = [
 ]
 ```
 
-Known Issues
-------------
-This program has only been tested on Ubuntu 11.04, and may not work on
-other platforms. Additionally:
+Frequently Asked Questions
+--------------------------
+** Isn't the HTML report format kind of unusable? What's the point of
+marking items "good" or "bad" or whatever when all of that work is going
+to be lost when I close my browser? **  
 
-* If you attempt to generate the same report more than once, you may find
-  that the ordering of the elements contained therein will change. (Only
-  the ordering of the information will change - the informational content
-  itself will not.) This is because my Ruby-Fu is still weak, and I haven't
-  yet figured out how to sort some of the nested hashes which the `VulnScanner`
-  model assembles before outputting a report. I plan to address this issue
-  very soon.
+Your work _won't_ be lost! `Watchtower` uses some clever HTML 5 to 
+save your work automatically as you make changes to the report.
 
 
-Roadmap
---------
-I plan to make the following changes when I have the time:
+** When I generate the same report multiple times, the order in which 
+each signature appears changes each time. What gives? **  
 
-* Fix the Known Issues
-* Add more default signatures for different programming languages and frameworks
+This is happening because you're running Ruby 1.8. In Ruby 1.8, 
+hashes were definitionally un-ordered, and thus the ordering of the 
+hashes in the signatures file is not guaranteed to be respected.
+
+I currently don't plan to fix this, because this issue does not 
+exist in Ruby 1.9.
+
+** When I scan a remote website, there seems to be a lot of 
+duplicated content in the report. What's happening? **  
+
+This can happen on websites whereby a single item of content is 
+accessible via more than one URL. (This is very common on blogs, 
+for example, where a each page may be accessible individually, on a 
+category page, in an archive, etc.)
+
+Currently there is no good workaround to this problem (other than 
+scanning locally, if possible), but I plan to take a crack at 
+fixing this in the future.
 
 
 Contributing
