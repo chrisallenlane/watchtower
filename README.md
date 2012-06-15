@@ -224,7 +224,7 @@ you to consider giving a few dollars to the EFF instead. Or, better
 yet, [become a member][4]!
 
 <a href='https://www.eff.org/join'>
-<img style='display:block;margin:0 auto' src='https://www.eff.org/sites/default/files/EFF-Banner.jpg' alt='Join EFF!' title='Join EFF!'
+![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')
 </a>
 
 
