@@ -34,8 +34,8 @@ few minutes playing with this report, and you should quickly gain a feel
 for how `Watchtower` works.
 
 ### Notes about the example report: ###
-1. This is a big HTML file. I'd recommend opening it in a fast
-browser like Google Chrome.
+1. This is a big HTML file. I recommend opening it in a fast browser 
+like Google Chrome.
 2. I chose to analyze W3 Total Cache because of its popularity. I'm not
 implying that I believe it to be insecure.
 
