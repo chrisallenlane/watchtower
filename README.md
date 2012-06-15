@@ -221,9 +221,10 @@ to share your expertise.
 
 If you were looking to support this project financially, I encourage 
 you to consider giving a few dollars to the EFF instead. Or, better 
-yet, become a member!
+yet, [become a member][6]!
 
-<a href="https://www.eff.org/join">![Join EFF!](https://www.eff.org/sites/default/files/eff-join.png 'Join EFF!')</a>
+<a href="https://www.eff.org/join" style='text-align:center'>![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')</a>
+
 
 Contact Me
 ----------
@@ -235,7 +236,7 @@ me on [twitter][4].
 
 License
 -------
-This product is licensed under the [GPL 3][5], and comes with absolutely
+This product is licensed under the [GPL 3][6], and comes with absolutely
 no warranty, expressed or implied. See the LICENSE file for more information.
 
 
@@ -243,4 +244,5 @@ no warranty, expressed or implied. See the LICENSE file for more information.
 [2]: https://raw.github.com/chrisallenlane/watchtower/master/examples/report.html
 [3]: http://wordpress.org/extend/plugins/w3-total-cache/
 [4]: http://twitter.com/#!/chrisallenlane
-[5]: http://www.gnu.org/copyleft/gpl.html
+[5]: https://www.eff.org/join
+[6]: http://www.gnu.org/copyleft/gpl.html
