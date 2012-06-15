@@ -185,7 +185,7 @@ $signatures[:php][:hashes] = [
 Frequently Asked Questions
 --------------------------
 **When I generate the same report multiple times, the order in which 
-each signature appears changes each time. What gives?**  
+each signature appears often changes changes. What gives?**  
 
 This is happening because you're running Ruby 1.8. In Ruby 1.8, 
 hashes were definitionally un-ordered, and thus the ordering of the 
