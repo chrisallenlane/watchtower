@@ -44,7 +44,7 @@ Usage
 -----
 There are essentially two use-cases for `Watchtower`:
 
-### Importing Scan Data into You Own Application ###
+### Importing Scan Data into Your Own Application ###
 `Watchtower` can be configured (via command-line options) to output as
 CSV, XML, or plain text:
 
