@@ -80,7 +80,7 @@ To generate the HTML report, run:
 ./watchtower -s /app/path/to/scan -p 'The Project Name' -o html > /path/to/report/file.html
 ```
 
-### Scanning a Remove Website ###
+### Scanning a Remote Website ###
 `Watchtower` can be instructed to scan a remote web site rather than a
 local filesystem. To do so, simply pass the `-s` (`--scan`) parameter
 a URL rather than a filesystem path:
