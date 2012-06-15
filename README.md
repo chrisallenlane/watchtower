@@ -67,7 +67,7 @@ outputting directly to the terminal.)
 
 ### Outputting a Sortable HTML Report for Direct Review ###
 In my opinion, `Watchtower`'s greatest feature is its ability to output
-an HTML report. Such a report can be a tremendous timesaver when scanning
+an HTML report. Such a report can be a tremendous time-saver when scanning
 for a large number of signatures in large numbers of files.
 
 This report is especially useful when auditing while running dual monitors,
@@ -99,7 +99,7 @@ on the page source. However:
   application scanned remotely, because it will not be able to read the
   application's underlying source (PHP, ASP, etc.)
 
-Thus, scanning locally is strongly preferred to scanningly remotely, if
+Thus, scanning locally is strongly preferred to scanning remotely, if
 possible.  
 
 

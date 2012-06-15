@@ -57,6 +57,6 @@ end
 
 Rake::TestTask.new do |test|
 	test.libs << 'test'
-	test.test_files = ['test/test_poi.rb', 'test/test_vulnscanner.rb', 'test/test_signature.rb']
+	test.test_files = ['test/test_poi.rb', 'test/test_vulnscanner.rb', 'test/test_signature.rb', 'test/test_reports.rb']
 	test.verbose = false
 end

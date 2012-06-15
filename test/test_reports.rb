@@ -1,13 +1,12 @@
 # @todo: this test is going to test the validity of the various sample
 # reports (csv, html, xml).
-
 require 'test/test_helper.rb'
-#require 'lib/models/poi.rb'
 
 
 class TestReports < ::Test::Unit::TestCase
   
   def setup
+  
 	#data = {
 		#:file_type		=> 'php',
 		#:file			=> 'example.php',
@@ -20,16 +19,20 @@ class TestReports < ::Test::Unit::TestCase
 	#@poi = PoI.new(data)
   end
   
-  must "output valid CSV" do
+  #must "output valid CSV" do
 	
+  #end
+  
+  #must "output valid HTML" do
+	
+  #end
+  
+  #must "output valid XML" do
+	
+  #end
+  
+  must "contain no typos in the README" do
+    assert_equal '', `cat ./README.md | aspell list --encoding utf-8`
   end
   
-  must "output valid HTML" do
-	
-  end
-  
-  must "output valid XML" do
-	
-  end
- 
 end
