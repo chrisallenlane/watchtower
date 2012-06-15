@@ -11,12 +11,12 @@ What it Does
 `Watchtower` is a [Static Code Analysis][1] tool designed to assist 
 security auditors who are tasked with performing manual code 
 reviews. It offers a robust alternative to `grep` for finding 
-matches on literal and regex-based string signatures within a 
-project. It can thus be used to locate (for example) dangerous functions 
-calls that are made within an application.
+matches on literal and regex-based strings within a project. It can 
+thus be used to locate (for example) dangerous functions calls that 
+are made within an application.
 
-`Watchtower` works best when it is targeted against a project on the local
-filesystem, but may additionally be directed to scan a website at a 
+`Watchtower` works best when it is targeted against a project on the 
+local filesystem, but can also be directed to scan a website at a 
 remote URL.
 
 `Watchtower` is platform- and language-agnostic.
@@ -66,9 +66,9 @@ can colorize plain-text output with the `--colorize` flag if you're
 outputting directly to the terminal.)
 
 ### Outputting a Sortable HTML Report for Direct Review ###
-In my opinion, `Watchtower`'s greatest feature is its ability to output
-an HTML report. Such a report can be a tremendous time-saver when scanning
-for a large number of signatures in large numbers of files.
+In my opinion, `Watchtower`'s greatest feature is its ability to 
+output an HTML report. Such a report can be a tremendous time-saver 
+when scanning for signatures in large numbers of files.
 
 This report is especially useful when auditing while running dual monitors,
 such that you can have the report open on one monitor, and your preferred IDE
@@ -185,26 +185,26 @@ $signatures[:php][:hashes] = [
 Frequently Asked Questions
 --------------------------
 **When I generate the same report multiple times, the order in which 
-each signature appears often changes changes. What gives?**  
+each signature appears often changes. Why?**  
 
 This is happening because you're running Ruby 1.8. In Ruby 1.8, 
 hashes were definitionally un-ordered, and thus the ordering of the 
-hashes in the signatures file is not guaranteed to be respected.
+signatures file is not guaranteed to be respected.
 
 I currently don't plan to fix this, because this issue does not 
 exist in Ruby 1.9.
 
 **When I scan a remote website, there seems to be a lot of 
-duplicated content in the report. What's happening?**  
+duplicated content in the report.**  
 
-This can happen on websites whereby a single item of content is 
-accessible via more than one URL. (This is very common on blogs, 
-for example, where a each page may be accessible individually, on a 
-category page, in an archive, etc.)
+This can happen on websites where each page is accessible at more 
+than one URL. (This is common on blogs, for example, where each 
+page may be accessible individually, on a category page, in an 
+archive, etc.)
 
-Currently there is no good workaround to this problem (other than 
-scanning locally, if possible), but I plan to take a crack at 
-fixing this in the future.
+Currently there is no good workaround to this problem (other than to 
+scan locally, if possible), but I plan to take a crack at fixing 
+this in the future.
 
 
 Contributing
