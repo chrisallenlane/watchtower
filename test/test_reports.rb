@@ -20,11 +20,11 @@ class TestReports < ::Test::Unit::TestCase
   end
   
   #must "output valid CSV" do
-	
+    
   #end
   
   #must "output valid HTML" do
-	
+	#assert_equal '', `tidy -eq ./examples/report.html`
   #end
   
   must "output valid XML" do
