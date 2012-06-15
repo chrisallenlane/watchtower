@@ -27,9 +27,9 @@ class TestReports < ::Test::Unit::TestCase
 	
   #end
   
-  #must "output valid XML" do
-	
-  #end
+  must "output valid XML" do
+	assert_equal '', `xmllint ./examples/report.xml --noout`
+  end
   
   must "contain no typos in the README" do
     assert_equal '', `cat ./README.md | aspell list --encoding utf-8`
