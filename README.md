@@ -223,7 +223,7 @@ If you were looking to support this project financially, I encourage
 you to consider giving a few dollars to the EFF instead. Or, better 
 yet, [become a member][6]!
 
-<a href="https://www.eff.org/join" style='text-align:center'>![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')</a>
+<p style='text-align:center'><a href="https://www.eff.org/join">![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')</a></p>
 
 
 Contact Me
