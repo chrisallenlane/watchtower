@@ -4,7 +4,7 @@ require 'rake/testtask'
 
 namespace :docs do
     RDoc::Task.new do |rdoc|
-      files 		=['lib/models/vulnscanner.rb', 'lib/models/poi.rb']
+      files 		=['lib/models/vulnscanner.rb', 'lib/models/poi.rb', 'lib/models/signature.rb']
       rdoc.rdoc_files.add(files)
       rdoc.main 	= 'README.rdoc'
       rdoc.title 	= 'WatchTower rdocs'
@@ -57,6 +57,6 @@ end
 
 Rake::TestTask.new do |test|
 	test.libs << 'test'
-	test.test_files = ['test/test_poi.rb', 'test/test_vulnscanner.rb']
+	test.test_files = ['test/test_poi.rb', 'test/test_vulnscanner.rb', 'test/test_signature.rb']
 	test.verbose = false
 end

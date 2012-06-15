@@ -6,5 +6,4 @@ class Signature
 		@literal = data[:literal]
 		@regex   = data[:regex]
 	end
-
 end
