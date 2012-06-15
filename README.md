@@ -215,15 +215,17 @@ which is Wordpress-specific.) If you have expertise in a popular
 framework (Joomla, Drupal, etc), and would like to contribute some 
 signature files, please let me know. 
 
-Likewise, if you have expertise in a language which is not 
-represented among the signatures (web or otherwise), I invite you 
-to share your expertise.
+Likewise, if you have expertise in a language (web or otherwise) 
+that is not represented among the signatures, I invite you to share 
+your expertise.
 
-If you were looking to support this project financially, I encourage 
+If you are looking to support this project financially, I encourage 
 you to consider giving a few dollars to the EFF instead. Or, better 
 yet, [become a member][6]!
 
-<a href='https://www.eff.org/join'>![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')</a>
+<a href='https://www.eff.org/join'>
+![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')
+</a>
 
 
 Contact Me
