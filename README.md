@@ -184,8 +184,8 @@ $signatures[:php][:hashes] = [
 
 Frequently Asked Questions
 --------------------------
-** When I generate the same report multiple times, the order in which 
-each signature appears changes each time. What gives? **  
+**When I generate the same report multiple times, the order in which 
+each signature appears changes each time. What gives?**  
 
 This is happening because you're running Ruby 1.8. In Ruby 1.8, 
 hashes were definitionally un-ordered, and thus the ordering of the 
@@ -194,8 +194,8 @@ hashes in the signatures file is not guaranteed to be respected.
 I currently don't plan to fix this, because this issue does not 
 exist in Ruby 1.9.
 
-** When I scan a remote website, there seems to be a lot of 
-duplicated content in the report. What's happening? **  
+**When I scan a remote website, there seems to be a lot of 
+duplicated content in the report. What's happening?**  
 
 This can happen on websites whereby a single item of content is 
 accessible via more than one URL. (This is very common on blogs, 
