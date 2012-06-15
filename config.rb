@@ -15,7 +15,7 @@ $configs = {
 	# to use all of the functionality of the HTML report even when
 	# no Internet connection is available, but will increase the
 	# file size of the report.
-	:embed_javascript 	=> true,
+	:embed_javascript 	=> false,
 	
 	# Exclude filenames to scan, matched anywhere within --scan-dir
     # or its subdirectories
