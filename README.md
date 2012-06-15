@@ -96,7 +96,7 @@ on the downloaded page source. However:
 - Be prepared to be patient, because it can take a long time to mirror
   a large website
 - `Watchtower` will not be able to see as "deeply" into an 
-  application scanned remotely, because it will not be able to read 
+  application scanned remotely, because it will not have access to 
   the application's underlying source (PHP, ASP, etc.)
 
 Thus, scanning locally is strongly preferred to scanning remotely, if
