@@ -221,7 +221,7 @@ your expertise.
 
 If you are looking to support this project financially, I encourage 
 you to consider giving a few dollars to the EFF instead. Or, better 
-yet, [become a member][6]!
+yet, [become a member][4]!
 
 <a href='https://www.eff.org/join'>
 ![Join EFF!](https://www.eff.org/sites/default/files/EFF-Banner.jpg 'Join EFF!')
@@ -233,7 +233,7 @@ Contact Me
 Questions, concerns, bug reports, and feature requests may be directed to
 chris@chris-allen-lane.com. If you're able to express your thoughts in
 144 characters or less ("It's great!", "It sucks!") you can also contact
-me on [twitter][4].
+me on [twitter][5].
 
 
 License
@@ -245,6 +245,6 @@ no warranty, expressed or implied. See the LICENSE file for more information.
 [1]: http://en.wikipedia.org/wiki/Static_program_analysis
 [2]: https://raw.github.com/chrisallenlane/watchtower/master/examples/report.html
 [3]: http://wordpress.org/extend/plugins/w3-total-cache/
-[4]: http://twitter.com/#!/chrisallenlane
-[5]: https://www.eff.org/join
+[4]: https://www.eff.org/join
+[5]: http://twitter.com/#!/chrisallenlane
 [6]: http://www.gnu.org/copyleft/gpl.html
