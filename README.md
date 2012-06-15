@@ -81,7 +81,7 @@ To generate the HTML report, run:
 ```
 
 ### Scanning a Remote Website ###
-`Watchtower` can be instructed to scan a remote web site rather than a
+`Watchtower` can be instructed to scan a remote web site rather than the
 local filesystem. To do so, simply pass the `-s` (`--scan`) parameter
 a URL rather than a filesystem path:
 
@@ -91,7 +91,7 @@ a URL rather than a filesystem path:
 
 When scanning a remote website, `Watchtower` will first mirror the 
 website locally using `wget`, and then will perform a standard scan 
-on the page source. However:
+on the downloaded page source. However:
 
 - Be prepared to be patient, because it can take a long time to mirror
   a large website
