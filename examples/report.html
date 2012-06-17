@@ -247,25 +247,23 @@ div.point_of_interest span.poi_mark_content a.poi_ok{
 	color: green;
 }
 
-div.point_of_interest span.poi_mark_content a.poi_ok.selected{
-	background-color: green;
-	color: white;
-}
-
-div.point_of_interest span.poi_mark_content a.poi_bad.selected:hover,
-div.point_of_interest span.poi_mark_content a.poi_ok.selected:hover{
-	text-decoration: none;
-}
-
 div.point_of_interest span.poi_mark_content a.poi_bad{
 	color: #A52A2A;
 }
 
-div.point_of_interest span.poi_mark_content a.poi_bad.selected{
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok{
+	background-color: green;
+	color: white;
+}
+
+div.point_of_interest.poi_bad span.poi_mark_content a.poi_bad{
 	background-color: #A52A2A;
 	color: white;
-	padding: 0 3px;
-	border-radius: 2px;
+}
+
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok:hover,
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_bad:hover{
+    text-decoration: none;
 }
 
 div.point_of_interest span.file_name{
@@ -340,6 +338,7 @@ span.signature_count{
 	
 // on-load initializations
 jQuery(document).ready(function(){
+    
     // initialize the tabbed display
 	$('div#main').tabs();
 	
@@ -349,30 +348,52 @@ jQuery(document).ready(function(){
 		function(){ $(this).fadeTo('fast', 0.75); }
 	);
     
-    /* @todo: this is broken
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1339733747');
+        console.log('Saving to key: watchtower1339973426');
 
         // initialize the datastore object
-        data_store  = {
-            // taking a very simple (and lazy) approach to save/load here
-            save: function(){ localStorage.watchtower1339733747 = $('div#main').html(); },
+        data_store = {
+            save: function(){
+                poi_classes = [];
+                
+                // Iterate over the PoIs. Save the class of each
+                // that has been marked.
+                $('div.point_of_interest').each(function(index, element){                    
+                    the_classes = $(element).attr('class');
+                    // don't bother saving information for the unmarked
+                    if(the_classes != 'point_of_interest'){
+                        poi_classes[index] = the_classes;
+                    }
+                });
+                localStorage.watchtower1339973426 = window.JSON.stringify(poi_classes);
+            },
+            
             load: function(){
-                if(localStorage.watchtower1339733747 != null){
-                    $('div#main').html(localStorage.watchtower1339733747);
+                // verify that a localstorage object exists
+                if(localStorage.watchtower1339973426 != null){
+                    
+                    // unpack the saved classes back into an array
+                    poi_classes = jQuery.parseJSON(localStorage.watchtower1339973426);
+                    
+                    // do this.save(), but in reverse
+                    $('div.point_of_interest').each(function(index, element){
+                        if(poi_classes[index] != null){
+                            $(element).attr('class', poi_classes[index]);
+                        }
+                    });
+                    
+                    // hide the appropriate PoIs
+                    $('div.point_of_interest.poi_hidden div.poi_content').hide();
+                    $('div.point_of_interest.poi_hidden span.poi_mark_content a.poi_hide').text('Show');
                 }
-                // hide the appropriate PoIs
-                $('div.point_of_interest.poi_hidden div.poi_content').hide();
-                $('div.point_of_interest.poi_hidden div.poi_content span.poi_mark_content a.poi_hide').text('Show');
             }
         }
         data_store.load();
     } else {
         console.log('Local storage is not available.');
     }
-    */
 });
 
 // shows/hides payload groups
@@ -415,13 +436,9 @@ function poiMark(obj, mark){
 	if(mark == 'ok'){
 		$(poi).removeClass('poi_bad');
 		$(poi).toggleClass('poi_ok');
-		$(poi).children('span.poi_mark_content').children('a.poi_bad').removeClass('selected');
-		$(poi).children('span.poi_mark_content').children('a.poi_ok').toggleClass('selected');
 	} else if(mark == 'bad'){
 		$(poi).removeClass('poi_ok');
 		$(poi).toggleClass('poi_bad');
-		$(poi).children('span.poi_mark_content').children('a.poi_ok').removeClass('selected');
-		$(poi).children('span.poi_mark_content').children('a.poi_bad').toggleClass('selected');
 	}
     data_store.save();
 }
@@ -435,7 +452,6 @@ function showPoi(mode){
 	} else if(mode == 'ok'){
 		$('div.point_of_interest').css('display', 'none');
 		$('div.point_of_interest.poi_ok').css('display', 'block');
-		
 	} else if(mode == 'bad'){
 		$('div.point_of_interest').css('display', 'none');
 		$('div.point_of_interest.poi_bad').css('display', 'block');
@@ -488,7 +504,7 @@ function setHighlight(mode){
 				
 				<h1>W3 Total Cache Plugin</h1>
 				
-				<p>Source Code Audit - <em>2012-06-15</em>
+				<p>Source Code Audit - <em>2012-06-17</em>
 					
 					<br>Prepared for <em>Enzo's Pizza</em>
 					
