@@ -187,25 +187,23 @@ div.point_of_interest span.poi_mark_content a.poi_ok{
 	color: green;
 }
 
-div.point_of_interest span.poi_mark_content a.poi_ok.selected{
-	background-color: green;
-	color: white;
-}
-
-div.point_of_interest span.poi_mark_content a.poi_bad.selected:hover,
-div.point_of_interest span.poi_mark_content a.poi_ok.selected:hover{
-	text-decoration: none;
-}
-
 div.point_of_interest span.poi_mark_content a.poi_bad{
 	color: #A52A2A;
 }
 
-div.point_of_interest span.poi_mark_content a.poi_bad.selected{
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok{
+	background-color: green;
+	color: white;
+}
+
+div.point_of_interest.poi_bad span.poi_mark_content a.poi_bad{
 	background-color: #A52A2A;
 	color: white;
-	padding: 0 3px;
-	border-radius: 2px;
+}
+
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok:hover,
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_bad:hover{
+    text-decoration: none;
 }
 
 div.point_of_interest span.file_name{
