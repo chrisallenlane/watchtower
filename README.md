@@ -184,9 +184,9 @@ $signatures[:php][:hashes] = [
 
 Frequently Asked Questions
 --------------------------
-** Isn't the HTML report format kind of unusable? What's the point of
+**Isn't the HTML report format kind of unusable? What's the point of
 marking items "good" or "bad" or whatever when all of that work is going
-to be lost when I close my browser? **  
+to be lost when I close my browser?**  
 
 Your work _won't_ be lost! `Watchtower` uses some clever HTML 5 to 
 save your work automatically as you make changes to the report.
