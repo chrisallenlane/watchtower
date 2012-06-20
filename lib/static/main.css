@@ -251,11 +251,16 @@ p#footer{
 }
 
 p.warning{
-	background-color: #A52A2A;
+	background-color: red;
 	color: white;
+    clear: both;
 	font-weight: bold;
 	line-height: 2em;
 	text-align: center;
+}
+
+p.warning#no_storage{
+    display: none;
 }
 
 span.match_highlight{
