@@ -1,4 +1,6 @@
+require 'csv'
 require 'fileutils'
+require 'open-uri'
 require 'rdoc/task'
 require 'rake/testtask'
 
@@ -54,6 +56,52 @@ namespace :docs do
         puts 'The example reports have been generated.'
     end 
 end
+
+
+namespace :sigs do
+
+    desc "Generates signatures files based off of known malware domains and IP addresses"
+    task :generate_blocklists do
+
+        # download the entire Malware Domain List
+        puts 'Downloading updated blocklist from malwaredomainlist.com...'        
+        
+        csv = open('http://www.malwaredomainlist.com/mdlcsv.php').read
+        
+        # generate the blocklists
+        puts 'Download complete. Generating blocklists...'
+        
+        # buffer the signatures produced
+        ip_signatures     = ''
+        domain_signatures = '';
+        
+        # iterate over the downloaded signatures file
+        CSV.parse(csv) do |row|
+          # buffer the new signatures
+          ip_signatures     += "\tSignature.new({:literal => '#{row[2]}}'),\n" unless ip_signatures.chomp.eql? '-';
+          domain_signatures += "\tSignature.new({:literal => '#{row[3]}}'),\n" unless domain_signatures.chomp.eql? '-';
+        end
+        
+        # assemble the Ruby for the signatures file
+        ruby = <<-sigs
+$signatures[:blocklists] ||= {}
+
+$signatures[:blocklists][:malicious_domains] = [
+#{domain_signatures}
+]
+
+$signatures[:blocklists][:malicious_ips] = [
+#{ip_signatures}
+]
+sigs
+
+        # flush the buffers to a signatures file
+        puts 'Flushing buffers to file...'
+        File.open('./signatures/blocklist.rb', 'w') {|f| f.write(ruby) }
+        puts 'Complete.'
+    end
+end
+
 
 Rake::TestTask.new do |test|
 	test.libs << 'test'

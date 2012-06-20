@@ -6818,8 +6818,9 @@ curl_exec(
 222-        return array($this->response_status, $this->response_reason,
 dangerous_functions
 
+
+dangerous_functions
 ./lib/CF/cloudfiles_http.php:1312
-curl_exec(
 curl_exec(
 1309-        curl_setopt($this->connections[$conn_type],
 1310-            CURLOPT_URL, $url_path);
@@ -6828,7 +6829,7 @@ curl_exec(
 1313-            $this->error_str = "(curl error: "
 1314-                . curl_errno($this->connections[$conn_type]) . ") ";
 1315-            $this->error_str .= curl_error($this->connections[$conn_type]);
-dangerous_functions
+
 
 ./lib/Nusoap/class.soap_transport_http.php:964
 curl_exec(
