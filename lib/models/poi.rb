@@ -59,11 +59,10 @@ class PoI
 	#	puts poi
 	#
 	def to_s
-		text = @file + ':' + @line_number + "\n"
-		text += @name + "\n"
-		text += @match + "\n"
-		text += @snippet + "\n"
-		text += @group
+		text = @group + "\n"
+		text += @file + ':' + @line_number + "\n"
+        text += @name + "\n"
+		text += @snippet
 	end
 
 	# Implements the string concatenation operator

@@ -29,7 +29,7 @@ class TestPoi < ::Test::Unit::TestCase
   end
   
   must "convert to string" do
-	str = "example.php:100\neval(\neval(\neval(evilFunction())\ndangerous_functions"
+	str = "dangerous_functions\nexample.php:100\neval(\neval(evilFunction())"
 	assert_equal @poi.to_s, str
   end
   

@@ -19,6 +19,5 @@ DEPENDENCES
 * rubygems
 
 It also depends on the following Rubygems:
-* colorize
 * fastercsv
 * trollop

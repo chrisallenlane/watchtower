@@ -1,6 +1,7 @@
 # Enumerate a hash containing all of the various signatures (grouped
 # topically) for which one may want to scan.
 $signatures[:php] ||= {}
+
 $signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => 'assert('}),
 	Signature.new({:literal => 'create_function('}),
@@ -45,23 +46,23 @@ $signatures[:php][:payload_obfuscators] = [
 	Signature.new({:literal => 'zlib_encode('}),
 	Signature.new({:literal => 'zlib_decode('}),
 	Signature.new({:literal => '$$'}),
-    # note: this is a somewhat liberal/invalid regex for parsing 
-    #base64, but I'd rather catch as much as possible rather than 
-    #miss an interesting string simply because it's not valid 
-    #base64.
+    # note: This is a somewhat liberal/invalid regex for parsing 
+    # base64, but I'd rather catch as much as possible rather than 
+    # miss an interesting string simply because it's not valid 
+    # base64.
 	Signature.new({:name    => 'Base64', :regex => '(?:[A-Za-z0-9+/]{4})*[=]{1-2}'}),
 ]
 
 $signatures[:php][:form_data] = [
 	Signature.new({:literal => '$_GET'}),
 	Signature.new({:literal => '$_POST'}),
+	Signature.new({:literal => '$_REQUEST'}),
 ]
 
 $signatures[:php][:globals] = [
 	Signature.new({:literal => '$_SESSION'}),
 	Signature.new({:literal => '$_SERVER'}),
 	Signature.new({:literal => '$_COOKIE'}),
-	Signature.new({:literal => '$_REQUEST'}),
 	Signature.new({:literal => '$_FILES'}),
 	Signature.new({:literal => '$GLOBALS'}),
 ]
