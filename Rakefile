@@ -89,7 +89,7 @@ namespace :sigs do
             ip = row[2].chomp.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/) unless row[2].nil?
             
             # process the domain
-            if !domain.nil? and !domain.eql? '-' and !domains.has_key? domain.to_s
+            if !domain.nil? and !domain.eql? '-' and !domain.eql? '.' and !domains.has_key? domain.to_s
                 # buffer the signature
                 domain_signatures += "\tSignature.new({:literal => '#{domain}'}),\n"
                 # track that this domain exists

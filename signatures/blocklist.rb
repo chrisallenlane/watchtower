@@ -16,7 +16,6 @@ $signatures[:blocklists][:malicious_domains] = [
 	Signature.new({:literal => 'static.237.216.46.78.clients.your-server.de'}),
 	Signature.new({:literal => 'unknown198.72.200.74.defenderhosting.com'}),
 	Signature.new({:literal => 'ec2-67-202-36-227.compute-1.amazonaws.com'}),
-	Signature.new({:literal => '.'}),
 	Signature.new({:literal => 'solar.lsn.servebyte.com'}),
 	Signature.new({:literal => '185.71.153.219.broad.cq.cq.dynamic.163data.com.cn'}),
 	Signature.new({:literal => '77.221.137.138.addr.datapoint.ru'}),

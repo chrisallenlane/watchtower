@@ -134,6 +134,7 @@ $configs[:ftype_ext][:yaml]          = %w[yaml yml]
 
 # map the Wordpress API signatures to PHP files
 $configs[:ftype_ext][:wordpress]     = %w[php phpt php3 php4 php5 phtml]
+
 # map the blocklists to some filetypes (defaulting to PHP and HTML)
 # Note: if you're going to scan blocklists, be prepared to wait a 
 # long time to complete a scan, because the blocklists are huge.
