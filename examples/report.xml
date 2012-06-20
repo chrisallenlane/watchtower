@@ -1,5 +1,244 @@
 <points_of_interest>
 	<poi>
+		<file><![CDATA[./lib/JSON.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[821]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[819-
+820-	/**
+821:	* @todo Ultimately, this should just call PEAR::isError()
+822-	*/
+823-	function isError($data, $code = null)
+824-	{]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/JSON.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[850]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[847-} else {
+848-
+849-	/**
+850:	* @todo Ultimately, this class shall be descended from PEAR_Error
+851-	*/
+852-	class Services_JSON_Error
+853-	{]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/class.csstidy_optimise.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[647]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[644-     * @return array
+645-     * @version 1.0
+646-     * @see merge_bg()
+647:     * @todo full CSS 3 compliance
+648-     */
+649-    function dissolve_short_bg($str_value)
+650-    {]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/class.csstidy_optimise.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[733]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[730-     * @return array
+731-     * @version 1.0
+732-     * @see dissolve_short_bg()
+733:     * @todo full CSS 3 compliance
+734-     */
+735-    function merge_bg($input_css)
+736-    {]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[71]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[68- /**
+69- * Properties that need a value with unit
+70- *
+71: * @todo CSS3 properties
+72- * @see compress_numbers();
+73- * @global array $GLOBALS['csstidy']['unit_values']
+74- * @version 1.2]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[85]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[82-/**
+83- * Properties that allow <color> as value
+84- *
+85: * @todo CSS3 properties
+86- * @see compress_numbers();
+87- * @global array $GLOBALS['csstidy']['color_values']
+88- * @version 1.0]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[104]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[101-/**
+102- * Default values for the background properties
+103- *
+104: * @todo Possibly property names will change during CSS3 development
+105- * @global array $GLOBALS['csstidy']['background_prop_default']
+106- * @see dissolve_short_bg()
+107- * @see merge_bg()]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[260]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues
+258- *
+259- * @global array $GLOBALS['csstidy']['shorthands']
+260: * @todo Are there new ones in CSS3?
+261- * @see dissolve_4value_shorthands()
+262- * @see merge_4value_shorthands()
+263- * @version 1.0]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[277]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[274- * All CSS Properties. Needed for csstidy::property_is_next()
+275- *
+276- * @global array $GLOBALS['csstidy']['all_properties']
+277: * @todo Add CSS3 properties
+278- * @version 1.0
+279- * @see csstidy::property_is_next()
+280- */]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Cookie.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[97]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[94-    /**
+95-     * Cookie object constructor
+96-     *
+97:     * @todo Add validation of each one of the parameters (legal domain, etc.)
+98-     *
+99-     * @param string $name
+100-     * @param string $value]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[55]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[52- * redirections, as well as more advanced features like proxy settings, HTTP
+53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)
+54- *
+55: * @todo Implement proxy settings
+56- * @category   Microsoft
+57- * @package    Microsoft_Http
+58- * @subpackage Client]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[1387]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[1384-
+1385-            //case self::AUTH_DIGEST:
+1386-                /**
+1387:                 * @todo Implement digest authentication
+1388-                 */
+1389-            //    break;
+1390-]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/CookieJar.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[357]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[354-     * @param Microsoft_Http_Response $response HTTP Response object
+355-     * @param Microsoft_Uri_Http|string $uri The requested URI
+356-     * @return Microsoft_Http_CookieJar
+357:     * @todo Add the $uri functionality.
+358-     */
+359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)
+360-    {]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/HTML.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[118]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[115-            ,$this->_html);
+116-
+117-        // trim each line.
+118:        // @todo take into account attribute values that span multiple lines.
+119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);
+120-
+121-        // remove ws around block/undisplayed elements]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/Packer.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[36]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[33-class Minify_Packer {
+34-    public static function minify($code, $options = array())
+35-    {
+36:        // @todo: set encoding options based on $options :)
+37-        $packer = new JavascriptPacker($code, 'Normal', true, false);
+38-        return trim($packer->pack());
+39-    }]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/Controller/Page.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[39]]></line_number>
+		<match><![CDATA[@todo]]></match>
+		<name><![CDATA[@todo]]></name>
+		<snippet><![CDATA[36-     * 'minifyAll': should all CSS and Javascript blocks be individually
+37-     * minified? (default false)
+38-     *
+39:     * @todo Add 'file' option to read HTML file.
+40-     */
+41-    public function setupSources($options) {
+42-        if (isset($options['file'])) {]]></snippet>
+		<group><![CDATA[developer_notes]]></group>
+	</poi>
+	<poi>
 		<file><![CDATA[./lib/W3/Db/mssql.php]]></file>
 		<file_type><![CDATA[php]]></file_type>
 		<line_number><![CDATA[535]]></line_number>
@@ -13637,6 +13876,66 @@
 		<group><![CDATA[form_data]]></group>
 	</poi>
 	<poi>
+		<file><![CDATA[./lib/W3/PgCacheFlush.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[352]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[350-        } elseif (is_single() || is_page() && count($posts)) {
+351-            return $posts[0]->ID;
+352:        } elseif (isset($_REQUEST['p'])) {
+353:            return (integer) $_REQUEST['p'];
+354-        }
+355-
+356-        return 0;]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Plugin/TotalCache.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[43]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[40-            'admin_bar_menu'
+41-        ), 150);
+42-
+43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
+44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
+45-            add_filter('template', array(
+46-                &$this,]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Plugin/TotalCacheAdmin.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[265]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[262-         */
+263-        $action = false;
+264-
+265:        foreach ($_REQUEST as $key => $value) {
+266-            if (strpos($key, 'w3tc_') === 0) {
+267-                $action = 'action_' . substr($key, 5);
+268-                break;]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./inc/define.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[229]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[226- * @return boolean
+227- */
+228-function w3_is_preview_mode() {
+229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
+230-}
+231-
+232-/**]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
 		<file><![CDATA[./lib/W3/Minify.php]]></file>
 		<file_type><![CDATA[php]]></file_type>
 		<line_number><![CDATA[84]]></line_number>
@@ -15430,66 +15729,6 @@
 		<group><![CDATA[globals]]></group>
 	</poi>
 	<poi>
-		<file><![CDATA[./lib/W3/PgCacheFlush.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[352]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[350-        } elseif (is_single() || is_page() && count($posts)) {
-351-            return $posts[0]->ID;
-352:        } elseif (isset($_REQUEST['p'])) {
-353:            return (integer) $_REQUEST['p'];
-354-        }
-355-
-356-        return 0;]]></snippet>
-		<group><![CDATA[globals]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Plugin/TotalCache.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[43]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[40-            'admin_bar_menu'
-41-        ), 150);
-42-
-43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
-44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
-45-            add_filter('template', array(
-46-                &$this,]]></snippet>
-		<group><![CDATA[globals]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Plugin/TotalCacheAdmin.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[265]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[262-         */
-263-        $action = false;
-264-
-265:        foreach ($_REQUEST as $key => $value) {
-266-            if (strpos($key, 'w3tc_') === 0) {
-267-                $action = 'action_' . substr($key, 5);
-268-                break;]]></snippet>
-		<group><![CDATA[globals]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./inc/define.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[229]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[226- * @return boolean
-227- */
-228-function w3_is_preview_mode() {
-229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
-230-}
-231-
-232-/**]]></snippet>
-		<group><![CDATA[globals]]></group>
-	</poi>
-	<poi>
 		<file><![CDATA[./lib/W3/Plugin/TotalCacheAdmin.php]]></file>
 		<file_type><![CDATA[php]]></file_type>
 		<line_number><![CDATA[2021]]></line_number>
@@ -16567,245 +16806,6 @@
 39-    }
 40-}]]></snippet>
 		<group><![CDATA[globals]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/JSON.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[821]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[819-
-820-	/**
-821:	* @todo Ultimately, this should just call PEAR::isError()
-822-	*/
-823-	function isError($data, $code = null)
-824-	{]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/JSON.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[850]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[847-} else {
-848-
-849-	/**
-850:	* @todo Ultimately, this class shall be descended from PEAR_Error
-851-	*/
-852-	class Services_JSON_Error
-853-	{]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/class.csstidy_optimise.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[647]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[644-     * @return array
-645-     * @version 1.0
-646-     * @see merge_bg()
-647:     * @todo full CSS 3 compliance
-648-     */
-649-    function dissolve_short_bg($str_value)
-650-    {]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/class.csstidy_optimise.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[733]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[730-     * @return array
-731-     * @version 1.0
-732-     * @see dissolve_short_bg()
-733:     * @todo full CSS 3 compliance
-734-     */
-735-    function merge_bg($input_css)
-736-    {]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[71]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[68- /**
-69- * Properties that need a value with unit
-70- *
-71: * @todo CSS3 properties
-72- * @see compress_numbers();
-73- * @global array $GLOBALS['csstidy']['unit_values']
-74- * @version 1.2]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[85]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[82-/**
-83- * Properties that allow <color> as value
-84- *
-85: * @todo CSS3 properties
-86- * @see compress_numbers();
-87- * @global array $GLOBALS['csstidy']['color_values']
-88- * @version 1.0]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[104]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[101-/**
-102- * Default values for the background properties
-103- *
-104: * @todo Possibly property names will change during CSS3 development
-105- * @global array $GLOBALS['csstidy']['background_prop_default']
-106- * @see dissolve_short_bg()
-107- * @see merge_bg()]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[260]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues
-258- *
-259- * @global array $GLOBALS['csstidy']['shorthands']
-260: * @todo Are there new ones in CSS3?
-261- * @see dissolve_4value_shorthands()
-262- * @see merge_4value_shorthands()
-263- * @version 1.0]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/CSSTidy/data.inc.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[277]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[274- * All CSS Properties. Needed for csstidy::property_is_next()
-275- *
-276- * @global array $GLOBALS['csstidy']['all_properties']
-277: * @todo Add CSS3 properties
-278- * @version 1.0
-279- * @see csstidy::property_is_next()
-280- */]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Cookie.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[97]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[94-    /**
-95-     * Cookie object constructor
-96-     *
-97:     * @todo Add validation of each one of the parameters (legal domain, etc.)
-98-     *
-99-     * @param string $name
-100-     * @param string $value]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[55]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[52- * redirections, as well as more advanced features like proxy settings, HTTP
-53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)
-54- *
-55: * @todo Implement proxy settings
-56- * @category   Microsoft
-57- * @package    Microsoft_Http
-58- * @subpackage Client]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[1387]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[1384-
-1385-            //case self::AUTH_DIGEST:
-1386-                /**
-1387:                 * @todo Implement digest authentication
-1388-                 */
-1389-            //    break;
-1390-]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/CookieJar.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[357]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[354-     * @param Microsoft_Http_Response $response HTTP Response object
-355-     * @param Microsoft_Uri_Http|string $uri The requested URI
-356-     * @return Microsoft_Http_CookieJar
-357:     * @todo Add the $uri functionality.
-358-     */
-359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)
-360-    {]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/HTML.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[118]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[115-            ,$this->_html);
-116-
-117-        // trim each line.
-118:        // @todo take into account attribute values that span multiple lines.
-119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);
-120-
-121-        // remove ws around block/undisplayed elements]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/Packer.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[36]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[33-class Minify_Packer {
-34-    public static function minify($code, $options = array())
-35-    {
-36:        // @todo: set encoding options based on $options :)
-37-        $packer = new JavascriptPacker($code, 'Normal', true, false);
-38-        return trim($packer->pack());
-39-    }]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/Controller/Page.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[39]]></line_number>
-		<match><![CDATA[@todo]]></match>
-		<name><![CDATA[@todo]]></name>
-		<snippet><![CDATA[36-     * 'minifyAll': should all CSS and Javascript blocks be individually
-37-     * minified? (default false)
-38-     *
-39:     * @todo Add 'file' option to read HTML file.
-40-     */
-41-    public function setupSources($options) {
-42-        if (isset($options['file'])) {]]></snippet>
-		<group><![CDATA[developer_notes]]></group>
 	</poi>
 	<poi>
 		<file><![CDATA[./pub/js/metadata.js]]></file>

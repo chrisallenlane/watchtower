@@ -1,12 +1,13 @@
 require 'csv'
 require 'fileutils'
 require 'open-uri'
-require 'rdoc/task'
 require 'rake/testtask'
+require 'rdoc/task'
+require 'uri'
 
 namespace :docs do
     RDoc::Task.new do |rdoc|
-      files 		=['lib/models/vulnscanner.rb', 'lib/models/poi.rb', 'lib/models/signature.rb']
+      files 		= ['lib/models/vulnscanner.rb', 'lib/models/poi.rb', 'lib/models/signature.rb']
       rdoc.rdoc_files.add(files)
       rdoc.main 	= 'README.rdoc'
       rdoc.title 	= 'WatchTower rdocs'
@@ -65,22 +66,48 @@ namespace :sigs do
 
         # download the entire Malware Domain List
         puts 'Downloading updated blocklist from malwaredomainlist.com...'        
-        
         csv = open('http://www.malwaredomainlist.com/mdlcsv.php').read
         
         # generate the blocklists
         puts 'Download complete. Generating blocklists...'
         
+        # track the ips and domains
+        ips                 = {}
+        domains             = {}
+        
         # buffer the signatures produced
-        ip_signatures     = ''
-        domain_signatures = '';
+        ip_signatures       = ''
+        domain_signatures   = '';
         
         # iterate over the downloaded signatures file
         CSV.parse(csv) do |row|
-          # buffer the new signatures
-          ip_signatures     += "\tSignature.new({:literal => '#{row[2]}}'),\n" unless ip_signatures.chomp.eql? '-';
-          domain_signatures += "\tSignature.new({:literal => '#{row[3]}}'),\n" unless domain_signatures.chomp.eql? '-';
+            # parse out the domain and IP address
+            domain =  row[3].chomp unless row[3].nil?
+            
+            # this regex isn't quite correct, but it's good enough
+            # for our purposes here
+            ip = row[2].chomp.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/) unless row[2].nil?
+            
+            # process the domain
+            if !domain.nil? and !domain.eql? '-' and !domains.has_key? domain.to_s
+                # buffer the signature
+                domain_signatures += "\tSignature.new({:literal => '#{domain}'}),\n"
+                # track that this domain exists
+                domains[domain.to_s] = true
+            end
+            
+            # process the ip address
+            if !ip.nil? and !ip.eql? '-' and !ips.has_key? ip.to_s
+                # buffer the signature
+                ip_signatures += "\tSignature.new({:literal => '#{ip}'}),\n"
+                # track that this IP exists
+                ips[ip.to_s] = true
+            end
         end
+        
+        # strip the trailing whitespace from the buffers
+        domain_signatures.chomp!
+        ip_signatures.chomp!
         
         # assemble the Ruby for the signatures file
         ruby = <<-sigs
@@ -102,6 +129,14 @@ sigs
     end
 end
 
+desc 'Builds the project'
+task :build do
+    puts 'Building project...'
+    Rake::Task['sigs:generate_blocklists'].execute
+    Rake::Task['docs:examples'].execute
+    Rake::Task['docs:rerdoc'].execute
+    puts 'Build complete. Did you remember to update the version number if necessary?'
+end
 
 Rake::TestTask.new do |test|
 	test.libs << 'test'

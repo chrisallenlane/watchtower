@@ -1,4 +1,115 @@
 "file_type","file","line_number","match","name","snippet","group"
+"php","./lib/JSON.php","821","@todo","@todo","819-
+820-	/**
+821:	* @todo Ultimately, this should just call PEAR::isError()
+822-	*/
+823-	function isError($data, $code = null)
+824-	{","developer_notes"
+"php","./lib/JSON.php","850","@todo","@todo","847-} else {
+848-
+849-	/**
+850:	* @todo Ultimately, this class shall be descended from PEAR_Error
+851-	*/
+852-	class Services_JSON_Error
+853-	{","developer_notes"
+"php","./lib/CSSTidy/class.csstidy_optimise.php","647","@todo","@todo","644-     * @return array
+645-     * @version 1.0
+646-     * @see merge_bg()
+647:     * @todo full CSS 3 compliance
+648-     */
+649-    function dissolve_short_bg($str_value)
+650-    {","developer_notes"
+"php","./lib/CSSTidy/class.csstidy_optimise.php","733","@todo","@todo","730-     * @return array
+731-     * @version 1.0
+732-     * @see dissolve_short_bg()
+733:     * @todo full CSS 3 compliance
+734-     */
+735-    function merge_bg($input_css)
+736-    {","developer_notes"
+"php","./lib/CSSTidy/data.inc.php","71","@todo","@todo","68- /**
+69- * Properties that need a value with unit
+70- *
+71: * @todo CSS3 properties
+72- * @see compress_numbers();
+73- * @global array $GLOBALS['csstidy']['unit_values']
+74- * @version 1.2","developer_notes"
+"php","./lib/CSSTidy/data.inc.php","85","@todo","@todo","82-/**
+83- * Properties that allow <color> as value
+84- *
+85: * @todo CSS3 properties
+86- * @see compress_numbers();
+87- * @global array $GLOBALS['csstidy']['color_values']
+88- * @version 1.0","developer_notes"
+"php","./lib/CSSTidy/data.inc.php","104","@todo","@todo","101-/**
+102- * Default values for the background properties
+103- *
+104: * @todo Possibly property names will change during CSS3 development
+105- * @global array $GLOBALS['csstidy']['background_prop_default']
+106- * @see dissolve_short_bg()
+107- * @see merge_bg()","developer_notes"
+"php","./lib/CSSTidy/data.inc.php","260","@todo","@todo","257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues
+258- *
+259- * @global array $GLOBALS['csstidy']['shorthands']
+260: * @todo Are there new ones in CSS3?
+261- * @see dissolve_4value_shorthands()
+262- * @see merge_4value_shorthands()
+263- * @version 1.0","developer_notes"
+"php","./lib/CSSTidy/data.inc.php","277","@todo","@todo","274- * All CSS Properties. Needed for csstidy::property_is_next()
+275- *
+276- * @global array $GLOBALS['csstidy']['all_properties']
+277: * @todo Add CSS3 properties
+278- * @version 1.0
+279- * @see csstidy::property_is_next()
+280- */","developer_notes"
+"php","./lib/Microsoft/Http/Cookie.php","97","@todo","@todo","94-    /**
+95-     * Cookie object constructor
+96-     *
+97:     * @todo Add validation of each one of the parameters (legal domain, etc.)
+98-     *
+99-     * @param string $name
+100-     * @param string $value","developer_notes"
+"php","./lib/Microsoft/Http/Client.php","55","@todo","@todo","52- * redirections, as well as more advanced features like proxy settings, HTTP
+53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)
+54- *
+55: * @todo Implement proxy settings
+56- * @category   Microsoft
+57- * @package    Microsoft_Http
+58- * @subpackage Client","developer_notes"
+"php","./lib/Microsoft/Http/Client.php","1387","@todo","@todo","1384-
+1385-            //case self::AUTH_DIGEST:
+1386-                /**
+1387:                 * @todo Implement digest authentication
+1388-                 */
+1389-            //    break;
+1390-","developer_notes"
+"php","./lib/Microsoft/Http/CookieJar.php","357","@todo","@todo","354-     * @param Microsoft_Http_Response $response HTTP Response object
+355-     * @param Microsoft_Uri_Http|string $uri The requested URI
+356-     * @return Microsoft_Http_CookieJar
+357:     * @todo Add the $uri functionality.
+358-     */
+359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)
+360-    {","developer_notes"
+"php","./lib/Minify/Minify/HTML.php","118","@todo","@todo","115-            ,$this->_html);
+116-
+117-        // trim each line.
+118:        // @todo take into account attribute values that span multiple lines.
+119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);
+120-
+121-        // remove ws around block/undisplayed elements","developer_notes"
+"php","./lib/Minify/Minify/Packer.php","36","@todo","@todo","33-class Minify_Packer {
+34-    public static function minify($code, $options = array())
+35-    {
+36:        // @todo: set encoding options based on $options :)
+37-        $packer = new JavascriptPacker($code, 'Normal', true, false);
+38-        return trim($packer->pack());
+39-    }","developer_notes"
+"php","./lib/Minify/Minify/Controller/Page.php","39","@todo","@todo","36-     * 'minifyAll': should all CSS and Javascript blocks be individually
+37-     * minified? (default false)
+38-     *
+39:     * @todo Add 'file' option to read HTML file.
+40-     */
+41-    public function setupSources($options) {
+42-        if (isset($options['file'])) {","developer_notes"
 "php","./lib/W3/Db/mssql.php","535","username","username","533-                        $this->bail( sprintf( /*WP_I18N_DB_CONN_ERROR*/""
 534-<h1>Error establishing a database connection</h1>
 535:<p>This either means that the username and password information in your <code>wp-config.php</code> file is incorrect or we can't contact the database server at <code>%s</code>. This could mean your host's database server is down.</p>
@@ -7188,6 +7299,34 @@
 114:        return array_merge($_GET, $_POST);
 115-    }
 116-}","form_data"
+"php","./lib/W3/PgCacheFlush.php","352","$_REQUEST","$_REQUEST","350-        } elseif (is_single() || is_page() && count($posts)) {
+351-            return $posts[0]->ID;
+352:        } elseif (isset($_REQUEST['p'])) {
+353:            return (integer) $_REQUEST['p'];
+354-        }
+355-
+356-        return 0;","form_data"
+"php","./lib/W3/Plugin/TotalCache.php","43","$_REQUEST","$_REQUEST","40-            'admin_bar_menu'
+41-        ), 150);
+42-
+43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
+44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
+45-            add_filter('template', array(
+46-                &$this,","form_data"
+"php","./lib/W3/Plugin/TotalCacheAdmin.php","265","$_REQUEST","$_REQUEST","262-         */
+263-        $action = false;
+264-
+265:        foreach ($_REQUEST as $key => $value) {
+266-            if (strpos($key, 'w3tc_') === 0) {
+267-                $action = 'action_' . substr($key, 5);
+268-                break;","form_data"
+"php","./inc/define.php","229","$_REQUEST","$_REQUEST","226- * @return boolean
+227- */
+228-function w3_is_preview_mode() {
+229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
+230-}
+231-
+232-/**","form_data"
 "php","./lib/W3/Minify.php","84","$_SERVER","$_SERVER","82-         * Fix DOCUMENT_ROOT
 83-         */
 84:        $_SERVER['DOCUMENT_ROOT'] = w3_get_document_root();
@@ -8093,34 +8232,6 @@
 44-        } elseif (isset($_SERVER['HTTP_REFERER'])) {
 45-            $http_referrer = $_SERVER['HTTP_REFERER'];
 46-","globals"
-"php","./lib/W3/PgCacheFlush.php","352","$_REQUEST","$_REQUEST","350-        } elseif (is_single() || is_page() && count($posts)) {
-351-            return $posts[0]->ID;
-352:        } elseif (isset($_REQUEST['p'])) {
-353:            return (integer) $_REQUEST['p'];
-354-        }
-355-
-356-        return 0;","globals"
-"php","./lib/W3/Plugin/TotalCache.php","43","$_REQUEST","$_REQUEST","40-            'admin_bar_menu'
-41-        ), 150);
-42-
-43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
-44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
-45-            add_filter('template', array(
-46-                &$this,","globals"
-"php","./lib/W3/Plugin/TotalCacheAdmin.php","265","$_REQUEST","$_REQUEST","262-         */
-263-        $action = false;
-264-
-265:        foreach ($_REQUEST as $key => $value) {
-266-            if (strpos($key, 'w3tc_') === 0) {
-267-                $action = 'action_' . substr($key, 5);
-268-                break;","globals"
-"php","./inc/define.php","229","$_REQUEST","$_REQUEST","226- * @return boolean
-227- */
-228-function w3_is_preview_mode() {
-229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
-230-}
-231-
-232-/**","globals"
 "php","./lib/W3/Plugin/TotalCacheAdmin.php","2021","$_FILES","$_FILES","2019-        @$config = & new W3_Config();
 2020-
 2021:        if (!isset($_FILES['config_file']['error']) || $_FILES['config_file']['error'] == UPLOAD_ERR_NO_FILE) {
@@ -8864,117 +8975,6 @@
 38:        @$GLOBALS['wpdb'] = & W3_Db::instance();
 39-    }
 40-}","globals"
-"php","./lib/JSON.php","821","@todo","@todo","819-
-820-	/**
-821:	* @todo Ultimately, this should just call PEAR::isError()
-822-	*/
-823-	function isError($data, $code = null)
-824-	{","developer_notes"
-"php","./lib/JSON.php","850","@todo","@todo","847-} else {
-848-
-849-	/**
-850:	* @todo Ultimately, this class shall be descended from PEAR_Error
-851-	*/
-852-	class Services_JSON_Error
-853-	{","developer_notes"
-"php","./lib/CSSTidy/class.csstidy_optimise.php","647","@todo","@todo","644-     * @return array
-645-     * @version 1.0
-646-     * @see merge_bg()
-647:     * @todo full CSS 3 compliance
-648-     */
-649-    function dissolve_short_bg($str_value)
-650-    {","developer_notes"
-"php","./lib/CSSTidy/class.csstidy_optimise.php","733","@todo","@todo","730-     * @return array
-731-     * @version 1.0
-732-     * @see dissolve_short_bg()
-733:     * @todo full CSS 3 compliance
-734-     */
-735-    function merge_bg($input_css)
-736-    {","developer_notes"
-"php","./lib/CSSTidy/data.inc.php","71","@todo","@todo","68- /**
-69- * Properties that need a value with unit
-70- *
-71: * @todo CSS3 properties
-72- * @see compress_numbers();
-73- * @global array $GLOBALS['csstidy']['unit_values']
-74- * @version 1.2","developer_notes"
-"php","./lib/CSSTidy/data.inc.php","85","@todo","@todo","82-/**
-83- * Properties that allow <color> as value
-84- *
-85: * @todo CSS3 properties
-86- * @see compress_numbers();
-87- * @global array $GLOBALS['csstidy']['color_values']
-88- * @version 1.0","developer_notes"
-"php","./lib/CSSTidy/data.inc.php","104","@todo","@todo","101-/**
-102- * Default values for the background properties
-103- *
-104: * @todo Possibly property names will change during CSS3 development
-105- * @global array $GLOBALS['csstidy']['background_prop_default']
-106- * @see dissolve_short_bg()
-107- * @see merge_bg()","developer_notes"
-"php","./lib/CSSTidy/data.inc.php","260","@todo","@todo","257- * A list of all shorthand properties that are devided into four properties and/or have four subvalues
-258- *
-259- * @global array $GLOBALS['csstidy']['shorthands']
-260: * @todo Are there new ones in CSS3?
-261- * @see dissolve_4value_shorthands()
-262- * @see merge_4value_shorthands()
-263- * @version 1.0","developer_notes"
-"php","./lib/CSSTidy/data.inc.php","277","@todo","@todo","274- * All CSS Properties. Needed for csstidy::property_is_next()
-275- *
-276- * @global array $GLOBALS['csstidy']['all_properties']
-277: * @todo Add CSS3 properties
-278- * @version 1.0
-279- * @see csstidy::property_is_next()
-280- */","developer_notes"
-"php","./lib/Microsoft/Http/Cookie.php","97","@todo","@todo","94-    /**
-95-     * Cookie object constructor
-96-     *
-97:     * @todo Add validation of each one of the parameters (legal domain, etc.)
-98-     *
-99-     * @param string $name
-100-     * @param string $value","developer_notes"
-"php","./lib/Microsoft/Http/Client.php","55","@todo","@todo","52- * redirections, as well as more advanced features like proxy settings, HTTP
-53- * authentication and cookie persistance (using a Microsoft_Http_CookieJar object)
-54- *
-55: * @todo Implement proxy settings
-56- * @category   Microsoft
-57- * @package    Microsoft_Http
-58- * @subpackage Client","developer_notes"
-"php","./lib/Microsoft/Http/Client.php","1387","@todo","@todo","1384-
-1385-            //case self::AUTH_DIGEST:
-1386-                /**
-1387:                 * @todo Implement digest authentication
-1388-                 */
-1389-            //    break;
-1390-","developer_notes"
-"php","./lib/Microsoft/Http/CookieJar.php","357","@todo","@todo","354-     * @param Microsoft_Http_Response $response HTTP Response object
-355-     * @param Microsoft_Uri_Http|string $uri The requested URI
-356-     * @return Microsoft_Http_CookieJar
-357:     * @todo Add the $uri functionality.
-358-     */
-359-    public static function fromResponse(Microsoft_Http_Response $response, $ref_uri)
-360-    {","developer_notes"
-"php","./lib/Minify/Minify/HTML.php","118","@todo","@todo","115-            ,$this->_html);
-116-
-117-        // trim each line.
-118:        // @todo take into account attribute values that span multiple lines.
-119-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);
-120-
-121-        // remove ws around block/undisplayed elements","developer_notes"
-"php","./lib/Minify/Minify/Packer.php","36","@todo","@todo","33-class Minify_Packer {
-34-    public static function minify($code, $options = array())
-35-    {
-36:        // @todo: set encoding options based on $options :)
-37-        $packer = new JavascriptPacker($code, 'Normal', true, false);
-38-        return trim($packer->pack());
-39-    }","developer_notes"
-"php","./lib/Minify/Minify/Controller/Page.php","39","@todo","@todo","36-     * 'minifyAll': should all CSS and Javascript blocks be individually
-37-     * minified? (default false)
-38-     *
-39:     * @todo Add 'file' option to read HTML file.
-40-     */
-41-    public function setupSources($options) {
-42-        if (isset($options['file'])) {","developer_notes"
 "js","./pub/js/metadata.js","92","eval","eval","90-        
 91-        if( data.indexOf('{') < 0 ) {
 92:          data = eval(""("" + data + "")"");
