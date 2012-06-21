@@ -39,6 +39,7 @@
 				Show:
 				<a href='javascript:showPoi("all")'>All</a> | 
 				<a href='javascript:showPoi("ok")'>OK</a> | 
+				<a href='javascript:showPoi("dubious")'>Dubious</a>
 				<a href='javascript:showPoi("bad")'>Bad</a>
 			</div>
 		</div>
@@ -125,6 +126,7 @@
 								<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
 								<span class='poi_mark_content'>
 									<a class='poi_ok' onclick='javascript:poiMark(this, "ok")'>OK</a> |
+									<a class='poi_dubious' onclick='javascript:poiMark(this, "dubious")'>Dubious</a> |
 									<a class='poi_bad' onclick='javascript:poiMark(this, "bad")'>Bad</a> |
 									<a class='poi_hide' onclick='javascript:poiHideContent(this)'>Hide</a>
 								</span>

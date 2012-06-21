@@ -154,6 +154,11 @@ div.point_of_interest.poi_bad{
 	background-color: #FFC0CB;
 }
 
+div.point_of_interest.poi_dubious{
+	background-color: lightyellow;
+	border: 2px solid gold;
+}
+
 div.point_of_interest.poi_ok{
 	background-color: #90EE90;
 	border: 2px solid green;
@@ -187,12 +192,21 @@ div.point_of_interest span.poi_mark_content a.poi_ok{
 	color: green;
 }
 
+div.point_of_interest span.poi_mark_content a.poi_dubious{
+	color: orange;
+}
+
 div.point_of_interest span.poi_mark_content a.poi_bad{
 	color: #A52A2A;
 }
 
 div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok{
 	background-color: green;
+	color: white;
+}
+
+div.point_of_interest.poi_ok span.poi_mark_content a.poi_dubious{
+	background-color: orange;
 	color: white;
 }
 
