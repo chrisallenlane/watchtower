@@ -205,7 +205,7 @@ div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok{
 	color: white;
 }
 
-div.point_of_interest.poi_ok span.poi_mark_content a.poi_dubious{
+div.point_of_interest.poi_dubious span.poi_mark_content a.poi_dubious{
 	background-color: orange;
 	color: white;
 }
@@ -216,7 +216,8 @@ div.point_of_interest.poi_bad span.poi_mark_content a.poi_bad{
 }
 
 div.point_of_interest.poi_ok span.poi_mark_content a.poi_ok:hover,
-div.point_of_interest.poi_ok span.poi_mark_content a.poi_bad:hover{
+div.point_of_interest.poi_dubious span.poi_mark_content a.poi_dubious:hover,
+div.point_of_interest.poi_bad span.poi_mark_content a.poi_bad:hover{
     text-decoration: none;
 }
 
