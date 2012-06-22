@@ -1294,6 +1294,8 @@ $signatures[:blocklists][:malicious_domains] = [
 	Signature.new({:literal => '84-16-234-27.internetserviceteam.com'}),
 	Signature.new({:literal => 'azurova.sykora.paskuli.cz.'}),
 	Signature.new({:literal => 'www17.pipni.cz.'}),
+	Signature.new({:literal => 'jora39.org.'}),
+	Signature.new({:literal => 'elite.nsjet.com.'}),
 	Signature.new({:literal => 'coffestreet.pp.ru.'}),
 	Signature.new({:literal => 'hz-w1.hosting90.cz.'}),
 	Signature.new({:literal => 'impulse.websitewelcome.com.'}),
@@ -10247,6 +10249,8 @@ $signatures[:blocklists][:malicious_domains] = [
 	Signature.new({:literal => '213-17-171-186.ip.netia.com.pl.'}),
 	Signature.new({:literal => 'h18.agava.net.'}),
 	Signature.new({:literal => '204.152.214.165.static.quadranet.com.'}),
+	Signature.new({:literal => 'static.29.216.63.178.clients.your-server.de.'}),
+	Signature.new({:literal => '174.36.29.53-static.reverse.softlayer.com.'}),
 ]
 
 $signatures[:blocklists][:malicious_ips] = [
@@ -12536,6 +12540,8 @@ $signatures[:blocklists][:malicious_ips] = [
 	Signature.new({:literal => '205.177.124.46'}),
 	Signature.new({:literal => '83.167.234.16'}),
 	Signature.new({:literal => '93.185.104.27'}),
+	Signature.new({:literal => '83.69.233.14'}),
+	Signature.new({:literal => '67.23.226.119'}),
 	Signature.new({:literal => '63.218.225.118'}),
 	Signature.new({:literal => '81.0.225.68'}),
 	Signature.new({:literal => '125.65.112.15'}),
@@ -28644,4 +28650,9 @@ $signatures[:blocklists][:malicious_ips] = [
 	Signature.new({:literal => '89.108.66.32'}),
 	Signature.new({:literal => '204.152.214.165'}),
 	Signature.new({:literal => '178.239.62.11'}),
+	Signature.new({:literal => '178.63.216.29'}),
+	Signature.new({:literal => '109.169.86.139'}),
+	Signature.new({:literal => '174.36.29.53'}),
+	Signature.new({:literal => '216.18.228.149'}),
+	Signature.new({:literal => '108.162.196.74'}),
 ]
