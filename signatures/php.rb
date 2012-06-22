@@ -16,8 +16,10 @@ $signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => 'fread('}),
 	Signature.new({:literal => 'fread('}),
 	Signature.new({:literal => 'fsockopen('}),
-	Signature.new({:literal => 'include('}),
-	Signature.new({:literal => 'include_once('}),
+	Signature.new({:literal => 'goto'}),
+    # omit the parenthesis, because these are also keywords
+	Signature.new({:literal => 'include'}),
+	Signature.new({:literal => 'include_once'}),
 	Signature.new({:literal => 'mail('}),
 	Signature.new({:literal => 'ob_get_contents('}),
 	Signature.new({:literal => 'passthru('}),
@@ -26,8 +28,9 @@ $signatures[:php][:dangerous_functions] = [
 	Signature.new({:literal => 'proc_open('}),
 	Signature.new({:literal => 'readfile('}),
 	Signature.new({:literal => 'readfile('}),
-	Signature.new({:literal => 'require('}),
-	Signature.new({:literal => 'require_once('}),
+	# omit the parenthesis, because these are also keywords
+    Signature.new({:literal => 'require'}),
+	Signature.new({:literal => 'require_once'}),
 	Signature.new({:literal => 'shell_exec('}),
 	Signature.new({:literal => 'system('}),
 	Signature.new({:literal => 'unserialize('}),
@@ -65,6 +68,17 @@ $signatures[:php][:globals] = [
 	Signature.new({:literal => '$_COOKIE'}),
 	Signature.new({:literal => '$_FILES'}),
 	Signature.new({:literal => '$GLOBALS'}),
+]
+
+$signatures[:php][:sql] = [
+	Signature.new({:literal => 'SELECT'}),
+	Signature.new({:literal => 'INSERT'}),
+	Signature.new({:literal => 'UPDATE'}),
+	Signature.new({:literal => 'DELETE'}),
+	Signature.new({:literal => 'REPLACE'}),
+	Signature.new({:literal => 'DROP'}),
+	Signature.new({:literal => 'TRUNCATE'}),
+    # todo: include some signatures here to spot dynamic SQL
 ]
 
 $signatures[:php][:developer_notes] = [
