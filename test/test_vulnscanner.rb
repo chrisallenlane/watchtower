@@ -1,6 +1,8 @@
-require 'test/test_helper.rb'
-require 'lib/models/signature.rb'
-require 'lib/models/vulnscanner.rb'
+require 'rubygems'
+require 'backports'
+require_relative './test_helper.rb'
+require_relative '../lib/models/signature.rb'
+require_relative '../lib/models/vulnscanner.rb'
 
 # @todo: I should probably beef up the testing on this class in the
 # future. It's a bit weak right now.

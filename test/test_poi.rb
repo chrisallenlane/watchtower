@@ -1,5 +1,7 @@
-require 'test/test_helper.rb'
-require 'lib/models/poi.rb'
+require 'rubygems'
+require 'backports'
+require_relative './test_helper.rb'
+require_relative '../lib/models/poi.rb'
 
 
 class TestPoi < ::Test::Unit::TestCase

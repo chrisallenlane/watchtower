@@ -1,5 +1,7 @@
-require 'test/test_helper.rb'
-require 'lib/models/signature.rb'
+require 'rubygems'
+require 'backports'
+require_relative './test_helper.rb'
+require_relative '../lib/models/signature.rb'
 
 
 class TestSignature < ::Test::Unit::TestCase

@@ -1,6 +1,8 @@
 # @todo: this test is going to test the validity of the various sample
 # reports (csv, html, xml).
-require 'test/test_helper.rb'
+require 'rubygems'
+require 'backports'
+require_relative './test_helper.rb'
 
 
 class TestReports < ::Test::Unit::TestCase
