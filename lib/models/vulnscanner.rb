@@ -99,7 +99,7 @@ class VulnScanner
 						grep_blocks.each do |grep_block|                         
                             # Discard the first (empty) line.
                             # See: http://stackoverflow.com/questions/1469986/how-do-i-remove-the-first-n-lines-from-a-string-in-ruby
-                            grep_block = grep_block.to_a[1..-1].join
+                            grep_block = grep_block.lines.to_a[1..-1].join
                             
                             # buffer the grep data in a hash until the context
                             # lines have been parsed out proerly

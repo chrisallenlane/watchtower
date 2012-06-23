@@ -1,4 +1,5 @@
 require 'csv'
+require 'backports'
 require 'fileutils'
 require 'open-uri'
 require 'rake/testtask'

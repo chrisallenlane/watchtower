@@ -1,4 +1,4 @@
-Watchtower (1.4.3)
+Watchtower (1.4.4)
 ===================
 Chris Lane  
 chris@chris-allen-lane.com  
