@@ -28655,4 +28655,5 @@ $signatures[:blocklists][:malicious_ips] = [
 	Signature.new({:literal => '174.36.29.53'}),
 	Signature.new({:literal => '216.18.228.149'}),
 	Signature.new({:literal => '108.162.196.74'}),
+	Signature.new({:literal => '195.210.47.239'}),
 ]

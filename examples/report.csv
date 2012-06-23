@@ -1,4 +1,501 @@
 "file_type","file","line_number","match","name","snippet","group"
+"php","./lib/Nusoap/class.soap_parser.php","504","base64_decode(","base64_decode(","502-		if ($type == 'base64' || $type == 'base64Binary') {
+503-			$this->debug('Decode base64 value');
+504:			return base64_decode($value);
+505-		}
+506-		// obscure numeric types
+507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'","payload_obfuscators"
+"php","./lib/Nusoap/nusoap.php","7020","base64_decode(","base64_decode(","7017-		}
+7018-		if ($type == 'base64' || $type == 'base64Binary') {
+7019-			$this->debug('Decode base64 value');
+7020:			return base64_decode($value);
+7021-		}
+7022-		// obscure numeric types
+7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/SessionHandler.php","150","base64_decode(","base64_decode(","147-                $this->_sessionTablePartition,
+148-                $id
+149-            );
+150:            return base64_decode($sessionRecord->serializedData);
+151-        }
+152-        catch (Microsoft_WindowsAzure_Exception $ex)
+153-        {","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","111","base64_decode(","base64_decode(","108-		$usePathStyleUri = false
+109-	) {
+110-		$this->_accountName = $accountName;
+111:		$this->_accountKey = base64_decode($accountKey);
+112-		$this->_usePathStyleUri = $usePathStyleUri;
+113-	}
+114-","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","135","base64_decode(","base64_decode(","132-	 */
+133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)
+134-	{
+135:		$this->_accountKey = base64_decode($value);
+136-		return $this;
+137-	}
+138-","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Storage/Queue.php","467","base64_decode(","base64_decode(","464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),
+465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),
+466-					(string)$xmlMessages[$i]->DequeueCount,
+467:					base64_decode((string)$xmlMessages[$i]->MessageText)
+468-			    );
+469-			}
+470-","payload_obfuscators"
+"php","./lib/W3/Cdn/Azure.php","404","base64_encode(","base64_encode(","402-     */
+403-    function _get_content_md5($md5) {
+404:        return base64_encode(pack('H*', $md5));
+405-    }
+406-
+407-    /**","payload_obfuscators"
+"php","./lib/Nusoap/class.soap_transport_http.php","476","base64_encode(","base64_encode(","473-		$this->appendDebug($this->varDump($certRequest));
+474-		// cf. RFC 2617
+475-		if ($authtype == 'basic') {
+476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
+477-		} elseif ($authtype == 'digest') {
+478-			if (isset($digestRequest['nonce'])) {
+479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;","payload_obfuscators"
+"php","./lib/Nusoap/class.soap_transport_http.php","587","base64_encode(","base64_encode(","584-				'authtype' => $proxyauthtype
+585-			);
+586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
+587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
+588-			}
+589-		} else {
+590-			$this->debug('remove proxy');","payload_obfuscators"
+"php","./lib/Nusoap/nusoap.php","2629","base64_encode(","base64_encode(","2626-		$this->appendDebug($this->varDump($certRequest));
+2627-		// cf. RFC 2617
+2628-		if ($authtype == 'basic') {
+2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
+2630-		} elseif ($authtype == 'digest') {
+2631-			if (isset($digestRequest['nonce'])) {
+2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;","payload_obfuscators"
+"php","./lib/Nusoap/nusoap.php","2740","base64_encode(","base64_encode(","2737-				'authtype' => $proxyauthtype
+2738-			);
+2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
+2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
+2741-			}
+2742-		} else {
+2743-			$this->debug('remove proxy');","payload_obfuscators"
+"php","./lib/S3.php","289","base64_encode(","base64_encode(","286-		}
+287-		return array('file' => $file, 'size' => filesize($file),
+288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
+289:		base64_encode(md5_file($file, true))) : '');
+290-	}
+291-
+292-","payload_obfuscators"
+"php","./lib/S3.php","329","base64_encode(","base64_encode(","326-
+327-		if (is_string($input)) $input = array(
+328-			'data' => $input, 'size' => strlen($input),
+329:			'md5sum' => base64_encode(md5($input, true))
+330-		);
+331-
+332-		// Data","payload_obfuscators"
+"php","./lib/S3.php","860","base64_encode(","base64_encode(","857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);
+858-		}
+859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));
+860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));
+861-
+862-		// Create parameters
+863-		$params = new stdClass;","payload_obfuscators"
+"php","./lib/S3.php","1310","base64_encode(","base64_encode(","1307-	* @return string
+1308-	*/
+1309-	private static function __getHash($string) {
+1310:		return base64_encode(extension_loaded('hash') ?
+1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
+1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
+1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/SessionHandler.php","168","base64_encode(","base64_encode(","165-    {
+166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);
+167-        $sessionRecord->sessionExpires = time();
+168:        $sessionRecord->serializedData = base64_encode($serializedData);
+169-
+170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');
+171-","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php","194","base64_encode(","base64_encode(","191-
+192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
+193-    	$stringToSign   = implode(""\n"", $stringToSign);
+194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+195-
+196-    	// Sign request
+197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php","163","base64_encode(","base64_encode(","160-    	$stringToSign[] = $identifier;
+161-
+162-    	$stringToSign = implode(""\n"", $stringToSign);
+163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+164-
+165-    	return $signature;
+166-    }","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php","142","base64_encode(","base64_encode(","139-    	$stringToSign[] = $requestDate; // Date
+140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
+141-    	$stringToSign   = implode(""\n"", $stringToSign);
+142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+143-
+144-    	// Sign request
+145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Storage/Blob.php","831","base64_encode(","base64_encode(","828-		$resourceName = self::createResourceName($containerName , $blobName);
+829-
+830-		// Upload
+831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);
+832-		if (!$response->isSuccessful()) {
+833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));
+834-		}","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Storage/Blob.php","869","base64_encode(","base64_encode(","866-		// Generate block list
+867-		$blocks = '';
+868-		foreach ($blockList as $block) {
+869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . ""\n"";
+870-		}
+871-
+872-		// Generate block list request","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Storage/Queue.php","393","base64_encode(","base64_encode(","390-	    // Build body
+391-	    $rawData = '';
+392-	    $rawData .= '<QueueMessage>';
+393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';
+394-	    $rawData .= '</QueueMessage>';
+395-
+396-		// Perform request","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client.php","1382","base64_encode(","base64_encode(","1379-                    throw new Microsoft_Http_Client_Exception(""The user name cannot contain ':' in 'Basic' HTTP authentication"");
+1380-                }
+1381-
+1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);
+1383-                break;
+1384-
+1385-            //case self::AUTH_DIGEST:","payload_obfuscators"
+"php","./lib/W3/PgCache.php","770","gzdeflate(","gzdeflate(","768-
+769-            case 'deflate':
+770:                $data = gzdeflate($data);
+771-                break;
+772-        }
+773-    }","payload_obfuscators"
+"php","./lib/Nusoap/nusoap.php","4260","gzdeflate(","gzdeflate(","4257-						$payload .= ""<!-- Content being deflated -->"";
+4258-					}
+4259-					$this->outgoing_headers[] = ""Content-Encoding: deflate"";
+4260:					$payload = gzdeflate($payload);
+4261-				} else {
+4262-					if (isset($this->debug_flag) && $this->debug_flag) {
+4263-						$payload .= ""<!-- Content will not be deflated: no gzcompress -->"";","payload_obfuscators"
+"php","./lib/Minify/HTTP/Encoder.php","238","gzdeflate(","gzdeflate(","235-            return false;
+236-        }
+237-        if ($this->_encodeMethod[0] === 'deflate') {
+238:            $encoded = gzdeflate($this->_content, $compressionLevel);
+239-        } elseif ($this->_encodeMethod[0] === 'gzip') {
+240-            $encoded = gzencode($this->_content, $compressionLevel);
+241-        } else {","payload_obfuscators"
+"php","./lib/Minify/Minify.php","302","gzdeflate(","gzdeflate(","299-                    break;
+300-
+301-                case 'deflate':
+302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);
+303-                    break;
+304-            }
+305-            // still need to encode","payload_obfuscators"
+"php","./lib/Nusoap/nusoap.php","3914","gzuncompress(","gzuncompress(","3912-		    	// if decoding works, use it. else assume data wasn't gzencoded
+3913-				if (function_exists('gzuncompress')) {
+3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
+3915-						$data = $degzdata;
+3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {
+3917-						$data = $degzdata;","payload_obfuscators"
+"php","./lib/Microsoft/Http/Response.php","642","gzuncompress(","gzuncompress(","639-         */
+640-        $zlibHeader = unpack('n', substr($body, 0, 2));
+641-        if ($zlibHeader[1] % 31 == 0) {
+642:            return gzuncompress($body);
+643-        } else {
+644-            return gzinflate($body);
+645-        }","payload_obfuscators"
+"php","./lib/JSON.php","54","$$","$$","52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
+53- * @copyright	2005 Michal Migurski
+54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $
+55- * @license		http://www.opensource.org/licenses/bsd-license.php
+56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+57- */","payload_obfuscators"
+"php","./lib/S3.php","3","$$","$$","1-<?php
+2-/**
+3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $
+4-*
+5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.
+6-*","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id$
+33- */
+34-if (!defined('W3TC')) {
+35-    die();","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();","payload_obfuscators"
+"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();","payload_obfuscators"
+"php","./lib/Microsoft/Uri/Http.php","19","$$","$$","16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $
+20- */
+21-if (!defined('W3TC')) {
+22-    die();","payload_obfuscators"
+"php","./lib/Microsoft/Uri/Exception.php","19","$$","$$","16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $
+20- */
+21-if (!defined('W3TC')) {
+22-    die();","payload_obfuscators"
+"php","./lib/Microsoft/Uri.php","19","$$","$$","16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $
+20- */
+21-
+22-/**","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Proxy.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Stream.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Curl.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Interface.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Socket.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Adapter/Exception.php","18","$$","$$","15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage Client_Adapter_Exception
+18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client/Exception.php","18","$$","$$","15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage Client_Exception
+18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Cookie.php","20","$$","$$","17- * @package    Microsoft_Http
+18- * @subpackage Cookie
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */
+23-if (!defined('W3TC')) {","payload_obfuscators"
+"php","./lib/Microsoft/Http/Client.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client
+19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Response.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Response
+19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/Response/Stream.php","19","$$","$$","16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Response
+19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */","payload_obfuscators"
+"php","./lib/Microsoft/Http/CookieJar.php","18","$$","$$","15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage CookieJar
+18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */","payload_obfuscators"
+"php","./lib/Minify/FirePHP.php","1068","$$","$$","1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
+1066-   * @author      Christoph Dorn <christoph@christophdorn.com>
+1067-   * @copyright   2005 Michal Migurski
+1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
+1069-   * @license     http://www.opensource.org/licenses/bsd-license.php
+1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+1071-   */","payload_obfuscators"
+"php","./lib/Minify/Solar/Dir.php","14","$$","$$","11- * 
+12- * @license http://opensource.org/licenses/bsd-license.php BSD
+13- * 
+14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $
+15- * 
+16- */
+17-class Solar_Dir {","payload_obfuscators"
+"php","./lib/W3/Request.php","106","$_GET","$_GET","104-     */
+105-    function get_request() {
+106:        if (!isset($_GET)) {
+107:            $_GET = array();
+108-        }
+109-
+110-        if (!isset($_POST)) {
+111-            $_POST = array();
+112-        }
+113-
+114:        return array_merge($_GET, $_POST);
+115-    }
+116-}","form_data"
+"php","./lib/W3/Minify.php","130","$_GET","$_GET","127-         * Set sources
+128-         */
+129-        if ($hash) {
+130:            $_GET['f'] = $this->get_files($hash, $type);
+131-        } else {
+132:            $_GET['g'] = $location;
+133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);
+134-        }
+135-","form_data"
+"php","./lib/W3/Plugin/TotalCacheActivation.php","28","$_GET","$_GET","25-        /**
+26-         * Disable buggy sitewide activation in WPMU and WP 3.0
+27-         */
+28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {
+29-            w3_network_activate_error();
+30-        }
+31-","form_data"
+"php","./lib/Minify/Minify/Controller/Version1.php","44","$_GET","$_GET","41-
+42-        // The following restrictions are to limit the URLs that minify will
+43-        // respond to. Ideally there should be only one way to reference a file.
+44:        if (! isset($_GET['files'])
+45-            // verify at least one file, files are single comma separated,
+46-            // and are all same extension
+47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)
+48-            // no ""//"" (makes URL rewriting easier)
+49:            || strpos($_GET['files'], '//') !== false
+50-            // no ""\""
+51:            || strpos($_GET['files'], '\\') !== false
+52-            // no ""./""
+53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])
+54-        ) {
+55-            return $options;
+56-        }
+57-        $extension = $m[1];
+58-
+59:        $files = explode(',', $_GET['files']);
+60-        if (count($files) > MINIFY_MAX_FILES) {
+61-            return $options;
+62-        }","form_data"
+"php","./lib/Minify/Minify/Controller/MinApp.php","40","$_GET","$_GET","37-        );
+38-        unset($options['minApp']);
+39-        $sources = array();
+40:        if (isset($_GET['g'])) {
+41-            // try groups
+42:            if (! isset($cOptions['groups'][$_GET['g']])) {
+43:                $this->log(""A group configuration for \""{$_GET['g']}\"" was not set"");
+44-                return $options;
+45-            }
+46-
+47:            $files = $cOptions['groups'][$_GET['g']];
+48-            // if $files is a single object, casting will break it
+49-            if (is_object($files)) {
+50-                $files = array($files);","form_data"
+"php","./lib/Minify/Minify/Controller/MinApp.php","72","$_GET","$_GET","69-                    continue;
+70-                }
+71-            }
+72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {
+73-            // try user files
+74-            // The following restrictions are to limit the URLs that minify will
+75-            // respond to. Ideally there should be only one way to reference a file.
+76-            if (// verify at least one file, files are single comma separated,
+77-                // and are all same extension
+78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])
+79-                // no ""//""
+80:                || strpos($_GET['f'], '//') !== false
+81-                // no ""\""
+82:                || strpos($_GET['f'], '\\') !== false
+83-                // no ""./""
+84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])
+85-            ) {
+86:                $this->log(""GET['f'] param invalid: \""{$_GET['f']}\"""");
+87-                return $options;
+88-            }
+89:            $files = explode(',', $_GET['f']);
+90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {
+91-                $this->log(""Too many or duplicate files specified: \"""" . implode(', ', $files) . ""\"""");
+92-                return $options;
+93-            }
+94:            if (!empty($_GET['b'])) {
+95-                // check for validity
+96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])
+97:                    && false === strpos($_GET['b'], '..')
+98:                    && $_GET['b'] !== '.') {
+99-                    // valid base
+100:                    $base = ""/{$_GET['b']}/"";
+101-                } else {
+102:                    $this->log(""GET['b'] param invalid: \""{$_GET['b']}\"""");
+103-                    return $options;
+104-                }
+105-            } else {","form_data"
+"php","./lib/W3/Request.php","110","$_POST","$_POST","108-        }
+109-
+110:        if (!isset($_POST)) {
+111:            $_POST = array();
+112-        }
+113-
+114:        return array_merge($_GET, $_POST);
+115-    }
+116-}","form_data"
+"php","./lib/W3/PgCacheFlush.php","352","$_REQUEST","$_REQUEST","350-        } elseif (is_single() || is_page() && count($posts)) {
+351-            return $posts[0]->ID;
+352:        } elseif (isset($_REQUEST['p'])) {
+353:            return (integer) $_REQUEST['p'];
+354-        }
+355-
+356-        return 0;","form_data"
+"php","./lib/W3/Plugin/TotalCache.php","43","$_REQUEST","$_REQUEST","40-            'admin_bar_menu'
+41-        ), 150);
+42-
+43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
+44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
+45-            add_filter('template', array(
+46-                &$this,","form_data"
+"php","./lib/W3/Plugin/TotalCacheAdmin.php","265","$_REQUEST","$_REQUEST","262-         */
+263-        $action = false;
+264-
+265:        foreach ($_REQUEST as $key => $value) {
+266-            if (strpos($key, 'w3tc_') === 0) {
+267-                $action = 'action_' . substr($key, 5);
+268-                break;","form_data"
+"php","./inc/define.php","229","$_REQUEST","$_REQUEST","226- * @return boolean
+227- */
+228-function w3_is_preview_mode() {
+229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
+230-}
+231-
+232-/**","form_data"
 "php","./lib/W3/Minify.php","84","$_SERVER","$_SERVER","82-         * Fix DOCUMENT_ROOT
 83-         */
 84:        $_SERVER['DOCUMENT_ROOT'] = w3_get_document_root();
@@ -17847,503 +18344,6 @@
 107-
 108-		// Table storage?
 109-		if ($forTableStorage) {","hashes"
-"php","./lib/Nusoap/class.soap_parser.php","504","base64_decode(","base64_decode(","502-		if ($type == 'base64' || $type == 'base64Binary') {
-503-			$this->debug('Decode base64 value');
-504:			return base64_decode($value);
-505-		}
-506-		// obscure numeric types
-507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'","payload_obfuscators"
-"php","./lib/Nusoap/nusoap.php","7020","base64_decode(","base64_decode(","7017-		}
-7018-		if ($type == 'base64' || $type == 'base64Binary') {
-7019-			$this->debug('Decode base64 value');
-7020:			return base64_decode($value);
-7021-		}
-7022-		// obscure numeric types
-7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger'","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/SessionHandler.php","150","base64_decode(","base64_decode(","147-                $this->_sessionTablePartition,
-148-                $id
-149-            );
-150:            return base64_decode($sessionRecord->serializedData);
-151-        }
-152-        catch (Microsoft_WindowsAzure_Exception $ex)
-153-        {","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","111","base64_decode(","base64_decode(","108-		$usePathStyleUri = false
-109-	) {
-110-		$this->_accountName = $accountName;
-111:		$this->_accountKey = base64_decode($accountKey);
-112-		$this->_usePathStyleUri = $usePathStyleUri;
-113-	}
-114-","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","135","base64_decode(","base64_decode(","132-	 */
-133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)
-134-	{
-135:		$this->_accountKey = base64_decode($value);
-136-		return $this;
-137-	}
-138-","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Storage/Queue.php","467","base64_decode(","base64_decode(","464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),
-465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),
-466-					(string)$xmlMessages[$i]->DequeueCount,
-467:					base64_decode((string)$xmlMessages[$i]->MessageText)
-468-			    );
-469-			}
-470-","payload_obfuscators"
-"php","./lib/W3/Cdn/Azure.php","404","base64_encode(","base64_encode(","402-     */
-403-    function _get_content_md5($md5) {
-404:        return base64_encode(pack('H*', $md5));
-405-    }
-406-
-407-    /**","payload_obfuscators"
-"php","./lib/Nusoap/class.soap_transport_http.php","476","base64_encode(","base64_encode(","473-		$this->appendDebug($this->varDump($certRequest));
-474-		// cf. RFC 2617
-475-		if ($authtype == 'basic') {
-476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
-477-		} elseif ($authtype == 'digest') {
-478-			if (isset($digestRequest['nonce'])) {
-479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;","payload_obfuscators"
-"php","./lib/Nusoap/class.soap_transport_http.php","587","base64_encode(","base64_encode(","584-				'authtype' => $proxyauthtype
-585-			);
-586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
-587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
-588-			}
-589-		} else {
-590-			$this->debug('remove proxy');","payload_obfuscators"
-"php","./lib/Nusoap/nusoap.php","2629","base64_encode(","base64_encode(","2626-		$this->appendDebug($this->varDump($certRequest));
-2627-		// cf. RFC 2617
-2628-		if ($authtype == 'basic') {
-2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
-2630-		} elseif ($authtype == 'digest') {
-2631-			if (isset($digestRequest['nonce'])) {
-2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;","payload_obfuscators"
-"php","./lib/Nusoap/nusoap.php","2740","base64_encode(","base64_encode(","2737-				'authtype' => $proxyauthtype
-2738-			);
-2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
-2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
-2741-			}
-2742-		} else {
-2743-			$this->debug('remove proxy');","payload_obfuscators"
-"php","./lib/S3.php","289","base64_encode(","base64_encode(","286-		}
-287-		return array('file' => $file, 'size' => filesize($file),
-288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
-289:		base64_encode(md5_file($file, true))) : '');
-290-	}
-291-
-292-","payload_obfuscators"
-"php","./lib/S3.php","329","base64_encode(","base64_encode(","326-
-327-		if (is_string($input)) $input = array(
-328-			'data' => $input, 'size' => strlen($input),
-329:			'md5sum' => base64_encode(md5($input, true))
-330-		);
-331-
-332-		// Data","payload_obfuscators"
-"php","./lib/S3.php","860","base64_encode(","base64_encode(","857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);
-858-		}
-859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));
-860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));
-861-
-862-		// Create parameters
-863-		$params = new stdClass;","payload_obfuscators"
-"php","./lib/S3.php","1310","base64_encode(","base64_encode(","1307-	* @return string
-1308-	*/
-1309-	private static function __getHash($string) {
-1310:		return base64_encode(extension_loaded('hash') ?
-1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
-1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
-1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/SessionHandler.php","168","base64_encode(","base64_encode(","165-    {
-166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);
-167-        $sessionRecord->sessionExpires = time();
-168:        $sessionRecord->serializedData = base64_encode($serializedData);
-169-
-170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');
-171-","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php","194","base64_encode(","base64_encode(","191-
-192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
-193-    	$stringToSign   = implode(""\n"", $stringToSign);
-194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-195-
-196-    	// Sign request
-197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php","163","base64_encode(","base64_encode(","160-    	$stringToSign[] = $identifier;
-161-
-162-    	$stringToSign = implode(""\n"", $stringToSign);
-163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-164-
-165-    	return $signature;
-166-    }","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php","142","base64_encode(","base64_encode(","139-    	$stringToSign[] = $requestDate; // Date
-140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
-141-    	$stringToSign   = implode(""\n"", $stringToSign);
-142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-143-
-144-    	// Sign request
-145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Storage/Blob.php","831","base64_encode(","base64_encode(","828-		$resourceName = self::createResourceName($containerName , $blobName);
-829-
-830-		// Upload
-831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);
-832-		if (!$response->isSuccessful()) {
-833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));
-834-		}","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Storage/Blob.php","869","base64_encode(","base64_encode(","866-		// Generate block list
-867-		$blocks = '';
-868-		foreach ($blockList as $block) {
-869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . ""\n"";
-870-		}
-871-
-872-		// Generate block list request","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Storage/Queue.php","393","base64_encode(","base64_encode(","390-	    // Build body
-391-	    $rawData = '';
-392-	    $rawData .= '<QueueMessage>';
-393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';
-394-	    $rawData .= '</QueueMessage>';
-395-
-396-		// Perform request","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client.php","1382","base64_encode(","base64_encode(","1379-                    throw new Microsoft_Http_Client_Exception(""The user name cannot contain ':' in 'Basic' HTTP authentication"");
-1380-                }
-1381-
-1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);
-1383-                break;
-1384-
-1385-            //case self::AUTH_DIGEST:","payload_obfuscators"
-"php","./lib/W3/PgCache.php","770","gzdeflate(","gzdeflate(","768-
-769-            case 'deflate':
-770:                $data = gzdeflate($data);
-771-                break;
-772-        }
-773-    }","payload_obfuscators"
-"php","./lib/Nusoap/nusoap.php","4260","gzdeflate(","gzdeflate(","4257-						$payload .= ""<!-- Content being deflated -->"";
-4258-					}
-4259-					$this->outgoing_headers[] = ""Content-Encoding: deflate"";
-4260:					$payload = gzdeflate($payload);
-4261-				} else {
-4262-					if (isset($this->debug_flag) && $this->debug_flag) {
-4263-						$payload .= ""<!-- Content will not be deflated: no gzcompress -->"";","payload_obfuscators"
-"php","./lib/Minify/HTTP/Encoder.php","238","gzdeflate(","gzdeflate(","235-            return false;
-236-        }
-237-        if ($this->_encodeMethod[0] === 'deflate') {
-238:            $encoded = gzdeflate($this->_content, $compressionLevel);
-239-        } elseif ($this->_encodeMethod[0] === 'gzip') {
-240-            $encoded = gzencode($this->_content, $compressionLevel);
-241-        } else {","payload_obfuscators"
-"php","./lib/Minify/Minify.php","302","gzdeflate(","gzdeflate(","299-                    break;
-300-
-301-                case 'deflate':
-302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);
-303-                    break;
-304-            }
-305-            // still need to encode","payload_obfuscators"
-"php","./lib/Nusoap/nusoap.php","3914","gzuncompress(","gzuncompress(","3912-		    	// if decoding works, use it. else assume data wasn't gzencoded
-3913-				if (function_exists('gzuncompress')) {
-3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
-3915-						$data = $degzdata;
-3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {
-3917-						$data = $degzdata;","payload_obfuscators"
-"php","./lib/Microsoft/Http/Response.php","642","gzuncompress(","gzuncompress(","639-         */
-640-        $zlibHeader = unpack('n', substr($body, 0, 2));
-641-        if ($zlibHeader[1] % 31 == 0) {
-642:            return gzuncompress($body);
-643-        } else {
-644-            return gzinflate($body);
-645-        }","payload_obfuscators"
-"php","./lib/JSON.php","54","$$","$$","52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
-53- * @copyright	2005 Michal Migurski
-54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $
-55- * @license		http://www.opensource.org/licenses/bsd-license.php
-56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198
-57- */","payload_obfuscators"
-"php","./lib/S3.php","3","$$","$$","1-<?php
-2-/**
-3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $
-4-*
-5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.
-6-*","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id$
-33- */
-34-if (!defined('W3TC')) {
-35-    die();","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();","payload_obfuscators"
-"php","./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php","32","$$","$$","29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();","payload_obfuscators"
-"php","./lib/Microsoft/Uri/Http.php","19","$$","$$","16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $
-20- */
-21-if (!defined('W3TC')) {
-22-    die();","payload_obfuscators"
-"php","./lib/Microsoft/Uri/Exception.php","19","$$","$$","16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $
-20- */
-21-if (!defined('W3TC')) {
-22-    die();","payload_obfuscators"
-"php","./lib/Microsoft/Uri.php","19","$$","$$","16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $
-20- */
-21-
-22-/**","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Proxy.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Stream.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Curl.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Interface.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Socket.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Adapter/Exception.php","18","$$","$$","15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage Client_Adapter_Exception
-18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client/Exception.php","18","$$","$$","15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage Client_Exception
-18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Cookie.php","20","$$","$$","17- * @package    Microsoft_Http
-18- * @subpackage Cookie
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */
-23-if (!defined('W3TC')) {","payload_obfuscators"
-"php","./lib/Microsoft/Http/Client.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client
-19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Response.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Response
-19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/Response/Stream.php","19","$$","$$","16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Response
-19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */","payload_obfuscators"
-"php","./lib/Microsoft/Http/CookieJar.php","18","$$","$$","15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage CookieJar
-18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */","payload_obfuscators"
-"php","./lib/Minify/FirePHP.php","1068","$$","$$","1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
-1066-   * @author      Christoph Dorn <christoph@christophdorn.com>
-1067-   * @copyright   2005 Michal Migurski
-1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
-1069-   * @license     http://www.opensource.org/licenses/bsd-license.php
-1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
-1071-   */","payload_obfuscators"
-"php","./lib/Minify/Solar/Dir.php","14","$$","$$","11- * 
-12- * @license http://opensource.org/licenses/bsd-license.php BSD
-13- * 
-14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $
-15- * 
-16- */
-17-class Solar_Dir {","payload_obfuscators"
-"php","./lib/W3/Request.php","106","$_GET","$_GET","104-     */
-105-    function get_request() {
-106:        if (!isset($_GET)) {
-107:            $_GET = array();
-108-        }
-109-
-110-        if (!isset($_POST)) {
-111-            $_POST = array();
-112-        }
-113-
-114:        return array_merge($_GET, $_POST);
-115-    }
-116-}","form_data"
-"php","./lib/W3/Minify.php","130","$_GET","$_GET","127-         * Set sources
-128-         */
-129-        if ($hash) {
-130:            $_GET['f'] = $this->get_files($hash, $type);
-131-        } else {
-132:            $_GET['g'] = $location;
-133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);
-134-        }
-135-","form_data"
-"php","./lib/W3/Plugin/TotalCacheActivation.php","28","$_GET","$_GET","25-        /**
-26-         * Disable buggy sitewide activation in WPMU and WP 3.0
-27-         */
-28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {
-29-            w3_network_activate_error();
-30-        }
-31-","form_data"
-"php","./lib/Minify/Minify/Controller/Version1.php","44","$_GET","$_GET","41-
-42-        // The following restrictions are to limit the URLs that minify will
-43-        // respond to. Ideally there should be only one way to reference a file.
-44:        if (! isset($_GET['files'])
-45-            // verify at least one file, files are single comma separated,
-46-            // and are all same extension
-47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)
-48-            // no ""//"" (makes URL rewriting easier)
-49:            || strpos($_GET['files'], '//') !== false
-50-            // no ""\""
-51:            || strpos($_GET['files'], '\\') !== false
-52-            // no ""./""
-53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])
-54-        ) {
-55-            return $options;
-56-        }
-57-        $extension = $m[1];
-58-
-59:        $files = explode(',', $_GET['files']);
-60-        if (count($files) > MINIFY_MAX_FILES) {
-61-            return $options;
-62-        }","form_data"
-"php","./lib/Minify/Minify/Controller/MinApp.php","40","$_GET","$_GET","37-        );
-38-        unset($options['minApp']);
-39-        $sources = array();
-40:        if (isset($_GET['g'])) {
-41-            // try groups
-42:            if (! isset($cOptions['groups'][$_GET['g']])) {
-43:                $this->log(""A group configuration for \""{$_GET['g']}\"" was not set"");
-44-                return $options;
-45-            }
-46-
-47:            $files = $cOptions['groups'][$_GET['g']];
-48-            // if $files is a single object, casting will break it
-49-            if (is_object($files)) {
-50-                $files = array($files);","form_data"
-"php","./lib/Minify/Minify/Controller/MinApp.php","72","$_GET","$_GET","69-                    continue;
-70-                }
-71-            }
-72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {
-73-            // try user files
-74-            // The following restrictions are to limit the URLs that minify will
-75-            // respond to. Ideally there should be only one way to reference a file.
-76-            if (// verify at least one file, files are single comma separated,
-77-                // and are all same extension
-78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])
-79-                // no ""//""
-80:                || strpos($_GET['f'], '//') !== false
-81-                // no ""\""
-82:                || strpos($_GET['f'], '\\') !== false
-83-                // no ""./""
-84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])
-85-            ) {
-86:                $this->log(""GET['f'] param invalid: \""{$_GET['f']}\"""");
-87-                return $options;
-88-            }
-89:            $files = explode(',', $_GET['f']);
-90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {
-91-                $this->log(""Too many or duplicate files specified: \"""" . implode(', ', $files) . ""\"""");
-92-                return $options;
-93-            }
-94:            if (!empty($_GET['b'])) {
-95-                // check for validity
-96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])
-97:                    && false === strpos($_GET['b'], '..')
-98:                    && $_GET['b'] !== '.') {
-99-                    // valid base
-100:                    $base = ""/{$_GET['b']}/"";
-101-                } else {
-102:                    $this->log(""GET['b'] param invalid: \""{$_GET['b']}\"""");
-103-                    return $options;
-104-                }
-105-            } else {","form_data"
-"php","./lib/W3/Request.php","110","$_POST","$_POST","108-        }
-109-
-110:        if (!isset($_POST)) {
-111:            $_POST = array();
-112-        }
-113-
-114:        return array_merge($_GET, $_POST);
-115-    }
-116-}","form_data"
-"php","./lib/W3/PgCacheFlush.php","352","$_REQUEST","$_REQUEST","350-        } elseif (is_single() || is_page() && count($posts)) {
-351-            return $posts[0]->ID;
-352:        } elseif (isset($_REQUEST['p'])) {
-353:            return (integer) $_REQUEST['p'];
-354-        }
-355-
-356-        return 0;","form_data"
-"php","./lib/W3/Plugin/TotalCache.php","43","$_REQUEST","$_REQUEST","40-            'admin_bar_menu'
-41-        ), 150);
-42-
-43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
-44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
-45-            add_filter('template', array(
-46-                &$this,","form_data"
-"php","./lib/W3/Plugin/TotalCacheAdmin.php","265","$_REQUEST","$_REQUEST","262-         */
-263-        $action = false;
-264-
-265:        foreach ($_REQUEST as $key => $value) {
-266-            if (strpos($key, 'w3tc_') === 0) {
-267-                $action = 'action_' . substr($key, 5);
-268-                break;","form_data"
-"php","./inc/define.php","229","$_REQUEST","$_REQUEST","226- * @return boolean
-227- */
-228-function w3_is_preview_mode() {
-229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
-230-}
-231-
-232-/**","form_data"
 "js","./pub/js/metadata.js","92","eval","eval","90-        
 91-        if( data.indexOf('{') < 0 ) {
 92:          data = eval(""("" + data + "")"");

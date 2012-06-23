@@ -1,5 +1,1006 @@
 <points_of_interest>
 	<poi>
+		<file><![CDATA[./lib/Nusoap/class.soap_parser.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[504]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[502-		if ($type == 'base64' || $type == 'base64Binary') {
+503-			$this->debug('Decode base64 value');
+504:			return base64_decode($value);
+505-		}
+506-		// obscure numeric types
+507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger']]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[7020]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[7017-		}
+7018-		if ($type == 'base64' || $type == 'base64Binary') {
+7019-			$this->debug('Decode base64 value');
+7020:			return base64_decode($value);
+7021-		}
+7022-		// obscure numeric types
+7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger']]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/SessionHandler.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[150]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[147-                $this->_sessionTablePartition,
+148-                $id
+149-            );
+150:            return base64_decode($sessionRecord->serializedData);
+151-        }
+152-        catch (Microsoft_WindowsAzure_Exception $ex)
+153-        {]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[111]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[108-		$usePathStyleUri = false
+109-	) {
+110-		$this->_accountName = $accountName;
+111:		$this->_accountKey = base64_decode($accountKey);
+112-		$this->_usePathStyleUri = $usePathStyleUri;
+113-	}
+114-]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[135]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[132-	 */
+133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)
+134-	{
+135:		$this->_accountKey = base64_decode($value);
+136-		return $this;
+137-	}
+138-]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Queue.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[467]]></line_number>
+		<match><![CDATA[base64_decode(]]></match>
+		<name><![CDATA[base64_decode(]]></name>
+		<snippet><![CDATA[464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),
+465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),
+466-					(string)$xmlMessages[$i]->DequeueCount,
+467:					base64_decode((string)$xmlMessages[$i]->MessageText)
+468-			    );
+469-			}
+470-]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Cdn/Azure.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[404]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[402-     */
+403-    function _get_content_md5($md5) {
+404:        return base64_encode(pack('H*', $md5));
+405-    }
+406-
+407-    /**]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/class.soap_transport_http.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[476]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[473-		$this->appendDebug($this->varDump($certRequest));
+474-		// cf. RFC 2617
+475-		if ($authtype == 'basic') {
+476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
+477-		} elseif ($authtype == 'digest') {
+478-			if (isset($digestRequest['nonce'])) {
+479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/class.soap_transport_http.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[587]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[584-				'authtype' => $proxyauthtype
+585-			);
+586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
+587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
+588-			}
+589-		} else {
+590-			$this->debug('remove proxy');]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[2629]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[2626-		$this->appendDebug($this->varDump($certRequest));
+2627-		// cf. RFC 2617
+2628-		if ($authtype == 'basic') {
+2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
+2630-		} elseif ($authtype == 'digest') {
+2631-			if (isset($digestRequest['nonce'])) {
+2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[2740]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[2737-				'authtype' => $proxyauthtype
+2738-			);
+2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
+2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
+2741-			}
+2742-		} else {
+2743-			$this->debug('remove proxy');]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/S3.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[289]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[286-		}
+287-		return array('file' => $file, 'size' => filesize($file),
+288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
+289:		base64_encode(md5_file($file, true))) : '');
+290-	}
+291-
+292-]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/S3.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[329]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[326-
+327-		if (is_string($input)) $input = array(
+328-			'data' => $input, 'size' => strlen($input),
+329:			'md5sum' => base64_encode(md5($input, true))
+330-		);
+331-
+332-		// Data]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/S3.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[860]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);
+858-		}
+859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));
+860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));
+861-
+862-		// Create parameters
+863-		$params = new stdClass;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/S3.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[1310]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[1307-	* @return string
+1308-	*/
+1309-	private static function __getHash($string) {
+1310:		return base64_encode(extension_loaded('hash') ?
+1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
+1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
+1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/SessionHandler.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[168]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[165-    {
+166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);
+167-        $sessionRecord->sessionExpires = time();
+168:        $sessionRecord->serializedData = base64_encode($serializedData);
+169-
+170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');
+171-]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[194]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[191-
+192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
+193-    	$stringToSign   = implode("\n", $stringToSign);
+194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+195-
+196-    	// Sign request
+197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[163]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[160-    	$stringToSign[] = $identifier;
+161-
+162-    	$stringToSign = implode("\n", $stringToSign);
+163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+164-
+165-    	return $signature;
+166-    }]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[142]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[139-    	$stringToSign[] = $requestDate; // Date
+140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
+141-    	$stringToSign   = implode("\n", $stringToSign);
+142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
+143-
+144-    	// Sign request
+145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Blob.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[831]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[828-		$resourceName = self::createResourceName($containerName , $blobName);
+829-
+830-		// Upload
+831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);
+832-		if (!$response->isSuccessful()) {
+833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));
+834-		}]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Blob.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[869]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[866-		// Generate block list
+867-		$blocks = '';
+868-		foreach ($blockList as $block) {
+869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . "\n";
+870-		}
+871-
+872-		// Generate block list request]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Queue.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[393]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[390-	    // Build body
+391-	    $rawData = '';
+392-	    $rawData .= '<QueueMessage>';
+393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';
+394-	    $rawData .= '</QueueMessage>';
+395-
+396-		// Perform request]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[1382]]></line_number>
+		<match><![CDATA[base64_encode(]]></match>
+		<name><![CDATA[base64_encode(]]></name>
+		<snippet><![CDATA[1379-                    throw new Microsoft_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");
+1380-                }
+1381-
+1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);
+1383-                break;
+1384-
+1385-            //case self::AUTH_DIGEST:]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/PgCache.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[770]]></line_number>
+		<match><![CDATA[gzdeflate(]]></match>
+		<name><![CDATA[gzdeflate(]]></name>
+		<snippet><![CDATA[768-
+769-            case 'deflate':
+770:                $data = gzdeflate($data);
+771-                break;
+772-        }
+773-    }]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[4260]]></line_number>
+		<match><![CDATA[gzdeflate(]]></match>
+		<name><![CDATA[gzdeflate(]]></name>
+		<snippet><![CDATA[4257-						$payload .= "<!-- Content being deflated -->";
+4258-					}
+4259-					$this->outgoing_headers[] = "Content-Encoding: deflate";
+4260:					$payload = gzdeflate($payload);
+4261-				} else {
+4262-					if (isset($this->debug_flag) && $this->debug_flag) {
+4263-						$payload .= "<!-- Content will not be deflated: no gzcompress -->";]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/HTTP/Encoder.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[238]]></line_number>
+		<match><![CDATA[gzdeflate(]]></match>
+		<name><![CDATA[gzdeflate(]]></name>
+		<snippet><![CDATA[235-            return false;
+236-        }
+237-        if ($this->_encodeMethod[0] === 'deflate') {
+238:            $encoded = gzdeflate($this->_content, $compressionLevel);
+239-        } elseif ($this->_encodeMethod[0] === 'gzip') {
+240-            $encoded = gzencode($this->_content, $compressionLevel);
+241-        } else {]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[302]]></line_number>
+		<match><![CDATA[gzdeflate(]]></match>
+		<name><![CDATA[gzdeflate(]]></name>
+		<snippet><![CDATA[299-                    break;
+300-
+301-                case 'deflate':
+302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);
+303-                    break;
+304-            }
+305-            // still need to encode]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[3914]]></line_number>
+		<match><![CDATA[gzuncompress(]]></match>
+		<name><![CDATA[gzuncompress(]]></name>
+		<snippet><![CDATA[3912-		    	// if decoding works, use it. else assume data wasn't gzencoded
+3913-				if (function_exists('gzuncompress')) {
+3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
+3915-						$data = $degzdata;
+3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {
+3917-						$data = $degzdata;]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Response.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[642]]></line_number>
+		<match><![CDATA[gzuncompress(]]></match>
+		<name><![CDATA[gzuncompress(]]></name>
+		<snippet><![CDATA[639-         */
+640-        $zlibHeader = unpack('n', substr($body, 0, 2));
+641-        if ($zlibHeader[1] % 31 == 0) {
+642:            return gzuncompress($body);
+643-        } else {
+644-            return gzinflate($body);
+645-        }]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/JSON.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[54]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
+53- * @copyright	2005 Michal Migurski
+54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $
+55- * @license		http://www.opensource.org/licenses/bsd-license.php
+56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+57- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/S3.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[3]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[1-<?php
+2-/**
+3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $
+4-*
+5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.
+6-*]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[32]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id$
+33- */
+34-if (!defined('W3TC')) {
+35-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[32]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[32]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[32]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
+30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
+31- * @license    http://phpazure.codeplex.com/license
+32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
+33- */
+34-if (!defined('W3TC')) {
+35-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Uri/Http.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $
+20- */
+21-if (!defined('W3TC')) {
+22-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Uri/Exception.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $
+20- */
+21-if (!defined('W3TC')) {
+22-    die();]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Uri.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @package   Microsoft_Uri
+17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
+19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $
+20- */
+21-
+22-/**]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Proxy.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Stream.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Curl.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Interface.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Socket.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client_Adapter
+19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Exception.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[18]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage Client_Adapter_Exception
+18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client/Exception.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[18]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage Client_Exception
+18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Cookie.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[20]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[17- * @package    Microsoft_Http
+18- * @subpackage Cookie
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */
+23-if (!defined('W3TC')) {]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Client
+19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Response.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Response
+19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/Response/Stream.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[19]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[16- * @category   Microsoft
+17- * @package    Microsoft_Http
+18- * @subpackage Response
+19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $
+20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+22- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Microsoft/Http/CookieJar.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[18]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[15- * @category   Microsoft
+16- * @package    Microsoft_Http
+17- * @subpackage CookieJar
+18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $
+19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+21- */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/FirePHP.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[1068]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
+1066-   * @author      Christoph Dorn <christoph@christophdorn.com>
+1067-   * @copyright   2005 Michal Migurski
+1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
+1069-   * @license     http://www.opensource.org/licenses/bsd-license.php
+1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
+1071-   */]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Solar/Dir.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[14]]></line_number>
+		<match><![CDATA[$$]]></match>
+		<name><![CDATA[$$]]></name>
+		<snippet><![CDATA[11- * 
+12- * @license http://opensource.org/licenses/bsd-license.php BSD
+13- * 
+14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $
+15- * 
+16- */
+17-class Solar_Dir {]]></snippet>
+		<group><![CDATA[payload_obfuscators]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Request.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[106]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[104-     */
+105-    function get_request() {
+106:        if (!isset($_GET)) {
+107:            $_GET = array();
+108-        }
+109-
+110-        if (!isset($_POST)) {
+111-            $_POST = array();
+112-        }
+113-
+114:        return array_merge($_GET, $_POST);
+115-    }
+116-}]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Minify.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[130]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[127-         * Set sources
+128-         */
+129-        if ($hash) {
+130:            $_GET['f'] = $this->get_files($hash, $type);
+131-        } else {
+132:            $_GET['g'] = $location;
+133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);
+134-        }
+135-]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Plugin/TotalCacheActivation.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[28]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[25-        /**
+26-         * Disable buggy sitewide activation in WPMU and WP 3.0
+27-         */
+28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {
+29-            w3_network_activate_error();
+30-        }
+31-]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/Controller/Version1.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[44]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[41-
+42-        // The following restrictions are to limit the URLs that minify will
+43-        // respond to. Ideally there should be only one way to reference a file.
+44:        if (! isset($_GET['files'])
+45-            // verify at least one file, files are single comma separated,
+46-            // and are all same extension
+47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)
+48-            // no "//" (makes URL rewriting easier)
+49:            || strpos($_GET['files'], '//') !== false
+50-            // no "\"
+51:            || strpos($_GET['files'], '\\') !== false
+52-            // no "./"
+53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])
+54-        ) {
+55-            return $options;
+56-        }
+57-        $extension = $m[1];
+58-
+59:        $files = explode(',', $_GET['files']);
+60-        if (count($files) > MINIFY_MAX_FILES) {
+61-            return $options;
+62-        }]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/Controller/MinApp.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[40]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[37-        );
+38-        unset($options['minApp']);
+39-        $sources = array();
+40:        if (isset($_GET['g'])) {
+41-            // try groups
+42:            if (! isset($cOptions['groups'][$_GET['g']])) {
+43:                $this->log("A group configuration for \"{$_GET['g']}\" was not set");
+44-                return $options;
+45-            }
+46-
+47:            $files = $cOptions['groups'][$_GET['g']];
+48-            // if $files is a single object, casting will break it
+49-            if (is_object($files)) {
+50-                $files = array($files);]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/Minify/Minify/Controller/MinApp.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[72]]></line_number>
+		<match><![CDATA[$_GET]]></match>
+		<name><![CDATA[$_GET]]></name>
+		<snippet><![CDATA[69-                    continue;
+70-                }
+71-            }
+72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {
+73-            // try user files
+74-            // The following restrictions are to limit the URLs that minify will
+75-            // respond to. Ideally there should be only one way to reference a file.
+76-            if (// verify at least one file, files are single comma separated,
+77-                // and are all same extension
+78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])
+79-                // no "//"
+80:                || strpos($_GET['f'], '//') !== false
+81-                // no "\"
+82:                || strpos($_GET['f'], '\\') !== false
+83-                // no "./"
+84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])
+85-            ) {
+86:                $this->log("GET['f'] param invalid: \"{$_GET['f']}\"");
+87-                return $options;
+88-            }
+89:            $files = explode(',', $_GET['f']);
+90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {
+91-                $this->log("Too many or duplicate files specified: \"" . implode(', ', $files) . "\"");
+92-                return $options;
+93-            }
+94:            if (!empty($_GET['b'])) {
+95-                // check for validity
+96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])
+97:                    && false === strpos($_GET['b'], '..')
+98:                    && $_GET['b'] !== '.') {
+99-                    // valid base
+100:                    $base = "/{$_GET['b']}/";
+101-                } else {
+102:                    $this->log("GET['b'] param invalid: \"{$_GET['b']}\"");
+103-                    return $options;
+104-                }
+105-            } else {]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Request.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[110]]></line_number>
+		<match><![CDATA[$_POST]]></match>
+		<name><![CDATA[$_POST]]></name>
+		<snippet><![CDATA[108-        }
+109-
+110:        if (!isset($_POST)) {
+111:            $_POST = array();
+112-        }
+113-
+114:        return array_merge($_GET, $_POST);
+115-    }
+116-}]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/PgCacheFlush.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[352]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[350-        } elseif (is_single() || is_page() && count($posts)) {
+351-            return $posts[0]->ID;
+352:        } elseif (isset($_REQUEST['p'])) {
+353:            return (integer) $_REQUEST['p'];
+354-        }
+355-
+356-        return 0;]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Plugin/TotalCache.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[43]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[40-            'admin_bar_menu'
+41-        ), 150);
+42-
+43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
+44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
+45-            add_filter('template', array(
+46-                &$this,]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./lib/W3/Plugin/TotalCacheAdmin.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[265]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[262-         */
+263-        $action = false;
+264-
+265:        foreach ($_REQUEST as $key => $value) {
+266-            if (strpos($key, 'w3tc_') === 0) {
+267-                $action = 'action_' . substr($key, 5);
+268-                break;]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
+		<file><![CDATA[./inc/define.php]]></file>
+		<file_type><![CDATA[php]]></file_type>
+		<line_number><![CDATA[229]]></line_number>
+		<match><![CDATA[$_REQUEST]]></match>
+		<name><![CDATA[$_REQUEST]]></name>
+		<snippet><![CDATA[226- * @return boolean
+227- */
+228-function w3_is_preview_mode() {
+229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
+230-}
+231-
+232-/**]]></snippet>
+		<group><![CDATA[form_data]]></group>
+	</poi>
+	<poi>
 		<file><![CDATA[./lib/W3/Minify.php]]></file>
 		<file_type><![CDATA[php]]></file_type>
 		<line_number><![CDATA[84]]></line_number>
@@ -33630,1007 +34631,6 @@
 108-		// Table storage?
 109-		if ($forTableStorage) {]]></snippet>
 		<group><![CDATA[hashes]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/class.soap_parser.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[504]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[502-		if ($type == 'base64' || $type == 'base64Binary') {
-503-			$this->debug('Decode base64 value');
-504:			return base64_decode($value);
-505-		}
-506-		// obscure numeric types
-507-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger']]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[7020]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[7017-		}
-7018-		if ($type == 'base64' || $type == 'base64Binary') {
-7019-			$this->debug('Decode base64 value');
-7020:			return base64_decode($value);
-7021-		}
-7022-		// obscure numeric types
-7023-		if ($type == 'nonPositiveInteger' || $type == 'negativeInteger']]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/SessionHandler.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[150]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[147-                $this->_sessionTablePartition,
-148-                $id
-149-            );
-150:            return base64_decode($sessionRecord->serializedData);
-151-        }
-152-        catch (Microsoft_WindowsAzure_Exception $ex)
-153-        {]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[111]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[108-		$usePathStyleUri = false
-109-	) {
-110-		$this->_accountName = $accountName;
-111:		$this->_accountKey = base64_decode($accountKey);
-112-		$this->_usePathStyleUri = $usePathStyleUri;
-113-	}
-114-]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[135]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[132-	 */
-133-	public function setAccountkey($value = Microsoft_WindowsAzure_Credentials_CredentialsAbstract::DEVSTORE_KEY)
-134-	{
-135:		$this->_accountKey = base64_decode($value);
-136-		return $this;
-137-	}
-138-]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Queue.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[467]]></line_number>
-		<match><![CDATA[base64_decode(]]></match>
-		<name><![CDATA[base64_decode(]]></name>
-		<snippet><![CDATA[464-					($peek ? '' : (string)$xmlMessages[$i]->PopReceipt),
-465-					($peek ? '' : (string)$xmlMessages[$i]->TimeNextVisible),
-466-					(string)$xmlMessages[$i]->DequeueCount,
-467:					base64_decode((string)$xmlMessages[$i]->MessageText)
-468-			    );
-469-			}
-470-]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Cdn/Azure.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[404]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[402-     */
-403-    function _get_content_md5($md5) {
-404:        return base64_encode(pack('H*', $md5));
-405-    }
-406-
-407-    /**]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/class.soap_transport_http.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[476]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[473-		$this->appendDebug($this->varDump($certRequest));
-474-		// cf. RFC 2617
-475-		if ($authtype == 'basic') {
-476:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
-477-		} elseif ($authtype == 'digest') {
-478-			if (isset($digestRequest['nonce'])) {
-479-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/class.soap_transport_http.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[587]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[584-				'authtype' => $proxyauthtype
-585-			);
-586-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
-587:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
-588-			}
-589-		} else {
-590-			$this->debug('remove proxy');]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[2629]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[2626-		$this->appendDebug($this->varDump($certRequest));
-2627-		// cf. RFC 2617
-2628-		if ($authtype == 'basic') {
-2629:			$this->setHeader('Authorization', 'Basic '.base64_encode(str_replace(':','',$username).':'.$password));
-2630-		} elseif ($authtype == 'digest') {
-2631-			if (isset($digestRequest['nonce'])) {
-2632-				$digestRequest['nc'] = isset($digestRequest['nc']) ? $digestRequest['nc']++ : 1;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[2740]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[2737-				'authtype' => $proxyauthtype
-2738-			);
-2739-			if ($proxyusername != '' && $proxypassword != '' && $proxyauthtype = 'basic') {
-2740:				$this->setHeader('Proxy-Authorization', ' Basic '.base64_encode($proxyusername.':'.$proxypassword));
-2741-			}
-2742-		} else {
-2743-			$this->debug('remove proxy');]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/S3.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[289]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[286-		}
-287-		return array('file' => $file, 'size' => filesize($file),
-288-		'md5sum' => $md5sum !== false ? (is_string($md5sum) ? $md5sum :
-289:		base64_encode(md5_file($file, true))) : '');
-290-	}
-291-
-292-]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/S3.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[329]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[326-
-327-		if (is_string($input)) $input = array(
-328-			'data' => $input, 'size' => strlen($input),
-329:			'md5sum' => base64_encode(md5($input, true))
-330-		);
-331-
-332-		// Data]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/S3.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[860]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[857-			$obj = new stdClass; $obj->{$headerKey} = (string)$headerVal; array_push($policy->conditions, $obj);
-858-		}
-859-		array_push($policy->conditions, array('content-length-range', 0, $maxFileSize));
-860:		$policy = base64_encode(str_replace('\/', '/', json_encode($policy)));
-861-
-862-		// Create parameters
-863-		$params = new stdClass;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/S3.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[1310]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[1307-	* @return string
-1308-	*/
-1309-	private static function __getHash($string) {
-1310:		return base64_encode(extension_loaded('hash') ?
-1311-		hash_hmac('sha1', $string, self::$__secretKey, true) : pack('H*', sha1(
-1312-		(str_pad(self::$__secretKey, 64, chr(0x00)) ^ (str_repeat(chr(0x5c), 64))) .
-1313-		pack('H*', sha1((str_pad(self::$__secretKey, 64, chr(0x00)) ^]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/SessionHandler.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[168]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[165-    {
-166-        $sessionRecord = new Microsoft_WindowsAzure_Storage_DynamicTableEntity($this->_sessionTablePartition, $id);
-167-        $sessionRecord->sessionExpires = time();
-168:        $sessionRecord->serializedData = base64_encode($serializedData);
-169-
-170-        $sessionRecord->setAzurePropertyType('sessionExpires', 'Edm.Int32');
-171-]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[194]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[191-
-192-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
-193-    	$stringToSign   = implode("\n", $stringToSign);
-194:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-195-
-196-    	// Sign request
-197-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[163]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[160-    	$stringToSign[] = $identifier;
-161-
-162-    	$stringToSign = implode("\n", $stringToSign);
-163:    	$signature    = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-164-
-165-    	return $signature;
-166-    }]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[142]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[139-    	$stringToSign[] = $requestDate; // Date
-140-    	$stringToSign[] = $canonicalizedResource;		 			// Canonicalized resource
-141-    	$stringToSign   = implode("\n", $stringToSign);
-142:    	$signString     = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
-143-
-144-    	// Sign request
-145-    	$headers[Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PREFIX_STORAGE_HEADER . 'date'] = $requestDate;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Blob.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[831]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[828-		$resourceName = self::createResourceName($containerName , $blobName);
-829-
-830-		// Upload
-831:		$response = $this->_performRequest($resourceName, '?comp=block&blockid=' . base64_encode($identifier), Microsoft_Http_Client::PUT, $headers, false, $contents, Microsoft_WindowsAzure_Storage::RESOURCE_BLOB, Microsoft_WindowsAzure_Credentials_CredentialsAbstract::PERMISSION_WRITE);
-832-		if (!$response->isSuccessful()) {
-833-			throw new Microsoft_WindowsAzure_Exception($this->_getErrorMessage($response, 'Resource could not be accessed.'));
-834-		}]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Blob.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[869]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[866-		// Generate block list
-867-		$blocks = '';
-868-		foreach ($blockList as $block) {
-869:			$blocks .= '  <Latest>' . base64_encode($block) . '</Latest>' . "\n";
-870-		}
-871-
-872-		// Generate block list request]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Storage/Queue.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[393]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[390-	    // Build body
-391-	    $rawData = '';
-392-	    $rawData .= '<QueueMessage>';
-393:	    $rawData .= '    <MessageText>' . base64_encode($message) . '</MessageText>';
-394-	    $rawData .= '</QueueMessage>';
-395-
-396-		// Perform request]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[1382]]></line_number>
-		<match><![CDATA[base64_encode(]]></match>
-		<name><![CDATA[base64_encode(]]></name>
-		<snippet><![CDATA[1379-                    throw new Microsoft_Http_Client_Exception("The user name cannot contain ':' in 'Basic' HTTP authentication");
-1380-                }
-1381-
-1382:                $authHeader = 'Basic ' . base64_encode($user . ':' . $password);
-1383-                break;
-1384-
-1385-            //case self::AUTH_DIGEST:]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/PgCache.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[770]]></line_number>
-		<match><![CDATA[gzdeflate(]]></match>
-		<name><![CDATA[gzdeflate(]]></name>
-		<snippet><![CDATA[768-
-769-            case 'deflate':
-770:                $data = gzdeflate($data);
-771-                break;
-772-        }
-773-    }]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[4260]]></line_number>
-		<match><![CDATA[gzdeflate(]]></match>
-		<name><![CDATA[gzdeflate(]]></name>
-		<snippet><![CDATA[4257-						$payload .= "<!-- Content being deflated -->";
-4258-					}
-4259-					$this->outgoing_headers[] = "Content-Encoding: deflate";
-4260:					$payload = gzdeflate($payload);
-4261-				} else {
-4262-					if (isset($this->debug_flag) && $this->debug_flag) {
-4263-						$payload .= "<!-- Content will not be deflated: no gzcompress -->";]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/HTTP/Encoder.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[238]]></line_number>
-		<match><![CDATA[gzdeflate(]]></match>
-		<name><![CDATA[gzdeflate(]]></name>
-		<snippet><![CDATA[235-            return false;
-236-        }
-237-        if ($this->_encodeMethod[0] === 'deflate') {
-238:            $encoded = gzdeflate($this->_content, $compressionLevel);
-239-        } elseif ($this->_encodeMethod[0] === 'gzip') {
-240-            $encoded = gzencode($this->_content, $compressionLevel);
-241-        } else {]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[302]]></line_number>
-		<match><![CDATA[gzdeflate(]]></match>
-		<name><![CDATA[gzdeflate(]]></name>
-		<snippet><![CDATA[299-                    break;
-300-
-301-                case 'deflate':
-302:                    $content = gzdeflate($content, self::$_options['encodeLevel']);
-303-                    break;
-304-            }
-305-            // still need to encode]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Nusoap/nusoap.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[3914]]></line_number>
-		<match><![CDATA[gzuncompress(]]></match>
-		<name><![CDATA[gzuncompress(]]></name>
-		<snippet><![CDATA[3912-		    	// if decoding works, use it. else assume data wasn't gzencoded
-3913-				if (function_exists('gzuncompress')) {
-3914:					if ($this->headers['content-encoding'] == 'deflate' && $degzdata = @gzuncompress($data)) {
-3915-						$data = $degzdata;
-3916-					} elseif ($this->headers['content-encoding'] == 'gzip' && $degzdata = gzinflate(substr($data, 10))) {
-3917-						$data = $degzdata;]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Response.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[642]]></line_number>
-		<match><![CDATA[gzuncompress(]]></match>
-		<name><![CDATA[gzuncompress(]]></name>
-		<snippet><![CDATA[639-         */
-640-        $zlibHeader = unpack('n', substr($body, 0, 2));
-641-        if ($zlibHeader[1] % 31 == 0) {
-642:            return gzuncompress($body);
-643-        } else {
-644-            return gzinflate($body);
-645-        }]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/JSON.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[54]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[52- * @author		Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
-53- * @copyright	2005 Michal Migurski
-54: * @version     CVS: $Id: JSON.php 288200 2009-09-09 15:41:29Z alan_k $
-55- * @license		http://www.opensource.org/licenses/bsd-license.php
-56- * @link		http://pear.php.net/pepr/pepr-proposal-show.php?id=198
-57- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/S3.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[3]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[1-<?php
-2-/**
-3:* $Id: S3.php 47 2009-07-20 01:25:40Z don.schonknecht $
-4-*
-5-* Copyright (c) 2008, Donovan Schönknecht.  All rights reserved.
-6-*]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKey.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[32]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id$
-33- */
-34-if (!defined('W3TC')) {
-35-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedAccessSignature.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[32]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 24305 2009-07-23 06:30:04Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/SharedKeyLite.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[32]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/WindowsAzure/Credentials/CredentialsAbstract.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[32]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[29- * @package    Microsoft_WindowsAzure
-30- * @copyright  Copyright (c) 2009 - 2010, RealDolmen (http://www.realdolmen.com)
-31- * @license    http://phpazure.codeplex.com/license
-32: * @version    $Id: SharedKeyCredentials.php 14561 2009-05-07 08:05:12Z unknown $
-33- */
-34-if (!defined('W3TC')) {
-35-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Uri/Http.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Http.php 19041 2009-11-19 15:19:07Z sgehrig $
-20- */
-21-if (!defined('W3TC')) {
-22-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Uri/Exception.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Exception.php 16208 2009-06-21 19:19:26Z thomas $
-20- */
-21-if (!defined('W3TC')) {
-22-    die();]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Uri.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @package   Microsoft_Uri
-17- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-18- * @license   http://framework.zend.com/license/new-bsd     New BSD License
-19: * @version   $Id: Uri.php 18950 2009-11-12 15:37:56Z alexander $
-20- */
-21-
-22-/**]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Proxy.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Proxy.php 17059 2009-07-25 11:24:49Z shahar $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Stream.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Curl.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Curl.php 19238 2009-11-25 17:13:38Z bate $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Interface.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Interface.php 16214 2009-06-21 19:34:03Z thomas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Socket.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client_Adapter
-19: * @version    $Id: Socket.php 19219 2009-11-24 22:25:36Z stas $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Adapter/Exception.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[18]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage Client_Adapter_Exception
-18: * @version    $Id: Exception.php 17026 2009-07-24 09:09:19Z shahar $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client/Exception.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[18]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage Client_Exception
-18: * @version    $Id: Exception.php 16872 2009-07-20 11:47:08Z mikaelkael $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Cookie.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[20]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[17- * @package    Microsoft_Http
-18- * @subpackage Cookie
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20: * @version    $Id: Cookie.php 17131 2009-07-26 10:03:39Z shahar $
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */
-23-if (!defined('W3TC')) {]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Client.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Client
-19: * @version    $Id: Client.php 19661 2009-12-15 18:03:07Z matthew $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Response.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Response
-19: * @version    $Id: Response.php 35835 2009-12-17 09:40:36Z unknown $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/Response/Stream.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[19]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[16- * @category   Microsoft
-17- * @package    Microsoft_Http
-18- * @subpackage Response
-19: * @version    $Id: Response.php 17131 2009-07-26 10:03:39Z shahar $
-20- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-21- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-22- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Microsoft/Http/CookieJar.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[18]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[15- * @category   Microsoft
-16- * @package    Microsoft_Http
-17- * @subpackage CookieJar
-18: * @version    $Id: CookieJar.php 17131 2009-07-26 10:03:39Z shahar $
-19- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
-20- * @license    http://framework.zend.com/license/new-bsd     New BSD License
-21- */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/FirePHP.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[1068]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[1065-   * @author      Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
-1066-   * @author      Christoph Dorn <christoph@christophdorn.com>
-1067-   * @copyright   2005 Michal Migurski
-1068:   * @version     CVS: $Id: JSON.php,v 1.31 2006/06/28 05:54:17 migurski Exp $
-1069-   * @license     http://www.opensource.org/licenses/bsd-license.php
-1070-   * @link        http://pear.php.net/pepr/pepr-proposal-show.php?id=198
-1071-   */]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Solar/Dir.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[14]]></line_number>
-		<match><![CDATA[$$]]></match>
-		<name><![CDATA[$$]]></name>
-		<snippet><![CDATA[11- * 
-12- * @license http://opensource.org/licenses/bsd-license.php BSD
-13- * 
-14: * @version $Id: Dir.php 2926 2007-11-09 16:25:44Z pmjones $
-15- * 
-16- */
-17-class Solar_Dir {]]></snippet>
-		<group><![CDATA[payload_obfuscators]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Request.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[106]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[104-     */
-105-    function get_request() {
-106:        if (!isset($_GET)) {
-107:            $_GET = array();
-108-        }
-109-
-110-        if (!isset($_POST)) {
-111-            $_POST = array();
-112-        }
-113-
-114:        return array_merge($_GET, $_POST);
-115-    }
-116-}]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Minify.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[130]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[127-         * Set sources
-128-         */
-129-        if ($hash) {
-130:            $_GET['f'] = $this->get_files($hash, $type);
-131-        } else {
-132:            $_GET['g'] = $location;
-133-            $serve_options['minApp']['groups'] = $this->get_groups($theme, $template, $type);
-134-        }
-135-]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Plugin/TotalCacheActivation.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[28]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[25-        /**
-26-         * Disable buggy sitewide activation in WPMU and WP 3.0
-27-         */
-28:        if ((w3_is_wpmu() && isset($_GET['sitewide'])) || (w3_is_multisite() && isset($_GET['networkwide']))) {
-29-            w3_network_activate_error();
-30-        }
-31-]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/Controller/Version1.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[44]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[41-
-42-        // The following restrictions are to limit the URLs that minify will
-43-        // respond to. Ideally there should be only one way to reference a file.
-44:        if (! isset($_GET['files'])
-45-            // verify at least one file, files are single comma separated,
-46-            // and are all same extension
-47:            || ! preg_match('/^[^,]+\\.(css|js)(,[^,]+\\.\\1)*$/', $_GET['files'], $m)
-48-            // no "//" (makes URL rewriting easier)
-49:            || strpos($_GET['files'], '//') !== false
-50-            // no "\"
-51:            || strpos($_GET['files'], '\\') !== false
-52-            // no "./"
-53:            || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['files'])
-54-        ) {
-55-            return $options;
-56-        }
-57-        $extension = $m[1];
-58-
-59:        $files = explode(',', $_GET['files']);
-60-        if (count($files) > MINIFY_MAX_FILES) {
-61-            return $options;
-62-        }]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/Controller/MinApp.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[40]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[37-        );
-38-        unset($options['minApp']);
-39-        $sources = array();
-40:        if (isset($_GET['g'])) {
-41-            // try groups
-42:            if (! isset($cOptions['groups'][$_GET['g']])) {
-43:                $this->log("A group configuration for \"{$_GET['g']}\" was not set");
-44-                return $options;
-45-            }
-46-
-47:            $files = $cOptions['groups'][$_GET['g']];
-48-            // if $files is a single object, casting will break it
-49-            if (is_object($files)) {
-50-                $files = array($files);]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/Minify/Minify/Controller/MinApp.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[72]]></line_number>
-		<match><![CDATA[$_GET]]></match>
-		<name><![CDATA[$_GET]]></name>
-		<snippet><![CDATA[69-                    continue;
-70-                }
-71-            }
-72:        } elseif (! $cOptions['groupsOnly'] && isset($_GET['f'])) {
-73-            // try user files
-74-            // The following restrictions are to limit the URLs that minify will
-75-            // respond to. Ideally there should be only one way to reference a file.
-76-            if (// verify at least one file, files are single comma separated,
-77-                // and are all same extension
-78:                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'])
-79-                // no "//"
-80:                || strpos($_GET['f'], '//') !== false
-81-                // no "\"
-82:                || strpos($_GET['f'], '\\') !== false
-83-                // no "./"
-84:                || preg_match('/(?:^|[^\\.])\\.\\//', $_GET['f'])
-85-            ) {
-86:                $this->log("GET['f'] param invalid: \"{$_GET['f']}\"");
-87-                return $options;
-88-            }
-89:            $files = explode(',', $_GET['f']);
-90-            if (count($files) > $cOptions['maxFiles'] || $files != array_unique($files)) {
-91-                $this->log("Too many or duplicate files specified: \"" . implode(', ', $files) . "\"");
-92-                return $options;
-93-            }
-94:            if (!empty($_GET['b'])) {
-95-                // check for validity
-96:                if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])
-97:                    && false === strpos($_GET['b'], '..')
-98:                    && $_GET['b'] !== '.') {
-99-                    // valid base
-100:                    $base = "/{$_GET['b']}/";
-101-                } else {
-102:                    $this->log("GET['b'] param invalid: \"{$_GET['b']}\"");
-103-                    return $options;
-104-                }
-105-            } else {]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Request.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[110]]></line_number>
-		<match><![CDATA[$_POST]]></match>
-		<name><![CDATA[$_POST]]></name>
-		<snippet><![CDATA[108-        }
-109-
-110:        if (!isset($_POST)) {
-111:            $_POST = array();
-112-        }
-113-
-114:        return array_merge($_GET, $_POST);
-115-    }
-116-}]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/PgCacheFlush.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[352]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[350-        } elseif (is_single() || is_page() && count($posts)) {
-351-            return $posts[0]->ID;
-352:        } elseif (isset($_REQUEST['p'])) {
-353:            return (integer) $_REQUEST['p'];
-354-        }
-355-
-356-        return 0;]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Plugin/TotalCache.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[43]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[40-            'admin_bar_menu'
-41-        ), 150);
-42-
-43:        if (isset($_REQUEST['w3tc_theme']) && isset($_SERVER['HTTP_USER_AGENT']) &&
-44-                $_SERVER['HTTP_USER_AGENT'] == W3TC_POWERED_BY) {
-45-            add_filter('template', array(
-46-                &$this,]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./lib/W3/Plugin/TotalCacheAdmin.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[265]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[262-         */
-263-        $action = false;
-264-
-265:        foreach ($_REQUEST as $key => $value) {
-266-            if (strpos($key, 'w3tc_') === 0) {
-267-                $action = 'action_' . substr($key, 5);
-268-                break;]]></snippet>
-		<group><![CDATA[form_data]]></group>
-	</poi>
-	<poi>
-		<file><![CDATA[./inc/define.php]]></file>
-		<file_type><![CDATA[php]]></file_type>
-		<line_number><![CDATA[229]]></line_number>
-		<match><![CDATA[$_REQUEST]]></match>
-		<name><![CDATA[$_REQUEST]]></name>
-		<snippet><![CDATA[226- * @return boolean
-227- */
-228-function w3_is_preview_mode() {
-229:    return (w3_is_preview_config() && (defined('WP_ADMIN') || isset($_REQUEST['w3tc_preview']) || (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'w3tc_preview') !== false)));
-230-}
-231-
-232-/**]]></snippet>
-		<group><![CDATA[form_data]]></group>
 	</poi>
 	<poi>
 		<file><![CDATA[./pub/js/metadata.js]]></file>
