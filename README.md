@@ -19,8 +19,6 @@ are made within an application.
 local filesystem, but can also be directed to scan a website at a 
 remote URL.
 
-`Watchtower` is platform- and language-agnostic.
-
 
 View an Example Report
 --------------------
@@ -239,7 +237,7 @@ Contact Me
 ----------
 Questions, concerns, bug reports, and feature requests may be directed to
 chris@chris-allen-lane.com. If you're able to express your thoughts in
-144 characters or less ("It's great!", "It sucks!") you can also contact
+140 characters or fewer ("It's great!", "It sucks!") you can also contact
 me on [twitter][5].
 
 
