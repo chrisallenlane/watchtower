@@ -25,7 +25,6 @@ $signatures[:java][:external_process] = [
     Signature.new({:literal => 'Process'}),
 ]
 
-
 $signatures[:java][:HTTP_request] = [
     # HTTP redirect/playing with response headers
     Signature.new({:literal => '.sendRedirect'}),
