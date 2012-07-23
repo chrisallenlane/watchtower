@@ -71,8 +71,8 @@ $configs = {
 	:signatures 		=> [
 		#'./signatures/c.rb',
 		'./signatures/html.rb',
-		'./signatures/php.rb',
-        './signatures/js.rb',
+		'./signatures/asp_net.rb',
+    './signatures/js.rb',
 		# './signatures/sql.rb',
 		# './signatures/wordpress.rb',
 		# './signatures/blocklist.rb',
@@ -139,6 +139,9 @@ $configs[:ftype_ext][:yaml]          = %w[yaml yml]
 
 # map the Wordpress API signatures to PHP files
 $configs[:ftype_ext][:wordpress]     = %w[php phpt php3 php4 php5 phtml]
+
+# map the ASP.NET signature to various files, includes also .cs files (C#)
+$configs[:ftype_ext][:asp_net]     = %w[asp aspx cs]
 
 # map the blocklists to some filetypes (defaulting to PHP and HTML)
 # Note: if you're going to scan blocklists, be prepared to wait a 
