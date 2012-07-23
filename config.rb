@@ -72,8 +72,9 @@ $configs = {
 		#'./signatures/c.rb',
 		'./signatures/html.rb',
 		'./signatures/asp_net.rb',
+    './signatures/java.rb',
     './signatures/js.rb',
-		# './signatures/sql.rb',
+		'./signatures/sql.rb',
 		# './signatures/wordpress.rb',
 		# './signatures/blocklist.rb',
 	].sort,
@@ -129,7 +130,7 @@ $configs[:ftype_ext][:scala]         = %w[scala]
 $configs[:ftype_ext][:scheme]        = %w[scm ss]
 $configs[:ftype_ext][:shell]         = %w[sh bash csh tcsh ksh zsh]
 $configs[:ftype_ext][:smalltalk]     = %w[st]
-$configs[:ftype_ext][:sql]           = %w[sql ctl]
+$configs[:ftype_ext][:sql]           = %w[sql ctl java groovy asp aspx cs]
 $configs[:ftype_ext][:tcl]           = %w[tcl itcl itk]
 $configs[:ftype_ext][:tex]           = %w[tex cls sty]
 $configs[:ftype_ext][:tt]            = %w[tt tt2 ttml]
@@ -142,6 +143,7 @@ $configs[:ftype_ext][:wordpress]     = %w[php phpt php3 php4 php5 phtml]
 
 # map the ASP.NET signature to various files, includes also .cs files (C#)
 $configs[:ftype_ext][:asp_net]     = %w[asp aspx cs]
+$configs[:ftype_ext][:java]     = %w[java jsp groovy properties xml]
 
 # map the blocklists to some filetypes (defaulting to PHP and HTML)
 # Note: if you're going to scan blocklists, be prepared to wait a 
