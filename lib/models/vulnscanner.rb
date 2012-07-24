@@ -1,6 +1,7 @@
 # This class encapsulates the main functionality of the application -
 # the scanning of a codebase for potential points of interest as specified
 # in the user-provided signatures.
+require 'iconv'
 class VulnScanner
 
 	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context, :context
@@ -89,7 +90,10 @@ class VulnScanner
 						result  = `cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match   = nil
 					end
-                    
+
+          i = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+          result = i.iconv(result + ' ')[0..-2]
+
 					# display the matches
 					unless result.strip.empty?
                         # parse the grep output into blocks
