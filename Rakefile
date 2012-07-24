@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'csv'
 require 'backports'
 require 'fileutils'
