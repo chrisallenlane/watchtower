@@ -91,8 +91,8 @@ class VulnScanner
 						match   = nil
 					end
 
-          i = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-          result = i.iconv(result + ' ')[0..-2]
+                    i = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+                    result = i.iconv(result + ' ')[0..-2]
 
 					# display the matches
 					unless result.strip.empty?
