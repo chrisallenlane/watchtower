@@ -85,6 +85,7 @@
 			<!-- @filetype -->
 			<div id='filetype_<%= sym_file_type.to_s %>'>
 				<div class='column_nav'>
+                    <span class='pin'><a href='javascript:togglePin()'>pin</a></span>
 					<% signature_groups.each do |signature_group, signatures| %>
 					<h3><a onclick='javascript:toggleSignatureGroup(this, "<%= signature_group.to_s %>")'><%= signature_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
 					<ul class='signature_group_<%= signature_group.to_s %>'>
