@@ -1,3 +1,4 @@
+require 'iconv'
 require 'rubygems'
 require 'backports'
 require_relative './test_helper.rb'

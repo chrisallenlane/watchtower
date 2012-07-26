@@ -1,7 +1,6 @@
 # This class encapsulates the main functionality of the application -
 # the scanning of a codebase for potential points of interest as specified
 # in the user-provided signatures.
-require 'iconv'
 class VulnScanner
 
 	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context, :context
