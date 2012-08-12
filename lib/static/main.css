@@ -230,6 +230,11 @@ div.point_of_interest span.file_name{
 	font-size: small;
 }
 
+div.point_of_interest span.match_count{
+    color: gray;
+    font-size: x-small;
+}
+
 div.point_of_interest span.line_number{
 	color: green;
 	font-size: small;

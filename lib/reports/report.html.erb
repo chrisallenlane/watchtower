@@ -122,9 +122,14 @@
 							</span>
 						</h3>
 						<div class='sortable'>
-							<% points.each do |point|%>
+                            <%
+                                current_poi = 0
+                                points.each do |point|
+                                    current_poi += 1
+                            %>
 							<div class='point_of_interest'>
 								<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
+                                <span class='match_count'>(<%= current_poi %>/<%= points.count %>)</span>
 								<span class='poi_mark_content'>
 									<a class='poi_ok' onclick='javascript:poiMark(this, "ok")'>OK</a> |
 									<a class='poi_dubious' onclick='javascript:poiMark(this, "dubious")'>Dubious</a> |
