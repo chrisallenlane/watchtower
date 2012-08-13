@@ -1,8 +1,0 @@
-source 'http://rubygems.org'
-gem 'backports'
-gem 'digest'
-gem 'fileutils'
-gem 'iconv'
-gem 'open-uri'
-gem 'trollop'
-gem 'uri'
