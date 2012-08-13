@@ -223,66 +223,6 @@ user-provided signatures.</p>
 
     <!-- Methods -->
     
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
-
-    
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">(data)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
-Accepts a hash containing the following keys:</p>
-<dl class="rdoc-list note-list"><dt><code>:signatures</code>
-<dd>
-<p>A hash of signature strings for which to scan</p>
-</dd><dt><code>:scan_dir</code>  
-<dd>
-<p>The project directory to scan</p>
-</dd></dl>
-
-<p>Usage:</p>
-
-<pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">signatures</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
-        :<span class="ruby-identifier">scan_dir</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
-        :<span class="ruby-identifier">before_context</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
-        :<span class="ruby-identifier">after_context</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
-}
-</pre>
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 22</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
-        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
-        <span class="ruby-ivar">@before_context</span>                               = <span class="ruby-identifier">data</span>[<span class="ruby-value">:before_context</span>]
-        <span class="ruby-ivar">@after_context</span>                                = <span class="ruby-identifier">data</span>[<span class="ruby-value">:after_context</span>]
-        <span class="ruby-ivar">@context</span>                              = <span class="ruby-identifier">data</span>[<span class="ruby-value">:context</span>]
-        <span class="ruby-ivar">@points_of_interest</span>         = []
-        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
-    </section><!-- public-class-method-details -->
-  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
       <h3 class="section-header">Public Instance Methods</h3>
 
@@ -363,7 +303,10 @@ Accepts a hash containing the following keys:</p>
                                         <span class="ruby-identifier">result</span>  = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
                                         <span class="ruby-identifier">match</span>   = <span class="ruby-keyword">nil</span>
                                 <span class="ruby-keyword">end</span>
-            
+
+            <span class="ruby-identifier">i</span> = <span class="ruby-constant">Iconv</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">'UTF-8//IGNORE'</span>, <span class="ruby-string">'UTF-8'</span>)
+            <span class="ruby-identifier">result</span> = <span class="ruby-identifier">i</span>.<span class="ruby-identifier">iconv</span>(<span class="ruby-identifier">result</span> <span class="ruby-operator">+</span> <span class="ruby-string">' '</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>]
+
                                 <span class="ruby-comment"># display the matches</span>
                                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span>
                 <span class="ruby-comment"># parse the grep output into blocks</span>
@@ -373,7 +316,7 @@ Accepts a hash containing the following keys:</p>
                                         <span class="ruby-identifier">grep_blocks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">grep_block</span><span class="ruby-operator">|</span>                         
                     <span class="ruby-comment"># Discard the first (empty) line.</span>
                     <span class="ruby-comment"># See: http://stackoverflow.com/questions/1469986/how-do-i-remove-the-first-n-lines-from-a-string-in-ruby</span>
-                    <span class="ruby-identifier">grep_block</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">to_a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">join</span>
+                    <span class="ruby-identifier">grep_block</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">to_a</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">join</span>
                     
                     <span class="ruby-comment"># buffer the grep data in a hash until the context</span>
                     <span class="ruby-comment"># lines have been parsed out proerly</span>
@@ -450,7 +393,7 @@ vulnscanner.sort</pre>
 
           
           <div class="method-source-code" id="sort-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 155</span>
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
         <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
@@ -470,6 +413,66 @@ vulnscanner.sort</pre>
 
     
     </section><!-- public-instance-method-details -->
+  
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(data)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
+Accepts a hash containing the following keys:</p>
+<dl class="rdoc-list note-list"><dt><code>:signatures</code>
+<dd>
+<p>A hash of signature strings for which to scan</p>
+</dd><dt><code>:scan_dir</code>  
+<dd>
+<p>The project directory to scan</p>
+</dd></dl>
+
+<p>Usage:</p>
+
+<pre class="ruby"><span class="ruby-identifier">data</span> = {
+        :<span class="ruby-identifier">signatures</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
+        :<span class="ruby-identifier">scan_dir</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
+        :<span class="ruby-identifier">before_context</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
+        :<span class="ruby-identifier">after_context</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
+}
+</pre>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
+        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@before_context</span>                               = <span class="ruby-identifier">data</span>[<span class="ruby-value">:before_context</span>]
+        <span class="ruby-ivar">@after_context</span>                                = <span class="ruby-identifier">data</span>[<span class="ruby-value">:after_context</span>]
+        <span class="ruby-ivar">@context</span>                              = <span class="ruby-identifier">data</span>[<span class="ruby-value">:context</span>]
+        <span class="ruby-ivar">@points_of_interest</span>         = []
+        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- new-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- new-method -->
+
+    
+    </section><!-- public-class-method-details -->
   
   </section><!-- 5Buntitled-5D -->
 

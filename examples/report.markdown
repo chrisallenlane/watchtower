@@ -1,7 +1,7 @@
 Watchtower - W3 Total Cache Plugin
 ==================================  
 
-Source Code Audit - _2012-07-26_  
+Source Code Audit - _2012-08-12_  
 Prepared for _Enzo's Pizza_  
 
 ## php ##

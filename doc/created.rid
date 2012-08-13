@@ -1,4 +1,4 @@
-Sun, 17 Jun 2012 18:55:28 -0400
-lib/models/poi.rb	Wed, 13 Jun 2012 00:38:46 -0400
-lib/models/signature.rb	Sun, 17 Jun 2012 15:19:21 -0400
-lib/models/vulnscanner.rb	Mon, 11 Jun 2012 00:16:25 -0400
+Sun, 12 Aug 2012 20:46:02 -0400
+lib/models/signature.rb	Sun, 22 Jul 2012 13:00:05 -0400
+lib/models/vulnscanner.rb	Thu, 26 Jul 2012 00:23:22 -0400
+lib/models/poi.rb	Sun, 22 Jul 2012 13:00:05 -0400
