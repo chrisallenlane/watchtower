@@ -381,7 +381,7 @@ jQuery(document).ready(function(){
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1344818728');
+        console.log('Saving to key: watchtower1346214849');
 
         // initialize the datastore object
         data_store = {
@@ -397,15 +397,15 @@ jQuery(document).ready(function(){
                         poi_classes[index] = the_classes;
                     }
                 });
-                localStorage.watchtower1344818728 = window.JSON.stringify(poi_classes);
+                localStorage.watchtower1346214849 = window.JSON.stringify(poi_classes);
             },
             
             load: function(){
                 // verify that a localstorage object exists
-                if(localStorage.watchtower1344818728 != null){
+                if(localStorage.watchtower1346214849 != null){
                     
                     // unpack the saved classes back into an array
-                    poi_classes = jQuery.parseJSON(localStorage.watchtower1344818728);
+                    poi_classes = jQuery.parseJSON(localStorage.watchtower1346214849);
                     
                     // do this.save(), but in reverse
                     $('div.point_of_interest').each(function(index, element){
@@ -562,7 +562,7 @@ function togglePin(){
 				
 				<h1>W3 Total Cache Plugin</h1>
 				
-				<p>Source Code Audit - <em>2012-08-12</em>
+				<p>Source Code Audit - <em>2012-08-29</em>
 					
 					<br>Prepared for <em>Enzo's Pizza</em>
 					

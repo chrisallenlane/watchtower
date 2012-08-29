@@ -27,7 +27,7 @@ require_relative 'lib/models/vulnscanner'
 opts = Trollop::options do
 	banner File.read('./lib/static/banner.txt')
 	
-	version 'Version: 1.4.6'
+	version 'Version: 1.4.7'
 
 	opt :scan,		    'The target to scan (may be a path on the local filesystem or a URL on the web)',
 			:type 		=> :string,
@@ -143,6 +143,12 @@ vulnscanner = VulnScanner.new({
 	:context    	=> (opts[:context_given]) ? opts[:context] : false,
 })
 vulnscanner.scan
+
+# if no matches at all were detected, notify and exit
+if vulnscanner.points_of_interest.count.zero?
+    warn "No signature matches were found within the project. Terminating."
+    exit
+end
 
 # clean up after wget if necessary
 `rm -rf '/tmp/#{$configs[:domain]}'` if $configs[:clean_up_after_wget].eql? true
