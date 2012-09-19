@@ -5,11 +5,6 @@ $configs = {
 	# HTML reporting only: If an HTML report is being generated, this
 	# information will be printed into the report.
 	:client_name		=> "Enzo's Pizza",
-
-    # If set to true, when multiple matches are found within the same
-    # line of a file, only the first match will be recorded. This can
-    # help back to eliminate some noise and redundancy within a report.
-    :dedup_matches      => true, # @todo @note: not yet implemented
     
 	# HTML reporting only: if set to true, all JavaScript dependencies
 	# will be embedded directly into the report file. If set to false,
