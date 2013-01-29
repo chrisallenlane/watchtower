@@ -23,6 +23,8 @@
 	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 	<% end %>
 	<script type='text/javascript'>
+	<%= ERB.new(File.read('./lib/static/wt.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/wt.datastore.js')).result(binding) %>
 	<%= ERB.new(File.read('./lib/static/main.js')).result(binding) %>
 	</script>
 </head>
