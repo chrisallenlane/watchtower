@@ -1,253 +1,357 @@
-<!DOCTYPE html>
-
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 
-<title>class VulnScanner - WatchTower rdocs</title>
+  <title>Class: VulnScanner</title>
 
-<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+  <link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
 
-<script type="text/javascript">
-  var rdoc_rel_prefix = "./";
-</script>
+  <script src="./js/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/thickbox-compressed.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/darkfish.js" type="text/javascript" charset="utf-8"></script>
 
-<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
-<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
-<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
-<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
-<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
-<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
-
-
+</head>
 <body id="top" class="class">
-<nav id="metadata">
-  <nav id="home-section" class="section">
-  <h3 class="section-header">
-    <a href="./index.html">Home</a>
-    <a href="./table_of_contents.html#classes">Classes</a>
-    <a href="./table_of_contents.html#methods">Methods</a>
-  </h3>
-</nav>
 
+  <div id="metadata">
+    <div id="home-metadata">
+      <div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+      </div>
+    </div>
 
-  <nav id="search-section" class="section project-section" class="initially-hidden">
-  <form action="#" method="get" accept-charset="utf-8">
-    <h3 class="section-header">
-      <input type="text" name="search" placeholder="Search" id="search-field"
-             title="Type to search, Up and Down to navigate, Enter to load">
-    </h3>
-  </form>
+    <div id="file-metadata">
+      <div id="file-list-section" class="section">
+        <h3 class="section-header">In Files</h3>
+        <div class="section-body">
+          <ul>
+          
+            <li><a href="./lib/models/vulnscanner_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+              class="thickbox" title="lib/models/vulnscanner.rb">lib/models/vulnscanner.rb</a></li>
+          
+          </ul>
+        </div>
+      </div>
 
-  <ul id="search-results" class="initially-hidden"></ul>
-</nav>
+      
+    </div>
 
+    <div id="class-metadata">
+      
+      <!-- Parent Class -->
+      <div id="parent-class-section" class="section">
+        <h3 class="section-header">Parent</h3>
+        
+        <p class="link">Object</p>
+        
+      </div>
+      
 
-  <div id="file-metadata">
-    <nav id="file-list-section" class="section">
-  <h3 class="section-header">Defined In</h3>
-  <ul>
-    <li>lib/models/vulnscanner.rb
-  </ul>
-</nav>
+      
 
-    
+      
+
+      
+      <!-- Method Quickref -->
+      <div id="method-list-section" class="section">
+        <h3 class="section-header">Methods</h3>
+        <ul class="link-list">
+          
+          <li><a href="#method-c-new">::new</a></li>
+          
+          <li><a href="#method-i-scan">#scan</a></li>
+          
+          <li><a href="#method-i-sort">#sort</a></li>
+          
+        </ul>
+      </div>
+      
+
+      
+    </div>
+
+    <div id="project-metadata">
+      
+      
+
+      <div id="classindex-section" class="section project-section">
+        <h3 class="section-header">Class/Module Index
+          <span class="search-toggle"><img src="./images/find.png"
+            height="16" width="16" alt="[+]"
+            title="show/hide quicksearch" /></span></h3>
+        <form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+        <fieldset>
+          <legend>Quicksearch</legend>
+          <input type="text" name="quicksearch" value=""
+            class="quicksearch-field" />
+        </fieldset>
+        </form>
+
+        <ul class="link-list">
+        
+          <li><a href="./PoI.html">PoI</a></li>
+        
+          <li><a href="./Signature.html">Signature</a></li>
+        
+          <li><a href="./VulnScanner.html">VulnScanner</a></li>
+        
+        </ul>
+        <div id="no-class-search-results" style="display: none;">No matching classes.</div>
+      </div>
+
+      
+    </div>
   </div>
 
-  <div id="class-metadata">
-    
-    <nav id="parent-class-section" class="section">
-  <h3 class="section-header">Parent</h3>
-  
-  <p class="link">Object
-  
-</nav>
+  <div id="documentation">
+    <h1 class="class">VulnScanner</h1>
 
-    
-    <!-- Method Quickref -->
-<nav id="method-list-section" class="section">
-  <h3 class="section-header">Methods</h3>
-
-  <ul class="link-list">
-    
-    <li><a href="#method-c-new">::new</a>
-    
-    <li><a href="#method-i-scan">#scan</a>
-    
-    <li><a href="#method-i-sort">#sort</a>
-    
-  </ul>
-</nav>
-
-  </div>
-
-  <div id="project-metadata">
-    
-    <nav id="classindex-section" class="section project-section">
-  <h3 class="section-header">Class and Module Index</h3>
-
-  <ul class="link-list">
-  
-    <li><a href="./PoI.html">PoI</a>
-  
-    <li><a href="./Signature.html">Signature</a>
-  
-    <li><a href="./VulnScanner.html">VulnScanner</a>
-  
-  </ul>
-</nav>
-
-  </div>
-</nav>
-
-<div id="documentation">
-  <h1 class="class">class VulnScanner</h1>
-
-  <div id="description" class="description">
-    
+    <div id="description" class="description">
+      
 <p>This class encapsulates the main functionality of the application - the
 scanning of a codebase for potential points of interest as specified in the
 user-provided signatures.</p>
 
-  </div><!-- description -->
-
-  
-  
-  
-  <section id="5Buntitled-5D" class="documentation-section">
-    
+    </div><!-- description -->
 
     
-
     
-
     
-    <!-- Attributes -->
-    <section id="attribute-method-details" class="method-section section">
-      <h3 class="section-header">Attributes</h3>
+    <div id="5Buntitled-5D" class="documentation-section">
+      
 
       
-      <div id="attribute-i-after_context" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">after_context</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
 
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
       
-      <div id="attribute-i-before_context" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">before_context</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
 
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
       
-      <div id="attribute-i-context" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">context</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
+      <!-- Attributes -->
+      <div id="attribute-method-details" class="method-section section">
+        <h3 class="section-header">Attributes</h3>
 
-        <div class="method-description">
         
-        
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-points_of_interest" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">points_of_interest</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-points_of_interest_sorted" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">points_of_interest_sorted</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-scan_dir" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">scan_dir</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-signatures" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">signatures</span><span
-            class="attribute-access-type">[RW]</span>
-        </div>
-
-        <div class="method-description">
-        
-        
-        
-        </div>
-      </div>
-      
-    </section><!-- attribute-method-details -->
-    
-
-    <!-- Methods -->
-    
-     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Instance Methods</h3>
-
-    
-      <div id="method-i-scan" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">scan</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
+        <div id="after_context-attribute-method" class="method-detail">
+          <a name="after_context"></a>
           
-          <p>Performs a scan against the specified project directory.</p>
+          <a name="after_context="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">after_context</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="before_context-attribute-method" class="method-detail">
+          <a name="before_context"></a>
+          
+          <a name="before_context="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">before_context</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="context-attribute-method" class="method-detail">
+          <a name="context"></a>
+          
+          <a name="context="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">context</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="points_of_interest-attribute-method" class="method-detail">
+          <a name="points_of_interest"></a>
+          
+          <a name="points_of_interest="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">points_of_interest</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="points_of_interest_sorted-attribute-method" class="method-detail">
+          <a name="points_of_interest_sorted"></a>
+          
+          <a name="points_of_interest_sorted="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">points_of_interest_sorted</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="scan_dir-attribute-method" class="method-detail">
+          <a name="scan_dir"></a>
+          
+          <a name="scan_dir="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">scan_dir</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+        <div id="signatures-attribute-method" class="method-detail">
+          <a name="signatures"></a>
+          
+          <a name="signatures="></a>
+          
+          <div class="method-heading attribute-method-heading">
+            <span class="method-name">signatures</span><span
+              class="attribute-access-type">[RW]</span>
+          </div>
+
+          <div class="method-description">
+          
+          
+          
+          </div>
+        </div>
+        
+      </div><!-- attribute-method-details -->
+      
+
+      <!-- Methods -->
+      
+      <div id="public-class-method-details" class="method-section section">
+        <h3 class="section-header">Public Class Methods</h3>
+
+      
+        <div id="new-method" class="method-detail ">
+          <a name="method-c-new"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(data)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
+Accepts a hash containing the following keys:</p>
+<table class="rdoc-list"><tr><td class="rdoc-term"><p><tt>:signatures</tt></p></td>
+<td>
+<p>A hash of signature strings for which to scan</p>
+</td></tr><tr><td class="rdoc-term"><p><tt>:scan_dir</tt>  </p></td>
+<td>
+<p>The project directory to scan</p>
+</td></tr></table>
+
+<p>Usage:</p>
+
+<pre>data = {
+        :signatures     =&gt; signatures,
+        :scan_dir       =&gt; '/path/to/scan',
+        :before_context =&gt; 1,
+        :after_context  =&gt; 1,
+}</pre>
+            
+
+            
+            <div class="method-source-code" id="new-source">
+<pre>
+<span class="ruby-comment"># File lib/models/vulnscanner.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
+        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
+        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
+        <span class="ruby-ivar">@before_context</span>                               = <span class="ruby-identifier">data</span>[<span class="ruby-value">:before_context</span>]
+        <span class="ruby-ivar">@after_context</span>                                = <span class="ruby-identifier">data</span>[<span class="ruby-value">:after_context</span>]
+        <span class="ruby-ivar">@context</span>                              = <span class="ruby-identifier">data</span>[<span class="ruby-value">:context</span>]
+        <span class="ruby-ivar">@points_of_interest</span>         = []
+        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
+<span class="ruby-keyword">end</span></pre>
+            </div><!-- new-source -->
+            
+          </div>
+
+          
+
+          
+        </div><!-- new-method -->
+
+      
+      </div><!-- public-class-method-details -->
+    
+      <div id="public-instance-method-details" class="method-section section">
+        <h3 class="section-header">Public Instance Methods</h3>
+
+      
+        <div id="scan-method" class="method-detail ">
+          <a name="method-i-scan"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">scan</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Performs a scan against the specified project directory.</p>
 
 <p>Usage:</p>
 
 <pre>vulnscanner.scan</pre>
-          
+            
 
-          
-          <div class="method-source-code" id="scan-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 37</span>
+            
+            <div class="method-source-code" id="scan-source">
+<pre>
+<span class="ruby-comment"># File lib/models/vulnscanner.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">scan</span>
         <span class="ruby-ivar">@signatures</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file_type</span>, <span class="ruby-identifier">signature_groups</span><span class="ruby-operator">|</span>
                 <span class="ruby-comment"># cast the file_type symbol into a string</span>
@@ -297,10 +401,10 @@ user-provided signatures.</p>
             
                                 <span class="ruby-comment"># do a grep scan</span>
                                 <span class="ruby-keyword">if</span> <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">regex</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>
-                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">%xcd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">`cd #{@scan_dir}; grep -RHnZ #{bc} #{ac} '#{signature.literal.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
                                         <span class="ruby-identifier">match</span>   = <span class="ruby-identifier">signature</span>.<span class="ruby-identifier">literal</span>
                                 <span class="ruby-keyword">else</span>
-                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">%xcd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
+                                        <span class="ruby-identifier">result</span>  = <span class="ruby-node">`cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`</span>
                                         <span class="ruby-identifier">match</span>   = <span class="ruby-keyword">nil</span>
                                 <span class="ruby-keyword">end</span>
 
@@ -310,7 +414,7 @@ user-provided signatures.</p>
                                 <span class="ruby-comment"># display the matches</span>
                                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">empty?</span>
                 <span class="ruby-comment"># parse the grep output into blocks</span>
-                <span class="ruby-identifier">grep_blocks</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">%r^--$/</span>)
+                <span class="ruby-identifier">grep_blocks</span> = <span class="ruby-identifier">result</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/^--$/</span>)
                 
                                         <span class="ruby-comment">## iterate over the grep results</span>
                                         <span class="ruby-identifier">grep_blocks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">grep_block</span><span class="ruby-operator">|</span>                         
@@ -332,7 +436,7 @@ user-provided signatures.</p>
                                                                 
                     <span class="ruby-comment"># parse out the block metadata</span>
                                                 <span class="ruby-identifier">filename_terminator_pos</span>         = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value">\x00\</span>)
-                    <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
+                    <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
                     <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:file</span>]               = <span class="ruby-identifier">grep_block</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">filename_terminator_pos</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>))
                     
                     <span class="ruby-comment"># now iterate over each line, removing filenames</span>
@@ -342,8 +446,8 @@ user-provided signatures.</p>
                         <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:snippet</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">snippet</span>
                         
                         <span class="ruby-comment"># determine if we're on the line number with the match</span>
-                        <span class="ruby-keyword">if</span> <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">eql?</span> <span class="ruby-string">':'</span>
-                            <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">%r[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
+                        <span class="ruby-keyword">if</span> <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/[:\-]+/</span>).<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">eql?</span> <span class="ruby-string">':'</span>
+                            <span class="ruby-identifier">line_number_terminator_position</span> = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/[:\-]+/</span>).<span class="ruby-identifier">to_s</span>)
                             <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:line_number</span>]        = <span class="ruby-identifier">snippet</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">line_number_terminator_position</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_data</span>[<span class="ruby-value">:line_number</span>].<span class="ruby-identifier">nil?</span>
                         <span class="ruby-keyword">end</span>
                     <span class="ruby-keyword">end</span>
@@ -361,39 +465,42 @@ user-provided signatures.</p>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>           
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- scan-source -->
+            </div><!-- scan-source -->
+            
+          </div>
+
           
-        </div>
 
-        
-
-        
-      </div><!-- scan-method -->
-
-    
-      <div id="method-i-sort" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">sort</span><span
-            class="method-args">()</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
-
-        <div class="method-description">
           
-          <p>Sorts the vulnscanner results into the format expected by the  HTML report.
+        </div><!-- scan-method -->
+
+      
+        <div id="sort-method" class="method-detail ">
+          <a name="method-i-sort"></a>
+
+          
+          <div class="method-heading">
+            <span class="method-name">sort</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+          
+
+          <div class="method-description">
+            
+            <p>Sorts the vulnscanner results into the format expected by the  HTML report.
 May only be invoked after performing a scan.</p>
 
 <p>Usage:</p>
 
 <pre>vulnscanner.scan
 vulnscanner.sort</pre>
-          
+            
 
-          
-          <div class="method-source-code" id="sort-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 158</span>
+            
+            <div class="method-source-code" id="sort-source">
+<pre>
+<span class="ruby-comment"># File lib/models/vulnscanner.rb, line 158</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">sort</span>
         <span class="ruby-ivar">@points_of_interest</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">point</span>, <span class="ruby-identifier">index</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> {}
@@ -402,86 +509,29 @@ vulnscanner.sort</pre>
                 <span class="ruby-ivar">@points_of_interest_sorted</span>[<span class="ruby-identifier">point</span>.<span class="ruby-identifier">file_type</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">group</span>.<span class="ruby-identifier">to_sym</span>][<span class="ruby-identifier">point</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>].<span class="ruby-identifier">push</span> <span class="ruby-identifier">point</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- sort-source -->
+            </div><!-- sort-source -->
+            
+          </div>
+
           
-        </div>
 
-        
+          
+        </div><!-- sort-method -->
 
-        
-      </div><!-- sort-method -->
-
+      
+      </div><!-- public-instance-method-details -->
     
-    </section><!-- public-instance-method-details -->
+    </div><!-- 5Buntitled-5D -->
   
-     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
-      <h3 class="section-header">Public Class Methods</h3>
 
-    
-      <div id="method-c-new" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">new</span><span
-            class="method-args">(data)</span>
-          <span class="method-click-advice">click to toggle source</span>
-        </div>
-        
+  </div><!-- documentation -->
 
-        <div class="method-description">
-          
-          <p>Initializes the <a href="VulnScanner.html">VulnScanner</a> instance.
-Accepts a hash containing the following keys:</p>
-<dl class="rdoc-list note-list"><dt><code>:signatures</code>
-<dd>
-<p>A hash of signature strings for which to scan</p>
-</dd><dt><code>:scan_dir</code>  
-<dd>
-<p>The project directory to scan</p>
-</dd></dl>
+  <div id="validator-badges">
+    <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+    <p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+      Rdoc Generator</a> 2</small>.</p>
+  </div>
 
-<p>Usage:</p>
-
-<pre class="ruby"><span class="ruby-identifier">data</span> = {
-        :<span class="ruby-identifier">signatures</span>     =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">signatures</span>,
-        :<span class="ruby-identifier">scan_dir</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'/path/to/scan'</span>,
-        :<span class="ruby-identifier">before_context</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
-        :<span class="ruby-identifier">after_context</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>,
-}
-</pre>
-          
-
-          
-          <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/models/vulnscanner.rb, line 22</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-identifier">data</span>
-        <span class="ruby-ivar">@signatures</span>                   = <span class="ruby-identifier">data</span>[<span class="ruby-value">:signatures</span>]
-        <span class="ruby-ivar">@scan_dir</span>                     = <span class="ruby-identifier">data</span>[<span class="ruby-value">:scan_dir</span>]
-        <span class="ruby-ivar">@before_context</span>                               = <span class="ruby-identifier">data</span>[<span class="ruby-value">:before_context</span>]
-        <span class="ruby-ivar">@after_context</span>                                = <span class="ruby-identifier">data</span>[<span class="ruby-value">:after_context</span>]
-        <span class="ruby-ivar">@context</span>                              = <span class="ruby-identifier">data</span>[<span class="ruby-value">:context</span>]
-        <span class="ruby-ivar">@points_of_interest</span>         = []
-        <span class="ruby-ivar">@points_of_interest_sorted</span>  = {}
-<span class="ruby-keyword">end</span></pre>
-          </div><!-- new-source -->
-          
-        </div>
-
-        
-
-        
-      </div><!-- new-method -->
-
-    
-    </section><!-- public-class-method-details -->
-  
-  </section><!-- 5Buntitled-5D -->
-
-</div><!-- documentation -->
-
-
-<footer id="validator-badges">
-  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
-  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
-</footer>
+</body>
+</html>
 
