@@ -1,12 +1,12 @@
 // initialize the datastore object
-wt.datastore = {
+wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.<%= watchtower_storage %> != null){
+        if(localStorage.<%= $watchtower_storage %> != null){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.<%= watchtower_storage %>);
+            var poi_classes = jQuery.parseJSON(localStorage.<%= $watchtower_storage %>);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
@@ -32,7 +32,7 @@ wt.datastore = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.<%= watchtower_storage %> = window.JSON.stringify(poi_classes);
+        localStorage.<%= $watchtower_storage %> = window.JSON.stringify(poi_classes);
     },
 
-},
+};

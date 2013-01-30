@@ -56,8 +56,8 @@ $configs = {
 	# HTML reporting only: the stylesheets to embed into the outputted
 	# report.
 	:stylesheets 		=> [
-		'./lib/static/jquery-ui-1.8.19.custom.css',
-		'./lib/static/main.css',
+		'./lib/static/css/jquery-ui-1.8.19.custom.css',
+		'./lib/static/css/main.css',
         # You may add stylesheets to implement your own branding here
 	],
 	
