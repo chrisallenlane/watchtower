@@ -35,8 +35,8 @@
 		<div class='inner'>
 			<div class='highlighting'>
 				Highlighting:
-				<a href='javascript:void(0)' onclick='javascript:setHighlight("on")'>On</a> |
-				<a href='javascript:void(0)' onclick='javascript:setHighlight("off")'>Off</a>
+				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("on")'>On</a> |
+				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("off")'>Off</a>
 			</div>
 			
 			<div class='show'>
@@ -91,7 +91,7 @@
 				<div class='column_nav'>
                     <span class='pin'><a href='javascript:togglePin()'>pin</a></span>
 					<% signature_groups.each do |signature_group, signatures| %>
-					<h3><a onclick='javascript:toggleSignatureGroup(this, "<%= signature_group.to_s %>")'><%= signature_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
+					<h3><a onclick='javascript:wt.signature.toggle_group(this, "<%= signature_group.to_s %>")'><%= signature_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
 					<ul class='signature_group_<%= signature_group.to_s %>'>
 						<%
 						signatures.each do |signature, points|
@@ -101,7 +101,7 @@
 						<li class='<%= @signature_hash %>'>
 							<code><a href='#pl_<%= @signature_hash %>'><%= h signature.to_s %></a></code>
 							<span class='signature_count'>(<%= points.count %>)</span>
-							<a class='show_hide' onclick='toggleSignature("<%= sym_file_type.to_s %>","<%= @signature_hash %>")'>Hide</a>
+							<a class='show_hide' onclick='wt.signature.toggle("<%= sym_file_type.to_s %>","<%= @signature_hash %>")'>Hide</a>
 						</li>
 						<% end %>
 					</ul>
@@ -122,7 +122,7 @@
 							<span class='signature_count'>(<%= points.count %>)</span>
 							<span class='top_hide'>
 								<a href='#'>Top</a> |
-								<a onclick='toggleSignature("<%= sym_file_type.to_s %>","<%= @signature_hash %>")'>Hide</a>
+								<a onclick='wt.signature.toggle("<%= sym_file_type.to_s %>","<%= @signature_hash %>")'>Hide</a>
 							</span>
 						</h3>
 						<div class='sortable'>
@@ -135,10 +135,10 @@
 								<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
                                 <span class='match_count'>(<%= current_poi %>/<%= points.count %>)</span>
 								<span class='poi_mark_content'>
-									<a class='poi_ok' onclick='javascript:poiMark(this, "ok")'>OK</a> |
-									<a class='poi_dubious' onclick='javascript:poiMark(this, "dubious")'>Dubious</a> |
-									<a class='poi_bad' onclick='javascript:poiMark(this, "bad")'>Bad</a> |
-									<a class='poi_hide' onclick='javascript:poiHideContent(this)'>Hide</a>
+									<a class='poi_ok' onclick='javascript:wt.poi.mark(this, "ok")'>OK</a> |
+									<a class='poi_dubious' onclick='javascript:wt.poi.mark(this, "dubious")'>Dubious</a> |
+									<a class='poi_bad' onclick='javascript:wt.poi.mark(this, "bad")'>Bad</a> |
+									<a class='poi_hide' onclick='javascript:wt.poi.mark(this)'>Hide</a>
 								</span>
 								<div class='poi_content'>
 									<%
