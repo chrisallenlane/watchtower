@@ -396,10 +396,10 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.watchtower1359558941 != null){
+        if(localStorage.watchtower1359560136 != null){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359558941);
+            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359560136);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
@@ -425,7 +425,7 @@ wt.data_store = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.watchtower1359558941 = window.JSON.stringify(poi_classes);
+        localStorage.watchtower1359560136 = window.JSON.stringify(poi_classes);
     },
 
 };
@@ -538,7 +538,7 @@ jQuery(document).ready(function(){
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1359558941');
+        console.log('Saving to key: watchtower1359560136');
         wt.data_store.load();
     } else {
         // warn the user that work will not be saved

@@ -90,8 +90,12 @@ class VulnScanner
 						match   = nil
 					end
 
-                    i = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-                    result = i.iconv(result + ' ')[0..-2]
+                    # force UTF-8 character encoding 
+                    result.encode!('UTF-8',
+                        :invalid => :replace,
+                        :undef   => :replace,
+                        :replace => '?'
+                    )
 
 					# display the matches
 					unless result.strip.empty?
