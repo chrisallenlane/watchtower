@@ -87,16 +87,19 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 
 		<div id='main'>
 			<!-- tab navigation -->
-			<ul>
-				<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, dontcare| %>
-				<%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
-				<% end %>
-			</ul>
+            <nav>
+                <ul>
+                    <% vulnscanner.points_of_interest_sorted.each do |sym_file_type, dontcare| %>
+                    <%= "<li><a href='#filetype_#{sym_file_type.to_s}'>#{sym_file_type.to_s}</a></li>" %>
+                    <% end %>
+                </ul>
+            </nav>
 
 			<% vulnscanner.points_of_interest_sorted.each do |sym_file_type, signature_groups|%>
 			<!-- @filetype -->
 			<div id='filetype_<%= sym_file_type.to_s %>'>
-				<div class='column_nav'>
+
+				<nav class='column_nav'>
                     <span class='pin'><a href='javascript:wt.toggle_pin()'>pin</a></span>
 					<% signature_groups.each do |signature_group, signatures| %>
 					<h3><a onclick='javascript:wt.signature.toggle_group(this, "<%= signature_group.to_s %>")'><%= signature_group.to_s.gsub('_', ' ') %> [<span class='expand_collapse'>-</span>]</a></h3>
@@ -114,7 +117,7 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 						<% end %>
 					</ul>
 					<% end %>
-				</div>
+				</nav>
 				
 				<div class='column_content'>
 					<h2><%= sym_file_type.to_s %></h2>

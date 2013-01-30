@@ -274,6 +274,7 @@ div.point_of_interest span.line_number{
 
 footer{
 	clear: both;
+    padding: 10px;
 	text-align: center;
 }
 
@@ -396,10 +397,10 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.watchtower1359561574 != null){
+        if(localStorage.watchtower1359570005 != null){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359561574);
+            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359570005);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
@@ -425,7 +426,7 @@ wt.data_store = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.watchtower1359561574 = window.JSON.stringify(poi_classes);
+        localStorage.watchtower1359570005 = window.JSON.stringify(poi_classes);
     },
 
 };
@@ -538,7 +539,7 @@ jQuery(document).ready(function(){
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1359561574');
+        console.log('Saving to key: watchtower1359570005');
         wt.data_store.load();
     } else {
         // warn the user that work will not be saved
@@ -606,22 +607,25 @@ jQuery(document).ready(function(){
 
 		<div id='main'>
 			<!-- tab navigation -->
-			<ul>
-				
-				<li><a href='#filetype_html'>html</a></li>
-				
-				<li><a href='#filetype_java'>java</a></li>
-				
-				<li><a href='#filetype_js'>js</a></li>
-				
-				<li><a href='#filetype_php'>php</a></li>
-				
-			</ul>
+            <nav>
+                <ul>
+                    
+                    <li><a href='#filetype_html'>html</a></li>
+                    
+                    <li><a href='#filetype_java'>java</a></li>
+                    
+                    <li><a href='#filetype_js'>js</a></li>
+                    
+                    <li><a href='#filetype_php'>php</a></li>
+                    
+                </ul>
+            </nav>
 
 			
 			<!-- @filetype -->
 			<div id='filetype_html'>
-				<div class='column_nav'>
+
+				<nav class='column_nav'>
                     <span class='pin'><a href='javascript:wt.toggle_pin()'>pin</a></span>
 					
 					<h3><a onclick='javascript:wt.signature.toggle_group(this, "inputs")'>inputs [<span class='expand_collapse'>-</span>]</a></h3>
@@ -646,7 +650,7 @@ jQuery(document).ready(function(){
 						
 					</ul>
 					
-				</div>
+				</nav>
 				
 				<div class='column_content'>
 					<h2>html</h2>
@@ -7346,7 +7350,8 @@ jQuery(document).ready(function(){
 			
 			<!-- @filetype -->
 			<div id='filetype_java'>
-				<div class='column_nav'>
+
+				<nav class='column_nav'>
                     <span class='pin'><a href='javascript:wt.toggle_pin()'>pin</a></span>
 					
 					<h3><a onclick='javascript:wt.signature.toggle_group(this, "db_access")'>db access [<span class='expand_collapse'>-</span>]</a></h3>
@@ -7360,7 +7365,7 @@ jQuery(document).ready(function(){
 						
 					</ul>
 					
-				</div>
+				</nav>
 				
 				<div class='column_content'>
 					<h2>java</h2>
@@ -7448,7 +7453,8 @@ jQuery(document).ready(function(){
 			
 			<!-- @filetype -->
 			<div id='filetype_js'>
-				<div class='column_nav'>
+
+				<nav class='column_nav'>
                     <span class='pin'><a href='javascript:wt.toggle_pin()'>pin</a></span>
 					
 					<h3><a onclick='javascript:wt.signature.toggle_group(this, "dangerous_functions")'>dangerous functions [<span class='expand_collapse'>-</span>]</a></h3>
@@ -7462,7 +7468,7 @@ jQuery(document).ready(function(){
 						
 					</ul>
 					
-				</div>
+				</nav>
 				
 				<div class='column_content'>
 					<h2>js</h2>
@@ -7508,7 +7514,8 @@ jQuery(document).ready(function(){
 			
 			<!-- @filetype -->
 			<div id='filetype_php'>
-				<div class='column_nav'>
+
+				<nav class='column_nav'>
                     <span class='pin'><a href='javascript:wt.toggle_pin()'>pin</a></span>
 					
 					<h3><a onclick='javascript:wt.signature.toggle_group(this, "dangerous_functions")'>dangerous functions [<span class='expand_collapse'>-</span>]</a></h3>
@@ -7785,7 +7792,7 @@ jQuery(document).ready(function(){
 						
 					</ul>
 					
-				</div>
+				</nav>
 				
 				<div class='column_content'>
 					<h2>php</h2>
