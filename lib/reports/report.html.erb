@@ -6,11 +6,11 @@
 
 $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 
-%><!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
+%><!DOCTYPE html>
 <html>
 <head>
 	<title>Watchtower<%= (opts[:project_name_given]) ? (' :: ' + opts[:project_name]) : '' %></title>
-	<style type='text/css'>
+	<style>
 	<%
 	unless $configs[:stylesheets].empty?
 		$configs[:stylesheets].each do |stylesheet|
@@ -22,13 +22,13 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 	%>
 	</style>
 	<% if $configs[:embed_javascript].eql? true %>
-	<script type='text/javascript'>
+	<script>
 	<%= ERB.new(File.read('./lib/static/js/jquery-1.7.2.min.js')).result(binding) %>
 	<%= ERB.new(File.read('./lib/static/js/jquery-ui-1.8.19.custom.min.js')).result(binding) %>
 	</script>
 	<% else %>
-	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 	<% end %>
 	<script type='text/javascript'>
 	<%= ERB.new(File.read('./lib/static/js/wt.js.erb')).result(binding) %>
@@ -40,14 +40,14 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 </head>
 <body>
 	<div id='control_bar'>
-		<div class='inner'>
-			<div class='highlighting'>
+		<div id='inner'>
+			<div id='highlighting'>
 				Highlighting:
 				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("on")'>On</a> |
 				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("off")'>Off</a>
 			</div>
 			
-			<div class='show'>
+			<div id='show'>
 				Show:
 				<a href='javascript:wt.poi.show("all")'>All</a> | 
 				<a href='javascript:wt.poi.show("ok")'>OK</a> | 
@@ -172,7 +172,7 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 		</div> <!-- main -->
 		
 		<% unless $configs[:footer_text].empty? %>
-		<p id='footer'><%= $configs[:footer_text] %></p>
+		<footer><%= $configs[:footer_text] %></footer>
 		<% end %>
 	</div>
 </body>

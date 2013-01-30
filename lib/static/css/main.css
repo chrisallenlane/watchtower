@@ -38,34 +38,6 @@ body{
 	z-index: 100;
 }
 
-#control_bar div.inner{
-	margin: 0 auto;
-	width: 1000px;
-}
-
-#control_bar div.inner p{
-	margin: 0;
-	padding: 0;
-}
-
-#control_bar div.inner div.highlighting{
-	float: left;
-	padding: 0 10px;
-}
-
-#control_bar div.inner div.highlighting a{
-	color: white;
-}
-
-#control_bar div.inner div.show{
-	float: right;
-	padding: 0 10px;
-}
-
-#control_bar div.inner div.show a{
-	color: white;
-}
-
 .column_nav{
 	border-right: 1px solid #EEE;
 	float: left;
@@ -240,39 +212,59 @@ div.point_of_interest span.line_number{
 	font-size: small;
 }
 
+footer{
+	clear: both;
+    padding: 10px;
+	text-align: center;
+}
+
 html{
 	background-color: #EEE;
+}
+
+#highlighting{
+	float: left;
+	padding: 0 10px;
+}
+
+#highlighting a{
+	color: white;
+}
+
+#inner{
+	margin: 0 auto;
+	width: 1000px;
+}
+
+#inner p{
+	margin: 0;
+	padding: 0;
 }
 
 #main{
 	clear: both;
 }
 
-#masthead #masthead_left{
+#masthead_left{
 	float: left;
 	padding: 10px;
 }
 
-#masthead #masthead_left h1{
+#masthead_left h1{
 	font-weight: normal;
 	margin: 0;
 	padding: 0;
 }
 
-#masthead #masthead_right{
+#masthead_right{
 	float: right;
 	padding: 10px;
 }
 
-#masthead #masthead_right h4,
-#masthead #masthead_right p{
+#masthead_right h4,
+#masthead_right p{
 	margin: 0;
 	padding: 0;
-}
-
-p#footer{
-	clear: both;
-	text-align: center;
 }
 
 p.warning{
@@ -286,6 +278,15 @@ p.warning{
 
 p.warning#no_storage{
     display: none;
+}
+
+#show{
+	float: right;
+	padding: 0 10px;
+}
+
+#show a{
+	color: white;
 }
 
 span.match_highlight{
