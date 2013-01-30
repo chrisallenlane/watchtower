@@ -1,0 +1,21 @@
+/**
+ * This is not the way this would typically be done, but the method used
+ * to embed the stylesheets is quite a typical too.
+ */
+div.column_nav{
+    display: none;
+}
+div.column_content{
+    width: 960px;
+}
+span.poi_mark_content{
+    display: none;
+}
+span.top_hide{
+    display: none;
+}
+div.point_of_interest{
+    border: none;
+    border-radius: none;
+    box-shadow: none;
+}

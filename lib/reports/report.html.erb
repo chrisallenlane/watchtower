@@ -25,6 +25,8 @@
 	<script type='text/javascript'>
 	<%= ERB.new(File.read('./lib/static/wt.js')).result(binding) %>
 	<%= ERB.new(File.read('./lib/static/wt.datastore.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/wt.poi.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/wt.signature.js')).result(binding) %>
 	<%= ERB.new(File.read('./lib/static/main.js')).result(binding) %>
 	</script>
 </head>
