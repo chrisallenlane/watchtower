@@ -2,13 +2,23 @@
 jQuery(document).ready(function(){
     
     // initialize the tabbed display
-	$('div#main').tabs();
+	$('#main').tabs();
 	
 	// animate opacity on the control bar
 	$('#control_bar').hover(
 		function(){	$(this).fadeTo('fast', 1); },
 		function(){ $(this).fadeTo('fast', 0.75); }
 	);
+
+    // bind events - Highlighting
+    $('a#highlight_on').click(function(){ wt.set_highlight("on") });
+    $('a#highlight_off').click(function(){ wt.set_highlight("off") });
+
+    // bind events - Points of Interest
+    $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok") });
+    $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious") });
+    $('a.poi_bad').click(function(){ wt.poi.mark(event.target, "bad") });
+    $('a.poi_hide').click(function(){ wt.poi.hide_content(event.target) });
     
     // local storage
     if(typeof(Storage) !== 'undefined'){

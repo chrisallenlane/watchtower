@@ -43,8 +43,8 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 		<div id='inner'>
 			<div id='highlighting'>
 				Highlighting:
-				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("on")'>On</a> |
-				<a href='javascript:void(0)' onclick='javascript:wt.set_highlight("off")'>Off</a>
+				<a id='highlight_on' href='javascript:void(0)'>On</a> |
+				<a id='highlight_off' href='javascript:void(0)'>Off</a>
 			</div>
 			
 			<div id='show'>
@@ -146,10 +146,10 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 								<span class='file_name'><%= h point.file %></span>:<span class='line_number'><%= h point.line_number %></span>
                                 <span class='match_count'>(<%= current_poi %>/<%= points.count %>)</span>
 								<span class='poi_mark_content'>
-									<a class='poi_ok' onclick='javascript:wt.poi.mark(this, "ok")'>OK</a> |
-									<a class='poi_dubious' onclick='javascript:wt.poi.mark(this, "dubious")'>Dubious</a> |
-									<a class='poi_bad' onclick='javascript:wt.poi.mark(this, "bad")'>Bad</a> |
-									<a class='poi_hide' onclick='javascript:wt.poi.hide_content(this)'>Hide</a>
+									<a class='poi_ok'>OK</a> |
+									<a class='poi_dubious'>Dubious</a> |
+									<a class='poi_bad'>Bad</a> |
+									<a class='poi_hide'>Hide</a>
 								</span>
 								<div class='poi_content'>
 									<%
