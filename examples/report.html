@@ -397,10 +397,10 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.watchtower1359571306 != null){
+        if(localStorage.watchtower1359572294 != null){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359571306);
+            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359572294);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
@@ -410,8 +410,8 @@ wt.data_store = {
             });
             
             // hide the appropriate PoIs
-            $('div.point_of_interest.poi_hidden div.poi_content').hide();
-            $('div.point_of_interest.poi_hidden span.poi_mark_content a.poi_hide').text('Show');
+            $('div.poi_hidden div.poi_content').hide();
+            $('div.poi_hidden span.poi_mark_content a.poi_hide').text('Show');
         }
     },
 
@@ -426,7 +426,7 @@ wt.data_store = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.watchtower1359571306 = window.JSON.stringify(poi_classes);
+        localStorage.watchtower1359572294 = window.JSON.stringify(poi_classes);
     },
 
 };
@@ -486,7 +486,7 @@ wt.poi = {
         $('div.signature_group').show();
         if(mode == 'ok' || mode == 'dubious' || mode == 'bad'){
             $('div.signature_group').each(function(index, element){
-                if($(this).find('div.point_of_interest.poi_' + mode).length == 0){
+                if($(this).find('div.poi_' + mode).length == 0){
                     $(this).hide();
                 }
             });
@@ -501,7 +501,7 @@ wt.signature = {
     
     // shows/hides an individual signature
     toggle: function(filetype, signature){
-        var obj      = $('div#filetype_' + filetype + ' div.column_nav ul li.' + signature + ' a').last();
+        var obj      = $('div#filetype_' + filetype + ' .column_nav ul li.' + signature + ' a').last();
         var new_text = (obj.text() == 'Show') ? 'Hide' : 'Show' ;
         obj.text(new_text);
         
@@ -536,10 +536,6 @@ jQuery(document).ready(function(){
 		function(){ $(this).fadeTo('fast', 0.75); }
 	);
 
-    // bind events - Highlighting
-    $('a#highlight_on').click(function(){ wt.set_highlight("on") });
-    $('a#highlight_off').click(function(){ wt.set_highlight("off") });
-
     // bind events - Points of Interest
     $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok") });
     $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious") });
@@ -549,7 +545,7 @@ jQuery(document).ready(function(){
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1359571306');
+        console.log('Saving to key: watchtower1359572294');
         wt.data_store.load();
     } else {
         // warn the user that work will not be saved
@@ -567,8 +563,8 @@ jQuery(document).ready(function(){
 		<div id='inner'>
 			<div id='highlighting'>
 				Highlighting:
-				<a id='highlight_on' href='javascript:void(0)'>On</a> |
-				<a id='highlight_off' href='javascript:void(0)'>Off</a>
+				<a href='javascript:wt.set_highlight("on")'>On</a> |
+				<a href='javascript:wt.set_highlight("off")'>Off</a>
 			</div>
 			
 			<div id='show'>
@@ -642,7 +638,7 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_inputs'>
 						
 						<li class='ea02e39fa43dc914db8a9250c86fa57d'>
-							<code><a href='#pl_ea02e39fa43dc914db8a9250c86fa57d'>&lt;script</a></code>
+							<code><a href='#s-ea02e39fa43dc914db8a9250c86fa57d'>&lt;script</a></code>
 							<span class='signature_count'>(22)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("html","ea02e39fa43dc914db8a9250c86fa57d")'>Hide</a>
 						</li>
@@ -653,7 +649,7 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_comments'>
 						
 						<li class='c11bb7eec8b60626961f63cda07648ac'>
-							<code><a href='#pl_c11bb7eec8b60626961f63cda07648ac'>&lt;!--</a></code>
+							<code><a href='#s-c11bb7eec8b60626961f63cda07648ac'>&lt;!--</a></code>
 							<span class='signature_count'>(257)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("html","c11bb7eec8b60626961f63cda07648ac")'>Hide</a>
 						</li>
@@ -666,7 +662,7 @@ jQuery(document).ready(function(){
 					<h2>html</h2>
 					
 					<div class='signature_ea02e39fa43dc914db8a9250c86fa57d signature_group_inputs signature_group'>
-						<a name='pl_ea02e39fa43dc914db8a9250c86fa57d'></a>
+						<a name='s-ea02e39fa43dc914db8a9250c86fa57d'></a>
 						<h3>
 							<code>&lt;script</code>
 							<span class='signature_count'>(22)</span>
@@ -1153,7 +1149,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_c11bb7eec8b60626961f63cda07648ac signature_group_comments signature_group'>
-						<a name='pl_c11bb7eec8b60626961f63cda07648ac'></a>
+						<a name='s-c11bb7eec8b60626961f63cda07648ac'></a>
 						<h3>
 							<code>&lt;!--</code>
 							<span class='signature_count'>(257)</span>
@@ -7368,7 +7364,7 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_db_access'>
 						
 						<li class='bb321705512e6a47c640b86971b62a09'>
-							<code><a href='#pl_bb321705512e6a47c640b86971b62a09'>.execute</a></code>
+							<code><a href='#s-bb321705512e6a47c640b86971b62a09'>.execute</a></code>
 							<span class='signature_count'>(3)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("java","bb321705512e6a47c640b86971b62a09")'>Hide</a>
 						</li>
@@ -7381,7 +7377,7 @@ jQuery(document).ready(function(){
 					<h2>java</h2>
 					
 					<div class='signature_bb321705512e6a47c640b86971b62a09 signature_group_db_access signature_group'>
-						<a name='pl_bb321705512e6a47c640b86971b62a09'></a>
+						<a name='s-bb321705512e6a47c640b86971b62a09'></a>
 						<h3>
 							<code>.execute</code>
 							<span class='signature_count'>(3)</span>
@@ -7471,7 +7467,7 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_dangerous_functions'>
 						
 						<li class='2eed1fe0db36d674643b5f84d2adf46e'>
-							<code><a href='#pl_2eed1fe0db36d674643b5f84d2adf46e'>eval</a></code>
+							<code><a href='#s-2eed1fe0db36d674643b5f84d2adf46e'>eval</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("js","2eed1fe0db36d674643b5f84d2adf46e")'>Hide</a>
 						</li>
@@ -7484,7 +7480,7 @@ jQuery(document).ready(function(){
 					<h2>js</h2>
 					
 					<div class='signature_2eed1fe0db36d674643b5f84d2adf46e signature_group_dangerous_functions signature_group'>
-						<a name='pl_2eed1fe0db36d674643b5f84d2adf46e'></a>
+						<a name='s-2eed1fe0db36d674643b5f84d2adf46e'></a>
 						<h3>
 							<code>eval</code>
 							<span class='signature_count'>(1)</span>
@@ -7532,97 +7528,97 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_dangerous_functions'>
 						
 						<li class='0de4ac8a3d23ab544ed323a26596e6ef'>
-							<code><a href='#pl_0de4ac8a3d23ab544ed323a26596e6ef'>eval(</a></code>
+							<code><a href='#s-0de4ac8a3d23ab544ed323a26596e6ef'>eval(</a></code>
 							<span class='signature_count'>(11)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","0de4ac8a3d23ab544ed323a26596e6ef")'>Hide</a>
 						</li>
 						
 						<li class='1e36507a2d0dc5e8eec1719f6ad310e5'>
-							<code><a href='#pl_1e36507a2d0dc5e8eec1719f6ad310e5'>exec(</a></code>
+							<code><a href='#s-1e36507a2d0dc5e8eec1719f6ad310e5'>exec(</a></code>
 							<span class='signature_count'>(5)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","1e36507a2d0dc5e8eec1719f6ad310e5")'>Hide</a>
 						</li>
 						
 						<li class='f2de5b1efd0fc050395cfe7d5bfc53cd'>
-							<code><a href='#pl_f2de5b1efd0fc050395cfe7d5bfc53cd'>fclose(</a></code>
+							<code><a href='#s-f2de5b1efd0fc050395cfe7d5bfc53cd'>fclose(</a></code>
 							<span class='signature_count'>(7)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","f2de5b1efd0fc050395cfe7d5bfc53cd")'>Hide</a>
 						</li>
 						
 						<li class='44b1b75c399c7a12f035c43a5e347d2c'>
-							<code><a href='#pl_44b1b75c399c7a12f035c43a5e347d2c'>file(</a></code>
+							<code><a href='#s-44b1b75c399c7a12f035c43a5e347d2c'>file(</a></code>
 							<span class='signature_count'>(9)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","44b1b75c399c7a12f035c43a5e347d2c")'>Hide</a>
 						</li>
 						
 						<li class='7bc55520eb98a73970ba7ba517846ffd'>
-							<code><a href='#pl_7bc55520eb98a73970ba7ba517846ffd'>file_get_contents(</a></code>
+							<code><a href='#s-7bc55520eb98a73970ba7ba517846ffd'>file_get_contents(</a></code>
 							<span class='signature_count'>(12)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","7bc55520eb98a73970ba7ba517846ffd")'>Hide</a>
 						</li>
 						
 						<li class='3fdb7a345c5254104cc23673998a6a2d'>
-							<code><a href='#pl_3fdb7a345c5254104cc23673998a6a2d'>fopen(</a></code>
+							<code><a href='#s-3fdb7a345c5254104cc23673998a6a2d'>fopen(</a></code>
 							<span class='signature_count'>(7)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","3fdb7a345c5254104cc23673998a6a2d")'>Hide</a>
 						</li>
 						
 						<li class='de94e676c0358eefea4794f03d6bda4f'>
-							<code><a href='#pl_de94e676c0358eefea4794f03d6bda4f'>goto</a></code>
+							<code><a href='#s-de94e676c0358eefea4794f03d6bda4f'>goto</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","de94e676c0358eefea4794f03d6bda4f")'>Hide</a>
 						</li>
 						
 						<li class='d436eb0fd9de10b54a828ce6435f7e81'>
-							<code><a href='#pl_d436eb0fd9de10b54a828ce6435f7e81'>include</a></code>
+							<code><a href='#s-d436eb0fd9de10b54a828ce6435f7e81'>include</a></code>
 							<span class='signature_count'>(70)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","d436eb0fd9de10b54a828ce6435f7e81")'>Hide</a>
 						</li>
 						
 						<li class='14bc8cdea3dd1973da3ef53db302e21e'>
-							<code><a href='#pl_14bc8cdea3dd1973da3ef53db302e21e'>include_once</a></code>
+							<code><a href='#s-14bc8cdea3dd1973da3ef53db302e21e'>include_once</a></code>
 							<span class='signature_count'>(10)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","14bc8cdea3dd1973da3ef53db302e21e")'>Hide</a>
 						</li>
 						
 						<li class='a7f4298e8238817b5bbabc120dd310f0'>
-							<code><a href='#pl_a7f4298e8238817b5bbabc120dd310f0'>mail(</a></code>
+							<code><a href='#s-a7f4298e8238817b5bbabc120dd310f0'>mail(</a></code>
 							<span class='signature_count'>(4)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","a7f4298e8238817b5bbabc120dd310f0")'>Hide</a>
 						</li>
 						
 						<li class='f0ffd3b7c2574ac324603ed00488c850'>
-							<code><a href='#pl_f0ffd3b7c2574ac324603ed00488c850'>require</a></code>
+							<code><a href='#s-f0ffd3b7c2574ac324603ed00488c850'>require</a></code>
 							<span class='signature_count'>(99)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","f0ffd3b7c2574ac324603ed00488c850")'>Hide</a>
 						</li>
 						
 						<li class='8ba15bbb3811356170950e052e3f8060'>
-							<code><a href='#pl_8ba15bbb3811356170950e052e3f8060'>require_once</a></code>
+							<code><a href='#s-8ba15bbb3811356170950e052e3f8060'>require_once</a></code>
 							<span class='signature_count'>(58)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","8ba15bbb3811356170950e052e3f8060")'>Hide</a>
 						</li>
 						
 						<li class='b4d770a2d48bac7142d51796f2babb9c'>
-							<code><a href='#pl_b4d770a2d48bac7142d51796f2babb9c'>shell_exec(</a></code>
+							<code><a href='#s-b4d770a2d48bac7142d51796f2babb9c'>shell_exec(</a></code>
 							<span class='signature_count'>(3)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","b4d770a2d48bac7142d51796f2babb9c")'>Hide</a>
 						</li>
 						
 						<li class='effefd84af1fbffd8d8e4d5349961cb6'>
-							<code><a href='#pl_effefd84af1fbffd8d8e4d5349961cb6'>system(</a></code>
+							<code><a href='#s-effefd84af1fbffd8d8e4d5349961cb6'>system(</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","effefd84af1fbffd8d8e4d5349961cb6")'>Hide</a>
 						</li>
 						
 						<li class='86750fb6d14ec15d645cdd28433a184c'>
-							<code><a href='#pl_86750fb6d14ec15d645cdd28433a184c'>unserialize(</a></code>
+							<code><a href='#s-86750fb6d14ec15d645cdd28433a184c'>unserialize(</a></code>
 							<span class='signature_count'>(6)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","86750fb6d14ec15d645cdd28433a184c")'>Hide</a>
 						</li>
 						
 						<li class='833344d5e1432da82ef02e1301477ce8'>
-							<code><a href='#pl_833344d5e1432da82ef02e1301477ce8'>`</a></code>
+							<code><a href='#s-833344d5e1432da82ef02e1301477ce8'>`</a></code>
 							<span class='signature_count'>(17)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","833344d5e1432da82ef02e1301477ce8")'>Hide</a>
 						</li>
@@ -7633,13 +7629,13 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_payload_obfuscators'>
 						
 						<li class='84afe5f7623c288a0ca27b00a1abf74e'>
-							<code><a href='#pl_84afe5f7623c288a0ca27b00a1abf74e'>base64_decode(</a></code>
+							<code><a href='#s-84afe5f7623c288a0ca27b00a1abf74e'>base64_decode(</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","84afe5f7623c288a0ca27b00a1abf74e")'>Hide</a>
 						</li>
 						
 						<li class='58859d93c30e635814dc980ed86e3f84'>
-							<code><a href='#pl_58859d93c30e635814dc980ed86e3f84'>$$</a></code>
+							<code><a href='#s-58859d93c30e635814dc980ed86e3f84'>$$</a></code>
 							<span class='signature_count'>(26)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","58859d93c30e635814dc980ed86e3f84")'>Hide</a>
 						</li>
@@ -7650,19 +7646,19 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_form_data'>
 						
 						<li class='36873191febbfe6c4cfb7d60d8aedfc0'>
-							<code><a href='#pl_36873191febbfe6c4cfb7d60d8aedfc0'>$_GET</a></code>
+							<code><a href='#s-36873191febbfe6c4cfb7d60d8aedfc0'>$_GET</a></code>
 							<span class='signature_count'>(29)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","36873191febbfe6c4cfb7d60d8aedfc0")'>Hide</a>
 						</li>
 						
 						<li class='af96ee114ac4e56b47dd4efd6694a827'>
-							<code><a href='#pl_af96ee114ac4e56b47dd4efd6694a827'>$_POST</a></code>
+							<code><a href='#s-af96ee114ac4e56b47dd4efd6694a827'>$_POST</a></code>
 							<span class='signature_count'>(16)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","af96ee114ac4e56b47dd4efd6694a827")'>Hide</a>
 						</li>
 						
 						<li class='77274c57134658673c3a59c7b2951842'>
-							<code><a href='#pl_77274c57134658673c3a59c7b2951842'>$_REQUEST</a></code>
+							<code><a href='#s-77274c57134658673c3a59c7b2951842'>$_REQUEST</a></code>
 							<span class='signature_count'>(6)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","77274c57134658673c3a59c7b2951842")'>Hide</a>
 						</li>
@@ -7673,25 +7669,25 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_globals'>
 						
 						<li class='76e33b87e40cceeb009eedd6a2a23937'>
-							<code><a href='#pl_76e33b87e40cceeb009eedd6a2a23937'>$_SESSION</a></code>
+							<code><a href='#s-76e33b87e40cceeb009eedd6a2a23937'>$_SESSION</a></code>
 							<span class='signature_count'>(4)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","76e33b87e40cceeb009eedd6a2a23937")'>Hide</a>
 						</li>
 						
 						<li class='74cf5004d8aceafd2531cc620a36c278'>
-							<code><a href='#pl_74cf5004d8aceafd2531cc620a36c278'>$_SERVER</a></code>
+							<code><a href='#s-74cf5004d8aceafd2531cc620a36c278'>$_SERVER</a></code>
 							<span class='signature_count'>(18)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","74cf5004d8aceafd2531cc620a36c278")'>Hide</a>
 						</li>
 						
 						<li class='1a9740268f2ff86d08b218254a845455'>
-							<code><a href='#pl_1a9740268f2ff86d08b218254a845455'>$_COOKIE</a></code>
+							<code><a href='#s-1a9740268f2ff86d08b218254a845455'>$_COOKIE</a></code>
 							<span class='signature_count'>(13)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","1a9740268f2ff86d08b218254a845455")'>Hide</a>
 						</li>
 						
 						<li class='f7954bf9e76927eb5734ade2c3a235d5'>
-							<code><a href='#pl_f7954bf9e76927eb5734ade2c3a235d5'>$_FILES</a></code>
+							<code><a href='#s-f7954bf9e76927eb5734ade2c3a235d5'>$_FILES</a></code>
 							<span class='signature_count'>(3)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","f7954bf9e76927eb5734ade2c3a235d5")'>Hide</a>
 						</li>
@@ -7702,37 +7698,37 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_sql'>
 						
 						<li class='63225f19fccb18e7c709f1fa11bc738e'>
-							<code><a href='#pl_63225f19fccb18e7c709f1fa11bc738e'>SELECT</a></code>
+							<code><a href='#s-63225f19fccb18e7c709f1fa11bc738e'>SELECT</a></code>
 							<span class='signature_count'>(22)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","63225f19fccb18e7c709f1fa11bc738e")'>Hide</a>
 						</li>
 						
 						<li class='61ee777e7f71dc466c3b2c685d8d313b'>
-							<code><a href='#pl_61ee777e7f71dc466c3b2c685d8d313b'>INSERT</a></code>
+							<code><a href='#s-61ee777e7f71dc466c3b2c685d8d313b'>INSERT</a></code>
 							<span class='signature_count'>(9)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","61ee777e7f71dc466c3b2c685d8d313b")'>Hide</a>
 						</li>
 						
 						<li class='15a8022d0ed9cd9c2a2e756822703eb4'>
-							<code><a href='#pl_15a8022d0ed9cd9c2a2e756822703eb4'>UPDATE</a></code>
+							<code><a href='#s-15a8022d0ed9cd9c2a2e756822703eb4'>UPDATE</a></code>
 							<span class='signature_count'>(4)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","15a8022d0ed9cd9c2a2e756822703eb4")'>Hide</a>
 						</li>
 						
 						<li class='32f68a60cef40faedbc6af20298c1a1e'>
-							<code><a href='#pl_32f68a60cef40faedbc6af20298c1a1e'>DELETE</a></code>
+							<code><a href='#s-32f68a60cef40faedbc6af20298c1a1e'>DELETE</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","32f68a60cef40faedbc6af20298c1a1e")'>Hide</a>
 						</li>
 						
 						<li class='bf8f3be424eb6a72b21549fbb24ffb57'>
-							<code><a href='#pl_bf8f3be424eb6a72b21549fbb24ffb57'>DROP</a></code>
+							<code><a href='#s-bf8f3be424eb6a72b21549fbb24ffb57'>DROP</a></code>
 							<span class='signature_count'>(7)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","bf8f3be424eb6a72b21549fbb24ffb57")'>Hide</a>
 						</li>
 						
 						<li class='0a83d15fde12983f199bdeb76667660f'>
-							<code><a href='#pl_0a83d15fde12983f199bdeb76667660f'>TRUNCATE</a></code>
+							<code><a href='#s-0a83d15fde12983f199bdeb76667660f'>TRUNCATE</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","0a83d15fde12983f199bdeb76667660f")'>Hide</a>
 						</li>
@@ -7743,13 +7739,13 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_developer_notes'>
 						
 						<li class='5af07d9c08fbb9e886057c245d6ace79'>
-							<code><a href='#pl_5af07d9c08fbb9e886057c245d6ace79'>@todo</a></code>
+							<code><a href='#s-5af07d9c08fbb9e886057c245d6ace79'>@todo</a></code>
 							<span class='signature_count'>(33)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","5af07d9c08fbb9e886057c245d6ace79")'>Hide</a>
 						</li>
 						
 						<li class='4da859ea54b4c76db2a9f5b11772efde'>
-							<code><a href='#pl_4da859ea54b4c76db2a9f5b11772efde'>@note</a></code>
+							<code><a href='#s-4da859ea54b4c76db2a9f5b11772efde'>@note</a></code>
 							<span class='signature_count'>(95)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","4da859ea54b4c76db2a9f5b11772efde")'>Hide</a>
 						</li>
@@ -7760,25 +7756,25 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_custom_strings'>
 						
 						<li class='14c4b06b824ec593239362517f538b29'>
-							<code><a href='#pl_14c4b06b824ec593239362517f538b29'>username</a></code>
+							<code><a href='#s-14c4b06b824ec593239362517f538b29'>username</a></code>
 							<span class='signature_count'>(16)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","14c4b06b824ec593239362517f538b29")'>Hide</a>
 						</li>
 						
 						<li class='5f4dcc3b5aa765d61d8327deb882cf99'>
-							<code><a href='#pl_5f4dcc3b5aa765d61d8327deb882cf99'>password</a></code>
+							<code><a href='#s-5f4dcc3b5aa765d61d8327deb882cf99'>password</a></code>
 							<span class='signature_count'>(42)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","5f4dcc3b5aa765d61d8327deb882cf99")'>Hide</a>
 						</li>
 						
 						<li class='67b3dba8bc6778101892eb77249db32e'>
-							<code><a href='#pl_67b3dba8bc6778101892eb77249db32e'>host</a></code>
+							<code><a href='#s-67b3dba8bc6778101892eb77249db32e'>host</a></code>
 							<span class='signature_count'>(29)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","67b3dba8bc6778101892eb77249db32e")'>Hide</a>
 						</li>
 						
 						<li class='11e0eed8d3696c0a632f822df385ab3c'>
-							<code><a href='#pl_11e0eed8d3696c0a632f822df385ab3c'>database</a></code>
+							<code><a href='#s-11e0eed8d3696c0a632f822df385ab3c'>database</a></code>
 							<span class='signature_count'>(26)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","11e0eed8d3696c0a632f822df385ab3c")'>Hide</a>
 						</li>
@@ -7789,13 +7785,13 @@ jQuery(document).ready(function(){
 					<ul class='signature_group_hashes'>
 						
 						<li class='7f138a09169b250e9dcb378140907378'>
-							<code><a href='#pl_7f138a09169b250e9dcb378140907378'>MD5</a></code>
+							<code><a href='#s-7f138a09169b250e9dcb378140907378'>MD5</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","7f138a09169b250e9dcb378140907378")'>Hide</a>
 						</li>
 						
 						<li class='9a9f4eb6d0036a164588b6ee74390442'>
-							<code><a href='#pl_9a9f4eb6d0036a164588b6ee74390442'>SHA1</a></code>
+							<code><a href='#s-9a9f4eb6d0036a164588b6ee74390442'>SHA1</a></code>
 							<span class='signature_count'>(1)</span>
 							<a class='show_hide' onclick='wt.signature.toggle("php","9a9f4eb6d0036a164588b6ee74390442")'>Hide</a>
 						</li>
@@ -7808,7 +7804,7 @@ jQuery(document).ready(function(){
 					<h2>php</h2>
 					
 					<div class='signature_0de4ac8a3d23ab544ed323a26596e6ef signature_group_dangerous_functions signature_group'>
-						<a name='pl_0de4ac8a3d23ab544ed323a26596e6ef'></a>
+						<a name='s-0de4ac8a3d23ab544ed323a26596e6ef'></a>
 						<h3>
 							<code>eval(</code>
 							<span class='signature_count'>(11)</span>
@@ -8057,7 +8053,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_1e36507a2d0dc5e8eec1719f6ad310e5 signature_group_dangerous_functions signature_group'>
-						<a name='pl_1e36507a2d0dc5e8eec1719f6ad310e5'></a>
+						<a name='s-1e36507a2d0dc5e8eec1719f6ad310e5'></a>
 						<h3>
 							<code>exec(</code>
 							<span class='signature_count'>(5)</span>
@@ -8191,7 +8187,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_f2de5b1efd0fc050395cfe7d5bfc53cd signature_group_dangerous_functions signature_group'>
-						<a name='pl_f2de5b1efd0fc050395cfe7d5bfc53cd'></a>
+						<a name='s-f2de5b1efd0fc050395cfe7d5bfc53cd'></a>
 						<h3>
 							<code>fclose(</code>
 							<span class='signature_count'>(7)</span>
@@ -8352,7 +8348,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_44b1b75c399c7a12f035c43a5e347d2c signature_group_dangerous_functions signature_group'>
-						<a name='pl_44b1b75c399c7a12f035c43a5e347d2c'></a>
+						<a name='s-44b1b75c399c7a12f035c43a5e347d2c'></a>
 						<h3>
 							<code>file(</code>
 							<span class='signature_count'>(9)</span>
@@ -8559,7 +8555,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_7bc55520eb98a73970ba7ba517846ffd signature_group_dangerous_functions signature_group'>
-						<a name='pl_7bc55520eb98a73970ba7ba517846ffd'></a>
+						<a name='s-7bc55520eb98a73970ba7ba517846ffd'></a>
 						<h3>
 							<code>file_get_contents(</code>
 							<span class='signature_count'>(12)</span>
@@ -8841,7 +8837,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_3fdb7a345c5254104cc23673998a6a2d signature_group_dangerous_functions signature_group'>
-						<a name='pl_3fdb7a345c5254104cc23673998a6a2d'></a>
+						<a name='s-3fdb7a345c5254104cc23673998a6a2d'></a>
 						<h3>
 							<code>fopen(</code>
 							<span class='signature_count'>(7)</span>
@@ -9002,7 +8998,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_de94e676c0358eefea4794f03d6bda4f signature_group_dangerous_functions signature_group'>
-						<a name='pl_de94e676c0358eefea4794f03d6bda4f'></a>
+						<a name='s-de94e676c0358eefea4794f03d6bda4f'></a>
 						<h3>
 							<code>goto</code>
 							<span class='signature_count'>(1)</span>
@@ -9037,7 +9033,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_d436eb0fd9de10b54a828ce6435f7e81 signature_group_dangerous_functions signature_group'>
-						<a name='pl_d436eb0fd9de10b54a828ce6435f7e81'></a>
+						<a name='s-d436eb0fd9de10b54a828ce6435f7e81'></a>
 						<h3>
 							<code>include</code>
 							<span class='signature_count'>(70)</span>
@@ -10570,7 +10566,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_14bc8cdea3dd1973da3ef53db302e21e signature_group_dangerous_functions signature_group'>
-						<a name='pl_14bc8cdea3dd1973da3ef53db302e21e'></a>
+						<a name='s-14bc8cdea3dd1973da3ef53db302e21e'></a>
 						<h3>
 							<code>include_once</code>
 							<span class='signature_count'>(10)</span>
@@ -10798,7 +10794,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_a7f4298e8238817b5bbabc120dd310f0 signature_group_dangerous_functions signature_group'>
-						<a name='pl_a7f4298e8238817b5bbabc120dd310f0'></a>
+						<a name='s-a7f4298e8238817b5bbabc120dd310f0'></a>
 						<h3>
 							<code>mail(</code>
 							<span class='signature_count'>(4)</span>
@@ -10911,7 +10907,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_f0ffd3b7c2574ac324603ed00488c850 signature_group_dangerous_functions signature_group'>
-						<a name='pl_f0ffd3b7c2574ac324603ed00488c850'></a>
+						<a name='s-f0ffd3b7c2574ac324603ed00488c850'></a>
 						<h3>
 							<code>require</code>
 							<span class='signature_count'>(99)</span>
@@ -13444,7 +13440,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_8ba15bbb3811356170950e052e3f8060 signature_group_dangerous_functions signature_group'>
-						<a name='pl_8ba15bbb3811356170950e052e3f8060'></a>
+						<a name='s-8ba15bbb3811356170950e052e3f8060'></a>
 						<h3>
 							<code>require_once</code>
 							<span class='signature_count'>(58)</span>
@@ -14896,7 +14892,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_b4d770a2d48bac7142d51796f2babb9c signature_group_dangerous_functions signature_group'>
-						<a name='pl_b4d770a2d48bac7142d51796f2babb9c'></a>
+						<a name='s-b4d770a2d48bac7142d51796f2babb9c'></a>
 						<h3>
 							<code>shell_exec(</code>
 							<span class='signature_count'>(3)</span>
@@ -14988,7 +14984,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_effefd84af1fbffd8d8e4d5349961cb6 signature_group_dangerous_functions signature_group'>
-						<a name='pl_effefd84af1fbffd8d8e4d5349961cb6'></a>
+						<a name='s-effefd84af1fbffd8d8e4d5349961cb6'></a>
 						<h3>
 							<code>system(</code>
 							<span class='signature_count'>(1)</span>
@@ -15023,7 +15019,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_86750fb6d14ec15d645cdd28433a184c signature_group_dangerous_functions signature_group'>
-						<a name='pl_86750fb6d14ec15d645cdd28433a184c'></a>
+						<a name='s-86750fb6d14ec15d645cdd28433a184c'></a>
 						<h3>
 							<code>unserialize(</code>
 							<span class='signature_count'>(6)</span>
@@ -15163,7 +15159,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_833344d5e1432da82ef02e1301477ce8 signature_group_dangerous_functions signature_group'>
-						<a name='pl_833344d5e1432da82ef02e1301477ce8'></a>
+						<a name='s-833344d5e1432da82ef02e1301477ce8'></a>
 						<h3>
 							<code>`</code>
 							<span class='signature_count'>(17)</span>
@@ -15574,7 +15570,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_84afe5f7623c288a0ca27b00a1abf74e signature_group_payload_obfuscators signature_group'>
-						<a name='pl_84afe5f7623c288a0ca27b00a1abf74e'></a>
+						<a name='s-84afe5f7623c288a0ca27b00a1abf74e'></a>
 						<h3>
 							<code>base64_decode(</code>
 							<span class='signature_count'>(1)</span>
@@ -15609,7 +15605,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_58859d93c30e635814dc980ed86e3f84 signature_group_payload_obfuscators signature_group'>
-						<a name='pl_58859d93c30e635814dc980ed86e3f84'></a>
+						<a name='s-58859d93c30e635814dc980ed86e3f84'></a>
 						<h3>
 							<code>$$</code>
 							<span class='signature_count'>(26)</span>
@@ -16169,7 +16165,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_36873191febbfe6c4cfb7d60d8aedfc0 signature_group_form_data signature_group'>
-						<a name='pl_36873191febbfe6c4cfb7d60d8aedfc0'></a>
+						<a name='s-36873191febbfe6c4cfb7d60d8aedfc0'></a>
 						<h3>
 							<code>$_GET</code>
 							<span class='signature_count'>(29)</span>
@@ -16858,7 +16854,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_af96ee114ac4e56b47dd4efd6694a827 signature_group_form_data signature_group'>
-						<a name='pl_af96ee114ac4e56b47dd4efd6694a827'></a>
+						<a name='s-af96ee114ac4e56b47dd4efd6694a827'></a>
 						<h3>
 							<code>$_POST</code>
 							<span class='signature_count'>(16)</span>
@@ -17220,7 +17216,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_77274c57134658673c3a59c7b2951842 signature_group_form_data signature_group'>
-						<a name='pl_77274c57134658673c3a59c7b2951842'></a>
+						<a name='s-77274c57134658673c3a59c7b2951842'></a>
 						<h3>
 							<code>$_REQUEST</code>
 							<span class='signature_count'>(6)</span>
@@ -17367,7 +17363,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_76e33b87e40cceeb009eedd6a2a23937 signature_group_globals signature_group'>
-						<a name='pl_76e33b87e40cceeb009eedd6a2a23937'></a>
+						<a name='s-76e33b87e40cceeb009eedd6a2a23937'></a>
 						<h3>
 							<code>$_SESSION</code>
 							<span class='signature_count'>(4)</span>
@@ -17472,7 +17468,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_74cf5004d8aceafd2531cc620a36c278 signature_group_globals signature_group'>
-						<a name='pl_74cf5004d8aceafd2531cc620a36c278'></a>
+						<a name='s-74cf5004d8aceafd2531cc620a36c278'></a>
 						<h3>
 							<code>$_SERVER</code>
 							<span class='signature_count'>(18)</span>
@@ -17896,7 +17892,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_1a9740268f2ff86d08b218254a845455 signature_group_globals signature_group'>
-						<a name='pl_1a9740268f2ff86d08b218254a845455'></a>
+						<a name='s-1a9740268f2ff86d08b218254a845455'></a>
 						<h3>
 							<code>$_COOKIE</code>
 							<span class='signature_count'>(13)</span>
@@ -18183,7 +18179,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_f7954bf9e76927eb5734ade2c3a235d5 signature_group_globals signature_group'>
-						<a name='pl_f7954bf9e76927eb5734ade2c3a235d5'></a>
+						<a name='s-f7954bf9e76927eb5734ade2c3a235d5'></a>
 						<h3>
 							<code>$_FILES</code>
 							<span class='signature_count'>(3)</span>
@@ -18278,7 +18274,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_63225f19fccb18e7c709f1fa11bc738e signature_group_sql signature_group'>
-						<a name='pl_63225f19fccb18e7c709f1fa11bc738e'></a>
+						<a name='s-63225f19fccb18e7c709f1fa11bc738e'></a>
 						<h3>
 							<code>SELECT</code>
 							<span class='signature_count'>(22)</span>
@@ -18761,7 +18757,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_61ee777e7f71dc466c3b2c685d8d313b signature_group_sql signature_group'>
-						<a name='pl_61ee777e7f71dc466c3b2c685d8d313b'></a>
+						<a name='s-61ee777e7f71dc466c3b2c685d8d313b'></a>
 						<h3>
 							<code>INSERT</code>
 							<span class='signature_count'>(9)</span>
@@ -18964,7 +18960,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_15a8022d0ed9cd9c2a2e756822703eb4 signature_group_sql signature_group'>
-						<a name='pl_15a8022d0ed9cd9c2a2e756822703eb4'></a>
+						<a name='s-15a8022d0ed9cd9c2a2e756822703eb4'></a>
 						<h3>
 							<code>UPDATE</code>
 							<span class='signature_count'>(4)</span>
@@ -19067,7 +19063,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_32f68a60cef40faedbc6af20298c1a1e signature_group_sql signature_group'>
-						<a name='pl_32f68a60cef40faedbc6af20298c1a1e'></a>
+						<a name='s-32f68a60cef40faedbc6af20298c1a1e'></a>
 						<h3>
 							<code>DELETE</code>
 							<span class='signature_count'>(1)</span>
@@ -19102,7 +19098,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_bf8f3be424eb6a72b21549fbb24ffb57 signature_group_sql signature_group'>
-						<a name='pl_bf8f3be424eb6a72b21549fbb24ffb57'></a>
+						<a name='s-bf8f3be424eb6a72b21549fbb24ffb57'></a>
 						<h3>
 							<code>DROP</code>
 							<span class='signature_count'>(7)</span>
@@ -19267,7 +19263,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_0a83d15fde12983f199bdeb76667660f signature_group_sql signature_group'>
-						<a name='pl_0a83d15fde12983f199bdeb76667660f'></a>
+						<a name='s-0a83d15fde12983f199bdeb76667660f'></a>
 						<h3>
 							<code>TRUNCATE</code>
 							<span class='signature_count'>(1)</span>
@@ -19302,7 +19298,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_5af07d9c08fbb9e886057c245d6ace79 signature_group_developer_notes signature_group'>
-						<a name='pl_5af07d9c08fbb9e886057c245d6ace79'></a>
+						<a name='s-5af07d9c08fbb9e886057c245d6ace79'></a>
 						<h3>
 							<code>@todo</code>
 							<span class='signature_count'>(33)</span>
@@ -20022,7 +20018,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_4da859ea54b4c76db2a9f5b11772efde signature_group_developer_notes signature_group'>
-						<a name='pl_4da859ea54b4c76db2a9f5b11772efde'></a>
+						<a name='s-4da859ea54b4c76db2a9f5b11772efde'></a>
 						<h3>
 							<code>@note</code>
 							<span class='signature_count'>(95)</span>
@@ -22079,7 +22075,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_14c4b06b824ec593239362517f538b29 signature_group_custom_strings signature_group'>
-						<a name='pl_14c4b06b824ec593239362517f538b29'></a>
+						<a name='s-14c4b06b824ec593239362517f538b29'></a>
 						<h3>
 							<code>username</code>
 							<span class='signature_count'>(16)</span>
@@ -22432,7 +22428,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_5f4dcc3b5aa765d61d8327deb882cf99 signature_group_custom_strings signature_group'>
-						<a name='pl_5f4dcc3b5aa765d61d8327deb882cf99'></a>
+						<a name='s-5f4dcc3b5aa765d61d8327deb882cf99'></a>
 						<h3>
 							<code>password</code>
 							<span class='signature_count'>(42)</span>
@@ -23445,7 +23441,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_67b3dba8bc6778101892eb77249db32e signature_group_custom_strings signature_group'>
-						<a name='pl_67b3dba8bc6778101892eb77249db32e'></a>
+						<a name='s-67b3dba8bc6778101892eb77249db32e'></a>
 						<h3>
 							<code>host</code>
 							<span class='signature_count'>(29)</span>
@@ -24120,7 +24116,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_11e0eed8d3696c0a632f822df385ab3c signature_group_custom_strings signature_group'>
-						<a name='pl_11e0eed8d3696c0a632f822df385ab3c'></a>
+						<a name='s-11e0eed8d3696c0a632f822df385ab3c'></a>
 						<h3>
 							<code>database</code>
 							<span class='signature_count'>(26)</span>
@@ -24761,7 +24757,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_7f138a09169b250e9dcb378140907378 signature_group_hashes signature_group'>
-						<a name='pl_7f138a09169b250e9dcb378140907378'></a>
+						<a name='s-7f138a09169b250e9dcb378140907378'></a>
 						<h3>
 							<code>MD5</code>
 							<span class='signature_count'>(1)</span>
@@ -24796,7 +24792,7 @@ jQuery(document).ready(function(){
 					</div>
 					
 					<div class='signature_9a9f4eb6d0036a164588b6ee74390442 signature_group_hashes signature_group'>
-						<a name='pl_9a9f4eb6d0036a164588b6ee74390442'></a>
+						<a name='s-9a9f4eb6d0036a164588b6ee74390442'></a>
 						<h3>
 							<code>SHA1</code>
 							<span class='signature_count'>(1)</span>

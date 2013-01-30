@@ -3,7 +3,7 @@ wt.signature = {
     
     // shows/hides an individual signature
     toggle: function(filetype, signature){
-        var obj      = $('div#filetype_' + filetype + ' div.column_nav ul li.' + signature + ' a').last();
+        var obj      = $('div#filetype_' + filetype + ' .column_nav ul li.' + signature + ' a').last();
         var new_text = (obj.text() == 'Show') ? 'Hide' : 'Show' ;
         obj.text(new_text);
         

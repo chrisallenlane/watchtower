@@ -10,10 +10,6 @@ jQuery(document).ready(function(){
 		function(){ $(this).fadeTo('fast', 0.75); }
 	);
 
-    // bind events - Highlighting
-    $('a#highlight_on').click(function(){ wt.set_highlight("on") });
-    $('a#highlight_off').click(function(){ wt.set_highlight("off") });
-
     // bind events - Points of Interest
     $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok") });
     $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious") });

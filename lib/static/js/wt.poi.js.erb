@@ -53,7 +53,7 @@ wt.poi = {
         $('div.signature_group').show();
         if(mode == 'ok' || mode == 'dubious' || mode == 'bad'){
             $('div.signature_group').each(function(index, element){
-                if($(this).find('div.point_of_interest.poi_' + mode).length == 0){
+                if($(this).find('div.poi_' + mode).length == 0){
                     $(this).hide();
                 }
             });
