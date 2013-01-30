@@ -386,7 +386,7 @@ var wt = {
             pin_link.html('unpin');
         } else {
             $('div.column_nav').css('position', 'relative');
-            pin_link.html('pin')
+            pin_link.html('pin');
         }
     },
 
@@ -397,14 +397,14 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.watchtower1359572294 != null){
+        if(localStorage['watchtower1359579547'] !== undefined){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.watchtower1359572294);
+            var poi_classes = jQuery.parseJSON(localStorage['watchtower1359579547']);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
-                if(poi_classes[index] != null){
+                if(poi_classes[index] !== undefined){
                     $(element).attr('class', poi_classes[index]);
                 }
             });
@@ -426,7 +426,7 @@ wt.data_store = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.watchtower1359572294 = window.JSON.stringify(poi_classes);
+        localStorage['watchtower1359579547'] = window.JSON.stringify(poi_classes);
     },
 
 };
@@ -435,8 +435,8 @@ wt.data_store = {
 wt.poi = {
 
     // hides each poi's content
-    hide_content: function(obj){
-        var obj       = $(obj);
+    hide_content: function(o){
+        var obj       = $(o);
         var next_text = (obj.text() == 'Hide') ? 'Show' : 'Hide';
         var poi       = obj.parents('div.point_of_interest');
         obj.text(next_text);
@@ -484,11 +484,16 @@ wt.poi = {
         
         // hide the signature groups which have no signatures to display
         $('div.signature_group').show();
-        if(mode == 'ok' || mode == 'dubious' || mode == 'bad'){
+        if(mode === 'ok' || mode === 'dubious' || mode === 'bad'){
             $('div.signature_group').each(function(index, element){
-                if($(this).find('div.poi_' + mode).length == 0){
+                if(element.find('div.poi_' + mode).length === 0){
+                    element.hide();
+                }
+                /*
+                if($(this).find('div.poi_' + mode).length === 0){
                     $(this).hide();
                 }
+                */
             });
         }
         wt.data_store.save();
@@ -537,15 +542,15 @@ jQuery(document).ready(function(){
 	);
 
     // bind events - Points of Interest
-    $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok") });
-    $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious") });
-    $('a.poi_bad').click(function(){ wt.poi.mark(event.target, "bad") });
-    $('a.poi_hide').click(function(){ wt.poi.hide_content(event.target) });
+    $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok"); });
+    $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious"); });
+    $('a.poi_bad').click(function(){ wt.poi.mark(event.target, "bad"); });
+    $('a.poi_hide').click(function(){ wt.poi.hide_content(event.target); });
     
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1359572294');
+        console.log('Saving to key: watchtower1359579547');
         wt.data_store.load();
     } else {
         // warn the user that work will not be saved
