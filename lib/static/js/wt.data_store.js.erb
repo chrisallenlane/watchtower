@@ -3,14 +3,14 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage.<%= $watchtower_storage %> != null){
+        if(localStorage['<%= $watchtower_storage %>'] !== undefined){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage.<%= $watchtower_storage %>);
+            var poi_classes = jQuery.parseJSON(localStorage['<%= $watchtower_storage %>']);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
-                if(poi_classes[index] != null){
+                if(poi_classes[index] !== undefined){
                     $(element).attr('class', poi_classes[index]);
                 }
             });
@@ -32,7 +32,7 @@ wt.data_store = {
                 poi_classes[index] = the_classes;
             }
         });
-        localStorage.<%= $watchtower_storage %> = window.JSON.stringify(poi_classes);
+        localStorage['<%= $watchtower_storage %>'] = window.JSON.stringify(poi_classes);
     },
 
 };

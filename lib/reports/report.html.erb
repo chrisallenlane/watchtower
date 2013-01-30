@@ -23,8 +23,8 @@ $watchtower_storage = 'watchtower' + Time.now.to_i.to_s
 	</style>
 	<% if $configs[:embed_javascript].eql? true %>
 	<script>
-	<%= ERB.new(File.read('./lib/static/js/jquery-1.7.2.min.js')).result(binding) %>
-	<%= ERB.new(File.read('./lib/static/js/jquery-ui-1.8.19.custom.min.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/js/vendor/jquery-1.7.2.min.js')).result(binding) %>
+	<%= ERB.new(File.read('./lib/static/js/vendor/jquery-ui-1.8.19.custom.min.js')).result(binding) %>
 	</script>
 	<% else %>
 	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>

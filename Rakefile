@@ -135,6 +135,20 @@ sigs
     end
 end
 
+namespace :lint do
+    desc "Runs JavaScript files through jshint"
+    task :js do
+        puts 'Linting JavaScript files...'
+        js_files = `find ./lib/static/js/ -name '*.js.erb' | grep -v 'vendor'`.split "\n"
+        js_files.each do |f|
+            lint_out = `jshint --extra-ext .erb --config ./test/jshint-config.json #{f}`
+            # don't output empty lines which would otherwise be outputted
+            # when a file contains no errors
+            puts lint_out unless lint_out.strip!.to_s.empty?
+        end
+    end
+end
+
 desc 'Builds the project'
 task :build do
     puts 'Building project...'
@@ -149,3 +163,4 @@ Rake::TestTask.new do |test|
 	test.test_files = ['test/test_poi.rb', 'test/test_vulnscanner.rb', 'test/test_signature.rb', 'test/test_reports.rb']
 	test.verbose = false
 end
+

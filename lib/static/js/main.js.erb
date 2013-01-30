@@ -11,10 +11,10 @@ jQuery(document).ready(function(){
 	);
 
     // bind events - Points of Interest
-    $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok") });
-    $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious") });
-    $('a.poi_bad').click(function(){ wt.poi.mark(event.target, "bad") });
-    $('a.poi_hide').click(function(){ wt.poi.hide_content(event.target) });
+    $('a.poi_ok').click(function(){ wt.poi.mark(event.target, "ok"); });
+    $('a.poi_dubious').click(function(){ wt.poi.mark(event.target, "dubious"); });
+    $('a.poi_bad').click(function(){ wt.poi.mark(event.target, "bad"); });
+    $('a.poi_hide').click(function(){ wt.poi.hide_content(event.target); });
     
     // local storage
     if(typeof(Storage) !== 'undefined'){

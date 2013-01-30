@@ -2,8 +2,8 @@
 wt.poi = {
 
     // hides each poi's content
-    hide_content: function(obj){
-        var obj       = $(obj);
+    hide_content: function(o){
+        var obj       = $(o);
         var next_text = (obj.text() == 'Hide') ? 'Show' : 'Hide';
         var poi       = obj.parents('div.point_of_interest');
         obj.text(next_text);
@@ -51,11 +51,16 @@ wt.poi = {
         
         // hide the signature groups which have no signatures to display
         $('div.signature_group').show();
-        if(mode == 'ok' || mode == 'dubious' || mode == 'bad'){
+        if(mode === 'ok' || mode === 'dubious' || mode === 'bad'){
             $('div.signature_group').each(function(index, element){
-                if($(this).find('div.poi_' + mode).length == 0){
+                if(element.find('div.poi_' + mode).length === 0){
+                    element.hide();
+                }
+                /*
+                if($(this).find('div.poi_' + mode).length === 0){
                     $(this).hide();
                 }
+                */
             });
         }
         wt.data_store.save();
