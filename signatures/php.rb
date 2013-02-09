@@ -48,7 +48,7 @@ $signatures[:php][:payload_obfuscators] = [
 	Signature.new({:literal => 'gzuncompress('}),
 	Signature.new({:literal => 'zlib_encode('}),
 	Signature.new({:literal => 'zlib_decode('}),
-	Signature.new({:literal => '$$'}),
+	Signature.new({:literal => '\$\$'}),
     # note: This is a somewhat liberal/invalid regex for parsing 
     # base64, but I'd rather catch as much as possible rather than 
     # miss an interesting string simply because it's not valid 
