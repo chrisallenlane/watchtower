@@ -8,11 +8,16 @@
 # http://twitter.com/chrisallenlane
 #######################################################################
 
+
+# try to patch in support for old ruby
+is_ruby_18 = (RUBY_VERSION[0,3] === '1.8')
+
 require 'rubygems'
 require 'backports'
-require 'csv'
+require 'csv' unless is_ruby_18
 require 'digest'
 require 'erb'
+require 'fastercsv' if is_ruby_18
 require 'fileutils'
 require 'iconv'
 require 'open-uri'
@@ -165,7 +170,8 @@ case opts[:output_format]
 		# print a header row
 		puts '"file_type","file","line_number","match","name","snippet","group"'
         vulnscanner.points_of_interest.each do |point|
-            puts CSV.generate_line(point.to_a, { :force_quotes => true }).gsub("\r", '').gsub("\n", '') + "\n";
+            puts CSV.generate_line(point.to_a, { :force_quotes => true }).gsub("\r", '').gsub("\n", '') + "\n" unless is_ruby_18
+            puts FasterCSV.generate_line(point.to_a, { :force_quotes => true }).gsub("\r", '').gsub("\n", '') + "\n" if is_ruby_18
         end
 		
 	when 'html'
