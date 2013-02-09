@@ -89,13 +89,12 @@ class VulnScanner
 						result  = `cd #{@scan_dir}; grep -ERHnZ #{bc} #{ac} '#{signature.regex.chomp}' #{include_filetypes} #{exclude_files} #{exclude_dirs} .`
 						match   = nil
 					end
+                    
 
-                    # force UTF-8 character encoding 
-                    result.encode!('UTF-8',
-                        :invalid => :replace,
-                        :undef   => :replace,
-                        :replace => '?'
-                    )
+
+                    i = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+                    result = i.iconv(result + ' ')[0..-2]
+
 
 					# display the matches
 					unless result.strip.empty?

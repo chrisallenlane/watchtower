@@ -1,6 +1,6 @@
 require 'rubygems'
-require 'csv'
 require 'backports'
+require 'csv'
 require 'fileutils'
 require 'open-uri'
 require 'rake/testtask'
@@ -45,7 +45,7 @@ namespace :docs do
         `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o xml > #{cwd}/examples/report.xml`
         puts 'Done.'
 
-        ## xml ##
+        ## markdown ##
         print 'Generating a Markdown report...'
         `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o markdown > #{cwd}/examples/report.markdown`
         puts 'Done.'
