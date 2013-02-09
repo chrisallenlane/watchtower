@@ -3,7 +3,8 @@
 # in the user-provided signatures.
 class VulnScanner
 
-	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted, :scan_dir, :before_context, :after_context, :context
+	attr_accessor :signatures, :points_of_interest, :points_of_interest_sorted,
+                  :scan_dir, :before_context, :after_context, :context
 	
 	# Initializes the VulnScanner instance. Accepts a hash containing
 	# the following keys:

@@ -9,11 +9,16 @@ require 'uri'
 
 namespace :docs do
     RDoc::Task.new do |rdoc|
-      files 		= ['lib/models/vulnscanner.rb', 'lib/models/poi.rb', 'lib/models/signature.rb']
+      files         = [
+          'lib/models/vulnscanner.rb',
+          'lib/models/poi.rb',
+          'lib/models/signature.rb'
+      ]
       rdoc.rdoc_files.add(files)
-      rdoc.main 	= 'README.rdoc'
-      rdoc.title 	= 'WatchTower rdocs'
-      rdoc.rdoc_dir	= 'doc'
+
+      rdoc.main     = 'README.rdoc'
+      rdoc.title    = 'WatchTower rdocs'
+      rdoc.rdoc_dir = 'doc'
       rdoc.options << '--line-numbers'
     end
     
@@ -30,29 +35,30 @@ namespace :docs do
         puts 'Done.'
         
         # build sample reports for all file types
+        project = 'Damn Vulnerable Web Application'
         ## plain text ##
         print 'Generating a plain-text report...'
-        `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o txt > #{cwd}/examples/report.txt`
+        `#{cwd}/watchtower -s /tmp/dvwa/ -p '#{project}' -C 7 -o txt > #{cwd}/examples/report.txt`
         puts 'Done.'
 
         ## csv ##
         print 'Generating a CSV report...'
-        `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o csv > #{cwd}/examples/report.csv`
+        `#{cwd}/watchtower -s /tmp/dvwa/ -p '#{project}' -C 7 -o csv > #{cwd}/examples/report.csv`
         puts 'Done.'
 
         ## xml ##
         print 'Generating an XML report...'
-        `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o xml > #{cwd}/examples/report.xml`
+        `#{cwd}/watchtower -s /tmp/dvwa/ -p '#{project}' -C 7 -o xml > #{cwd}/examples/report.xml`
         puts 'Done.'
 
         ## markdown ##
         print 'Generating a Markdown report...'
-        `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o markdown > #{cwd}/examples/report.markdown`
+        `#{cwd}/watchtower -s /tmp/dvwa/ -p '#{project}' -C 7 -o markdown > #{cwd}/examples/report.markdown`
         puts 'Done.'
 
         ## html ##
         print 'Generating an HTML report...'
-        `#{cwd}/watchtower -s /tmp/dvwa/ -p 'Damn Vulnerable Web Application' -C 7 -o html > #{cwd}/examples/report.html`
+        `#{cwd}/watchtower -s /tmp/dvwa/ -p '#{project}' -C 7 -o html > #{cwd}/examples/report.html`
         puts 'Done.'
         
         # clean up
@@ -78,12 +84,12 @@ namespace :sigs do
         puts 'Download complete. Generating blocklists...'
         
         # track the ips and domains
-        ips                 = {}
-        domains             = {}
+        ips     = {}
+        domains = {}
         
         # buffer the signatures produced
-        ip_signatures       = ''
-        domain_signatures   = '';
+        ip_signatures     = ''
+        domain_signatures = '';
         
         # iterate over the downloaded signatures file
         CSV.parse(csv) do |row|

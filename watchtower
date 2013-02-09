@@ -10,7 +10,9 @@
 
 require 'rubygems'
 require 'backports'
+require 'csv'
 require 'digest'
+require 'erb'
 require 'fileutils'
 require 'iconv'
 require 'open-uri'
@@ -160,17 +162,14 @@ end
 # output in the requested format
 case opts[:output_format]
 	when 'csv'
-		require 'fastercsv'
-		# kludge in a header row
+		# print a header row
 		puts '"file_type","file","line_number","match","name","snippet","group"'
-		csv_string = FasterCSV.generate(:force_quotes => true) do |csv|
-			vulnscanner.points_of_interest.each {|point| csv << point.to_a}
-		end
-		puts csv_string
+        vulnscanner.points_of_interest.each do |point|
+            puts CSV.generate_line(point.to_a, { :force_quotes => true }).gsub("\r", '').gsub("\n", '') + "\n";
+        end
 		
 	when 'html'
 		# require erb for templating
-		require 'erb'
 		include ERB::Util
 		
 		# sort the points of interest for HTML output
@@ -182,7 +181,6 @@ case opts[:output_format]
 		
 	when 'markdown'
 		# require erb for templating
-		require 'erb'
 		include ERB::Util
 		
 		# sort the points of interest for HTML output
