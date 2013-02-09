@@ -36,7 +36,7 @@ $signatures[:java][:HTTP_request] = [
 
 $signatures[:java][:Crypto_and_Keystore]= [
     # Keystore/Crypto usage
-    Signature.new({:literal => 'KeyStore.'}),
+    Signature.new({:literal => 'KeyStore'}),
     Signature.new({:literal => 'PrivateKey'}),
     Signature.new({:literal => 'SamlAuthToken'}),
 ]
