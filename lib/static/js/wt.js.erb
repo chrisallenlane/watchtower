@@ -10,14 +10,14 @@ var wt = {
     // toggles the pin status of the sidebar
     toggle_pin: function(){
         // get a handle on the necessary objects
-        var pin_link = $('div.column_nav span.pin a');
+        var pin_link = $('nav.column_nav span.pin a');
 
         // toggle the pin state
         if(pin_link.html() == 'pin'){
-            $('div.column_nav').css('position', 'fixed');
+            $('nav.column_nav').css('position', 'fixed');
             pin_link.html('unpin');
         } else {
-            $('div.column_nav').css('position', 'relative');
+            $('nav.column_nav').css('position', 'relative');
             pin_link.html('pin');
         }
     },
