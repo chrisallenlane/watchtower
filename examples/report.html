@@ -397,10 +397,10 @@ wt.data_store = {
 
     load: function(){
         // verify that a localstorage object exists
-        if(localStorage['watchtower1360368553'] !== undefined){
+        if(localStorage['watchtower1363052459'] !== undefined){
             
             // unpack the saved classes back into an array
-            var poi_classes = jQuery.parseJSON(localStorage['watchtower1360368553']);
+            var poi_classes = jQuery.parseJSON(localStorage['watchtower1363052459']);
             
             // do this.save(), but in reverse
             $('div.point_of_interest').each(function(index, element){
@@ -421,12 +421,9 @@ wt.data_store = {
         // Iterate over the PoIs. Save the class of each that has been marked.
         $('div.point_of_interest').each(function(index, element){                    
             var the_classes = $(element).attr('class');
-            // don't bother saving information for the unmarked
-            if(the_classes != 'point_of_interest'){
-                poi_classes[index] = the_classes;
-            }
+            poi_classes[index] = the_classes;
         });
-        localStorage['watchtower1360368553'] = window.JSON.stringify(poi_classes);
+        localStorage['watchtower1363052459'] = window.JSON.stringify(poi_classes);
     },
 
 };
@@ -550,7 +547,7 @@ jQuery(document).ready(function(){
     // local storage
     if(typeof(Storage) !== 'undefined'){
         console.log('Local storage is available!');
-        console.log('Saving to key: watchtower1360368553');
+        console.log('Saving to key: watchtower1363052459');
         wt.data_store.load();
     } else {
         // warn the user that work will not be saved
@@ -588,7 +585,7 @@ jQuery(document).ready(function(){
 				
 				<h1>Damn Vulnerable Web Application</h1>
 				
-				<p>Source Code Audit - <em>2013-02-08</em>
+				<p>Source Code Audit - <em>2013-03-11</em>
 					
 					<br>Prepared for <em>Enzo's Pizza</em>
 					
