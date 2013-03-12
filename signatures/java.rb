@@ -12,8 +12,8 @@ $signatures[:java][:db_access] = [
     # DB access
     # no PreparedStatement -> potentially vulnerable
     Signature.new({:literal => 'createStatement'}),
-    Signature.new({:literal => '.execute'}),
-    Signature.new({:literal => '.executeQuery'}),
+    Signature.new({:literal => 'execute'}),
+    Signature.new({:literal => 'executeQuery'}),
     Signature.new({:literal => 'Statement.execute'}),
     Signature.new({:literal => 'Statement.executeQuery'}),
 ]
@@ -27,16 +27,16 @@ $signatures[:java][:external_process] = [
 
 $signatures[:java][:HTTP_request] = [
     # HTTP redirect/playing with response headers
-    Signature.new({:literal => '.sendRedirect'}),
-    Signature.new({:literal => '.setStatus'}),
-    Signature.new({:literal => '.addHeader'}),
-    Signature.new({:literal => '.getParameter'}),
-    Signature.new({:literal => '.getHeader'}),
+    Signature.new({:literal => 'sendRedirect'}),
+    Signature.new({:literal => 'setStatus'}),
+    Signature.new({:literal => 'addHeader'}),
+    Signature.new({:literal => 'getParameter'}),
+    Signature.new({:literal => 'getHeader'}),
 ]
 
 $signatures[:java][:Crypto_and_Keystore]= [
     # Keystore/Crypto usage
-    Signature.new({:literal => 'KeyStore.'}),
+    Signature.new({:literal => 'KeyStore'}),
     Signature.new({:literal => 'PrivateKey'}),
     Signature.new({:literal => 'SamlAuthToken'}),
 ]
