@@ -67,12 +67,13 @@ $configs = {
     # decreases in scanning time.
 	:signatures 		=> [
 		#'./signatures/c.rb',
-		'./signatures/asp_net.rb',
-        './signatures/java.rb',
-        './signatures/js.rb',
 		'./signatures/html.rb',
+        './signatures/js.rb',
+		'./signatures/asp_net.rb',
 		'./signatures/php.rb',
+        './signatures/java.rb',
 		'./signatures/sql.rb',
+		'./signatures/linux_files.rb',
 		# './signatures/wordpress.rb',
 		# './signatures/blocklist.rb',
 	].sort,
