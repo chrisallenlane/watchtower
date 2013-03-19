@@ -139,9 +139,12 @@ $configs[:ftype_ext][:yaml]          = %w[yaml yml]
 # map the Wordpress API signatures to PHP files
 $configs[:ftype_ext][:wordpress]     = %w[php phpt php3 php4 php5 phtml]
 
+# map the linux system file signatures to PHP
+$configs[:ftype_ext][:linux]         = %w[php phpt php3 php4 php5 phtml]
+
 # map the ASP.NET signature to various files, includes also .cs files (C#)
-$configs[:ftype_ext][:asp_net]      = %w[asp aspx cs]
-$configs[:ftype_ext][:java]         = %w[java jsp groovy properties xml]
+$configs[:ftype_ext][:asp_net]       = %w[asp aspx cs]
+$configs[:ftype_ext][:java]          = %w[java jsp groovy properties xml]
 
 # map the blocklists to some filetypes (defaulting to PHP and HTML)
 # Note: if you're going to scan blocklists, be prepared to wait a 
