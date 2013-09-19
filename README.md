@@ -211,7 +211,7 @@ Contributing
 ------------
 I'm very interested in compiling signatures for popular 3rd-party 
 frameworks. (For an example, look at `/signatures/wordpress.rb`, 
-which is Wordpress-specific.) If you have expertise in a popular 
+which is WordPress-specific.) If you have expertise in a popular 
 framework (Joomla, Drupal, etc), and would like to contribute some 
 signature files, please let me know. 
 
