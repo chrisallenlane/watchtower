@@ -14,6 +14,7 @@ $signatures[:asp_net][:db_access] = [
     Signature.new({:literal => 'OleDbCommand'}),
     Signature.new({:literal => 'OdbcCommand'}),
     Signature.new({:literal => 'SqlCeCommand'}),
+    Signature.new({:literal => 'OracleCommand'}),
 ]
 
 $signatures[:asp_net][:external_process] = [
