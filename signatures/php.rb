@@ -100,3 +100,12 @@ $signatures[:php][:hashes] = [
 	Signature.new({:name => 'MD5',  :regex => '[0-9a-f]{32}'}),
 	Signature.new({:name => 'SHA1', :regex => '[0-9a-f]{40}'}),
 ]
+
+$signatures[:php][:crypto] = [
+	# crypto related stuff
+	Signature.new({:literal => 'mcrypt_'}),
+	Signature.new({:literal => 'openssl_'}),
+	Signature.new({:literal => 'hash_'}),
+	Signature.new({:literal => 'gnupg_'}),
+	Signature.new({:literal => 'blenc_'}),
+]
