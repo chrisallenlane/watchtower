@@ -1,3 +1,10 @@
+DEPRECATION NOTICE
+==================
+`watchtower` is now DEPRECATED. Please use [chrisallenlane/drek][drek] instead.
+`drek` serves exactly the same purpose as `watchtower`, but is a superior piece
+of software.
+
+
 Watchtower (1.4.8)
 ===================
 Chris Lane  
@@ -248,3 +255,4 @@ no warranty, expressed or implied. See the LICENSE file for more information.
 [4]: https://www.eff.org/join
 [5]: http://twitter.com/#!/chrisallenlane
 [6]: http://www.gnu.org/copyleft/gpl.html
+[drek]: https://github.com/chrisallenlane/drek
